@@ -1289,6 +1289,18 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
       >
         <View style={styles.receiptModalOverlay}>
           <View style={[styles.receiptSheet, isLandscape && styles.receiptSheetLandscape]}>
+            {/* Modal Header Bar */}
+            <View style={styles.receiptTopBar}>
+              <Text style={styles.receiptTopBarTitle}>Struk Transaksi</Text>
+              <TouchableOpacity
+                onPress={() => setReceiptModalOpen(false)}
+                style={styles.receiptCloseBtn}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <X size={18} color="#71717a" />
+              </TouchableOpacity>
+            </View>
+
             <ScrollView
               style={styles.receiptScroll}
               contentContainerStyle={styles.receiptScrollContent}
@@ -1799,20 +1811,44 @@ const styles = StyleSheet.create({
   receiptSheet: {
     backgroundColor: '#ffffff',
     borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: 18,
+    paddingTop: 16,
     paddingBottom: 16,
     width: '100%',
     maxWidth: 380,
-    maxHeight: '90%',
+    height: '86%',
+    maxHeight: 680,
     alignSelf: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  receiptTopBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e4e4e7',
+    flexShrink: 0,
+  },
+  receiptTopBarTitle: {
+    fontSize: 14,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#18181b',
+  },
+  receiptCloseBtn: {
+    padding: 4,
+    borderRadius: 8,
+    backgroundColor: '#f4f4f5',
   },
   receiptScroll: {
     flex: 1,
     width: '100%',
+    minHeight: 180,
   },
   receiptScrollContent: {
-    paddingBottom: 8,
+    paddingTop: 10,
+    paddingBottom: 12,
   },
   receiptHeader: {
     alignItems: 'center',
@@ -1926,7 +1962,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 12,
     alignItems: 'center',
-    marginTop: 14,
+    marginTop: 10,
+    flexShrink: 0,
   },
   newTxButtonText: {
     color: '#ffffff',
@@ -2783,10 +2820,11 @@ const styles = StyleSheet.create({
   },
   receiptSheetLandscape: {
     maxWidth: 420,
+    height: '94%',
     maxHeight: '94%',
     borderRadius: 20,
     paddingHorizontal: 18,
-    paddingTop: 16,
+    paddingTop: 12,
     paddingBottom: 12,
   },
 });
