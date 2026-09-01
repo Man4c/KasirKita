@@ -473,7 +473,7 @@ export default function PosScreen({ isLandscape = false }) {
           {/* Cart Item Rows */}
           {cart.length === 0 ? (
             <View style={styles.registerEmptyBox}>
-              <ShoppingCart size={32} color="#27272a" style={{ marginBottom: 8 }} />
+              <ShoppingCart size={36} color="#71717a" style={{ marginBottom: 12 }} />
               <Text style={styles.registerEmptyTitle}>Keranjang Kosong</Text>
               <Text style={styles.registerEmptySub}>Pilih produk di kiri untuk memulai pesanan.</Text>
             </View>
@@ -1411,17 +1411,17 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   catContainer: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
   catChip: {
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: 18,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
     backgroundColor: '#18181b',
     borderColor: '#27272a',
     borderWidth: 1,
-    marginRight: 8,
+    marginRight: 10,
   },
   catChipActive: {
     backgroundColor: '#e11d48',
@@ -2447,12 +2447,12 @@ const styles = StyleSheet.create({
   registerEmptyTitle: {
     fontSize: 14,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#71717a',
+    color: '#f4f4f5',
   },
   registerEmptySub: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#52525b',
+    color: '#a1a1aa',
     textAlign: 'center',
     marginTop: 4,
   },

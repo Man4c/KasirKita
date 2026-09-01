@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
   topBrand: {
     fontSize: 20,
@@ -343,9 +343,9 @@ const styles = StyleSheet.create({
   },
   topBadge: {
     backgroundColor: '#e11d48',
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
     alignSelf: 'center',
   },
   topBadgeText: {
@@ -447,8 +447,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#18181b',
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    paddingTop: 8,
-    paddingHorizontal: 8,
+    paddingTop: 10,
+    paddingHorizontal: 12,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
