@@ -16,6 +16,7 @@ import {
 import {
   Search,
   ArrowRight,
+  ArrowLeft,
   X,
   Minus,
   Plus,
@@ -45,7 +46,8 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Cart & Checkout Modal
+  // Cart & Checkout Screen View State
+  const [isCheckoutView, setIsCheckoutView] = useState(false);
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [paidAmount, setPaidAmount] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState(null); // null = Pelanggan Umum
@@ -299,6 +301,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         const defFees = taxesAndFees.filter((i) => !i.is_tax && i.apply_to === 'MANUAL' && i.is_default).map((i) => i.id);
         setSelectedManualFeeIds(defFees);
         setCartModalOpen(false);
+        setIsCheckoutView(false);
         setReceiptModalOpen(true);
         fetchData();
       }
@@ -313,8 +316,10 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
   return (
     <View style={[styles.container, isLandscape && styles.landscapeRoot]}>
-      {/* LEFT COLUMN: Catalog & Products */}
-      <View style={[styles.catalogCol, isLandscape && styles.landscapeCatalogCol]}>
+      {!isCheckoutView ? (
+        <>
+          {/* LEFT COLUMN: Catalog & Products */}
+          <View style={[styles.catalogCol, isLandscape && styles.landscapeCatalogCol]}>
         {/* Catalog Toolbar: Unified 1-Row Toolbar in Landscape, 2-Row Stack in Portrait */}
         {isLandscape ? (
           <View style={[styles.landscapeToolbar, compact && styles.landscapeToolbarCompact]}>
@@ -681,7 +686,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 disabled={cart.length === 0}
                 onPress={() => {
                   setPaidAmount(totalAmount.toString());
-                  setCartModalOpen(true);
+                  setIsCheckoutView(true);
                 }}
               >
                 <Text style={[styles.regPayButtonText, compact && styles.regPayButtonTextCompact]}>Bayar Kasir</Text>
@@ -703,7 +708,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
             style={styles.cartBarButton}
             onPress={() => {
               setPaidAmount(totalAmount.toString());
-              setCartModalOpen(true);
+              setIsCheckoutView(true);
             }}
           >
             <Text style={styles.cartBarButtonText}>Bayar Kasir</Text>
@@ -712,22 +717,52 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         </View>
       )}
 
-      {/* Cart & Checkout Modal */}
-      <Modal visible={cartModalOpen} animationType={isLandscape ? 'fade' : 'slide'} transparent>
-        <View style={[styles.modalOverlay, isLandscape && styles.modalOverlayLandscape]}>
-          <View style={[styles.modalContent, isLandscape && styles.modalContentLandscape]}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>
-                {isLandscape ? 'Konfirmasi Pembayaran' : 'Detail Keranjang & Pembayaran'}
-              </Text>
-              <TouchableOpacity onPress={() => setCartModalOpen(false)}>
-                <X size={20} color="#d4d4d8" />
-              </TouchableOpacity>
+        </>
+      ) : (
+        /* DEDICATED FULL-SCREEN CHECKOUT SCREEN */
+        <View style={styles.checkoutRoot}>
+          {/* Top Navigation Bar */}
+          <View style={[styles.checkoutHeader, isLandscape && styles.checkoutHeaderLandscape, compact && styles.checkoutHeaderCompact]}>
+            <TouchableOpacity
+              style={styles.checkoutBackBtn}
+              onPress={() => setIsCheckoutView(false)}
+              activeOpacity={0.7}
+            >
+              <ArrowLeft size={18} color="#fb7185" style={{ marginRight: 6 }} />
+              <Text style={styles.checkoutBackText}>Kembali ke Keranjang</Text>
+            </TouchableOpacity>
+
+            <View style={styles.checkoutTitleBox}>
+              <Text style={styles.checkoutTitleText}>Pembayaran Kasir</Text>
             </View>
 
-            {isLandscape ? (
-              <ScrollView style={styles.modalLandscapeScroll} showsVerticalScrollIndicator={false}>
-                {/* Compact Bill Summary */}
+            <View style={styles.checkoutHeaderRight}>
+              <View style={styles.checkoutItemBadge}>
+                <ShoppingCart size={13} color="#fb7185" style={{ marginRight: 5 }} />
+                <Text style={styles.checkoutItemBadgeText}>{totalItemsCount} Item</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Checkout Screen Body */}
+          {isLandscape ? (
+            <View style={styles.checkoutBodyLandscape}>
+              {/* Left Column (~38% width): Note, Items & Customer Summary */}
+              <View style={[styles.checkoutLeftColLandscape, compact && styles.checkoutLeftColCompactLandscape]}>
+                <View style={styles.checkoutLeftHeader}>
+                  <Text style={styles.checkoutSectionTitle}>Ringkasan Nota</Text>
+                  <TouchableOpacity
+                    style={styles.checkoutCustomerBtn}
+                    onPress={() => setCustomerModalOpen(true)}
+                  >
+                    <Users size={13} color="#fb7185" style={{ marginRight: 4 }} />
+                    <Text style={styles.checkoutCustomerBtnText} numberOfLines={1}>
+                      {selectedCustomer ? selectedCustomer.name : 'Pilih Member'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                {/* Total Bill Card */}
                 <View style={styles.landscapeBillCard}>
                   <View style={{ flex: 1, minWidth: 0 }}>
                     <Text style={styles.landscapeBillLabel}>Total Tagihan</Text>
@@ -741,329 +776,157 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                   </View>
                 </View>
 
-                {/* Payment Method */}
-                <Text style={styles.landscapeSectionLabel}>Metode Pembayaran</Text>
-                <View style={styles.methodRow}>
-                  {[
-                    { id: 'CASH', label: 'Tunai', icon: Banknote },
-                    { id: 'QRIS', label: 'QRIS', icon: QrCode },
-                    { id: 'TRANSFER', label: 'Transfer', icon: CreditCard },
-                  ].map((m) => {
-                    const Icon = m.icon;
-                    const isSelected = paymentMethod === m.id;
+                {/* Items List Preview */}
+                <ScrollView style={styles.checkoutItemsScrollLandscape} showsVerticalScrollIndicator={false}>
+                  {cart.map((item) => {
+                    const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
                     return (
-                      <TouchableOpacity
-                        key={m.id}
-                        style={[styles.methodBtn, isSelected && styles.methodBtnActive, styles.landscapeMethodBtn]}
-                        onPress={() => setPaymentMethod(m.id)}
-                      >
-                        <Icon size={14} color={isSelected ? '#ffffff' : '#d4d4d8'} />
-                        <Text style={[styles.methodBtnText, isSelected && styles.methodBtnTextActive]}>
-                          {m.label}
+                      <View key={item.product.id} style={styles.checkoutItemRowMini}>
+                        <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
+                          <Text style={styles.checkoutItemNameMini} numberOfLines={1} ellipsizeMode="tail">
+                            {item.product.name}
+                          </Text>
+                          <Text style={styles.checkoutItemPriceMini}>
+                            {item.quantity} {itemUnit} x {formatRp(item.product.price)}
+                          </Text>
+                        </View>
+                        <Text style={styles.checkoutItemSubtotalMini}>
+                          {formatRp(item.quantity * Number(item.product.price))}
                         </Text>
-                      </TouchableOpacity>
+                      </View>
                     );
                   })}
-                </View>
+                </ScrollView>
+              </View>
 
-                {/* QRIS Surcharge Alert */}
-                {paymentMethod === 'QRIS' && feeDetails.some((f) => f.name.toLowerCase().includes('qris')) && (
-                  <View style={styles.qrisFeeAlert}>
-                    <QrCode size={14} color="#fbbf24" />
-                    <Text style={styles.qrisFeeAlertText}>
-                      Biaya Admin QRIS: +{formatRp(feeDetails.filter((f) => f.name.toLowerCase().includes('qris')).reduce((s, f) => s + f.amount, 0))}
-                    </Text>
+              {/* Right Column (~62% width): Payment Terminal */}
+              <View style={styles.checkoutRightColLandscape}>
+                <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                  <Text style={styles.landscapeSectionLabel}>Metode Pembayaran</Text>
+                  <View style={styles.methodRow}>
+                    {[
+                      { id: 'CASH', label: 'Tunai', icon: Banknote },
+                      { id: 'QRIS', label: 'QRIS', icon: QrCode },
+                      { id: 'TRANSFER', label: 'Transfer', icon: CreditCard },
+                    ].map((m) => {
+                      const Icon = m.icon;
+                      const isSelected = paymentMethod === m.id;
+                      return (
+                        <TouchableOpacity
+                          key={m.id}
+                          style={[styles.methodBtn, isSelected && styles.methodBtnActive, styles.landscapeMethodBtn]}
+                          onPress={() => setPaymentMethod(m.id)}
+                        >
+                          <Icon size={14} color={isSelected ? '#ffffff' : '#d4d4d8'} />
+                          <Text style={[styles.methodBtnText, isSelected && styles.methodBtnTextActive]}>
+                            {m.label}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
-                )}
 
-                {paymentMethod === 'CASH' && (
-                  <View style={styles.landscapeCashBox}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                      <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
-                      <Text style={styles.changeLabel}>
-                        Kembalian: <Text style={styles.changeValue}>{formatRp(changeAmount)}</Text>
+                  {/* QRIS Surcharge Alert */}
+                  {paymentMethod === 'QRIS' && feeDetails.some((f) => f.name.toLowerCase().includes('qris')) && (
+                    <View style={styles.qrisFeeAlert}>
+                      <QrCode size={14} color="#fbbf24" />
+                      <Text style={styles.qrisFeeAlertText}>
+                        Biaya Admin QRIS: +{formatRp(feeDetails.filter((f) => f.name.toLowerCase().includes('qris')).reduce((s, f) => s + f.amount, 0))}
                       </Text>
                     </View>
-                    <TextInput
-                      style={styles.cashInput}
-                      keyboardType="numeric"
-                      value={paidAmount}
-                      onChangeText={setPaidAmount}
-                      placeholder="0"
-                      placeholderTextColor="#71717a"
-                    />
+                  )}
 
-                    <View style={styles.chipsRow}>
-                      {[totalAmount, 50000, 100000, 200000].map((val, idx) => (
-                        <TouchableOpacity
-                          key={idx}
-                          style={styles.chipBtn}
-                          onPress={() => setPaidAmount(val.toString())}
-                        >
-                          <Text style={styles.chipBtnText}>{idx === 0 ? 'Pas' : formatRp(val)}</Text>
-                        </TouchableOpacity>
-                      ))}
+                  {paymentMethod === 'CASH' && (
+                    <View style={styles.landscapeCashBox}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                        <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
+                        <Text style={styles.changeLabel}>
+                          Kembalian: <Text style={styles.changeValue}>{formatRp(changeAmount)}</Text>
+                        </Text>
+                      </View>
+                      <TextInput
+                        style={styles.cashInput}
+                        keyboardType="numeric"
+                        value={paidAmount}
+                        onChangeText={setPaidAmount}
+                        placeholder="0"
+                        placeholderTextColor="#71717a"
+                      />
+
+                      <View style={styles.chipsRow}>
+                        {[totalAmount, 50000, 100000, 200000].map((val, idx) => (
+                          <TouchableOpacity
+                            key={idx}
+                            style={styles.chipBtn}
+                            onPress={() => setPaidAmount(val.toString())}
+                          >
+                            <Text style={styles.chipBtnText}>{idx === 0 ? 'Pas' : formatRp(val)}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
                     </View>
-                  </View>
-                )}
-              </ScrollView>
-            ) : (
-              /* Cart Items List */
-              <ScrollView style={styles.modalScroll}>
+                  )}
+                </ScrollView>
+
+                <TouchableOpacity
+                  style={[styles.paySubmitBtn, styles.paySubmitBtnLandscape, checkoutLoading && styles.paySubmitBtnDisabled]}
+                  onPress={handleProcessCheckout}
+                  disabled={checkoutLoading}
+                >
+                  {checkoutLoading ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={[styles.paySubmitText, styles.paySubmitTextLandscape]}>
+                      Konfirmasi Pembayaran
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            /* Portrait Dedicated Checkout View */
+            <ScrollView style={styles.checkoutBodyPortrait} contentContainerStyle={{ padding: 16 }}>
+              {/* Bill Summary Box */}
+              <View style={styles.billSummaryBox}>
+                <View style={styles.billRow}>
+                  <Text style={styles.billLabel}>Total Tagihan:</Text>
+                  <Text style={[styles.billValue, { color: '#fb7185', fontSize: 18, fontFamily: 'Poppins_700Bold' }]}>
+                    {formatRp(totalAmount)}
+                  </Text>
+                </View>
+                <View style={styles.billRow}>
+                  <Text style={styles.billLabel}>Pelanggan:</Text>
+                  <Text style={[styles.billValue, { color: '#ffffff' }]}>
+                    {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
+                  </Text>
+                </View>
+              </View>
+
+              {/* Items in Cart */}
+              <View style={[styles.checkoutLeftHeader, { marginTop: 10 }]}>
+                <Text style={styles.checkoutSectionTitle}>Daftar Pesanan ({cart.length})</Text>
+              </View>
               {cart.map((item) => {
                 const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
                 return (
-                  <View key={item.product.id} style={styles.modalItemRow}>
-                    <View style={{ flex: 1, marginRight: 12 }}>
-                      <Text style={styles.modalItemName}>{item.product.name}</Text>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
-                        <Text style={styles.modalItemPrice}>{formatRp(item.product.price)}</Text>
-                        <Text style={styles.modalItemUnit}>/{itemUnit}</Text>
-                      </View>
+                  <View key={item.product.id} style={styles.checkoutItemRowMini}>
+                    <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
+                      <Text style={styles.checkoutItemNameMini} numberOfLines={1}>
+                        {item.product.name}
+                      </Text>
+                      <Text style={styles.checkoutItemPriceMini}>
+                        {item.quantity} {itemUnit} x {formatRp(item.product.price)}
+                      </Text>
                     </View>
-                    <View style={styles.qtyControl}>
-                      <TouchableOpacity style={styles.qtyBtn} onPress={() => updateQuantity(item.product.id, -1)}>
-                        <Minus size={14} color="#ffffff" />
-                      </TouchableOpacity>
-                      <Text style={styles.qtyText}>{item.quantity}</Text>
-                      <TouchableOpacity
-                        style={[
-                          styles.qtyBtn,
-                          item.quantity >= (parseFloat(item.product.stock) || 0) && { opacity: 0.35 },
-                        ]}
-                        onPress={() => updateQuantity(item.product.id, 1)}
-                      >
-                        <Plus size={14} color="#ffffff" />
-                      </TouchableOpacity>
-                    </View>
+                    <Text style={styles.checkoutItemSubtotalMini}>
+                      {formatRp(item.quantity * Number(item.product.price))}
+                    </Text>
                   </View>
                 );
               })}
 
-              {/* Promo & Voucher Section (Only visible if active promo exists or one is applied) */}
-              {(availablePromos.length > 0 || appliedPromo) && (
-                appliedPromo ? (
-                  <View style={styles.promoAppliedRow}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
-                      <TicketPercent size={18} color="#34d399" />
-                      <View style={{ flex: 1, minWidth: 0 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                          <Text style={styles.promoCodeText}>{appliedPromo.discount_code}</Text>
-                          <Text style={styles.promoDiscountText}>(-{formatRp(discount)})</Text>
-                        </View>
-                        <Text style={styles.promoNameText} numberOfLines={1}>{appliedPromo.discount_name}</Text>
-                      </View>
-                    </View>
-                    <TouchableOpacity onPress={handleRemovePromo} style={styles.promoRemoveBtn}>
-                      <X size={16} color="#fb7185" />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <View style={styles.promoInputSection}>
-                    <View style={styles.promoHeaderRow}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                        <TicketPercent size={14} color="#fb7185" />
-                        <Text style={styles.promoHeaderTitle}>Kupon / Voucher</Text>
-                      </View>
-                      {availablePromos.length > 0 && (
-                        <TouchableOpacity
-                          onPress={() => setPromoModalOpen(true)}
-                          style={styles.promoPickBtn}
-                        >
-                          <Sparkles size={12} color="#fb7185" style={{ marginRight: 6 }} />
-                          <Text style={styles.promoPickBtnText}>Pilih Promo ({availablePromos.length})</Text>
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                    <View style={styles.promoInputRow}>
-                      <TextInput
-                        style={styles.promoTextInput}
-                        placeholder="Kode promo (misal: HEMAT10)..."
-                        placeholderTextColor="#a1a1aa"
-                        value={voucherInput}
-                        onChangeText={(t) => setVoucherInput(t.toUpperCase())}
-                        autoCapitalize="characters"
-                      />
-                      <TouchableOpacity
-                        style={[styles.promoApplyBtn, (!voucherInput.trim() || voucherLoading) && styles.promoApplyBtnDisabled]}
-                        onPress={() => handleApplyVoucher()}
-                        disabled={!voucherInput.trim() || voucherLoading}
-                      >
-                        {voucherLoading ? (
-                          <ActivityIndicator size="small" color="#ffffff" />
-                        ) : (
-                          <Text style={styles.promoApplyBtnText}>Pakai</Text>
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                )
-              )}
-
-              {/* Taxes & Additional Fees Controls */}
-              {(availableTaxes.length > 0 || takeawayFees.length > 0 || manualFees.length > 0) && (
-                <View style={styles.taxFeeControlSection}>
-                  {/* Tax Selector */}
-                  {availableTaxes.length > 0 && (
-                    <View style={styles.taxSelectorBlock}>
-                      <View style={styles.taxSelectorHeader}>
-                        <Percent size={13} color="#fb7185" />
-                        <Text style={styles.taxSelectorTitle}>Pajak Penjualan (PPN/PB1):</Text>
-                      </View>
-                      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.taxChipsRow}>
-                        <TouchableOpacity
-                          style={[styles.taxChip, !selectedTaxId && styles.taxChipActive]}
-                          onPress={() => setSelectedTaxId('')}
-                        >
-                          <Text style={[styles.taxChipText, !selectedTaxId && styles.taxChipTextActive]}>
-                            Tanpa Pajak (0%)
-                          </Text>
-                        </TouchableOpacity>
-                        {availableTaxes.map((t) => {
-                          const isSelected = selectedTaxId === t.id;
-                          return (
-                            <TouchableOpacity
-                              key={t.id}
-                              style={[styles.taxChip, isSelected && styles.taxChipActive]}
-                              onPress={() => setSelectedTaxId(t.id)}
-                            >
-                              <Text style={[styles.taxChipText, isSelected && styles.taxChipTextActive]}>
-                                {t.name.includes('%') ? t.name : `${t.name} (${Number(t.value)}%)`}
-                              </Text>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </ScrollView>
-                    </View>
-                  )}
-
-                  {/* Operational & Packaging Fees Chips */}
-                  {(takeawayFees.length > 0 || manualFees.length > 0) && (
-                    <View style={[styles.feeSelectorBlock, availableTaxes.length > 0 && { marginTop: 10 }]}>
-                      <View style={styles.taxSelectorHeader}>
-                        <Package size={13} color="#fbbf24" />
-                        <Text style={styles.taxSelectorTitle}>Kemasan & Layanan:</Text>
-                      </View>
-                      <View style={styles.feeChipsWrap}>
-                        {takeawayFees.map((tFee) => (
-                          <TouchableOpacity
-                            key={tFee.id}
-                            style={[styles.feeChip, isTakeaway && styles.feeChipActive]}
-                            onPress={() => setIsTakeaway(!isTakeaway)}
-                          >
-                            <Text style={[styles.feeChipText, isTakeaway && styles.feeChipTextActive]}>
-                              {isTakeaway ? '✓ ' : '+ '}Bungkus ({formatRp(tFee.value)})
-                            </Text>
-                          </TouchableOpacity>
-                        ))}
-                        {manualFees.map((mFee) => {
-                          const isChecked = selectedManualFeeIds.includes(mFee.id);
-                          return (
-                            <TouchableOpacity
-                              key={mFee.id}
-                              style={[styles.feeChip, isChecked && styles.feeChipActive]}
-                              onPress={() => {
-                                setSelectedManualFeeIds((prev) =>
-                                  isChecked ? prev.filter((id) => id !== mFee.id) : [...prev, mFee.id]
-                                );
-                              }}
-                            >
-                              <Text style={[styles.feeChipText, isChecked && styles.feeChipTextActive]}>
-                                {isChecked ? '✓ ' : '+ '}{mFee.name} (+{mFee.type === 'PERCENTAGE' ? `${Number(mFee.value)}%` : formatRp(mFee.value)})
-                              </Text>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </View>
-                    </View>
-                  )}
-                </View>
-              )}
-
-              {/* Bill Summary */}
-              <View style={styles.billSummaryBox}>
-                {hasBillAdjustments && (
-                  <View style={styles.billRow}>
-                    <Text style={styles.billLabel}>Subtotal</Text>
-                    <Text style={styles.billValue}>{formatRp(subtotal)}</Text>
-                  </View>
-                )}
-                {discount > 0 && (
-                  <View style={styles.billRow}>
-                    <Text style={[styles.billLabel, { color: '#34d399' }]}>
-                      Diskon Promo ({appliedPromo?.discount_code})
-                    </Text>
-                    <Text style={[styles.billValue, { color: '#34d399', fontWeight: 'bold' }]}>
-                      -{formatRp(discount)}
-                    </Text>
-                  </View>
-                )}
-                {taxAmount > 0 && (
-                  <View style={styles.billRow}>
-                    <Text style={styles.billLabel}>Pajak ({activeTax?.name})</Text>
-                    <Text style={[styles.billValue, { color: '#fb7185' }]}>+{formatRp(taxAmount)}</Text>
-                  </View>
-                )}
-                {feeAmount > 0 && (
-                  <>
-                    <View style={styles.billRow}>
-                      <Text style={styles.billLabel}>Biaya Tambahan ({feeDetails.length})</Text>
-                      <Text style={[styles.billValue, { color: '#fb7185' }]}>+{formatRp(feeAmount)}</Text>
-                    </View>
-                    {feeDetails.map((f, idx) => (
-                      <View key={idx} style={[styles.billRow, { paddingLeft: 8, marginBottom: 2 }]}>
-                        <Text style={[styles.billLabel, { fontSize: 12, color: '#a1a1aa' }]}>• {f.name}</Text>
-                        <Text style={[styles.billValue, { fontSize: 12, color: '#fb7185' }]}>+{formatRp(f.amount)}</Text>
-                      </View>
-                    ))}
-                  </>
-                )}
-                <View style={styles.totalRowDivided}>
-                  <Text style={styles.totalLabel}>Total Tagihan:</Text>
-                  <Text style={styles.totalValue}>{formatRp(totalAmount)}</Text>
-                </View>
-              </View>
-
-              {/* Customer / Member Selector */}
-              <View style={styles.customerCard}>
-                <View style={styles.customerCardLeft}>
-                  <View style={[styles.customerAvatar, selectedCustomer && styles.customerAvatarMember]}>
-                    <Users size={16} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
-                  </View>
-                  <View style={{ flex: 1, minWidth: 0 }}>
-                    <Text style={styles.customerLabel}>Pelanggan Transaksi</Text>
-                    <Text style={styles.customerValue} numberOfLines={1} ellipsizeMode="tail">
-                      {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum (Walk-in)'}
-                    </Text>
-                    {selectedCustomer && (
-                      <View style={styles.customerBadgeRow}>
-                        <View style={styles.membershipBadge}>
-                          <Text style={styles.membershipBadgeText}>
-                            {selectedCustomer.membership_type || 'REGULAR'}
-                          </Text>
-                        </View>
-                        {selectedCustomer.phone && (
-                          <Text style={styles.customerPhoneText} numberOfLines={1}>
-                            {selectedCustomer.phone}
-                          </Text>
-                        )}
-                      </View>
-                    )}
-                  </View>
-                </View>
-
-                <TouchableOpacity
-                  style={styles.customerPickerBtn}
-                  onPress={() => setCustomerModalOpen(true)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.customerPickerBtnText}>
-                    {selectedCustomer ? 'Ubah' : 'Pilih'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
               {/* Payment Method */}
+              <Text style={[styles.inputLabel, { marginTop: 16 }]}>Metode Pembayaran</Text>
               <View style={styles.methodRow}>
                 {[
                   { id: 'CASH', label: 'Tunai', icon: Banknote },
@@ -1078,7 +941,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                       style={[styles.methodBtn, isSelected && styles.methodBtnActive]}
                       onPress={() => setPaymentMethod(m.id)}
                     >
-                      <Icon size={15} color={isSelected ? '#ffffff' : '#d4d4d8'} />
+                      <Icon size={16} color={isSelected ? '#ffffff' : '#d4d4d8'} />
                       <Text style={[styles.methodBtnText, isSelected && styles.methodBtnTextActive]}>
                         {m.label}
                       </Text>
@@ -1087,24 +950,16 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 })}
               </View>
 
-              {/* QRIS Surcharge Alert */}
-              {paymentMethod === 'QRIS' && feeDetails.some((f) => f.name.toLowerCase().includes('qris')) && (
-                <View style={styles.qrisFeeAlert}>
-                  <QrCode size={14} color="#fbbf24" />
-                  <Text style={styles.qrisFeeAlertText}>
-                    Biaya Admin QRIS: +{formatRp(feeDetails.filter((f) => f.name.toLowerCase().includes('qris')).reduce((s, f) => s + f.amount, 0))}
-                  </Text>
-                </View>
-              )}
-
               {paymentMethod === 'CASH' && (
-                <View style={{ marginTop: 20 }}>
+                <View style={{ marginTop: 14 }}>
                   <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
                   <TextInput
                     style={styles.cashInput}
                     keyboardType="numeric"
                     value={paidAmount}
                     onChangeText={setPaidAmount}
+                    placeholder="0"
+                    placeholderTextColor="#71717a"
                   />
 
                   <View style={styles.chipsRow}>
@@ -1126,27 +981,21 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 </View>
               )}
 
+              <TouchableOpacity
+                style={[styles.paySubmitBtn, { marginTop: 20 }, checkoutLoading && styles.paySubmitBtnDisabled]}
+                onPress={handleProcessCheckout}
+                disabled={checkoutLoading}
+              >
+                {checkoutLoading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.paySubmitText}>Konfirmasi Pembayaran</Text>
+                )}
+              </TouchableOpacity>
             </ScrollView>
           )}
-
-          <TouchableOpacity
-            style={[styles.paySubmitBtn, isLandscape && styles.paySubmitBtnLandscape, checkoutLoading && styles.paySubmitBtnDisabled]}
-            onPress={handleProcessCheckout}
-            disabled={checkoutLoading}
-          >
-            {checkoutLoading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={[styles.paySubmitText, isLandscape && styles.paySubmitTextLandscape]}>
-                Konfirmasi Pembayaran
-              </Text>
-            )}
-          </TouchableOpacity>
-          </View>
         </View>
-      </Modal>
-
-      {/* Mobile Customer Picker Modal */}
+      )}
       <Modal
         visible={customerModalOpen}
         animationType={isLandscape ? 'fade' : 'slide'}
@@ -1435,7 +1284,10 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
             {/* Action CTA */}
             <TouchableOpacity
               style={styles.newTxButton}
-              onPress={() => setReceiptModalOpen(false)}
+              onPress={() => {
+                setIsCheckoutView(false);
+                setReceiptModalOpen(false);
+              }}
             >
               <Text style={styles.newTxButtonText}>Transaksi Baru</Text>
             </TouchableOpacity>
@@ -2933,5 +2785,153 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingTop: 12,
     paddingBottom: 12,
+  },
+  checkoutRoot: {
+    flex: 1,
+    backgroundColor: '#09090b',
+  },
+  checkoutHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    height: 48,
+    backgroundColor: '#141416',
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+    flexShrink: 0,
+  },
+  checkoutHeaderLandscape: {
+    height: 48,
+    paddingHorizontal: 16,
+  },
+  checkoutHeaderCompact: {
+    height: 44,
+    paddingHorizontal: 12,
+  },
+  checkoutBackBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 44,
+    paddingVertical: 6,
+    paddingRight: 10,
+  },
+  checkoutBackText: {
+    color: '#fb7185',
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  checkoutTitleBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkoutTitleText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontFamily: 'Poppins_700Bold',
+  },
+  checkoutHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkoutItemBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#27272a',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  checkoutItemBadgeText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  checkoutBodyLandscape: {
+    flex: 1,
+    flexDirection: 'row',
+    height: '100%',
+    overflow: 'hidden',
+  },
+  checkoutLeftColLandscape: {
+    width: '38%',
+    maxWidth: 380,
+    borderRightWidth: 1,
+    borderRightColor: '#27272a',
+    backgroundColor: '#111113',
+    padding: 14,
+  },
+  checkoutLeftColCompactLandscape: {
+    width: '36%',
+    maxWidth: 320,
+    padding: 10,
+  },
+  checkoutRightColLandscape: {
+    flex: 1,
+    backgroundColor: '#09090b',
+    padding: 14,
+    justifyContent: 'space-between',
+  },
+  checkoutLeftHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  checkoutSectionTitle: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+  },
+  checkoutCustomerBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#27272a',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  checkoutCustomerBtnText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#fb7185',
+    maxWidth: 110,
+  },
+  checkoutItemsScrollLandscape: {
+    flex: 1,
+    marginTop: 6,
+  },
+  checkoutItemRowMini: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1f1f23',
+  },
+  checkoutItemNameMini: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#ffffff',
+  },
+  checkoutItemPriceMini: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#71717a',
+    marginTop: 2,
+  },
+  checkoutItemSubtotalMini: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fb7185',
+    flexShrink: 0,
+  },
+  checkoutBodyPortrait: {
+    flex: 1,
+    backgroundColor: '#09090b',
   },
 });
