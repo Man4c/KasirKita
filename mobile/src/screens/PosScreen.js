@@ -26,6 +26,7 @@ import {
   Receipt,
   Users,
   Check,
+  Delete,
   TicketPercent,
   Sparkles,
   Percent,
@@ -257,6 +258,33 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
     setAppliedPromo(null);
     setDiscount(0);
     setVoucherInput('');
+  };
+
+  const handleNumpadDigit = (digit) => {
+    setPaidAmount((prev) => {
+      const current = (prev || '').toString().trim();
+      if (!current || current === '0') {
+        return digit === '00' ? '0' : digit;
+      }
+      if (current.length >= 10) return current;
+      return current + digit;
+    });
+  };
+
+  const handleNumpadBackspace = () => {
+    setPaidAmount((prev) => {
+      const current = (prev || '').toString().trim();
+      if (current.length <= 1) return '';
+      return current.slice(0, -1);
+    });
+  };
+
+  const handleNumpadClear = () => {
+    setPaidAmount('');
+  };
+
+  const handleNominalShortcut = (val) => {
+    setPaidAmount(val.toString());
   };
 
   const handleProcessCheckout = async () => {
@@ -883,86 +911,232 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 </ScrollView>
               </View>
 
-              {/* Right Column (~62% width): Payment Terminal */}
+              {/* Right Column (~62% width): Payment Terminal & Numpad */}
               <View style={styles.checkoutRightColLandscape}>
-                <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-                  <Text style={styles.landscapeSectionLabel}>Metode Pembayaran</Text>
-                  <View style={styles.methodRow}>
-                    {[
-                      { id: 'CASH', label: 'Tunai', icon: Banknote },
-                      { id: 'QRIS', label: 'QRIS', icon: QrCode },
-                      { id: 'TRANSFER', label: 'Transfer', icon: CreditCard },
-                    ].map((m) => {
-                      const Icon = m.icon;
-                      const isSelected = paymentMethod === m.id;
-                      return (
-                        <TouchableOpacity
-                          key={m.id}
-                          style={[styles.methodBtn, isSelected && styles.methodBtnActive, styles.landscapeMethodBtn]}
-                          onPress={() => setPaymentMethod(m.id)}
-                        >
-                          <Icon size={14} color={isSelected ? '#ffffff' : '#d4d4d8'} />
-                          <Text style={[styles.methodBtnText, isSelected && styles.methodBtnTextActive]}>
-                            {m.label}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
+                {/* 1. Payment Method Selector */}
+                <View style={styles.checkoutMethodRow}>
+                  {[
+                    { id: 'CASH', label: 'Tunai', icon: Banknote },
+                    { id: 'QRIS', label: 'QRIS', icon: QrCode },
+                    { id: 'TRANSFER', label: 'Transfer', icon: CreditCard },
+                  ].map((m) => {
+                    const Icon = m.icon;
+                    const isSelected = paymentMethod === m.id;
+                    return (
+                      <TouchableOpacity
+                        key={m.id}
+                        style={[styles.checkoutMethodBtn, isSelected && styles.checkoutMethodBtnActive, compact && styles.checkoutMethodBtnCompact]}
+                        onPress={() => setPaymentMethod(m.id)}
+                        activeOpacity={0.7}
+                      >
+                        <Icon size={14} color={isSelected ? '#ffffff' : '#d4d4d8'} />
+                        <Text style={[styles.checkoutMethodBtnText, isSelected && styles.checkoutMethodBtnTextActive]}>
+                          {m.label}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
 
-                  {/* QRIS Surcharge Alert */}
-                  {paymentMethod === 'QRIS' && feeDetails.some((f) => f.name.toLowerCase().includes('qris')) && (
-                    <View style={styles.qrisFeeAlert}>
-                      <QrCode size={14} color="#fbbf24" />
-                      <Text style={styles.qrisFeeAlertText}>
-                        Biaya Admin QRIS: +{formatRp(feeDetails.filter((f) => f.name.toLowerCase().includes('qris')).reduce((s, f) => s + f.amount, 0))}
-                      </Text>
-                    </View>
-                  )}
-
-                  {paymentMethod === 'CASH' && (
-                    <View style={styles.landscapeCashBox}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                        <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
-                        <Text style={styles.changeLabel}>
-                          Kembalian: <Text style={styles.changeValue}>{formatRp(changeAmount)}</Text>
+                {/* 2. Terminal Content */}
+                {paymentMethod === 'CASH' ? (
+                  <View style={styles.checkoutCashTerminal}>
+                    {/* Cash Monitor Display (Uang Diterima & Kembalian) */}
+                    <View style={[styles.cashDisplayBox, compact && styles.cashDisplayBoxCompact]}>
+                      <View style={{ flex: 1, minWidth: 0 }}>
+                        <Text style={styles.cashDisplayLabel}>Uang Diterima:</Text>
+                        <Text style={[styles.cashDisplayAmount, compact && styles.cashDisplayAmountCompact]} numberOfLines={1}>
+                          {paidAmount ? formatRp(Number(paidAmount)) : 'Rp0'}
                         </Text>
                       </View>
-                      <TextInput
-                        style={styles.cashInput}
-                        keyboardType="numeric"
-                        value={paidAmount}
-                        onChangeText={setPaidAmount}
-                        placeholder="0"
-                        placeholderTextColor="#71717a"
-                      />
+                      <View style={{ alignItems: 'flex-end', flexShrink: 0 }}>
+                        <Text style={styles.cashDisplayLabel}>
+                          {Number(paidAmount) >= totalAmount ? 'Kembalian:' : 'Kurang:'}
+                        </Text>
+                        <Text style={[
+                          styles.cashDisplayChange,
+                          compact && styles.cashDisplayChangeCompact,
+                          Number(paidAmount) >= totalAmount ? styles.cashDisplayChangePositive : styles.cashDisplayChangeNegative
+                        ]}>
+                          {Number(paidAmount) >= totalAmount
+                            ? formatRp(changeAmount)
+                            : `-${formatRp(totalAmount - (Number(paidAmount) || 0))}`}
+                        </Text>
+                      </View>
+                      {paidAmount ? (
+                        <TouchableOpacity
+                          style={styles.cashDisplayClearBtn}
+                          onPress={handleNumpadClear}
+                          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                        >
+                          <X size={14} color="#a1a1aa" />
+                        </TouchableOpacity>
+                      ) : null}
+                    </View>
 
-                      <View style={styles.chipsRow}>
-                        {[totalAmount, 50000, 100000, 200000].map((val, idx) => (
+                    {/* Integrated Cashier Numpad & Quick Presets */}
+                    <View style={styles.numpadContainer}>
+                      {/* Left: 3x4 Number Keypad */}
+                      <View style={styles.numpadGrid}>
+                        <View style={styles.numpadRow}>
+                          {['1', '2', '3'].map((d) => (
+                            <TouchableOpacity
+                              key={d}
+                              style={[styles.numpadKey, compact && styles.numpadKeyCompact]}
+                              onPress={() => handleNumpadDigit(d)}
+                              activeOpacity={0.6}
+                            >
+                              <Text style={[styles.numpadKeyText, compact && styles.numpadKeyTextCompact]}>{d}</Text>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                        <View style={styles.numpadRow}>
+                          {['4', '5', '6'].map((d) => (
+                            <TouchableOpacity
+                              key={d}
+                              style={[styles.numpadKey, compact && styles.numpadKeyCompact]}
+                              onPress={() => handleNumpadDigit(d)}
+                              activeOpacity={0.6}
+                            >
+                              <Text style={[styles.numpadKeyText, compact && styles.numpadKeyTextCompact]}>{d}</Text>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                        <View style={styles.numpadRow}>
+                          {['7', '8', '9'].map((d) => (
+                            <TouchableOpacity
+                              key={d}
+                              style={[styles.numpadKey, compact && styles.numpadKeyCompact]}
+                              onPress={() => handleNumpadDigit(d)}
+                              activeOpacity={0.6}
+                            >
+                              <Text style={[styles.numpadKeyText, compact && styles.numpadKeyTextCompact]}>{d}</Text>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                        <View style={styles.numpadRow}>
                           <TouchableOpacity
-                            key={idx}
-                            style={styles.chipBtn}
-                            onPress={() => setPaidAmount(val.toString())}
+                            style={[styles.numpadKey, styles.numpadKeySecondary, compact && styles.numpadKeyCompact]}
+                            onPress={() => handleNumpadDigit('00')}
+                            activeOpacity={0.6}
                           >
-                            <Text style={styles.chipBtnText}>{idx === 0 ? 'Pas' : formatRp(val)}</Text>
+                            <Text style={[styles.numpadKeyText, styles.numpadKeyTextSecondary, compact && styles.numpadKeyTextCompact]}>00</Text>
                           </TouchableOpacity>
-                        ))}
+                          <TouchableOpacity
+                            style={[styles.numpadKey, compact && styles.numpadKeyCompact]}
+                            onPress={() => handleNumpadDigit('0')}
+                            activeOpacity={0.6}
+                          >
+                            <Text style={[styles.numpadKeyText, compact && styles.numpadKeyTextCompact]}>0</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[styles.numpadKey, styles.numpadKeyDelete, compact && styles.numpadKeyCompact]}
+                            onPress={handleNumpadBackspace}
+                            activeOpacity={0.6}
+                          >
+                            <Delete size={compact ? 16 : 18} color="#fb7185" />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      {/* Right: Quick Cash Presets Column */}
+                      <View style={styles.numpadPresetsCol}>
+                        <TouchableOpacity
+                          style={[
+                            styles.numpadPresetBtn,
+                            styles.numpadPresetBtnPas,
+                            compact && styles.numpadPresetBtnCompact,
+                            Number(paidAmount) === totalAmount && styles.numpadPresetBtnActive
+                          ]}
+                          onPress={() => handleNominalShortcut(totalAmount)}
+                          activeOpacity={0.7}
+                        >
+                          <Text style={[styles.numpadPresetTextPas, compact && styles.numpadPresetTextCompact]}>Uang Pas</Text>
+                        </TouchableOpacity>
+
+                        {[50000, 100000, 200000].map((val) => {
+                          const isSelected = Number(paidAmount) === val;
+                          return (
+                            <TouchableOpacity
+                              key={val}
+                              style={[
+                                styles.numpadPresetBtn,
+                                compact && styles.numpadPresetBtnCompact,
+                                isSelected && styles.numpadPresetBtnActive
+                              ]}
+                              onPress={() => handleNominalShortcut(val)}
+                              activeOpacity={0.7}
+                            >
+                              <Text style={[
+                                styles.numpadPresetText,
+                                compact && styles.numpadPresetTextCompact,
+                                isSelected && styles.numpadPresetTextActive
+                              ]}>
+                                {formatRp(val)}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
                       </View>
                     </View>
-                  )}
-                </ScrollView>
+                  </View>
+                ) : paymentMethod === 'QRIS' ? (
+                  <View style={styles.checkoutQrisTerminal}>
+                    <View style={styles.checkoutQrisCard}>
+                      <View style={styles.checkoutQrisIconBox}>
+                        <QrCode size={36} color="#fb7185" />
+                      </View>
+                      <Text style={styles.checkoutQrisTitle}>Pindai QRIS Statis / EDC</Text>
+                      <Text style={styles.checkoutQrisSub}>
+                        Minta pembeli scan kode QRIS kasir dan konfirmasi pembayaran di aplikasi e-wallet / m-banking.
+                      </Text>
+                      {feeDetails.some((f) => f.name.toLowerCase().includes('qris')) && (
+                        <View style={styles.qrisFeeAlert}>
+                          <QrCode size={14} color="#fbbf24" />
+                          <Text style={styles.qrisFeeAlertText}>
+                            Biaya Admin QRIS: +{formatRp(feeDetails.filter((f) => f.name.toLowerCase().includes('qris')).reduce((s, f) => s + f.amount, 0))}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                ) : (
+                  <View style={styles.checkoutTransferTerminal}>
+                    <View style={styles.checkoutTransferCard}>
+                      <View style={styles.checkoutTransferIconBox}>
+                        <CreditCard size={36} color="#60a5fa" />
+                      </View>
+                      <Text style={styles.checkoutTransferTitle}>Transfer Bank / EDC</Text>
+                      <Text style={styles.checkoutTransferSub}>
+                        Pastikan mutasi dana atau struk EDC telah keluar sebelum mengonfirmasi pembayaran.
+                      </Text>
+                    </View>
+                  </View>
+                )}
 
+                {/* 3. Main Action CTA Button */}
                 <TouchableOpacity
-                  style={[styles.paySubmitBtn, styles.paySubmitBtnLandscape, checkoutLoading && styles.paySubmitBtnDisabled]}
+                  style={[
+                    styles.checkoutSubmitBtn,
+                    compact && styles.checkoutSubmitBtnCompact,
+                    (paymentMethod === 'CASH' && Number(paidAmount) < totalAmount) && styles.checkoutSubmitBtnDisabled,
+                    checkoutLoading && styles.checkoutSubmitBtnDisabled
+                  ]}
                   onPress={handleProcessCheckout}
-                  disabled={checkoutLoading}
+                  disabled={checkoutLoading || (paymentMethod === 'CASH' && Number(paidAmount) < totalAmount)}
+                  activeOpacity={0.8}
                 >
                   {checkoutLoading ? (
-                    <ActivityIndicator color="#fff" />
+                    <ActivityIndicator color="#ffffff" />
                   ) : (
-                    <Text style={[styles.paySubmitText, styles.paySubmitTextLandscape]}>
-                      Konfirmasi Pembayaran
-                    </Text>
+                    <View style={styles.checkoutSubmitBtnContent}>
+                      <Check size={17} color="#ffffff" style={{ marginRight: 6 }} />
+                      <Text style={styles.checkoutSubmitBtnText}>
+                        {paymentMethod === 'CASH' && Number(paidAmount) < totalAmount
+                          ? `Uang Kurang (${formatRp(totalAmount - (Number(paidAmount) || 0))})`
+                          : 'Selesaikan Pembayaran'}
+                      </Text>
+                    </View>
                   )}
                 </TouchableOpacity>
               </View>
@@ -3175,6 +3349,281 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     color: '#fb7185',
     flexShrink: 0,
+  },
+  checkoutMethodRow: {
+    flexDirection: 'row',
+    gap: 6,
+    marginBottom: 8,
+  },
+  checkoutMethodBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 7,
+    borderRadius: 10,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
+  },
+  checkoutMethodBtnCompact: {
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  checkoutMethodBtnActive: {
+    backgroundColor: '#e11d48',
+    borderColor: '#f43f5e',
+  },
+  checkoutMethodBtnText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#a1a1aa',
+  },
+  checkoutMethodBtnTextActive: {
+    color: '#ffffff',
+  },
+  checkoutCashTerminal: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  cashDisplayBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#141416',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 8,
+  },
+  cashDisplayBoxCompact: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 6,
+  },
+  cashDisplayLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#a1a1aa',
+  },
+  cashDisplayAmount: {
+    fontSize: 18,
+    fontFamily: 'Poppins_700Bold',
+    color: '#34d399',
+  },
+  cashDisplayAmountCompact: {
+    fontSize: 16,
+  },
+  cashDisplayChange: {
+    fontSize: 15,
+    fontFamily: 'Poppins_700Bold',
+  },
+  cashDisplayChangeCompact: {
+    fontSize: 14,
+  },
+  cashDisplayChangePositive: {
+    color: '#34d399',
+  },
+  cashDisplayChangeNegative: {
+    color: '#fbbf24',
+  },
+  cashDisplayClearBtn: {
+    padding: 4,
+    marginLeft: 8,
+    borderRadius: 6,
+    backgroundColor: '#27272a',
+  },
+  numpadContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: 8,
+  },
+  numpadGrid: {
+    flex: 3,
+    gap: 6,
+  },
+  numpadRow: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: 6,
+  },
+  numpadKey: {
+    flex: 1,
+    backgroundColor: '#18181b',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  numpadKeyCompact: {
+    borderRadius: 8,
+  },
+  numpadKeyText: {
+    fontSize: 16,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
+  numpadKeyTextCompact: {
+    fontSize: 14,
+  },
+  numpadKeySecondary: {
+    backgroundColor: '#1f1f23',
+  },
+  numpadKeyTextSecondary: {
+    color: '#fb7185',
+    fontSize: 14,
+  },
+  numpadKeyDelete: {
+    backgroundColor: 'rgba(244, 63, 94, 0.12)',
+    borderColor: 'rgba(244, 63, 94, 0.25)',
+  },
+  numpadPresetsCol: {
+    flex: 1.4,
+    gap: 6,
+  },
+  numpadPresetBtn: {
+    flex: 1,
+    backgroundColor: '#18181b',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 4,
+  },
+  numpadPresetBtnCompact: {
+    borderRadius: 8,
+  },
+  numpadPresetBtnPas: {
+    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    borderColor: 'rgba(52, 211, 153, 0.3)',
+  },
+  numpadPresetBtnActive: {
+    backgroundColor: '#e11d48',
+    borderColor: '#f43f5e',
+  },
+  numpadPresetText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+  },
+  numpadPresetTextCompact: {
+    fontSize: 12,
+  },
+  numpadPresetTextPas: {
+    fontSize: 12,
+    fontFamily: 'Poppins_700Bold',
+    color: '#34d399',
+  },
+  numpadPresetTextActive: {
+    color: '#ffffff',
+  },
+  checkoutQrisTerminal: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+  },
+  checkoutTransferTerminal: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+  },
+  checkoutQrisCard: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: '#141416',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 18,
+    alignItems: 'center',
+  },
+  checkoutTransferCard: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: '#141416',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 18,
+    alignItems: 'center',
+  },
+  checkoutQrisIconBox: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: 'rgba(244, 63, 94, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  checkoutTransferIconBox: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: 'rgba(96, 165, 250, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  checkoutQrisTitle: {
+    fontSize: 14,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  checkoutTransferTitle: {
+    fontSize: 14,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  checkoutQrisSub: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    textAlign: 'center',
+  },
+  checkoutTransferSub: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    textAlign: 'center',
+  },
+  checkoutSubmitBtn: {
+    backgroundColor: '#e11d48',
+    borderRadius: 12,
+    paddingVertical: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  checkoutSubmitBtnCompact: {
+    paddingVertical: 8,
+    borderRadius: 10,
+    marginTop: 6,
+  },
+  checkoutSubmitBtnDisabled: {
+    backgroundColor: '#27272a',
+    opacity: 0.6,
+  },
+  checkoutSubmitBtnContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkoutSubmitBtnText: {
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
   },
   checkoutBodyPortrait: {
     flex: 1,
