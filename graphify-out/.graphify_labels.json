@@ -133,7 +133,6 @@
   "131": "palette.mjs",
   "132": "package.json",
   "133": "normalizeGitHubEvent",
-  "134": "renderDesignVisual",
   "135": "Init flow",
   "136": "staleness-notice.mjs",
   "137": "inline-ignores.mjs",
