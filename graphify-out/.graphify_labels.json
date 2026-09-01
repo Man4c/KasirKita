@@ -133,6 +133,7 @@
   "131": "palette.mjs",
   "132": "package.json",
   "133": "normalizeGitHubEvent",
+  "134": "checkElementDesignSystemDOM",
   "135": "Init flow",
   "136": "staleness-notice.mjs",
   "137": "inline-ignores.mjs",
@@ -297,7 +298,13 @@
   "296": "SKILL.md",
   "297": "SKILL.md",
   "298": "SKILL.md",
+  "299": ".oxlintrc.json",
+  "300": "Generate Report",
   "301": "Mobile Bottom Navigation & Auto-Rotate Landscape POS",
+  "302": "BORDER_SAFE_TAGS",
   "303": "2026_09_01_182500_create_taxes_and_fees_table.php",
-  "304": "2026_09_01_182600_alter_transactions_add_fee_fields.php"
+  "304": "2026_09_01_182600_alter_transactions_add_fee_fields.php",
+  "305": "Inventory.jsx",
+  "306": "Visualize: Direction Comps & Asset Production",
+  "307": "Adaptation Strategies"
 }
