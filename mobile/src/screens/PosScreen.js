@@ -1284,91 +1284,97 @@ export default function PosScreen({ isLandscape = false }) {
       >
         <View style={styles.receiptModalOverlay}>
           <View style={[styles.receiptSheet, isLandscape && styles.receiptSheetLandscape]}>
-            {/* Store Header */}
-            <View style={styles.receiptHeader}>
-              <Text style={styles.receiptBrand}>KasirKita POS</Text>
-              <Text style={styles.receiptSubtitle}>UMKM Ritel Modern</Text>
-              <Text style={styles.receiptInvoice}>{completedTx?.invoice_number}</Text>
-              <Text style={styles.receiptDate}>
-                {completedTx ? new Date(completedTx.created_at).toLocaleString('id-ID') : ''}
-              </Text>
-              <Text style={styles.receiptCustomer}>
-                Pelanggan: <Text style={{ fontWeight: 'bold' }}>{completedTx?.customer_name || 'Pelanggan Umum'}</Text>
-              </Text>
-              {completedTx?.customer_phone ? (
-                <Text style={styles.receiptCustomerPhone}>
-                  WA: {completedTx.customer_phone}
+            <ScrollView
+              style={styles.receiptScroll}
+              contentContainerStyle={styles.receiptScrollContent}
+              showsVerticalScrollIndicator={true}
+            >
+              {/* Store Header */}
+              <View style={styles.receiptHeader}>
+                <Text style={styles.receiptBrand}>KasirKita POS</Text>
+                <Text style={styles.receiptSubtitle}>UMKM Ritel Modern</Text>
+                <Text style={styles.receiptInvoice}>{completedTx?.invoice_number}</Text>
+                <Text style={styles.receiptDate}>
+                  {completedTx ? new Date(completedTx.created_at).toLocaleString('id-ID') : ''}
                 </Text>
-              ) : null}
-            </View>
-
-            {/* Receipt Items */}
-            <ScrollView style={[styles.receiptItemsList, isLandscape && styles.receiptItemsListLandscape]} showsVerticalScrollIndicator={false}>
-              {completedTx?.items?.map((item, idx) => (
-                <View key={idx} style={styles.receiptItemRow}>
-                  <Text style={styles.receiptItemName} numberOfLines={1} ellipsizeMode="tail">
-                    {Number(item.quantity)}x {item.product_name}
+                <Text style={styles.receiptCustomer}>
+                  Pelanggan: <Text style={{ fontWeight: 'bold' }}>{completedTx?.customer_name || 'Pelanggan Umum'}</Text>
+                </Text>
+                {completedTx?.customer_phone ? (
+                  <Text style={styles.receiptCustomerPhone}>
+                    WA: {completedTx.customer_phone}
                   </Text>
-                  <Text style={styles.receiptItemPrice}>{formatRp(item.subtotal)}</Text>
-                </View>
-              ))}
-            </ScrollView>
-
-            {/* Calculations */}
-            <View style={styles.receiptSummary}>
-              <View style={styles.receiptRow}>
-                <Text style={styles.receiptRowLabel}>Subtotal:</Text>
-                <Text style={styles.receiptRowValue}>{formatRp(completedTx?.subtotal)}</Text>
+                ) : null}
               </View>
-              {Number(completedTx?.discount_amount) > 0 && (
-                <View style={styles.receiptRow}>
-                  <Text style={[styles.receiptRowLabel, { color: '#e11d48' }]}>
-                    Diskon {completedTx?.discount_code ? `(${completedTx.discount_code})` : ''}:
-                  </Text>
-                  <Text style={[styles.receiptRowValue, { color: '#e11d48', fontWeight: 'bold' }]}>
-                    -{formatRp(completedTx.discount_amount)}
-                  </Text>
-                </View>
-              )}
-              {Number(completedTx?.tax_amount) > 0 && (
-                <View style={styles.receiptRow}>
-                  <Text style={styles.receiptRowLabel}>Pajak (PPN/PB1):</Text>
-                  <Text style={styles.receiptRowValue}>+{formatRp(completedTx?.tax_amount)}</Text>
-                </View>
-              )}
-              {Number(completedTx?.fee_amount) > 0 && (
-                <>
-                  <View style={styles.receiptRow}>
-                    <Text style={styles.receiptRowLabel}>Biaya Tambahan:</Text>
-                    <Text style={styles.receiptRowValue}>+{formatRp(completedTx?.fee_amount)}</Text>
+
+              {/* Receipt Items (All items displayed without clipping!) */}
+              <View style={styles.receiptItemsList}>
+                {completedTx?.items?.map((item, idx) => (
+                  <View key={idx} style={styles.receiptItemRow}>
+                    <Text style={styles.receiptItemName} numberOfLines={1} ellipsizeMode="tail">
+                      {Number(item.quantity)}x {item.product_name}
+                    </Text>
+                    <Text style={styles.receiptItemPrice}>{formatRp(item.subtotal)}</Text>
                   </View>
-                  {Array.isArray(completedTx?.fee_details) && completedTx.fee_details.map((f, idx) => (
-                    <View key={idx} style={[styles.receiptRow, { paddingLeft: 8 }]}>
-                      <Text style={[styles.receiptRowLabel, { fontSize: 12, color: '#71717a' }]}>• {f.name}:</Text>
-                      <Text style={[styles.receiptRowValue, { fontSize: 12, color: '#52525b' }]}>+{formatRp(f.amount)}</Text>
-                    </View>
-                  ))}
-                </>
-              )}
-              <View style={styles.receiptTotalRow}>
-                <Text style={styles.receiptTotalLabel}>TOTAL:</Text>
-                <Text style={styles.receiptTotalValue}>{formatRp(completedTx?.total_amount)}</Text>
+                ))}
               </View>
-              <View style={styles.receiptRow}>
-                <Text style={styles.receiptRowLabel}>Metode Bayar:</Text>
-                <Text style={styles.receiptRowValue}>{completedTx?.payment_method}</Text>
-              </View>
-              <View style={styles.receiptRow}>
-                <Text style={styles.receiptRowLabel}>Uang Diterima:</Text>
-                <Text style={styles.receiptRowValue}>{formatRp(completedTx?.paid_amount)}</Text>
-              </View>
-              <View style={styles.receiptRow}>
-                <Text style={styles.receiptRowLabel}>Kembalian:</Text>
-                <Text style={styles.receiptRowValue}>{formatRp(completedTx?.change_amount)}</Text>
-              </View>
-            </View>
 
-            <Text style={styles.receiptFooter}>Terima kasih atas kunjungan Anda!</Text>
+              {/* Calculations */}
+              <View style={styles.receiptSummary}>
+                <View style={styles.receiptRow}>
+                  <Text style={styles.receiptRowLabel}>Subtotal:</Text>
+                  <Text style={styles.receiptRowValue}>{formatRp(completedTx?.subtotal)}</Text>
+                </View>
+                {Number(completedTx?.discount_amount) > 0 && (
+                  <View style={styles.receiptRow}>
+                    <Text style={[styles.receiptRowLabel, { color: '#e11d48' }]}>
+                      Diskon {completedTx?.discount_code ? `(${completedTx.discount_code})` : ''}:
+                    </Text>
+                    <Text style={[styles.receiptRowValue, { color: '#e11d48', fontWeight: 'bold' }]}>
+                      -{formatRp(completedTx.discount_amount)}
+                    </Text>
+                  </View>
+                )}
+                {Number(completedTx?.tax_amount) > 0 && (
+                  <View style={styles.receiptRow}>
+                    <Text style={styles.receiptRowLabel}>Pajak (PPN/PB1):</Text>
+                    <Text style={styles.receiptRowValue}>{completedTx?.tax_amount ? `+${formatRp(completedTx.tax_amount)}` : '+Rp0'}</Text>
+                  </View>
+                )}
+                {Number(completedTx?.fee_amount) > 0 && (
+                  <>
+                    <View style={styles.receiptRow}>
+                      <Text style={styles.receiptRowLabel}>Biaya Tambahan:</Text>
+                      <Text style={styles.receiptRowValue}>+{formatRp(completedTx?.fee_amount)}</Text>
+                    </View>
+                    {Array.isArray(completedTx?.fee_details) && completedTx.fee_details.map((f, idx) => (
+                      <View key={idx} style={[styles.receiptRow, { paddingLeft: 8 }]}>
+                        <Text style={[styles.receiptRowLabel, { fontSize: 12, color: '#71717a' }]}>• {f.name}:</Text>
+                        <Text style={[styles.receiptRowValue, { fontSize: 12, color: '#52525b' }]}>+{formatRp(f.amount)}</Text>
+                      </View>
+                    ))}
+                  </>
+                )}
+                <View style={styles.receiptTotalRow}>
+                  <Text style={styles.receiptTotalLabel}>TOTAL:</Text>
+                  <Text style={styles.receiptTotalValue}>{formatRp(completedTx?.total_amount)}</Text>
+                </View>
+                <View style={styles.receiptRow}>
+                  <Text style={styles.receiptRowLabel}>Metode Bayar:</Text>
+                  <Text style={styles.receiptRowValue}>{completedTx?.payment_method}</Text>
+                </View>
+                <View style={styles.receiptRow}>
+                  <Text style={styles.receiptRowLabel}>Uang Diterima:</Text>
+                  <Text style={styles.receiptRowValue}>{formatRp(completedTx?.paid_amount)}</Text>
+                </View>
+                <View style={styles.receiptRow}>
+                  <Text style={styles.receiptRowLabel}>Kembalian:</Text>
+                  <Text style={styles.receiptRowValue}>{formatRp(completedTx?.change_amount)}</Text>
+                </View>
+              </View>
+
+              <Text style={styles.receiptFooter}>Terima kasih atas kunjungan Anda!</Text>
+            </ScrollView>
 
             {/* Action CTA */}
             <TouchableOpacity
@@ -1788,11 +1794,20 @@ const styles = StyleSheet.create({
   receiptSheet: {
     backgroundColor: '#ffffff',
     borderRadius: 20,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
     width: '100%',
-    maxWidth: 360,
-    maxHeight: '88%',
+    maxWidth: 380,
+    maxHeight: '90%',
     alignSelf: 'center',
+  },
+  receiptScroll: {
+    flex: 1,
+    width: '100%',
+  },
+  receiptScrollContent: {
+    paddingBottom: 8,
   },
   receiptHeader: {
     alignItems: 'center',
@@ -1829,7 +1844,6 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   receiptItemsList: {
-    maxHeight: 140,
     paddingVertical: 10,
     borderBottomColor: '#d4d4d8',
     borderBottomWidth: 1,
@@ -2654,11 +2668,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   receiptSheetLandscape: {
-    maxWidth: 400,
+    maxWidth: 420,
     maxHeight: '94%',
     borderRadius: 20,
-  },
-  receiptItemsListLandscape: {
-    maxHeight: 110,
+    paddingHorizontal: 18,
+    paddingTop: 16,
+    paddingBottom: 12,
   },
 });
