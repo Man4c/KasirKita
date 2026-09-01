@@ -532,11 +532,11 @@ export default function PosScreen({ isLandscape = false }) {
                   }
                 }}
               >
-                <TicketPercent size={12} color={appliedPromo ? '#34d399' : '#a1a1aa'} />
-                <Text style={[styles.regQuickPillText, appliedPromo && { color: '#34d399', fontWeight: 'bold' }]}>
+                <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
+                <Text style={[styles.regQuickPillText, appliedPromo && styles.regQuickPillPromoTextActive]}>
                   {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
                 </Text>
-                {appliedPromo && <X size={11} color="#34d399" style={{ marginLeft: 2 }} />}
+                {appliedPromo && <X size={11} color="#ffffff" style={{ marginLeft: 2 }} />}
               </TouchableOpacity>
 
               {/* Takeaway toggle */}
@@ -2531,8 +2531,12 @@ const styles = StyleSheet.create({
     borderColor: '#f43f5e',
   },
   regQuickPillPromoActive: {
-    backgroundColor: 'rgba(52, 211, 153, 0.15)',
-    borderColor: '#34d399',
+    backgroundColor: '#047857',
+    borderColor: '#10b981',
+  },
+  regQuickPillPromoTextActive: {
+    color: '#ffffff',
+    fontFamily: 'Poppins_600SemiBold',
   },
   regQuickPillText: {
     fontSize: 12,
