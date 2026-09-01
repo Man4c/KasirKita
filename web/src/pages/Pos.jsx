@@ -681,98 +681,100 @@ export default function Pos() {
             <span className="font-semibold text-zinc-200 font-mono text-sm">{formatRp(subtotal)}</span>
           </div>
 
-          {/* Promo & Voucher Section (Flattened - No Nested Card) */}
-          <div className="pt-2 border-t border-zinc-800/60">
-            {appliedPromo ? (
-              <div className="py-1.5 flex items-center justify-between gap-2 text-xs">
-                <div className="flex items-center gap-2 min-w-0">
-                  <TicketPercent className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-mono font-bold text-emerald-400 tracking-wider">
-                        {appliedPromo.discount_code}
-                      </span>
-                      <span className="text-emerald-400 font-bold font-mono shrink-0 whitespace-nowrap">
-                        (-{formatRp(discount)})
-                      </span>
-                    </div>
-                    <p className="text-xs text-zinc-400 truncate">{appliedPromo.discount_name}</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleRemovePromo}
-                  className="p-1 text-zinc-400 hover:text-rose-400 hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer shrink-0"
-                  title="Batalkan kupon promo"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-400 font-medium flex items-center gap-1">
-                    <TicketPercent className="w-3.5 h-3.5 text-rose-400" />
-                    <span>Kupon / Voucher</span>
-                  </span>
-                  {availablePromos.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => setPromoPickerOpen(!promoPickerOpen)}
-                      className="text-xs text-rose-400 hover:text-rose-300 font-semibold cursor-pointer"
-                    >
-                      {promoPickerOpen ? 'Tutup' : `Pilih Promo (${availablePromos.length})`}
-                    </button>
-                  )}
-                </div>
-
-                {/* Promo Picker Flat List (No Nested Box) */}
-                {promoPickerOpen && availablePromos.length > 0 && (
-                  <div className="py-1 divide-y divide-zinc-800/80 max-h-36 overflow-y-auto">
-                    {availablePromos.map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => handleApplyVoucher(p.code)}
-                        className="w-full text-left py-1.5 px-0.5 hover:text-rose-400 flex items-center justify-between text-xs cursor-pointer gap-2 transition-colors"
-                      >
-                        <div className="min-w-0">
-                          <span className="font-mono font-bold text-rose-400 block">{p.code}</span>
-                          <span className="text-zinc-400 truncate block text-xs">{p.name}</span>
-                        </div>
-                        <span className="text-xs font-semibold text-emerald-400 shrink-0 whitespace-nowrap">
-                          {p.type === 'PERCENTAGE' || p.type === 'MIN_SPEND' ? `${parseFloat(p.value)}%` : formatRp(p.value)}
+          {/* Promo & Voucher Section (Only shown if active promo exists or one is applied) */}
+          {(availablePromos.length > 0 || appliedPromo) && (
+            <div className="pt-2 border-t border-zinc-800/60">
+              {appliedPromo ? (
+                <div className="py-1.5 flex items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <TicketPercent className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono font-bold text-emerald-400 tracking-wider">
+                          {appliedPromo.discount_code}
                         </span>
-                      </button>
-                    ))}
+                        <span className="text-emerald-400 font-bold font-mono shrink-0 whitespace-nowrap">
+                          (-{formatRp(discount)})
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-400 truncate">{appliedPromo.discount_name}</p>
+                    </div>
                   </div>
-                )}
-
-                <div className="flex items-center gap-1.5">
-                  <input
-                    type="text"
-                    placeholder="Kode promo (misal: HEMAT10)..."
-                    value={voucherInput}
-                    onChange={(e) => setVoucherInput(e.target.value.toUpperCase())}
-                    onKeyDown={(e) => e.key === 'Enter' && handleApplyVoucher()}
-                    className="w-full px-2.5 py-1 text-xs bg-zinc-950/80 border border-zinc-800 focus:border-rose-500 rounded-lg text-zinc-200 font-mono uppercase placeholder-zinc-600 outline-none"
-                  />
                   <button
                     type="button"
-                    onClick={() => handleApplyVoucher()}
-                    disabled={!voucherInput.trim() || voucherLoading}
-                    className="px-2.5 py-1 bg-zinc-800 hover:bg-rose-600 hover:text-white text-zinc-300 text-xs font-semibold rounded-lg transition-colors cursor-pointer disabled:opacity-40 shrink-0 whitespace-nowrap"
+                    onClick={handleRemovePromo}
+                    className="p-1 text-zinc-400 hover:text-rose-400 hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer shrink-0"
+                    title="Batalkan kupon promo"
                   >
-                    {voucherLoading ? 'Cek...' : 'Pakai'}
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
+              ) : (
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-zinc-400 font-medium flex items-center gap-1">
+                      <TicketPercent className="w-3.5 h-3.5 text-rose-400" />
+                      <span>Kupon / Voucher</span>
+                    </span>
+                    {availablePromos.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setPromoPickerOpen(!promoPickerOpen)}
+                        className="text-xs text-rose-400 hover:text-rose-300 font-semibold cursor-pointer"
+                      >
+                        {promoPickerOpen ? 'Tutup' : `Pilih Promo (${availablePromos.length})`}
+                      </button>
+                    )}
+                  </div>
 
-                {voucherError && (
-                  <p className="text-xs text-rose-400 leading-tight">{voucherError}</p>
-                )}
-              </div>
-            )}
-          </div>
+                  {/* Promo Picker Flat List (No Nested Box) */}
+                  {promoPickerOpen && availablePromos.length > 0 && (
+                    <div className="py-1 divide-y divide-zinc-800/80 max-h-36 overflow-y-auto">
+                      {availablePromos.map((p) => (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => handleApplyVoucher(p.code)}
+                          className="w-full text-left py-1.5 px-0.5 hover:text-rose-400 flex items-center justify-between text-xs cursor-pointer gap-2 transition-colors"
+                        >
+                          <div className="min-w-0">
+                            <span className="font-mono font-bold text-rose-400 block">{p.code}</span>
+                            <span className="text-zinc-400 truncate block text-xs">{p.name}</span>
+                          </div>
+                          <span className="text-xs font-semibold text-emerald-400 shrink-0 whitespace-nowrap">
+                            {p.type === 'PERCENTAGE' || p.type === 'MIN_SPEND' ? `${parseFloat(p.value)}%` : formatRp(p.value)}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="text"
+                      placeholder="Kode promo (misal: HEMAT10)..."
+                      value={voucherInput}
+                      onChange={(e) => setVoucherInput(e.target.value.toUpperCase())}
+                      onKeyDown={(e) => e.key === 'Enter' && handleApplyVoucher()}
+                      className="w-full px-2.5 py-1 text-xs bg-zinc-950/80 border border-zinc-800 focus:border-rose-500 rounded-lg text-zinc-200 font-mono uppercase placeholder-zinc-600 outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleApplyVoucher()}
+                      disabled={!voucherInput.trim() || voucherLoading}
+                      className="px-2.5 py-1 bg-zinc-800 hover:bg-rose-600 hover:text-white text-zinc-300 text-xs font-semibold rounded-lg transition-colors cursor-pointer disabled:opacity-40 shrink-0 whitespace-nowrap"
+                    >
+                      {voucherLoading ? 'Cek...' : 'Pakai'}
+                    </button>
+                  </div>
+
+                  {voucherError && (
+                    <p className="text-xs text-rose-400 leading-tight">{voucherError}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Tax Selector */}
           {availableTaxes.length > 0 && (

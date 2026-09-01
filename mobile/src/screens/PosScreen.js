@@ -578,59 +578,63 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
           {/* Register Footer */}
           <View style={[styles.registerFooter, compact && styles.registerFooterCompact]}>
-            {/* Quick Fee & Promo Pills */}
-            <View style={[styles.regQuickOptionsRow, compact && styles.regQuickOptionsRowCompact]}>
-              {/* Promo button */}
-              <TouchableOpacity
-                style={[styles.regQuickPill, compact && styles.regQuickPillCompact, appliedPromo && styles.regQuickPillPromoActive]}
-                onPress={() => {
-                  if (appliedPromo) {
-                    handleRemovePromo();
-                  } else {
-                    setPromoModalOpen(true);
-                  }
-                }}
-              >
-                <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
-                <Text style={[styles.regQuickPillText, appliedPromo && styles.regQuickPillPromoTextActive]}>
-                  {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
-                </Text>
-                {appliedPromo && <X size={11} color="#ffffff" style={{ marginLeft: 2 }} />}
-              </TouchableOpacity>
+            {/* Quick Fee & Promo Pills (Only render if there are active promos, takeaway fees, or taxes) */}
+            {((availablePromos.length > 0 || appliedPromo) || takeawayFees.length > 0 || availableTaxes.length > 0) && (
+              <View style={[styles.regQuickOptionsRow, compact && styles.regQuickOptionsRowCompact]}>
+                {/* Promo button - only visible if active voucher exists or one is applied */}
+                {(availablePromos.length > 0 || appliedPromo) && (
+                  <TouchableOpacity
+                    style={[styles.regQuickPill, compact && styles.regQuickPillCompact, appliedPromo && styles.regQuickPillPromoActive]}
+                    onPress={() => {
+                      if (appliedPromo) {
+                        handleRemovePromo();
+                      } else {
+                        setPromoModalOpen(true);
+                      }
+                    }}
+                  >
+                    <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
+                    <Text style={[styles.regQuickPillText, appliedPromo && styles.regQuickPillPromoTextActive]}>
+                      {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
+                    </Text>
+                    {appliedPromo && <X size={11} color="#ffffff" style={{ marginLeft: 2 }} />}
+                  </TouchableOpacity>
+                )}
 
-              {/* Takeaway toggle */}
-              {takeawayFees.length > 0 && (
-                <TouchableOpacity
-                  style={[styles.regQuickPill, compact && styles.regQuickPillCompact, isTakeaway && styles.regQuickPillActive]}
-                  onPress={() => setIsTakeaway(!isTakeaway)}
-                >
-                  <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
-                  <Text style={[styles.regQuickPillText, isTakeaway && styles.regQuickPillTextActive]}>
-                    {isTakeaway ? 'Bungkus (+)' : 'Dine In'}
-                  </Text>
-                </TouchableOpacity>
-              )}
+                {/* Takeaway toggle */}
+                {takeawayFees.length > 0 && (
+                  <TouchableOpacity
+                    style={[styles.regQuickPill, compact && styles.regQuickPillCompact, isTakeaway && styles.regQuickPillActive]}
+                    onPress={() => setIsTakeaway(!isTakeaway)}
+                  >
+                    <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
+                    <Text style={[styles.regQuickPillText, isTakeaway && styles.regQuickPillTextActive]}>
+                      {isTakeaway ? 'Bungkus (+)' : 'Dine In'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
 
-              {/* Tax status chip */}
-              {availableTaxes.length > 0 && (
-                <TouchableOpacity
-                  style={[styles.regQuickPill, compact && styles.regQuickPillCompact, selectedTaxId && styles.regQuickPillActive]}
-                  onPress={() => {
-                    if (selectedTaxId) {
-                      setSelectedTaxId('');
-                    } else {
-                      const def = availableTaxes.find((t) => t.is_default) || availableTaxes[0];
-                      setSelectedTaxId(def?.id || '');
-                    }
-                  }}
-                >
-                  <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
-                  <Text style={[styles.regQuickPillText, selectedTaxId && styles.regQuickPillTextActive]}>
-                    {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
+                {/* Tax status chip */}
+                {availableTaxes.length > 0 && (
+                  <TouchableOpacity
+                    style={[styles.regQuickPill, compact && styles.regQuickPillCompact, selectedTaxId && styles.regQuickPillActive]}
+                    onPress={() => {
+                      if (selectedTaxId) {
+                        setSelectedTaxId('');
+                      } else {
+                        const def = availableTaxes.find((t) => t.is_default) || availableTaxes[0];
+                        setSelectedTaxId(def?.id || '');
+                      }
+                    }}
+                  >
+                    <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
+                    <Text style={[styles.regQuickPillText, selectedTaxId && styles.regQuickPillTextActive]}>
+                      {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
 
             {/* Bill Summary Rows */}
             <View style={[styles.regSummaryBox, compact && styles.regSummaryBoxCompact]}>
@@ -829,62 +833,64 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 );
               })}
 
-              {/* Promo & Voucher Section */}
-              {appliedPromo ? (
-                <View style={styles.promoAppliedRow}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
-                    <TicketPercent size={18} color="#34d399" />
-                    <View style={{ flex: 1, minWidth: 0 }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                        <Text style={styles.promoCodeText}>{appliedPromo.discount_code}</Text>
-                        <Text style={styles.promoDiscountText}>(-{formatRp(discount)})</Text>
+              {/* Promo & Voucher Section (Only visible if active promo exists or one is applied) */}
+              {(availablePromos.length > 0 || appliedPromo) && (
+                appliedPromo ? (
+                  <View style={styles.promoAppliedRow}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
+                      <TicketPercent size={18} color="#34d399" />
+                      <View style={{ flex: 1, minWidth: 0 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                          <Text style={styles.promoCodeText}>{appliedPromo.discount_code}</Text>
+                          <Text style={styles.promoDiscountText}>(-{formatRp(discount)})</Text>
+                        </View>
+                        <Text style={styles.promoNameText} numberOfLines={1}>{appliedPromo.discount_name}</Text>
                       </View>
-                      <Text style={styles.promoNameText} numberOfLines={1}>{appliedPromo.discount_name}</Text>
                     </View>
-                  </View>
-                  <TouchableOpacity onPress={handleRemovePromo} style={styles.promoRemoveBtn}>
-                    <X size={16} color="#fb7185" />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View style={styles.promoInputSection}>
-                  <View style={styles.promoHeaderRow}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                      <TicketPercent size={14} color="#fb7185" />
-                      <Text style={styles.promoHeaderTitle}>Kupon / Voucher</Text>
-                    </View>
-                    {availablePromos.length > 0 && (
-                      <TouchableOpacity
-                        onPress={() => setPromoModalOpen(true)}
-                        style={styles.promoPickBtn}
-                      >
-                        <Sparkles size={12} color="#fb7185" style={{ marginRight: 6 }} />
-                        <Text style={styles.promoPickBtnText}>Pilih Promo ({availablePromos.length})</Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                  <View style={styles.promoInputRow}>
-                    <TextInput
-                      style={styles.promoTextInput}
-                      placeholder="Kode promo (misal: HEMAT10)..."
-                      placeholderTextColor="#a1a1aa"
-                      value={voucherInput}
-                      onChangeText={(t) => setVoucherInput(t.toUpperCase())}
-                      autoCapitalize="characters"
-                    />
-                    <TouchableOpacity
-                      style={[styles.promoApplyBtn, (!voucherInput.trim() || voucherLoading) && styles.promoApplyBtnDisabled]}
-                      onPress={() => handleApplyVoucher()}
-                      disabled={!voucherInput.trim() || voucherLoading}
-                    >
-                      {voucherLoading ? (
-                        <ActivityIndicator size="small" color="#ffffff" />
-                      ) : (
-                        <Text style={styles.promoApplyBtnText}>Pakai</Text>
-                      )}
+                    <TouchableOpacity onPress={handleRemovePromo} style={styles.promoRemoveBtn}>
+                      <X size={16} color="#fb7185" />
                     </TouchableOpacity>
                   </View>
-                </View>
+                ) : (
+                  <View style={styles.promoInputSection}>
+                    <View style={styles.promoHeaderRow}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <TicketPercent size={14} color="#fb7185" />
+                        <Text style={styles.promoHeaderTitle}>Kupon / Voucher</Text>
+                      </View>
+                      {availablePromos.length > 0 && (
+                        <TouchableOpacity
+                          onPress={() => setPromoModalOpen(true)}
+                          style={styles.promoPickBtn}
+                        >
+                          <Sparkles size={12} color="#fb7185" style={{ marginRight: 6 }} />
+                          <Text style={styles.promoPickBtnText}>Pilih Promo ({availablePromos.length})</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <View style={styles.promoInputRow}>
+                      <TextInput
+                        style={styles.promoTextInput}
+                        placeholder="Kode promo (misal: HEMAT10)..."
+                        placeholderTextColor="#a1a1aa"
+                        value={voucherInput}
+                        onChangeText={(t) => setVoucherInput(t.toUpperCase())}
+                        autoCapitalize="characters"
+                      />
+                      <TouchableOpacity
+                        style={[styles.promoApplyBtn, (!voucherInput.trim() || voucherLoading) && styles.promoApplyBtnDisabled]}
+                        onPress={() => handleApplyVoucher()}
+                        disabled={!voucherInput.trim() || voucherLoading}
+                      >
+                        {voucherLoading ? (
+                          <ActivityIndicator size="small" color="#ffffff" />
+                        ) : (
+                          <Text style={styles.promoApplyBtnText}>Pakai</Text>
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )
               )}
 
               {/* Taxes & Additional Fees Controls */}
