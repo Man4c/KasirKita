@@ -201,6 +201,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Proyek monorepo KasirKita POS resmi diinisialisasi dengan Git dan dipush ke repositori GitHub `https://github.com/Man4c/KasirKita.git` pada branch `main`.
     - Menyusun file `.gitignore` komprehensif di root untuk mengabaikan `node_modules/`, `vendor/`, file rahasia `.env`, build artifacts (`dist/`), serta cache temporary.
     - Menghapus nested git submodule pada `mobile/` agar seluruh codebase backend, frontend web, dan mobile app terkelola rapi dalam satu kesatuan monorepo.
+  - **Penyelesaian Fase 1: Bottom Navigation Bar Mobile & Layar Riwayat Transaksi (`App.js` & `TransactionHistoryScreen.js` - Plan #18)**:
+    - Mengeliminasi tombol tab bar atas dari header sehingga area layar kasir menjadi luas, lapang, dan bersih.
+    - Mengimplementasikan **Bottom Navigation Bar** modern ramah jangkauan jempol (*Thumb Zone*): **Kasir POS**, **Laporan Toko** (khusus Owner), dan **Riwayat Transaksi** (staf kasir & owner).
+    - Menghadirkan layar baru `TransactionHistoryScreen.js` dengan pencarian invoice, filter metode pembayaran (Tunai/QRIS/Transfer), dan modal cetak ulang struk thermal mobile.
+    - Menerapkan desain `impeccable`: font `Poppins` minimal 12px, indikator aktif rose pill (`rgba(225, 29, 72, 0.16)`), rasio kontras tinggi `6.8:1` (WCAG AAA), dan bayangan dock bawah yang halus.
 
 ## Keputusan Arsitektur
 

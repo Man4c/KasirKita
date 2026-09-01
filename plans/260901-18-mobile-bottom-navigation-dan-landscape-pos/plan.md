@@ -25,7 +25,7 @@ Menyelesaikan keterbatasan ruang visual pada header aplikasi mobile kasir, serta
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | Eliminasi Top Header Tabs & Perancangan Bottom Navigation Bar (Portrait) di `App.js` | pending |
+| 1 | Eliminasi Top Header Tabs & Perancangan Bottom Navigation Bar (Portrait) di `App.js` | completed |
 | 2 | Deteksi Orientasi Cerdas & State Management Responsif (`useWindowDimensions`) | pending |
 | 3 | Perancangan Tata Letak Kasir 2 Kolom (*Split-Screen POS*) untuk Mode Landscape di `PosScreen.js` | pending |
 | 4 | Integrasi Alur Checkout, Diskon, Pajak/Biaya, dan Struk Thermal pada Mode Landscape | pending |
@@ -35,9 +35,9 @@ Menyelesaikan keterbatasan ruang visual pada header aplikasi mobile kasir, serta
 
 ## Key Deliverables
 
-- [ ] Area atas layar pada mode portrait menjadi luas dan bebas dari tombol tab bertumpuk.
-- [ ] Bilah navigasi bawah (*Bottom Navigation Bar*) terpasang dengan rapi, berikon, dan adaptif terhadap peran pengguna (kasir vs owner).
+- [x] Area atas layar pada mode portrait menjadi luas dan bebas dari tombol tab bertumpuk.
+- [x] Bilah navigasi bawah (*Bottom Navigation Bar*) terpasang dengan rapi, berikon, dan adaptif terhadap peran pengguna (kasir vs owner).
 - [ ] Deteksi otomatis transisi orientasi (Portrait $\leftrightarrow$ Landscape) berjalan mulus tanpa lag atau glitch UI.
 - [ ] Mode Landscape menampilkan tata letak 2 kolom: Katalog di kiri dan Keranjang Belanja permanen di kanan.
 - [ ] Kasir dapat melakukan transaksi di mode landscape dengan cepat tanpa perlu membuka/menutup modal keranjang.
-- [ ] Seluruh komponen memenuhi standar WCAG (rasio kontras $\ge 4.5:1$, ukuran font $\ge 12\text{px}$, target sentuh nyaman $\ge 44\text{px}$).
+- [x] Seluruh komponen memenuhi standar WCAG (rasio kontras $\ge 4.5:1$, ukuran font $\ge 12\text{px}$, target sentuh nyaman $\ge 44\text{px}$).

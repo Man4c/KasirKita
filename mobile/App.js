@@ -19,11 +19,12 @@ import {
   Poppins_600SemiBold,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
-import { ShoppingCart, BarChart3, LogOut } from 'lucide-react-native';
+import { ShoppingCart, BarChart3, Receipt, LogOut } from 'lucide-react-native';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import LoginScreen from './src/screens/LoginScreen';
 import PosScreen from './src/screens/PosScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
+import TransactionHistoryScreen from './src/screens/TransactionHistoryScreen';
 
 // Intercept and eliminate transition: padding injected by web safe area libraries
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -112,38 +113,71 @@ function MainApp() {
         </TouchableOpacity>
       </View>
 
-      {/* Tab Navigation (Only show multi-tab if owner, or show single tab if cashier) */}
-      {user?.role === 'owner' && (
-        <View style={styles.tabBar}>
-          <TouchableOpacity
-            style={[styles.tabItem, activeTab === 'pos' && styles.tabItemActive]}
-            onPress={() => setActiveTab('pos')}
-          >
-            <ShoppingCart size={15} color={activeTab === 'pos' ? '#ffffff' : '#d4d4d8'} />
-            <Text style={[styles.tabText, activeTab === 'pos' && styles.tabTextActive]}>
-              Kasir POS
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.tabItem, activeTab === 'dashboard' && styles.tabItemActive]}
-            onPress={() => setActiveTab('dashboard')}
-          >
-            <BarChart3 size={15} color={activeTab === 'dashboard' ? '#ffffff' : '#d4d4d8'} />
-            <Text style={[styles.tabText, activeTab === 'dashboard' && styles.tabTextActive]}>
-              Laporan Toko
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
       {/* Screen Body */}
       <View style={styles.body}>
-        {user?.role === 'owner' && activeTab === 'dashboard' ? (
+        {activeTab === 'dashboard' && user?.role === 'owner' ? (
           <DashboardScreen />
+        ) : activeTab === 'history' ? (
+          <TransactionHistoryScreen />
         ) : (
           <PosScreen />
         )}
+      </View>
+
+      {/* Bottom Navigation Bar */}
+      <View style={[styles.bottomNavBar, { paddingBottom: Math.max(insets.bottom, 10) }]}>
+        {/* 1. Kasir POS */}
+        <TouchableOpacity
+          style={styles.navItem}
+          activeOpacity={0.7}
+          onPress={() => setActiveTab('pos')}
+        >
+          <View style={[styles.navIconPill, activeTab === 'pos' && styles.navIconPillActive]}>
+            <ShoppingCart
+              size={20}
+              color={activeTab === 'pos' ? '#fb7185' : '#71717a'}
+            />
+          </View>
+          <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]}>
+            Kasir POS
+          </Text>
+        </TouchableOpacity>
+
+        {/* 2. Laporan Toko (Owner Only) */}
+        {user?.role === 'owner' && (
+          <TouchableOpacity
+            style={styles.navItem}
+            activeOpacity={0.7}
+            onPress={() => setActiveTab('dashboard')}
+          >
+            <View style={[styles.navIconPill, activeTab === 'dashboard' && styles.navIconPillActive]}>
+              <BarChart3
+                size={20}
+                color={activeTab === 'dashboard' ? '#fb7185' : '#71717a'}
+              />
+            </View>
+            <Text style={[styles.navText, activeTab === 'dashboard' && styles.navTextActive]}>
+              Laporan Toko
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {/* 3. Riwayat Transaksi */}
+        <TouchableOpacity
+          style={styles.navItem}
+          activeOpacity={0.7}
+          onPress={() => setActiveTab('history')}
+        >
+          <View style={[styles.navIconPill, activeTab === 'history' && styles.navIconPillActive]}>
+            <Receipt
+              size={20}
+              color={activeTab === 'history' ? '#fb7185' : '#71717a'}
+            />
+          </View>
+          <Text style={[styles.navText, activeTab === 'history' && styles.navTextActive]}>
+            Riwayat
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -244,38 +278,54 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: '#18181b',
-    borderBottomColor: '#27272a',
-    borderBottomWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    gap: 8,
-  },
-  tabItem: {
-    flex: 1,
+  bottomNavBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: '#18181b',
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    paddingTop: 8,
+    paddingHorizontal: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -3 },
+        shadowOpacity: 0.25,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 8,
+      },
+      web: {
+        boxShadow: '0 -4px 16px rgba(0,0,0,0.45)',
+      },
+    }),
+  },
+  navItem: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 10,
-    borderRadius: 12,
-    backgroundColor: '#09090b',
-    borderColor: '#27272a',
-    borderWidth: 1,
+    paddingVertical: 2,
   },
-  tabItemActive: {
-    backgroundColor: '#e11d48',
-    borderColor: '#e11d48',
+  navIconPill: {
+    paddingVertical: 4,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    backgroundColor: 'transparent',
   },
-  tabText: {
-    fontSize: 13,
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#d4d4d8',
+  navIconPillActive: {
+    backgroundColor: 'rgba(225, 29, 72, 0.16)',
   },
-  tabTextActive: {
-    color: '#ffffff',
+  navText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#a1a1aa',
+    marginTop: 2,
+  },
+  navTextActive: {
+    color: '#fb7185',
+    fontFamily: 'Poppins_700Bold',
   },
   body: {
     flex: 1,
