@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788264510.6776001,
-    "ast_hash": "a281fcbe790aa1201220cff9ad25e29c",
+    "mtime": 1788267111.349399,
+    "ast_hash": "a8b48d5c808d3752b17fa0ce7c809fd4",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2067,6 +2067,11 @@
   "web/src/pages/TaxesAndFees.jsx": {
     "mtime": 1788259989.897323,
     "ast_hash": "006baf030bf0b3bb79ba9ebab58c4b27",
+    "semantic_hash": ""
+  },
+  "plans/260901-18-mobile-bottom-navigation-dan-landscape-pos/plan.md": {
+    "mtime": 1788267093.4403033,
+    "ast_hash": "260dc5e2a057649a8346507c0c518f58",
     "semantic_hash": ""
   }
 }
