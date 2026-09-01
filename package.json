@@ -1,0 +1,15 @@
+{
+  "name": "kasirkita-pos",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,WEB\" -c \"magenta,cyan\" \"npm --prefix backend run dev\" \"cd backend && php artisan serve --host=0.0.0.0 --port=8000\"",
+    "dev:backend": "cd backend && php artisan serve --host=0.0.0.0 --port=8000",
+    "dev:web": "npm --prefix web run dev",
+    "dev:mobile": "npm --prefix mobile run start",
+    "kanban": "node .agents/skills/plans-kanban/scripts/server.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
