@@ -195,6 +195,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   const feeAmount = feeDetails.reduce((sum, f) => sum + f.amount, 0);
   const totalAmount = Math.max(0, netSubtotal + taxAmount + feeAmount);
   const changeAmount = Number(paidAmount) >= totalAmount ? Number(paidAmount) - totalAmount : 0;
+  const hasBillAdjustments = discount > 0 || taxAmount > 0 || feeAmount > 0;
 
   const availableTaxes = taxesAndFees.filter((i) => i.is_tax && i.is_active);
   const takeawayFees = taxesAndFees.filter((i) => !i.is_tax && i.is_active && i.apply_to === 'TAKEAWAY_ONLY');
@@ -636,34 +637,40 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               </View>
             )}
 
-            {/* Bill Summary Rows */}
-            <View style={[styles.regSummaryBox, compact && styles.regSummaryBoxCompact]}>
-              <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
-                <Text style={styles.regSummaryLabel}>Subtotal</Text>
-                <Text style={styles.regSummaryValue}>{formatRp(subtotal)}</Text>
+            {/* Bill Summary Rows (Only show Subtotal & adjustments if there are discounts, taxes, or fees) */}
+            {hasBillAdjustments && (
+              <View style={[styles.regSummaryBox, compact && styles.regSummaryBoxCompact]}>
+                <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
+                  <Text style={styles.regSummaryLabel}>Subtotal</Text>
+                  <Text style={styles.regSummaryValue}>{formatRp(subtotal)}</Text>
+                </View>
+                {discount > 0 && (
+                  <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
+                    <Text style={[styles.regSummaryLabel, { color: '#34d399' }]}>Diskon</Text>
+                    <Text style={[styles.regSummaryValue, { color: '#34d399' }]}>-{formatRp(discount)}</Text>
+                  </View>
+                )}
+                {taxAmount > 0 && (
+                  <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
+                    <Text style={styles.regSummaryLabel}>Pajak ({activeTax?.name})</Text>
+                    <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(taxAmount)}</Text>
+                  </View>
+                )}
+                {feeAmount > 0 && (
+                  <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
+                    <Text style={styles.regSummaryLabel}>Biaya Layanan</Text>
+                    <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(feeAmount)}</Text>
+                  </View>
+                )}
               </View>
-              {discount > 0 && (
-                <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
-                  <Text style={[styles.regSummaryLabel, { color: '#34d399' }]}>Diskon</Text>
-                  <Text style={[styles.regSummaryValue, { color: '#34d399' }]}>-{formatRp(discount)}</Text>
-                </View>
-              )}
-              {taxAmount > 0 && (
-                <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
-                  <Text style={styles.regSummaryLabel}>Pajak ({activeTax?.name})</Text>
-                  <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(taxAmount)}</Text>
-                </View>
-              )}
-              {feeAmount > 0 && (
-                <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
-                  <Text style={styles.regSummaryLabel}>Biaya Layanan</Text>
-                  <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(feeAmount)}</Text>
-                </View>
-              )}
-            </View>
+            )}
 
             {/* Total Row & Pay Button */}
-            <View style={[styles.regPayRow, compact && styles.regPayRowCompact]}>
+            <View style={[
+              styles.regPayRow,
+              compact && styles.regPayRowCompact,
+              (!hasBillAdjustments && !((availablePromos.length > 0 || appliedPromo) || takeawayFees.length > 0 || availableTaxes.length > 0)) && { borderTopWidth: 0, paddingTop: 0 }
+            ]}>
               <View>
                 <Text style={styles.regTotalLabel}>TOTAL BAYAR</Text>
                 <Text style={[styles.regTotalAmount, compact && styles.regTotalAmountCompact]}>{formatRp(totalAmount)}</Text>
@@ -975,10 +982,12 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
               {/* Bill Summary */}
               <View style={styles.billSummaryBox}>
-                <View style={styles.billRow}>
-                  <Text style={styles.billLabel}>Subtotal</Text>
-                  <Text style={styles.billValue}>{formatRp(subtotal)}</Text>
-                </View>
+                {hasBillAdjustments && (
+                  <View style={styles.billRow}>
+                    <Text style={styles.billLabel}>Subtotal</Text>
+                    <Text style={styles.billValue}>{formatRp(subtotal)}</Text>
+                  </View>
+                )}
                 {discount > 0 && (
                   <View style={styles.billRow}>
                     <Text style={[styles.billLabel, { color: '#34d399' }]}>
