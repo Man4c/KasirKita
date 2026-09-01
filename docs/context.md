@@ -212,6 +212,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Mengimplementasikan logika auto-switch: saat HP dimiringkan ke mode mendatar, otomatis mengarahkan antarmuka ke **Kasir POS (Terminal POS)** dan menyembunyikan Bottom Navigation Bar agar seluruh tinggi layar dialokasikan untuk operasional kasir.
     - Menghadirkan header lanskap kompak (tinggi ~36px) dengan badge `TERMINAL POS` dan pintasan tab miniatur.
     - Saat perangkat ditegakkan kembali ke Portrait, aplikasi secara cerdas memulihkan tab yang sedang dibuka sebelumnya (`portraitTab`) tanpa kehilangan state.
+  - **Penyelesaian Fase 3: Perancangan Tata Letak Kasir 2 Kolom (*Split-Screen POS*) di Mode Landscape (`PosScreen.js` - Plan #18)**:
+    - Mengonfigurasi antarmuka `PosScreen.js` untuk merender tata letak 2 kolom berdampingan saat `isLandscape === true`:
+      - **Kolom Kiri (~60%):** Pencarian produk, filter kategori chips yang kompak, dan grid katalog barang responsif.
+      - **Kolom Kanan (Lebar 350px):** Register Kasir permanen (*Persistent Visible Cart*) dengan daftar belanja aktif (+/- kuantitas, harga/item), pemilih member pelanggan, chip cepat kupon promo & pajak, rincian tagihan, serta tombol utama **"Bayar Kasir"**.
+    - Memastikan standar ketahanan layout (Defensive UI Craft): `Readability Floor Rule` (semua font $\ge 12\text{px}$), `Flexbox Pairing Rule` (`numberOfLines={1}` + `flexShrink: 0`), dan penyesuaian modal pembayaran terpusat (*centered modal dialog*) saat berada dalam mode mendatar.
 
 ## Keputusan Arsitektur
 

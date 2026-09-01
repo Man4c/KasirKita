@@ -28,6 +28,8 @@ import {
   Sparkles,
   Percent,
   Package,
+  Trash2,
+  ShoppingCart,
 } from 'lucide-react-native';
 import api from '../services/api';
 
@@ -306,112 +308,317 @@ export default function PosScreen({ isLandscape = false }) {
   const formatRp = (num) => 'Rp' + Number(num || 0).toLocaleString('id-ID');
 
   return (
-    <View style={styles.container}>
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBox}>
-          <Search size={16} color="#a1a1aa" style={{ marginRight: 8 }} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Cari produk atau barcode..."
-            placeholderTextColor="#a1a1aa"
-            value={search}
-            onChangeText={setSearch}
-          />
+    <View style={[styles.container, isLandscape && styles.landscapeRoot]}>
+      {/* LEFT COLUMN: Catalog & Products */}
+      <View style={[styles.catalogCol, isLandscape && styles.landscapeCatalogCol]}>
+        {/* Search Bar */}
+        <View style={[styles.searchContainer, isLandscape && styles.searchContainerLandscape]}>
+          <View style={styles.searchBox}>
+            <Search size={16} color="#a1a1aa" style={{ marginRight: 8 }} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Cari produk atau barcode..."
+              placeholderTextColor="#a1a1aa"
+              value={search}
+              onChangeText={setSearch}
+            />
+            {search.length > 0 && (
+              <TouchableOpacity onPress={() => setSearch('')}>
+                <X size={15} color="#a1a1aa" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-      </View>
 
-      {/* Category Pills */}
-      <View style={styles.catContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            style={[styles.catChip, selectedCat === 'ALL' && styles.catChipActive]}
-            onPress={() => setSelectedCat('ALL')}
-          >
-            <Text style={[styles.catChipText, selectedCat === 'ALL' && styles.catChipTextActive]}>
-              Semua
-            </Text>
-          </TouchableOpacity>
-          {categories.map((c) => (
+        {/* Category Pills */}
+        <View style={[styles.catContainer, isLandscape && styles.catContainerLandscape]}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <TouchableOpacity
-              key={c.id}
-              style={[styles.catChip, selectedCat === c.id && styles.catChipActive]}
-              onPress={() => setSelectedCat(c.id)}
+              style={[styles.catChip, selectedCat === 'ALL' && styles.catChipActive]}
+              onPress={() => setSelectedCat('ALL')}
             >
-              <Text style={[styles.catChipText, selectedCat === c.id && styles.catChipTextActive]}>
-                {c.name}
+              <Text style={[styles.catChipText, selectedCat === 'ALL' && styles.catChipTextActive]}>
+                Semua
               </Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Products Grid */}
-      {loading ? (
-        <View style={styles.centerBox}>
-          <ActivityIndicator color="#e11d48" size="large" />
-          <Text style={styles.loadingText}>Memuat katalog produk...</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredProducts}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          contentContainerStyle={styles.gridContent}
-          renderItem={({ item }) => {
-            const inCart = cart.find((i) => i.product.id === item.id);
-            const stockNum = Number(item.stock || 0);
-            const stockDisplay = Number.isInteger(stockNum) ? stockNum : stockNum.toFixed(1);
-            const minStockNum = Number(item.min_stock || 0);
-            const isOutOfStock = stockNum <= 0;
-            const isLowStock = stockNum <= minStockNum;
-            const unitSymbol = item.base_unit?.symbol || item.baseUnit?.symbol || 'pcs';
-
-            return (
+            {categories.map((c) => (
               <TouchableOpacity
-                style={[styles.productCard, isOutOfStock && styles.productOutOfStock]}
-                onPress={() => !isOutOfStock && addToCart(item)}
-                disabled={isOutOfStock}
-                activeOpacity={0.7}
+                key={c.id}
+                style={[styles.catChip, selectedCat === c.id && styles.catChipActive]}
+                onPress={() => setSelectedCat(c.id)}
               >
-                {inCart && (
-                  <View style={styles.floatingBadge}>
-                    <Text style={styles.floatingBadgeText}>
-                      {inCart.quantity} {unitSymbol}
+                <Text style={[styles.catChipText, selectedCat === c.id && styles.catChipTextActive]}>
+                  {c.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Products Grid */}
+        {loading ? (
+          <View style={styles.centerBox}>
+            <ActivityIndicator color="#e11d48" size="large" />
+            <Text style={styles.loadingText}>Memuat katalog produk...</Text>
+          </View>
+        ) : (
+          <FlatList
+            key={isLandscape ? 'grid-landscape' : 'grid-portrait'}
+            data={filteredProducts}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            contentContainerStyle={[styles.gridContent, isLandscape && styles.gridContentLandscape]}
+            renderItem={({ item }) => {
+              const inCart = cart.find((i) => i.product.id === item.id);
+              const stockNum = Number(item.stock || 0);
+              const stockDisplay = Number.isInteger(stockNum) ? stockNum : stockNum.toFixed(1);
+              const minStockNum = Number(item.min_stock || 0);
+              const isOutOfStock = stockNum <= 0;
+              const isLowStock = stockNum <= minStockNum;
+              const unitSymbol = item.base_unit?.symbol || item.baseUnit?.symbol || 'pcs';
+
+              return (
+                <TouchableOpacity
+                  style={[
+                    styles.productCard,
+                    isLandscape && styles.productCardLandscape,
+                    isOutOfStock && styles.productOutOfStock,
+                  ]}
+                  onPress={() => !isOutOfStock && addToCart(item)}
+                  disabled={isOutOfStock}
+                  activeOpacity={0.7}
+                >
+                  {inCart && (
+                    <View style={styles.floatingBadge}>
+                      <Text style={styles.floatingBadgeText}>
+                        {inCart.quantity} {unitSymbol}
+                      </Text>
+                    </View>
+                  )}
+
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.cardCategory} numberOfLines={1} ellipsizeMode="tail">
+                      {item.category?.name || 'Umum'}
+                    </Text>
+                    <Text
+                      style={[styles.cardStock, isLowStock && styles.cardStockLow]}
+                      numberOfLines={1}
+                    >
+                      {stockDisplay} {unitSymbol}
                     </Text>
                   </View>
-                )}
 
-                <View style={styles.cardHeader}>
-                  <Text style={styles.cardCategory} numberOfLines={1} ellipsizeMode="tail">
-                    {item.category?.name || 'Umum'}
+                  <Text style={[styles.cardTitle, isLandscape && styles.cardTitleLandscape]} numberOfLines={1} ellipsizeMode="tail">
+                    {item.name}
                   </Text>
-                  <Text
-                    style={[styles.cardStock, isLowStock && styles.cardStockLow]}
-                    numberOfLines={1}
-                  >
-                    {stockDisplay} {unitSymbol}
-                  </Text>
-                </View>
 
-                <Text style={styles.cardTitle} numberOfLines={2} ellipsizeMode="tail">
-                  {item.name}
-                </Text>
-
-                <View style={styles.cardFooter}>
-                  <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 2 }}>
-                    <Text style={styles.cardPrice}>{formatRp(item.price)}</Text>
-                    <Text style={styles.cardPriceUnit}>/{unitSymbol}</Text>
+                  <View style={styles.cardFooter}>
+                    <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 2 }}>
+                      <Text style={styles.cardPrice}>{formatRp(item.price)}</Text>
+                      <Text style={styles.cardPriceUnit}>/{unitSymbol}</Text>
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        )}
+      </View>
+
+      {/* RIGHT COLUMN (LANDSCAPE ONLY): Persistent Cashier Register Panel */}
+      {isLandscape && (
+        <View style={styles.landscapeRegisterCol}>
+          {/* Register Column Header */}
+          <View style={styles.registerHeader}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
+              <ShoppingCart size={16} color="#fb7185" />
+              <Text style={styles.registerTitle}>Keranjang</Text>
+              <View style={styles.registerCountBadge}>
+                <Text style={styles.registerCountText}>{totalItemsCount}</Text>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {/* Customer Chip */}
+              <TouchableOpacity
+                style={styles.regCustomerBtn}
+                onPress={() => setCustomerModalOpen(true)}
+              >
+                <Users size={12} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
+                <Text
+                  style={[styles.regCustomerBtnText, selectedCustomer && { color: '#fb7185', fontWeight: 'bold' }]}
+                  numberOfLines={1}
+                >
+                  {selectedCustomer ? selectedCustomer.name : 'Pelanggan'}
+                </Text>
               </TouchableOpacity>
-            );
-          }}
-        />
+
+              {/* Clear Cart Button */}
+              {cart.length > 0 && (
+                <TouchableOpacity
+                  style={styles.regClearBtn}
+                  onPress={() => setCart([])}
+                >
+                  <Trash2 size={13} color="#fb7185" />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
+          {/* Cart Item Rows */}
+          {cart.length === 0 ? (
+            <View style={styles.registerEmptyBox}>
+              <ShoppingCart size={32} color="#27272a" style={{ marginBottom: 8 }} />
+              <Text style={styles.registerEmptyTitle}>Keranjang Kosong</Text>
+              <Text style={styles.registerEmptySub}>Pilih produk di kiri untuk memulai pesanan.</Text>
+            </View>
+          ) : (
+            <ScrollView style={styles.registerItemsScroll} showsVerticalScrollIndicator={false}>
+              {cart.map((item) => {
+                const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
+                return (
+                  <View key={item.product.id} style={styles.regItemRow}>
+                    <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
+                      <Text style={styles.regItemName} numberOfLines={1}>
+                        {item.product.name}
+                      </Text>
+                      <Text style={styles.regItemPrice}>
+                        {formatRp(item.product.price)} x {item.quantity} = <Text style={{ color: '#fb7185', fontWeight: 'bold' }}>{formatRp(item.product.price * item.quantity)}</Text>
+                      </Text>
+                    </View>
+
+                    {/* Qty Controls */}
+                    <View style={styles.regQtyBox}>
+                      <TouchableOpacity
+                        style={styles.regQtyBtn}
+                        onPress={() => updateQuantity(item.product.id, -1)}
+                      >
+                        <Minus size={12} color="#ffffff" />
+                      </TouchableOpacity>
+                      <Text style={styles.regQtyText}>{item.quantity}</Text>
+                      <TouchableOpacity
+                        style={[
+                          styles.regQtyBtn,
+                          item.quantity >= (parseFloat(item.product.stock) || 0) && { opacity: 0.35 },
+                        ]}
+                        onPress={() => updateQuantity(item.product.id, 1)}
+                      >
+                        <Plus size={12} color="#ffffff" />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          )}
+
+          {/* Register Footer */}
+          <View style={styles.registerFooter}>
+            {/* Quick Fee & Promo Pills */}
+            <View style={styles.regQuickOptionsRow}>
+              {/* Promo button */}
+              <TouchableOpacity
+                style={[styles.regQuickPill, appliedPromo && styles.regQuickPillPromoActive]}
+                onPress={() => {
+                  if (appliedPromo) {
+                    handleRemovePromo();
+                  } else {
+                    setPromoModalOpen(true);
+                  }
+                }}
+              >
+                <TicketPercent size={12} color={appliedPromo ? '#34d399' : '#a1a1aa'} />
+                <Text style={[styles.regQuickPillText, appliedPromo && { color: '#34d399', fontWeight: 'bold' }]}>
+                  {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
+                </Text>
+                {appliedPromo && <X size={11} color="#34d399" style={{ marginLeft: 2 }} />}
+              </TouchableOpacity>
+
+              {/* Takeaway toggle */}
+              {takeawayFees.length > 0 && (
+                <TouchableOpacity
+                  style={[styles.regQuickPill, isTakeaway && styles.regQuickPillActive]}
+                  onPress={() => setIsTakeaway(!isTakeaway)}
+                >
+                  <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
+                  <Text style={[styles.regQuickPillText, isTakeaway && styles.regQuickPillTextActive]}>
+                    {isTakeaway ? 'Bungkus (+)' : 'Dine In'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              {/* Tax status chip */}
+              {availableTaxes.length > 0 && (
+                <TouchableOpacity
+                  style={[styles.regQuickPill, selectedTaxId && styles.regQuickPillActive]}
+                  onPress={() => {
+                    if (selectedTaxId) {
+                      setSelectedTaxId('');
+                    } else {
+                      const def = availableTaxes.find((t) => t.is_default) || availableTaxes[0];
+                      setSelectedTaxId(def?.id || '');
+                    }
+                  }}
+                >
+                  <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
+                  <Text style={[styles.regQuickPillText, selectedTaxId && styles.regQuickPillTextActive]}>
+                    {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Bill Summary Rows */}
+            <View style={styles.regSummaryBox}>
+              <View style={styles.regSummaryRow}>
+                <Text style={styles.regSummaryLabel}>Subtotal</Text>
+                <Text style={styles.regSummaryValue}>{formatRp(subtotal)}</Text>
+              </View>
+              {discount > 0 && (
+                <View style={styles.regSummaryRow}>
+                  <Text style={[styles.regSummaryLabel, { color: '#34d399' }]}>Diskon</Text>
+                  <Text style={[styles.regSummaryValue, { color: '#34d399' }]}>-{formatRp(discount)}</Text>
+                </View>
+              )}
+              {taxAmount > 0 && (
+                <View style={styles.regSummaryRow}>
+                  <Text style={styles.regSummaryLabel}>Pajak ({activeTax?.name})</Text>
+                  <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(taxAmount)}</Text>
+                </View>
+              )}
+              {feeAmount > 0 && (
+                <View style={styles.regSummaryRow}>
+                  <Text style={styles.regSummaryLabel}>Biaya Layanan</Text>
+                  <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(feeAmount)}</Text>
+                </View>
+              )}
+            </View>
+
+            {/* Total Row & Pay Button */}
+            <View style={styles.regPayRow}>
+              <View>
+                <Text style={styles.regTotalLabel}>TOTAL BAYAR</Text>
+                <Text style={styles.regTotalAmount}>{formatRp(totalAmount)}</Text>
+              </View>
+
+              <TouchableOpacity
+                style={[styles.regPayButton, cart.length === 0 && { opacity: 0.4 }]}
+                disabled={cart.length === 0}
+                onPress={() => {
+                  setPaidAmount(totalAmount.toString());
+                  setCartModalOpen(true);
+                }}
+              >
+                <Text style={styles.regPayButtonText}>Bayar Kasir</Text>
+                <ArrowRight size={15} color="#ffffff" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       )}
 
-      {/* Floating Bottom Cart Bar */}
-      {cart.length > 0 && (
+      {/* Floating Bottom Cart Bar (Portrait Only) */}
+      {!isLandscape && cart.length > 0 && (
         <View style={styles.floatingCart}>
           <View>
             <Text style={styles.cartBarCount}>{totalItemsCount} Item</Text>
@@ -431,9 +638,9 @@ export default function PosScreen({ isLandscape = false }) {
       )}
 
       {/* Cart & Checkout Modal */}
-      <Modal visible={cartModalOpen} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+      <Modal visible={cartModalOpen} animationType={isLandscape ? 'fade' : 'slide'} transparent>
+        <View style={[styles.modalOverlay, isLandscape && styles.modalOverlayLandscape]}>
+          <View style={[styles.modalContent, isLandscape && styles.modalContentLandscape]}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Detail Keranjang & Pembayaran</Text>
               <TouchableOpacity onPress={() => setCartModalOpen(false)}>
@@ -2016,5 +2223,262 @@ const styles = StyleSheet.create({
     color: '#fef3c7',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+  },
+  landscapeRoot: {
+    flexDirection: 'row',
+  },
+  catalogCol: {
+    flex: 1,
+  },
+  landscapeCatalogCol: {
+    flex: 1,
+    borderRightWidth: 1,
+    borderRightColor: '#27272a',
+  },
+  searchContainerLandscape: {
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  catContainerLandscape: {
+    paddingHorizontal: 12,
+    paddingBottom: 6,
+  },
+  gridContentLandscape: {
+    paddingHorizontal: 8,
+    paddingBottom: 16,
+  },
+  productCardLandscape: {
+    padding: 10,
+    margin: 4,
+  },
+  cardTitleLandscape: {
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  landscapeRegisterCol: {
+    width: 350,
+    backgroundColor: '#18181b',
+    borderLeftWidth: 1,
+    borderLeftColor: '#27272a',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  registerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+    backgroundColor: '#141416',
+  },
+  registerTitle: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
+  registerCountBadge: {
+    backgroundColor: '#e11d48',
+    borderRadius: 10,
+    paddingHorizontal: 7,
+    paddingVertical: 1,
+  },
+  registerCountText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+  },
+  regCustomerBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#27272a',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 8,
+    maxWidth: 120,
+  },
+  regCustomerBtnText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#d4d4d8',
+  },
+  regClearBtn: {
+    padding: 6,
+    backgroundColor: 'rgba(244, 63, 94, 0.12)',
+    borderRadius: 8,
+  },
+  registerEmptyBox: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  registerEmptyTitle: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#71717a',
+  },
+  registerEmptySub: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#52525b',
+    textAlign: 'center',
+    marginTop: 3,
+  },
+  registerItemsScroll: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  regItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+  },
+  regItemName: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
+  regItemPrice: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    marginTop: 2,
+  },
+  regQtyBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#27272a',
+    borderRadius: 8,
+    padding: 2,
+    gap: 4,
+    flexShrink: 0,
+  },
+  regQtyBtn: {
+    padding: 6,
+    borderRadius: 6,
+    backgroundColor: '#3f3f46',
+  },
+  regQtyText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+    minWidth: 18,
+    textAlign: 'center',
+  },
+  registerFooter: {
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    backgroundColor: '#141416',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  regQuickOptionsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginBottom: 8,
+  },
+  regQuickPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  regQuickPillActive: {
+    backgroundColor: '#e11d48',
+    borderColor: '#f43f5e',
+  },
+  regQuickPillPromoActive: {
+    backgroundColor: 'rgba(52, 211, 153, 0.15)',
+    borderColor: '#34d399',
+  },
+  regQuickPillText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#d4d4d8',
+  },
+  regQuickPillTextActive: {
+    color: '#ffffff',
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  regSummaryBox: {
+    marginBottom: 8,
+    gap: 3,
+  },
+  regSummaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  regSummaryLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+  },
+  regSummaryValue: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+    flexShrink: 0,
+  },
+  regPayRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    paddingTop: 8,
+  },
+  regTotalLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#a1a1aa',
+  },
+  regTotalAmount: {
+    fontSize: 17,
+    fontFamily: 'Poppins_700Bold',
+    color: '#fb7185',
+  },
+  regPayButton: {
+    backgroundColor: '#e11d48',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 9,
+    borderRadius: 12,
+    flexShrink: 0,
+  },
+  regPayButtonText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
+  },
+  modalOverlayLandscape: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  modalContentLandscape: {
+    borderRadius: 20,
+    maxWidth: 580,
+    width: '100%',
+    maxHeight: '92%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });
