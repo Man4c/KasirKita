@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788267886.2557178,
-    "ast_hash": "74fae222785e7beeaaefb84ff00ebab0",
+    "mtime": 1788268519.7487426,
+    "ast_hash": "893e6d3ef47c972e61acd6308d641d4a",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/PosScreen.js": {
-    "mtime": 1788267862.1646507,
-    "ast_hash": "c43e3a4ff1760ed8f9804986ecce9c91",
+    "mtime": 1788268449.518254,
+    "ast_hash": "e63fd453332a4a38355a2d6d9becbe99",
     "semantic_hash": ""
   },
   "mobile/src/services/api.js": {
@@ -2070,8 +2070,8 @@
     "semantic_hash": ""
   },
   "plans/260901-18-mobile-bottom-navigation-dan-landscape-pos/plan.md": {
-    "mtime": 1788267878.120181,
-    "ast_hash": "3b040742677779c4f4c47ae22bb73876",
+    "mtime": 1788268512.5794396,
+    "ast_hash": "bfefedf7ef65454e24bee888ce54d14d",
     "semantic_hash": ""
   },
   "mobile/src/screens/TransactionHistoryScreen.js": {
