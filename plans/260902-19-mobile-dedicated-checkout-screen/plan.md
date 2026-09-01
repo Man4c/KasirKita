@@ -30,7 +30,7 @@ Mengeliminasi masalah keterbatasan ruang dan keyboard bawaan HP yang menutupi an
 | Phase | Description | Status |
 |---|---|---|
 | 1 | Perancangan Arsitektur Transisi Layar Checkout Penuh & Header Navigasi Kembali (`PosScreen.js`) | completed |
-| 2 | Perancangan Kolom Kiri Landscape: Panel Nota Tagihan, Ringkasan Belanja, & Member Pelanggan | pending |
+| 2 | Perancangan Kolom Kiri Landscape: Panel Nota Tagihan, Ringkasan Belanja, & Member Pelanggan | completed |
 | 3 | Perancangan Kolom Kanan Landscape: Terminal Pembayaran & Numpad Kasir Virtual Terintegrasi | pending |
 | 4 | Adaptasi Responsif Layar Penuh pada Mode Portrait (Single Full-Page Checkout Flow) | pending |
 | 5 | Pengujian Standar Aksesibilitas WCAG AA, Defensive UI Craft, & Validasi Build Final | pending |
@@ -41,7 +41,7 @@ Mengeliminasi masalah keterbatasan ruang dan keyboard bawaan HP yang menutupi an
 
 - [x] Transisi mulus dari kasir ke layar pembayaran penuh saat tombol *"Bayar Kasir"* ditekan.
 - [x] Tombol `← Kembali ke Keranjang` memudahkan kasir jika pelanggan ingin menambah pesanan.
-- [ ] Kolom kiri menampilkan ringkasan nota, total tagihan besar, dan identitas pembeli secara elegan.
+- [x] Kolom kiri menampilkan ringkasan nota, total tagihan besar, dan identitas pembeli secara elegan.
 - [ ] Kolom kanan dilengkapi Numpad Kasir Virtual sentuh jempol (0-9, 00, C, Pas, 50k, 100k, 200k) tanpa keyboard HP.
 - [ ] Kembalian dihitung otomatis dan ditampilkan dengan teks emerald bold yang jelas.
 - [ ] Tombol *"Selesaikan Pembayaran"* selalu terlihat dan responsif terhadap status validasi pembayaran.

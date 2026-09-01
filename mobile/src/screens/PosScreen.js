@@ -749,39 +749,123 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
             <View style={styles.checkoutBodyLandscape}>
               {/* Left Column (~38% width): Note, Items & Customer Summary */}
               <View style={[styles.checkoutLeftColLandscape, compact && styles.checkoutLeftColCompactLandscape]}>
-                <View style={styles.checkoutLeftHeader}>
-                  <Text style={styles.checkoutSectionTitle}>Ringkasan Nota</Text>
-                  <TouchableOpacity
-                    style={styles.checkoutCustomerBtn}
-                    onPress={() => setCustomerModalOpen(true)}
-                  >
-                    <Users size={13} color="#fb7185" style={{ marginRight: 4 }} />
-                    <Text style={styles.checkoutCustomerBtnText} numberOfLines={1}>
-                      {selectedCustomer ? selectedCustomer.name : 'Pilih Member'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                {/* Total Bill Card */}
-                <View style={styles.landscapeBillCard}>
+                {/* 1. Total Tagihan Banner */}
+                <View style={[styles.checkoutBillBanner, compact && styles.checkoutBillBannerCompact]}>
                   <View style={{ flex: 1, minWidth: 0 }}>
-                    <Text style={styles.landscapeBillLabel}>Total Tagihan</Text>
-                    <Text style={styles.landscapeBillTotal}>{formatRp(totalAmount)}</Text>
-                  </View>
-                  <View style={{ alignItems: 'flex-end', flexShrink: 0 }}>
-                    <Text style={styles.landscapeBillLabel}>Pelanggan</Text>
-                    <Text style={styles.landscapeBillCustomer} numberOfLines={1}>
-                      {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
+                    <Text style={styles.checkoutBillBannerLabel}>TOTAL TAGIHAN</Text>
+                    <Text style={[styles.checkoutBillBannerAmount, compact && styles.checkoutBillBannerAmountCompact]} numberOfLines={1}>
+                      {formatRp(totalAmount)}
                     </Text>
+                  </View>
+                  <View style={styles.checkoutBillItemBadge}>
+                    <Text style={styles.checkoutBillItemBadgeText}>{totalItemsCount} pcs</Text>
                   </View>
                 </View>
 
-                {/* Items List Preview */}
-                <ScrollView style={styles.checkoutItemsScrollLandscape} showsVerticalScrollIndicator={false}>
+                {/* 2. Customer / Member Card */}
+                <View style={[styles.checkoutCustomerCard, compact && styles.checkoutCustomerCardCompact]}>
+                  <View style={styles.checkoutCustomerCardLeft}>
+                    <View style={[styles.checkoutCustomerAvatar, selectedCustomer && styles.checkoutCustomerAvatarActive]}>
+                      <Users size={14} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
+                    </View>
+                    <View style={{ flex: 1, minWidth: 0 }}>
+                      <Text style={styles.checkoutCustomerName} numberOfLines={1} ellipsizeMode="tail">
+                        {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
+                      </Text>
+                      {selectedCustomer ? (
+                        <View style={styles.checkoutCustomerMetaRow}>
+                          <View style={styles.checkoutMembershipBadge}>
+                            <Text style={styles.checkoutMembershipBadgeText}>
+                              {selectedCustomer.membership_type || 'REGULAR'}
+                            </Text>
+                          </View>
+                          {selectedCustomer.phone && (
+                            <Text style={styles.checkoutCustomerPhone} numberOfLines={1}>
+                              {selectedCustomer.phone}
+                            </Text>
+                          )}
+                        </View>
+                      ) : (
+                        <Text style={styles.checkoutCustomerSub}>Walk-in (Tanpa Member)</Text>
+                      )}
+                    </View>
+                  </View>
+
+                  <View style={styles.checkoutCustomerCardRight}>
+                    {selectedCustomer && (
+                      <TouchableOpacity
+                        style={styles.checkoutCustomerResetBtn}
+                        onPress={() => setSelectedCustomer(null)}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <X size={13} color="#a1a1aa" />
+                      </TouchableOpacity>
+                    )}
+                    <TouchableOpacity
+                      style={styles.checkoutCustomerChangeBtn}
+                      onPress={() => setCustomerModalOpen(true)}
+                    >
+                      <Text style={styles.checkoutCustomerChangeBtnText}>
+                        {selectedCustomer ? 'Ganti' : 'Pilih'}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* 3. Financial Breakdown (Subtotal, Diskon, Pajak, Biaya Layanan) */}
+                {hasBillAdjustments && (
+                  <View style={[styles.checkoutAdjustmentsBox, compact && styles.checkoutAdjustmentsBoxCompact]}>
+                    <View style={styles.checkoutAdjustmentRow}>
+                      <Text style={styles.checkoutAdjustmentLabel}>Subtotal</Text>
+                      <Text style={styles.checkoutAdjustmentVal}>{formatRp(subtotal)}</Text>
+                    </View>
+                    {discount > 0 && (
+                      <View style={styles.checkoutAdjustmentRow}>
+                        <Text style={[styles.checkoutAdjustmentLabel, { color: '#34d399' }]} numberOfLines={1}>
+                          Diskon ({appliedPromo?.discount_code || 'Promo'})
+                        </Text>
+                        <Text style={[styles.checkoutAdjustmentVal, { color: '#34d399' }]}>
+                          -{formatRp(discount)}
+                        </Text>
+                      </View>
+                    )}
+                    {taxAmount > 0 && (
+                      <View style={styles.checkoutAdjustmentRow}>
+                        <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
+                          Pajak ({activeTax?.name || 'PPN'})
+                        </Text>
+                        <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                          +{formatRp(taxAmount)}
+                        </Text>
+                      </View>
+                    )}
+                    {feeAmount > 0 && (
+                      <View style={styles.checkoutAdjustmentRow}>
+                        <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>Biaya Layanan</Text>
+                        <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                          +{formatRp(feeAmount)}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                )}
+
+                {/* 4. Order Items Header */}
+                <View style={styles.checkoutItemsHeader}>
+                  <Text style={styles.checkoutItemsTitle}>Daftar Pesanan ({cart.length})</Text>
+                  <Text style={styles.checkoutItemsTotalQty}>{totalItemsCount} Total Qty</Text>
+                </View>
+
+                {/* 5. Scrollable Items List */}
+                <ScrollView
+                  style={styles.checkoutItemsScrollLandscape}
+                  contentContainerStyle={{ paddingBottom: 8 }}
+                  showsVerticalScrollIndicator={false}
+                >
                   {cart.map((item) => {
                     const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
                     return (
-                      <View key={item.product.id} style={styles.checkoutItemRowMini}>
+                      <View key={item.product.id} style={[styles.checkoutItemRowMini, compact && styles.checkoutItemRowMiniCompact]}>
                         <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
                           <Text style={styles.checkoutItemNameMini} numberOfLines={1} ellipsizeMode="tail">
                             {item.product.name}
@@ -2874,44 +2958,206 @@ const styles = StyleSheet.create({
     padding: 14,
     justifyContent: 'space-between',
   },
-  checkoutLeftHeader: {
+  checkoutBillBanner: {
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(244, 63, 94, 0.25)',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 8,
   },
-  checkoutSectionTitle: {
-    fontSize: 13,
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#d4d4d8',
+  checkoutBillBannerCompact: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 6,
   },
-  checkoutCustomerBtn: {
+  checkoutBillBannerLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fb7185',
+    letterSpacing: 0.5,
+  },
+  checkoutBillBannerAmount: {
+    fontSize: 20,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+  },
+  checkoutBillBannerAmountCompact: {
+    fontSize: 17,
+  },
+  checkoutBillItemBadge: {
+    backgroundColor: 'rgba(244, 63, 94, 0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  checkoutBillItemBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fb7185',
+  },
+  checkoutCustomerCard: {
+    backgroundColor: '#18181b',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 8,
+    marginBottom: 8,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  checkoutCustomerCardCompact: {
+    padding: 6,
+    marginBottom: 6,
+  },
+  checkoutCustomerCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flex: 1,
+    minWidth: 0,
+  },
+  checkoutCustomerAvatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  checkoutCustomerAvatarActive: {
+    backgroundColor: 'rgba(244, 63, 94, 0.15)',
+  },
+  checkoutCustomerName: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
+  checkoutCustomerSub: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#71717a',
+  },
+  checkoutCustomerMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 1,
+  },
+  checkoutMembershipBadge: {
+    backgroundColor: '#27272a',
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 4,
+  },
+  checkoutMembershipBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fb7185',
+    textTransform: 'uppercase',
+  },
+  checkoutCustomerPhone: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    maxWidth: 110,
+  },
+  checkoutCustomerCardRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexShrink: 0,
+  },
+  checkoutCustomerResetBtn: {
+    padding: 4,
+    borderRadius: 6,
+    backgroundColor: '#27272a',
+  },
+  checkoutCustomerChangeBtn: {
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 8,
+    backgroundColor: '#27272a',
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: '#3f3f46',
   },
-  checkoutCustomerBtnText: {
+  checkoutCustomerChangeBtnText: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     color: '#fb7185',
-    maxWidth: 110,
+  },
+  checkoutAdjustmentsBox: {
+    backgroundColor: '#141416',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 8,
+    gap: 4,
+  },
+  checkoutAdjustmentsBoxCompact: {
+    paddingVertical: 4,
+    marginBottom: 6,
+    gap: 2,
+  },
+  checkoutAdjustmentRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  checkoutAdjustmentLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    flex: 1,
+    minWidth: 0,
+  },
+  checkoutAdjustmentVal: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+    flexShrink: 0,
+  },
+  checkoutItemsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+    marginBottom: 4,
+  },
+  checkoutItemsTitle: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+  },
+  checkoutItemsTotalQty: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#71717a',
   },
   checkoutItemsScrollLandscape: {
     flex: 1,
-    marginTop: 6,
+    marginTop: 2,
   },
   checkoutItemRowMini: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingVertical: 7,
     borderBottomWidth: 1,
     borderBottomColor: '#1f1f23',
+  },
+  checkoutItemRowMiniCompact: {
+    paddingVertical: 4,
   },
   checkoutItemNameMini: {
     fontSize: 12,
