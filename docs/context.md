@@ -226,6 +226,7 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - *Bilah Alat Katalog Sejajar Horisontal (*Unified Search & Category Toolbar*)*: Menggabungkan kotak pencarian produk dan deretan chip filter kategori ke dalam 1 baris horizontal ramping (`landscapeToolbar`, tinggi ~36px), menghemat ~40px ruang vertikal tambahan.
       - *Total Penghematan Ruang Vertikal*: ~90px ruang vertikal berhasil dibebaskan, sehingga katalog produk dapat menampilkan hingga 2-3 baris kartu barang secara utuh di layar HP kecil.
       - *Perbaikan Modal Struk Belanja Kasir*: Mengeliminasi masalah struk belanja menyusut/hilang (*zero height flexbox collapse*) di mode portrait dengan menetapkan `height: '86%'` dan `minHeight: 180`, serta menambahkan bilah atas struk dengan tombol silang `X` untuk kenyamanan kasir.
+      - *Penyederhanaan Modal Pembayaran Kasir Landscape (`PosScreen.js`)*: Menghilangkan tab ganda redundan ("Pembayaran" & "Daftar Item") karena daftar barang sudah terpampang jelas di kolom keranjang kanan. Memperkecil lebar modal dari 580px menjadi 420px kompak dengan padding 16px, menampilkan kartu ringkasan tagihan & pelanggan, metode bayar (Tunai/QRIS/Transfer), serta kolom input uang diterima dan kembalian secara langsung dalam satu tampilan utuh tanpa perlu scroll berlebih.
 
 ## Keputusan Arsitektur
 

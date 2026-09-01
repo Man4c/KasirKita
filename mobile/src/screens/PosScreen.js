@@ -53,7 +53,6 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   const [customerSearch, setCustomerSearch] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('CASH');
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [modalTab, setModalTab] = useState('payment'); // 'payment' | 'items'
 
   // Promo & Voucher State
   const [appliedPromo, setAppliedPromo] = useState(null);
@@ -707,55 +706,32 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         <View style={[styles.modalOverlay, isLandscape && styles.modalOverlayLandscape]}>
           <View style={[styles.modalContent, isLandscape && styles.modalContentLandscape]}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Detail Keranjang & Pembayaran</Text>
+              <Text style={styles.modalTitle}>
+                {isLandscape ? 'Konfirmasi Pembayaran' : 'Detail Keranjang & Pembayaran'}
+              </Text>
               <TouchableOpacity onPress={() => setCartModalOpen(false)}>
                 <X size={20} color="#d4d4d8" />
               </TouchableOpacity>
             </View>
 
-            {isLandscape && (
-              <View style={styles.modalLandscapeTabs}>
-                <TouchableOpacity
-                  style={[styles.modalLandscapeTabBtn, modalTab === 'payment' && styles.modalLandscapeTabBtnActive]}
-                  onPress={() => setModalTab('payment')}
-                >
-                  <Banknote size={14} color={modalTab === 'payment' ? '#ffffff' : '#a1a1aa'} />
-                  <Text style={[styles.modalLandscapeTabText, modalTab === 'payment' && styles.modalLandscapeTabTextActive]}>
-                    Pembayaran
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[styles.modalLandscapeTabBtn, modalTab === 'items' && styles.modalLandscapeTabBtnActive]}
-                  onPress={() => setModalTab('items')}
-                >
-                  <ShoppingCart size={14} color={modalTab === 'items' ? '#ffffff' : '#a1a1aa'} />
-                  <Text style={[styles.modalLandscapeTabText, modalTab === 'items' && styles.modalLandscapeTabTextActive]}>
-                    Daftar Item ({totalItemsCount})
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-
-            {isLandscape && modalTab === 'payment' ? (
+            {isLandscape ? (
               <ScrollView style={styles.modalLandscapeScroll} showsVerticalScrollIndicator={false}>
                 {/* Compact Bill Summary */}
-                <View style={styles.billSummaryBox}>
-                  <View style={styles.billRow}>
-                    <Text style={styles.billLabel}>Pelanggan:</Text>
-                    <Text style={[styles.billValue, { color: '#ffffff' }]}>
-                      {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
-                    </Text>
+                <View style={styles.landscapeBillCard}>
+                  <View style={{ flex: 1, minWidth: 0 }}>
+                    <Text style={styles.landscapeBillLabel}>Total Tagihan</Text>
+                    <Text style={styles.landscapeBillTotal}>{formatRp(totalAmount)}</Text>
                   </View>
-                  <View style={styles.billRow}>
-                    <Text style={styles.billLabel}>Total Tagihan:</Text>
-                    <Text style={[styles.billValue, { color: '#fb7185', fontSize: 16, fontFamily: 'Poppins_700Bold' }]}>
-                      {formatRp(totalAmount)}
+                  <View style={{ alignItems: 'flex-end', flexShrink: 0 }}>
+                    <Text style={styles.landscapeBillLabel}>Pelanggan</Text>
+                    <Text style={styles.landscapeBillCustomer} numberOfLines={1}>
+                      {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
                     </Text>
                   </View>
                 </View>
 
                 {/* Payment Method */}
+                <Text style={styles.landscapeSectionLabel}>Metode Pembayaran</Text>
                 <View style={styles.methodRow}>
                   {[
                     { id: 'CASH', label: 'Tunai', icon: Banknote },
@@ -767,10 +743,10 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                     return (
                       <TouchableOpacity
                         key={m.id}
-                        style={[styles.methodBtn, isSelected && styles.methodBtnActive]}
+                        style={[styles.methodBtn, isSelected && styles.methodBtnActive, styles.landscapeMethodBtn]}
                         onPress={() => setPaymentMethod(m.id)}
                       >
-                        <Icon size={15} color={isSelected ? '#ffffff' : '#d4d4d8'} />
+                        <Icon size={14} color={isSelected ? '#ffffff' : '#d4d4d8'} />
                         <Text style={[styles.methodBtnText, isSelected && styles.methodBtnTextActive]}>
                           {m.label}
                         </Text>
@@ -790,13 +766,20 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 )}
 
                 {paymentMethod === 'CASH' && (
-                  <View style={{ marginTop: 12 }}>
-                    <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
+                  <View style={styles.landscapeCashBox}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                      <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
+                      <Text style={styles.changeLabel}>
+                        Kembalian: <Text style={styles.changeValue}>{formatRp(changeAmount)}</Text>
+                      </Text>
+                    </View>
                     <TextInput
                       style={styles.cashInput}
                       keyboardType="numeric"
                       value={paidAmount}
                       onChangeText={setPaidAmount}
+                      placeholder="0"
+                      placeholderTextColor="#71717a"
                     />
 
                     <View style={styles.chipsRow}>
@@ -809,11 +792,6 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                           <Text style={styles.chipBtnText}>{idx === 0 ? 'Pas' : formatRp(val)}</Text>
                         </TouchableOpacity>
                       ))}
-                    </View>
-
-                    <View style={styles.changeRow}>
-                      <Text style={styles.changeLabel}>Kembalian:</Text>
-                      <Text style={styles.changeValue}>{formatRp(changeAmount)}</Text>
                     </View>
                   </View>
                 )}
@@ -1133,31 +1111,22 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 </View>
               )}
 
-              {isLandscape && modalTab === 'items' && (
-                <TouchableOpacity
-                  style={[styles.paySubmitBtn, { marginTop: 16 }]}
-                  onPress={() => setModalTab('payment')}
-                >
-                  <Text style={styles.paySubmitText}>Lanjut ke Pembayaran</Text>
-                  <ArrowRight size={16} color="#ffffff" style={{ marginLeft: 8 }} />
-                </TouchableOpacity>
-              )}
             </ScrollView>
           )}
 
-          {(!isLandscape || modalTab === 'payment') && (
-            <TouchableOpacity
-              style={[styles.paySubmitBtn, checkoutLoading && styles.paySubmitBtnDisabled]}
-              onPress={handleProcessCheckout}
-              disabled={checkoutLoading}
-            >
-              {checkoutLoading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.paySubmitText}>Konfirmasi Pembayaran</Text>
-              )}
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={[styles.paySubmitBtn, isLandscape && styles.paySubmitBtnLandscape, checkoutLoading && styles.paySubmitBtnDisabled]}
+            onPress={handleProcessCheckout}
+            disabled={checkoutLoading}
+          >
+            {checkoutLoading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={[styles.paySubmitText, isLandscape && styles.paySubmitTextLandscape]}>
+                Konfirmasi Pembayaran
+              </Text>
+            )}
+          </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -2870,41 +2839,67 @@ const styles = StyleSheet.create({
   },
   modalContentLandscape: {
     borderRadius: 20,
-    maxWidth: 580,
+    maxWidth: 420,
     width: '100%',
-    maxHeight: '92%',
+    maxHeight: '94%',
+    padding: 16,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
-  modalLandscapeTabs: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
+  modalLandscapeScroll: {
+    maxHeight: 240,
   },
-  modalLandscapeTabBtn: {
+  landscapeBillCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 10,
+    justifyContent: 'space-between',
     backgroundColor: '#27272a',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 10,
   },
-  modalLandscapeTabBtnActive: {
-    backgroundColor: '#e11d48',
+  landscapeBillLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    marginBottom: 2,
   },
-  modalLandscapeTabText: {
+  landscapeBillTotal: {
+    fontSize: 18,
+    fontFamily: 'Poppins_700Bold',
+    color: '#fb7185',
+  },
+  landscapeBillCustomer: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+    maxWidth: 140,
+  },
+  landscapeSectionLabel: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     color: '#a1a1aa',
+    marginBottom: 6,
   },
-  modalLandscapeTabTextActive: {
-    color: '#ffffff',
-    fontFamily: 'Poppins_700Bold',
+  landscapeMethodBtn: {
+    paddingVertical: 8,
   },
-  modalLandscapeScroll: {
-    maxHeight: 220,
+  landscapeCashBox: {
+    marginTop: 8,
+    backgroundColor: '#141416',
+    borderRadius: 12,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+  },
+  paySubmitBtnLandscape: {
+    marginTop: 10,
+    paddingVertical: 11,
+    borderRadius: 12,
+  },
+  paySubmitTextLandscape: {
+    fontSize: 14,
   },
   customerPickerSheetLandscape: {
     maxWidth: 500,
