@@ -221,6 +221,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Memindahkan tampilan sisa stok (`cardStock`) ke bagian footer kartu produk berdampingan dengan harga eceran, sehingga badge mengambang kuantitas keranjang (`floatingBadge`) di pojok kanan atas kartu tidak lagi menutupi angka stok.
     - Menambah bantalan bawah (*padding bottom*) katalog produk pada mode portrait (`paddingBottom: cart.length > 0 ? 170 : 100`) dan landscape (`paddingBottom: 36`) agar kartu terbawah tidak tertutup bilah keranjang mengambang atau bilah gestur sistem HP.
     - Menstandarisasi seluruh ukuran font di modul mobile ke $\ge 12\text{px}$ (*Readability Floor Rule* WCAG AAA, zero 10px/11px) dan memvalidasi seluruh build backend (60/60 test PHPUnit pass) dan web Vite build (100% pass).
+    - **Solusi Keterbatasan Layar HP Kecil di Mode Landscape (`App.js` & `PosScreen.js`)**:
+      - *Menghilangkan Bilah Header Atas di Mode Landscape*: Mode mendatar didedikasikan 100% sebagai Terminal Kasir penuh (*Immersive POS Terminal*), menghemat ~50px ruang vertikal. Akses menu Laporan, Riwayat Transaksi, dan Keluar difokuskan saat kasir memutar perangkat kembali ke mode Portrait.
+      - *Bilah Alat Katalog Sejajar Horisontal (*Unified Search & Category Toolbar*)*: Menggabungkan kotak pencarian produk dan deretan chip filter kategori ke dalam 1 baris horizontal ramping (`landscapeToolbar`, tinggi ~36px), menghemat ~40px ruang vertikal tambahan.
+      - *Total Penghematan Ruang Vertikal*: ~90px ruang vertikal berhasil dibebaskan, sehingga katalog produk dapat menampilkan hingga 2-3 baris kartu barang secara utuh di layar HP kecil.
+      - *Perbaikan Modal Struk Belanja Kasir*: Mengeliminasi masalah struk belanja menyusut/hilang (*zero height flexbox collapse*) di mode portrait dengan menetapkan `height: '86%'` dan `minHeight: 180`, serta menambahkan bilah atas struk dengan tombol silang `X` untuk kenyamanan kasir.
 
 ## Keputusan Arsitektur
 

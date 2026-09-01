@@ -315,49 +315,104 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
     <View style={[styles.container, isLandscape && styles.landscapeRoot]}>
       {/* LEFT COLUMN: Catalog & Products */}
       <View style={[styles.catalogCol, isLandscape && styles.landscapeCatalogCol]}>
-        {/* Search Bar */}
-        <View style={[styles.searchContainer, isLandscape && styles.searchContainerLandscape, compact && styles.searchContainerCompactLandscape]}>
-          <View style={[styles.searchBox, compact && styles.searchBoxCompact]}>
-            <Search size={compact ? 14 : 16} color="#a1a1aa" style={{ marginRight: 8 }} />
-            <TextInput
-              style={[styles.searchInput, compact && styles.searchInputCompact]}
-              placeholder="Cari produk atau barcode..."
-              placeholderTextColor="#a1a1aa"
-              value={search}
-              onChangeText={setSearch}
-            />
-            {search.length > 0 && (
-              <TouchableOpacity onPress={() => setSearch('')}>
-                <X size={15} color="#a1a1aa" />
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
+        {/* Catalog Toolbar: Unified 1-Row Toolbar in Landscape, 2-Row Stack in Portrait */}
+        {isLandscape ? (
+          <View style={[styles.landscapeToolbar, compact && styles.landscapeToolbarCompact]}>
+            {/* Search Box */}
+            <View style={[styles.landscapeSearchBox, compact && styles.landscapeSearchBoxCompact]}>
+              <Search size={14} color="#a1a1aa" style={{ marginRight: 6 }} />
+              <TextInput
+                style={[styles.landscapeSearchInput, compact && styles.landscapeSearchInputCompact]}
+                placeholder="Cari produk..."
+                placeholderTextColor="#71717a"
+                value={search}
+                onChangeText={setSearch}
+              />
+              {search.length > 0 && (
+                <TouchableOpacity onPress={() => setSearch('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                  <X size={14} color="#a1a1aa" />
+                </TouchableOpacity>
+              )}
+            </View>
 
-        {/* Category Pills */}
-        <View style={[styles.catContainer, isLandscape && styles.catContainerLandscape, compact && styles.catContainerCompactLandscape]}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity
-              style={[styles.catChip, compact && styles.catChipCompact, selectedCat === 'ALL' && styles.catChipActive]}
-              onPress={() => setSelectedCat('ALL')}
+            {/* Separator Divider */}
+            <View style={styles.toolbarDivider} />
+
+            {/* Horizontal Category Chips */}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.landscapeCatScrollContent}
+              style={{ flex: 1 }}
             >
-              <Text style={[styles.catChipText, compact && styles.catChipTextCompact, selectedCat === 'ALL' && styles.catChipTextActive]}>
-                Semua
-              </Text>
-            </TouchableOpacity>
-            {categories.map((c) => (
               <TouchableOpacity
-                key={c.id}
-                style={[styles.catChip, compact && styles.catChipCompact, selectedCat === c.id && styles.catChipActive]}
-                onPress={() => setSelectedCat(c.id)}
+                style={[styles.catChip, styles.catChipCompact, selectedCat === 'ALL' && styles.catChipActive]}
+                onPress={() => setSelectedCat('ALL')}
               >
-                <Text style={[styles.catChipText, compact && styles.catChipTextCompact, selectedCat === c.id && styles.catChipTextActive]}>
-                  {c.name}
+                <Text style={[styles.catChipText, styles.catChipTextCompact, selectedCat === 'ALL' && styles.catChipTextActive]}>
+                  Semua
                 </Text>
               </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
+              {categories.map((c) => (
+                <TouchableOpacity
+                  key={c.id}
+                  style={[styles.catChip, styles.catChipCompact, selectedCat === c.id && styles.catChipActive]}
+                  onPress={() => setSelectedCat(c.id)}
+                >
+                  <Text style={[styles.catChipText, styles.catChipTextCompact, selectedCat === c.id && styles.catChipTextActive]}>
+                    {c.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        ) : (
+          <>
+            {/* Search Bar (Portrait) */}
+            <View style={styles.searchContainer}>
+              <View style={styles.searchBox}>
+                <Search size={16} color="#a1a1aa" style={{ marginRight: 8 }} />
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Cari produk atau barcode..."
+                  placeholderTextColor="#a1a1aa"
+                  value={search}
+                  onChangeText={setSearch}
+                />
+                {search.length > 0 && (
+                  <TouchableOpacity onPress={() => setSearch('')}>
+                    <X size={15} color="#a1a1aa" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+
+            {/* Category Pills (Portrait) */}
+            <View style={styles.catContainer}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <TouchableOpacity
+                  style={[styles.catChip, selectedCat === 'ALL' && styles.catChipActive]}
+                  onPress={() => setSelectedCat('ALL')}
+                >
+                  <Text style={[styles.catChipText, selectedCat === 'ALL' && styles.catChipTextActive]}>
+                    Semua
+                  </Text>
+                </TouchableOpacity>
+                {categories.map((c) => (
+                  <TouchableOpacity
+                    key={c.id}
+                    style={[styles.catChip, selectedCat === c.id && styles.catChipActive]}
+                    onPress={() => setSelectedCat(c.id)}
+                  >
+                    <Text style={[styles.catChipText, selectedCat === c.id && styles.catChipTextActive]}>
+                      {c.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          </>
+        )}
 
         {/* Products Grid */}
         {loading ? (
@@ -2420,30 +2475,62 @@ const styles = StyleSheet.create({
     borderRightColor: '#27272a',
     overflow: 'hidden',
   },
-  searchContainerLandscape: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+  landscapeToolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+    backgroundColor: '#09090b',
+    gap: 8,
+    flexShrink: 0,
   },
-  searchContainerCompactLandscape: {
+  landscapeToolbarCompact: {
     paddingHorizontal: 10,
-    paddingTop: 6,
-    paddingBottom: 4,
+    paddingVertical: 6,
+    gap: 6,
   },
-  searchBoxCompact: {
+  landscapeSearchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#18181b',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
     paddingHorizontal: 10,
+    paddingVertical: 4,
+    width: 170,
+    flexShrink: 0,
   },
-  searchInputCompact: {
-    paddingVertical: 5,
+  landscapeSearchBoxCompact: {
+    width: 140,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  landscapeSearchInput: {
+    flex: 1,
+    color: '#ffffff',
     fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    padding: 0,
+    height: 28,
   },
-  catContainerLandscape: {
-    paddingHorizontal: 16,
-    paddingBottom: 10,
+  landscapeSearchInputCompact: {
+    fontSize: 12,
+    height: 26,
   },
-  catContainerCompactLandscape: {
-    paddingHorizontal: 10,
-    paddingBottom: 4,
+  toolbarDivider: {
+    width: 1,
+    height: 20,
+    backgroundColor: '#27272a',
+    marginHorizontal: 2,
+    flexShrink: 0,
+  },
+  landscapeCatScrollContent: {
+    alignItems: 'center',
+    paddingRight: 10,
   },
   catChipCompact: {
     paddingHorizontal: 10,
@@ -2456,8 +2543,8 @@ const styles = StyleSheet.create({
   },
   gridContentLandscape: {
     paddingHorizontal: 12,
-    paddingTop: 4,
-    paddingBottom: 40,
+    paddingTop: 8,
+    paddingBottom: 24,
   },
   gridContentCompactLandscape: {
     paddingHorizontal: 6,

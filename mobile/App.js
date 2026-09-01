@@ -135,87 +135,40 @@ function MainApp() {
     >
       <StatusBar style="light" />
 
-      {/* Top Header Bar */}
-      <View style={[styles.topBar, isLandscape && styles.topBarLandscape, isCompactLandscape && styles.topBarCompactLandscape]}>
-        <View style={styles.headerLeft}>
-          <View style={styles.brandRow}>
-            <Text style={[styles.topBrand, isLandscape && styles.topBrandLandscape, isCompactLandscape && styles.topBrandCompact]}>
-              KasirKita
-            </Text>
-            <View style={[styles.topBadge, isLandscape && styles.topBadgeLandscape, isCompactLandscape && styles.topBadgeCompact]}>
-              <Text style={[styles.topBadgeText, isLandscape && styles.topBadgeTextLandscape]}>
-                {isLandscape ? 'TERMINAL POS' : 'MOBILE'}
-              </Text>
+      {/* Top Header Bar (Portrait Only - Landscape is dedicated 100% full-screen POS Terminal) */}
+      {!isLandscape && (
+        <View style={styles.topBar}>
+          <View style={styles.headerLeft}>
+            <View style={styles.brandRow}>
+              <Text style={styles.topBrand}>KasirKita</Text>
+              <View style={styles.topBadge}>
+                <Text style={styles.topBadgeText}>MOBILE</Text>
+              </View>
             </View>
-          </View>
-          {!isLandscape && (
             <Text style={styles.topUser}>
               {user?.name || 'Kasir'} • <Text style={{ textTransform: 'capitalize' }}>{user?.role}</Text>
             </Text>
-          )}
-        </View>
+          </View>
 
-        {/* Compact quick switcher in landscape */}
-        {isLandscape && (
-          <View style={[styles.landscapeNavRow, isCompactLandscape && styles.landscapeNavRowCompact]}>
-            <TouchableOpacity
-              style={[styles.landscapeTabBtn, isCompactLandscape && styles.landscapeTabBtnCompact, activeTab === 'pos' && styles.landscapeTabBtnActive]}
-              onPress={() => handleTabChange('pos')}
-            >
-              <ShoppingCart size={isCompactLandscape ? 12 : 13} color={activeTab === 'pos' ? '#ffffff' : '#a1a1aa'} />
-              <Text style={[styles.landscapeTabText, activeTab === 'pos' && styles.landscapeTabTextActive]}>
-                Kasir
-              </Text>
-            </TouchableOpacity>
-
-            {user?.role === 'owner' && (
-              <TouchableOpacity
-                style={[styles.landscapeTabBtn, isCompactLandscape && styles.landscapeTabBtnCompact, activeTab === 'dashboard' && styles.landscapeTabBtnActive]}
-                onPress={() => handleTabChange('dashboard')}
-              >
-                <BarChart3 size={isCompactLandscape ? 12 : 13} color={activeTab === 'dashboard' ? '#ffffff' : '#a1a1aa'} />
-                <Text style={[styles.landscapeTabText, activeTab === 'dashboard' && styles.landscapeTabTextActive]}>
-                  Laporan
-                </Text>
-              </TouchableOpacity>
-            )}
-
-            <TouchableOpacity
-              style={[styles.landscapeTabBtn, isCompactLandscape && styles.landscapeTabBtnCompact, activeTab === 'history' && styles.landscapeTabBtnActive]}
-              onPress={() => handleTabChange('history')}
-            >
-              <Receipt size={isCompactLandscape ? 12 : 13} color={activeTab === 'history' ? '#ffffff' : '#a1a1aa'} />
-              <Text style={[styles.landscapeTabText, activeTab === 'history' && styles.landscapeTabTextActive]}>
-                Riwayat
-              </Text>
+          <View style={styles.headerRight}>
+            <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+              <LogOut size={13} color="#fb7185" />
+              <Text style={styles.logoutText}>Keluar</Text>
             </TouchableOpacity>
           </View>
-        )}
-
-        <View style={styles.headerRight}>
-          {isLandscape && width >= 720 && (
-            <Text style={styles.landscapeUserText} numberOfLines={1}>
-              {user?.name || 'Kasir'}
-            </Text>
-          )}
-          <TouchableOpacity
-            style={[styles.logoutBtn, isLandscape && styles.logoutBtnLandscape, isCompactLandscape && styles.logoutBtnCompactLandscape]}
-            onPress={logout}
-          >
-            <LogOut size={13} color="#fb7185" />
-            {!isLandscape && <Text style={styles.logoutText}>Keluar</Text>}
-          </TouchableOpacity>
         </View>
-      </View>
+      )}
 
       {/* Screen Body */}
       <View style={styles.body}>
-        {activeTab === 'dashboard' && user?.role === 'owner' ? (
-          <DashboardScreen isLandscape={isLandscape} />
+        {isLandscape ? (
+          <PosScreen isLandscape={true} isCompactLandscape={isCompactLandscape} />
+        ) : activeTab === 'dashboard' && user?.role === 'owner' ? (
+          <DashboardScreen isLandscape={false} />
         ) : activeTab === 'history' ? (
-          <TransactionHistoryScreen isLandscape={isLandscape} />
+          <TransactionHistoryScreen isLandscape={false} />
         ) : (
-          <PosScreen isLandscape={isLandscape} isCompactLandscape={isCompactLandscape} />
+          <PosScreen isLandscape={false} isCompactLandscape={false} />
         )}
       </View>
 
