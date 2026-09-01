@@ -31,7 +31,7 @@ import {
 } from 'lucide-react-native';
 import api from '../services/api';
 
-export default function PosScreen() {
+export default function PosScreen({ isLandscape = false }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [customers, setCustomers] = useState([]);

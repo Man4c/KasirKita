@@ -18,7 +18,7 @@ import {
 } from 'lucide-react-native';
 import api from '../services/api';
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ isLandscape = false }) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
 

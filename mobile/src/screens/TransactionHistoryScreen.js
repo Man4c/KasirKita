@@ -27,7 +27,7 @@ import {
 } from 'lucide-react-native';
 import api from '../services/api';
 
-export default function TransactionHistoryScreen() {
+export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

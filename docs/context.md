@@ -206,6 +206,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Mengimplementasikan **Bottom Navigation Bar** modern ramah jangkauan jempol (*Thumb Zone*): **Kasir POS**, **Laporan Toko** (khusus Owner), dan **Riwayat Transaksi** (staf kasir & owner).
     - Menghadirkan layar baru `TransactionHistoryScreen.js` dengan pencarian invoice, filter metode pembayaran (Tunai/QRIS/Transfer), dan modal cetak ulang struk thermal mobile.
     - Menerapkan desain `impeccable`: font `Poppins` minimal 12px, indikator aktif rose pill (`rgba(225, 29, 72, 0.16)`), rasio kontras tinggi `6.8:1` (WCAG AAA), dan bayangan dock bawah yang halus.
+  - **Penyelesaian Fase 2: Deteksi Orientasi Cerdas & State Management Responsif (`App.js` & `app.json` - Plan #18)**:
+    - Mengonfigurasi `app.json` ke `orientation: default` agar perangkat Android & iOS mengizinkan rotasi otomatis horizontal.
+    - Mengintegrasikan `useWindowDimensions` di `App.js` untuk mendeteksi `isLandscape = width > height` secara reaktif.
+    - Mengimplementasikan logika auto-switch: saat HP dimiringkan ke mode mendatar, otomatis mengarahkan antarmuka ke **Kasir POS (Terminal POS)** dan menyembunyikan Bottom Navigation Bar agar seluruh tinggi layar dialokasikan untuk operasional kasir.
+    - Menghadirkan header lanskap kompak (tinggi ~36px) dengan badge `TERMINAL POS` dan pintasan tab miniatur.
+    - Saat perangkat ditegakkan kembali ke Portrait, aplikasi secara cerdas memulihkan tab yang sedang dibuka sebelumnya (`portraitTab`) tanpa kehilangan state.
 
 ## Keputusan Arsitektur
 

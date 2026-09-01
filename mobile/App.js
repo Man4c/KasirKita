@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Platform,
+  useWindowDimensions,
 } from 'react-native';
 import {
   SafeAreaProvider,
@@ -70,8 +71,30 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
 
 function MainApp() {
   const { isAuthenticated, loading, user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState('pos'); // 'pos' or 'dashboard'
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
+  const [activeTab, setActiveTab] = useState('pos');
+  const [portraitTab, setPortraitTab] = useState('pos');
+  const prevIsLandscapeRef = useRef(isLandscape);
   const insets = useSafeAreaInsets();
+
+  // Auto-switch to Kasir POS upon rotating to landscape, restore upon rotating back to portrait
+  useEffect(() => {
+    if (isLandscape && !prevIsLandscapeRef.current) {
+      setActiveTab('pos');
+    } else if (!isLandscape && prevIsLandscapeRef.current) {
+      setActiveTab(portraitTab);
+    }
+    prevIsLandscapeRef.current = isLandscape;
+  }, [isLandscape, portraitTab]);
+
+  const handleTabChange = (newTab) => {
+    setActiveTab(newTab);
+    if (!isLandscape) {
+      setPortraitTab(newTab);
+    }
+  };
 
   if (loading) {
     return (
@@ -90,95 +113,158 @@ function MainApp() {
   }
 
   return (
-    <View style={[styles.safeArea, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.safeArea,
+        {
+          paddingTop: isLandscape ? 0 : insets.top,
+          paddingBottom: isLandscape ? 0 : insets.bottom,
+        },
+      ]}
+    >
       <StatusBar style="light" />
 
       {/* Top Header Bar */}
-      <View style={styles.topBar}>
-        <View>
+      <View style={[styles.topBar, isLandscape && styles.topBarLandscape]}>
+        <View style={styles.headerLeft}>
           <View style={styles.brandRow}>
-            <Text style={styles.topBrand}>KasirKita</Text>
-            <View style={styles.topBadge}>
-              <Text style={styles.topBadgeText}>MOBILE</Text>
+            <Text style={[styles.topBrand, isLandscape && styles.topBrandLandscape]}>
+              KasirKita
+            </Text>
+            <View style={[styles.topBadge, isLandscape && styles.topBadgeLandscape]}>
+              <Text style={[styles.topBadgeText, isLandscape && styles.topBadgeTextLandscape]}>
+                {isLandscape ? 'TERMINAL POS' : 'MOBILE'}
+              </Text>
             </View>
           </View>
-          <Text style={styles.topUser}>
-            {user?.name || 'Kasir'} • <Text style={{ textTransform: 'capitalize' }}>{user?.role}</Text>
-          </Text>
+          {!isLandscape && (
+            <Text style={styles.topUser}>
+              {user?.name || 'Kasir'} • <Text style={{ textTransform: 'capitalize' }}>{user?.role}</Text>
+            </Text>
+          )}
         </View>
 
-        <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
-          <LogOut size={14} color="#fb7185" />
-          <Text style={styles.logoutText}>Keluar</Text>
-        </TouchableOpacity>
+        {/* Compact quick switcher in landscape */}
+        {isLandscape && (
+          <View style={styles.landscapeNavRow}>
+            <TouchableOpacity
+              style={[styles.landscapeTabBtn, activeTab === 'pos' && styles.landscapeTabBtnActive]}
+              onPress={() => handleTabChange('pos')}
+            >
+              <ShoppingCart size={13} color={activeTab === 'pos' ? '#ffffff' : '#a1a1aa'} />
+              <Text style={[styles.landscapeTabText, activeTab === 'pos' && styles.landscapeTabTextActive]}>
+                Kasir
+              </Text>
+            </TouchableOpacity>
+
+            {user?.role === 'owner' && (
+              <TouchableOpacity
+                style={[styles.landscapeTabBtn, activeTab === 'dashboard' && styles.landscapeTabBtnActive]}
+                onPress={() => handleTabChange('dashboard')}
+              >
+                <BarChart3 size={13} color={activeTab === 'dashboard' ? '#ffffff' : '#a1a1aa'} />
+                <Text style={[styles.landscapeTabText, activeTab === 'dashboard' && styles.landscapeTabTextActive]}>
+                  Laporan
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            <TouchableOpacity
+              style={[styles.landscapeTabBtn, activeTab === 'history' && styles.landscapeTabBtnActive]}
+              onPress={() => handleTabChange('history')}
+            >
+              <Receipt size={13} color={activeTab === 'history' ? '#ffffff' : '#a1a1aa'} />
+              <Text style={[styles.landscapeTabText, activeTab === 'history' && styles.landscapeTabTextActive]}>
+                Riwayat
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        <View style={styles.headerRight}>
+          {isLandscape && (
+            <Text style={styles.landscapeUserText} numberOfLines={1}>
+              {user?.name || 'Kasir'}
+            </Text>
+          )}
+          <TouchableOpacity
+            style={[styles.logoutBtn, isLandscape && styles.logoutBtnLandscape]}
+            onPress={logout}
+          >
+            <LogOut size={13} color="#fb7185" />
+            {!isLandscape && <Text style={styles.logoutText}>Keluar</Text>}
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Screen Body */}
       <View style={styles.body}>
         {activeTab === 'dashboard' && user?.role === 'owner' ? (
-          <DashboardScreen />
+          <DashboardScreen isLandscape={isLandscape} />
         ) : activeTab === 'history' ? (
-          <TransactionHistoryScreen />
+          <TransactionHistoryScreen isLandscape={isLandscape} />
         ) : (
-          <PosScreen />
+          <PosScreen isLandscape={isLandscape} />
         )}
       </View>
 
-      {/* Bottom Navigation Bar */}
-      <View style={[styles.bottomNavBar, { paddingBottom: Math.max(insets.bottom, 10) }]}>
-        {/* 1. Kasir POS */}
-        <TouchableOpacity
-          style={styles.navItem}
-          activeOpacity={0.7}
-          onPress={() => setActiveTab('pos')}
-        >
-          <View style={[styles.navIconPill, activeTab === 'pos' && styles.navIconPillActive]}>
-            <ShoppingCart
-              size={20}
-              color={activeTab === 'pos' ? '#fb7185' : '#71717a'}
-            />
-          </View>
-          <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]}>
-            Kasir POS
-          </Text>
-        </TouchableOpacity>
-
-        {/* 2. Laporan Toko (Owner Only) */}
-        {user?.role === 'owner' && (
+      {/* Bottom Navigation Bar (Hidden in Landscape to give full height to Kasir Terminal) */}
+      {!isLandscape && (
+        <View style={[styles.bottomNavBar, { paddingBottom: Math.max(insets.bottom, 10) }]}>
+          {/* 1. Kasir POS */}
           <TouchableOpacity
             style={styles.navItem}
             activeOpacity={0.7}
-            onPress={() => setActiveTab('dashboard')}
+            onPress={() => handleTabChange('pos')}
           >
-            <View style={[styles.navIconPill, activeTab === 'dashboard' && styles.navIconPillActive]}>
-              <BarChart3
+            <View style={[styles.navIconPill, activeTab === 'pos' && styles.navIconPillActive]}>
+              <ShoppingCart
                 size={20}
-                color={activeTab === 'dashboard' ? '#fb7185' : '#71717a'}
+                color={activeTab === 'pos' ? '#fb7185' : '#71717a'}
               />
             </View>
-            <Text style={[styles.navText, activeTab === 'dashboard' && styles.navTextActive]}>
-              Laporan Toko
+            <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]}>
+              Kasir POS
             </Text>
           </TouchableOpacity>
-        )}
 
-        {/* 3. Riwayat Transaksi */}
-        <TouchableOpacity
-          style={styles.navItem}
-          activeOpacity={0.7}
-          onPress={() => setActiveTab('history')}
-        >
-          <View style={[styles.navIconPill, activeTab === 'history' && styles.navIconPillActive]}>
-            <Receipt
-              size={20}
-              color={activeTab === 'history' ? '#fb7185' : '#71717a'}
-            />
-          </View>
-          <Text style={[styles.navText, activeTab === 'history' && styles.navTextActive]}>
-            Riwayat
-          </Text>
-        </TouchableOpacity>
-      </View>
+          {/* 2. Laporan Toko (Owner Only) */}
+          {user?.role === 'owner' && (
+            <TouchableOpacity
+              style={styles.navItem}
+              activeOpacity={0.7}
+              onPress={() => handleTabChange('dashboard')}
+            >
+              <View style={[styles.navIconPill, activeTab === 'dashboard' && styles.navIconPillActive]}>
+                <BarChart3
+                  size={20}
+                  color={activeTab === 'dashboard' ? '#fb7185' : '#71717a'}
+                />
+              </View>
+              <Text style={[styles.navText, activeTab === 'dashboard' && styles.navTextActive]}>
+                Laporan Toko
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {/* 3. Riwayat Transaksi */}
+          <TouchableOpacity
+            style={styles.navItem}
+            activeOpacity={0.7}
+            onPress={() => handleTabChange('history')}
+          >
+            <View style={[styles.navIconPill, activeTab === 'history' && styles.navIconPillActive]}>
+              <Receipt
+                size={20}
+                color={activeTab === 'history' ? '#fb7185' : '#71717a'}
+              />
+            </View>
+            <Text style={[styles.navText, activeTab === 'history' && styles.navTextActive]}>
+              Riwayat
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
@@ -277,6 +363,69 @@ const styles = StyleSheet.create({
     color: '#fb7185',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+  },
+  topBarLandscape: {
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderBottomColor: '#27272a',
+    borderBottomWidth: 1,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  topBrandLandscape: {
+    fontSize: 16,
+  },
+  topBadgeLandscape: {
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+  },
+  topBadgeTextLandscape: {
+    fontSize: 10,
+  },
+  landscapeNavRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#27272a',
+    padding: 3,
+    borderRadius: 8,
+  },
+  landscapeTabBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  landscapeTabBtnActive: {
+    backgroundColor: '#e11d48',
+  },
+  landscapeTabText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#a1a1aa',
+  },
+  landscapeTabTextActive: {
+    color: '#ffffff',
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  landscapeUserText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#a1a1aa',
+  },
+  logoutBtnLandscape: {
+    paddingHorizontal: 8,
+    paddingVertical: 5,
   },
   bottomNavBar: {
     flexDirection: 'row',
