@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788269965.6098473,
-    "ast_hash": "2a9c4c9d8d251859b1b127caed1d1832",
+    "mtime": 1788274478.0399437,
+    "ast_hash": "583434091de1b6a3c97f89ba966fa720",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788272938.5573924,
-    "ast_hash": "5c3ee38f4fdd64b6228fb733487810b7",
+    "mtime": 1788274412.702494,
+    "ast_hash": "671fbbd1179145e805ccd59918267311",
     "semantic_hash": ""
   },
   "mobile/app.json": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/PosScreen.js": {
-    "mtime": 1788274059.4015927,
-    "ast_hash": "9abb98c9294d5b9521acd6773facf87d",
+    "mtime": 1788274957.5956352,
+    "ast_hash": "29a9427d7f701556055939d5d4964507",
     "semantic_hash": ""
   },
   "mobile/src/services/api.js": {
