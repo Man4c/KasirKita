@@ -207,15 +207,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 - **Task & Progress Tracking:**
   - Menggunakan `plans-kanban` dengan struktur direktori `plans/YYMMDD-modul/plan.md`.
   - Dashboard web berjalan di background port 3500 dengan visualisasi Gantt timeline & progress bar.
-  - Penambahan 4 rencana modul Data Master lanjutan (Telah Selesai 100%):
+  - Penambahan 5 rencana modul Data Master lanjutan (Telah Selesai 100%):
     1. `plans/260831-11-master-pelanggan/plan.md` (Prioritas P1: Data Pelanggan, Membership, No. WhatsApp struk digital, dan autocomplete di kasir POS).
     2. `plans/260831-12-master-pemasok-supplier/plan.md` (Prioritas P2: Data Pemasok/Distributor, kontak agen, relasi modal restock barang inventaris, dan audit pengeluaran kas kulakan).
     3. `plans/260831-13-master-pengguna-dan-kasir/plan.md` (Prioritas P2: Manajemen Akun Kasir oleh Owner, reset password, status aktif, dan proteksi RBAC).
     4. `plans/260831-14-master-promosi-dan-diskon/plan.md` (Prioritas P2: Diskon tanggal kembar, persentase/nominal/min-spend, kode voucher kupon, validasi checkout POS, dan kalkulasi otomatis).
-  - Sisa 3 rencana modul Data Master Tambahan untuk Pengembangan Lanjutan (Status Pending):
     5. `plans/260831-15-master-pajak-dan-biaya/plan.md` (Prioritas P2: Pajak PB1/PPN, biaya kemasan/kantong kresek, surcharge MDR QRIS/EDC, dan integrasi struk).
-    6. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
-    7. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).
+  - Rencana Modul Lanjutan dalam Antrean (Status Pending):
+    6. `plans/260901-18-mobile-bottom-navigation-dan-landscape-pos/plan.md` (Prioritas P1: Bottom Navigation Bar ramah jempol di mode Portrait, dan Mode Kasir Register 2-Kolom otomatis saat perangkat diputar mendatar ke Landscape).
+    7. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
+    8. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).
 - **Autentikasi Multi-Platform:**
   - Web: Laravel Sanctum berbasis stateful/cookies atau bearer token.
   - Mobile: Laravel Sanctum stateless bearer token disimpan di SecureStore.
