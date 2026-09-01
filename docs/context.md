@@ -241,10 +241,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     3. `plans/260831-13-master-pengguna-dan-kasir/plan.md` (Prioritas P2: Manajemen Akun Kasir oleh Owner, reset password, status aktif, dan proteksi RBAC).
     4. `plans/260831-14-master-promosi-dan-diskon/plan.md` (Prioritas P2: Diskon tanggal kembar, persentase/nominal/min-spend, kode voucher kupon, validasi checkout POS, dan kalkulasi otomatis).
     5. `plans/260831-15-master-pajak-dan-biaya/plan.md` (Prioritas P2: Pajak PB1/PPN, biaya kemasan/kantong kresek, surcharge MDR QRIS/EDC, dan integrasi struk).
-  - Rencana Modul Lanjutan dalam Antrean (Status Pending):
+  - Modul Mobile POS Lanjutan (Telah Selesai 100%):
     6. `plans/260901-18-mobile-bottom-navigation-dan-landscape-pos/plan.md` (Prioritas P1: Bottom Navigation Bar ramah jempol di mode Portrait, dan Mode Kasir Register 2-Kolom otomatis saat perangkat diputar mendatar ke Landscape).
-    7. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
-    8. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).
+  - Rencana Modul Aktif & Dalam Antrean:
+    7. `plans/260902-19-mobile-dedicated-checkout-screen/plan.md` (Prioritas P1: Layar Pembayaran Penuh / Dedicated Checkout Screen dengan Tata Letak 2 Kolom Landscape dan Numpad Kasir Virtual Terintegrasi tanpa Keyboard HP - Sedang Berjalan).
+    8. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
+    9. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).
 - **Autentikasi Multi-Platform:**
   - Web: Laravel Sanctum berbasis stateful/cookies atau bearer token.
   - Mobile: Laravel Sanctum stateless bearer token disimpan di SecureStore.
