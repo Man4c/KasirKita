@@ -1,12 +1,12 @@
 ---
 title: Mobile Bottom Navigation & Auto-Rotate Landscape POS
 description: Perombakan sistem navigasi aplikasi mobile menjadi Bottom Navigation Bar ramah jempol untuk mode Portrait, serta mode kasir register profesional 2-kolom otomatis saat perangkat diputar ke Landscape.
-status: pending
+status: completed
 priority: P1
 effort: 6h
 tags: [mobile, react-native, expo, ui-ux, navigation, landscape-pos]
 created: 2026-09-01
-completed:
+completed: 2026-09-01
 assignee: Mobile UI/UX Developer
 ---
 
@@ -29,7 +29,7 @@ Menyelesaikan keterbatasan ruang visual pada header aplikasi mobile kasir, serta
 | 2 | Deteksi Orientasi Cerdas & State Management Responsif (`useWindowDimensions`) | completed |
 | 3 | Perancangan Tata Letak Kasir 2 Kolom (*Split-Screen POS*) untuk Mode Landscape di `PosScreen.js` | completed |
 | 4 | Integrasi Alur Checkout, Diskon, Pajak/Biaya, dan Struk Thermal pada Mode Landscape | completed |
-| 5 | Pengujian Standar Aksesibilitas WCAG AA, Defensive UI Craft, & Validasi Build | pending |
+| 5 | Pengujian Standar Aksesibilitas WCAG AA, Defensive UI Craft, & Validasi Build | completed |
 
 ---
 

@@ -368,7 +368,11 @@ export default function PosScreen({ isLandscape = false }) {
             data={filteredProducts}
             keyExtractor={(item) => item.id}
             numColumns={2}
-            contentContainerStyle={[styles.gridContent, isLandscape && styles.gridContentLandscape]}
+            contentContainerStyle={[
+              styles.gridContent,
+              { paddingBottom: cart.length > 0 ? 170 : 100 },
+              isLandscape && styles.gridContentLandscape,
+            ]}
             renderItem={({ item }) => {
               const inCart = cart.find((i) => i.product.id === item.id);
               const stockNum = Number(item.stock || 0);
@@ -401,12 +405,6 @@ export default function PosScreen({ isLandscape = false }) {
                     <Text style={styles.cardCategory} numberOfLines={1} ellipsizeMode="tail">
                       {item.category?.name || 'Umum'}
                     </Text>
-                    <Text
-                      style={[styles.cardStock, isLowStock && styles.cardStockLow]}
-                      numberOfLines={1}
-                    >
-                      {stockDisplay} {unitSymbol}
-                    </Text>
                   </View>
 
                   <Text style={[styles.cardTitle, isLandscape && styles.cardTitleLandscape]} numberOfLines={1} ellipsizeMode="tail">
@@ -414,10 +412,16 @@ export default function PosScreen({ isLandscape = false }) {
                   </Text>
 
                   <View style={styles.cardFooter}>
-                    <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 2 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 2, flexShrink: 0 }}>
                       <Text style={styles.cardPrice}>{formatRp(item.price)}</Text>
                       <Text style={styles.cardPriceUnit}>/{unitSymbol}</Text>
                     </View>
+                    <Text
+                      style={[styles.cardStock, isLowStock && styles.cardStockLow]}
+                      numberOfLines={1}
+                    >
+                      {stockDisplay} {unitSymbol}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -955,8 +959,8 @@ export default function PosScreen({ isLandscape = false }) {
                     </View>
                     {feeDetails.map((f, idx) => (
                       <View key={idx} style={[styles.billRow, { paddingLeft: 8, marginBottom: 2 }]}>
-                        <Text style={[styles.billLabel, { fontSize: 11, color: '#a1a1aa' }]}>• {f.name}</Text>
-                        <Text style={[styles.billValue, { fontSize: 11, color: '#fb7185' }]}>+{formatRp(f.amount)}</Text>
+                        <Text style={[styles.billLabel, { fontSize: 12, color: '#a1a1aa' }]}>• {f.name}</Text>
+                        <Text style={[styles.billValue, { fontSize: 12, color: '#fb7185' }]}>+{formatRp(f.amount)}</Text>
                       </View>
                     ))}
                   </>
@@ -1340,8 +1344,8 @@ export default function PosScreen({ isLandscape = false }) {
                   </View>
                   {Array.isArray(completedTx?.fee_details) && completedTx.fee_details.map((f, idx) => (
                     <View key={idx} style={[styles.receiptRow, { paddingLeft: 8 }]}>
-                      <Text style={[styles.receiptRowLabel, { fontSize: 11, color: '#71717a' }]}>• {f.name}:</Text>
-                      <Text style={[styles.receiptRowValue, { fontSize: 11, color: '#52525b' }]}>+{formatRp(f.amount)}</Text>
+                      <Text style={[styles.receiptRowLabel, { fontSize: 12, color: '#71717a' }]}>• {f.name}:</Text>
+                      <Text style={[styles.receiptRowValue, { fontSize: 12, color: '#52525b' }]}>+{formatRp(f.amount)}</Text>
                     </View>
                   ))}
                 </>
@@ -2366,7 +2370,7 @@ const styles = StyleSheet.create({
   },
   gridContentLandscape: {
     paddingHorizontal: 8,
-    paddingBottom: 16,
+    paddingBottom: 36,
   },
   productCardLandscape: {
     padding: 10,

@@ -216,9 +216,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Mengonfigurasi antarmuka `PosScreen.js` untuk merender tata letak 2 kolom berdampingan saat `isLandscape === true`:
       - **Kolom Kiri (~60%):** Pencarian produk, filter kategori chips yang kompak, dan grid katalog barang responsif.
       - **Kolom Kanan (Lebar 350px):** Register Kasir permanen (*Persistent Visible Cart*) dengan daftar belanja aktif (+/- kuantitas, harga/item), pemilih member pelanggan, chip cepat kupon promo & pajak, rincian tagihan, serta tombol utama **"Bayar Kasir"**.
-  - **Penyelesaian Fase 4: Integrasi Alur Checkout, Diskon, Pajak/Biaya, dan Struk Thermal pada Mode Landscape (`PosScreen.js` - Plan #18)**:
-    - Mengoptimalkan modal checkout pada mode landscape dengan menghadirkan tab navigasi terfokus (**Pembayaran Kasir** vs **Daftar Item**); kasir dapat langsung memilih metode bayar (Tunai/QRIS/Transfer), menekan chip uang pas / pecahan cepat, melihat kalkulasi kembalian, dan mengeksekusi transaksi secara instan tanpa scroll panjang.
-    - Mengintegrasikan dialog terpusat (*centered floating modal*) pada **Pemilih Pelanggan / Member**, **Pemilih Promo Toko**, dan **Modal Struk Thermal KasirKita** di mode landscape agar proporsional, nyaman dibaca, dan tidak terdistorsi oleh tinggi layar horizontal yang terbatas.
+  - **Penyelesaian Fase 5: Pengujian Aksesibilitas WCAG AA, Defensive UI Craft, & Validasi Build Final (`App.js`, `PosScreen.js`, `TransactionHistoryScreen.js` - Plan #18)**:
+    - Mengoreksi tumpang tindih visual (*overlap*) bilah status Android/iOS di mode landscape melalui kalkulasi *dynamic safe area padding* (`Math.max(insets.top, StatusBarNative.currentHeight)`) sehingga jam, baterai, dan ikon status tidak lagi menabrak teks brand dan tombol keluar.
+    - Memindahkan tampilan sisa stok (`cardStock`) ke bagian footer kartu produk berdampingan dengan harga eceran, sehingga badge mengambang kuantitas keranjang (`floatingBadge`) di pojok kanan atas kartu tidak lagi menutupi angka stok.
+    - Menambah bantalan bawah (*padding bottom*) katalog produk pada mode portrait (`paddingBottom: cart.length > 0 ? 170 : 100`) dan landscape (`paddingBottom: 36`) agar kartu terbawah tidak tertutup bilah keranjang mengambang atau bilah gestur sistem HP.
+    - Menstandarisasi seluruh ukuran font di modul mobile ke $\ge 12\text{px}$ (*Readability Floor Rule* WCAG AAA, zero 10px/11px) dan memvalidasi seluruh build backend (60/60 test PHPUnit pass) dan web Vite build (100% pass).
 
 ## Keputusan Arsitektur
 

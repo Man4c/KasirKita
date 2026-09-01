@@ -328,10 +328,10 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
                     {Array.isArray(selectedTx?.fee_details) &&
                       selectedTx.fee_details.map((f, idx) => (
                         <View key={idx} style={[styles.receiptRow, { paddingLeft: 8 }]}>
-                          <Text style={[styles.receiptRowLabel, { fontSize: 11, color: '#71717a' }]}>
+                          <Text style={[styles.receiptRowLabel, { fontSize: 12, color: '#71717a' }]}>
                             • {f.name}:
                           </Text>
-                          <Text style={[styles.receiptRowValue, { fontSize: 11, color: '#52525b' }]}>
+                          <Text style={[styles.receiptRowValue, { fontSize: 12, color: '#52525b' }]}>
                             +{formatRp(f.amount)}
                           </Text>
                         </View>

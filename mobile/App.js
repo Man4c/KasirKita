@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Platform,
   useWindowDimensions,
+  StatusBar as StatusBarNative,
 } from 'react-native';
 import {
   SafeAreaProvider,
@@ -112,13 +113,22 @@ function MainApp() {
     );
   }
 
+  const androidStatusHeight = Platform.OS === 'android' ? (StatusBarNative.currentHeight || 0) : 0;
+  const safeTopPadding = isLandscape
+    ? Math.max(insets.top, androidStatusHeight > 0 ? androidStatusHeight + 2 : 6)
+    : Math.max(insets.top, androidStatusHeight);
+  const safeLeftPadding = isLandscape ? Math.max(insets.left, 8) : 0;
+  const safeRightPadding = isLandscape ? Math.max(insets.right, 8) : 0;
+
   return (
     <View
       style={[
         styles.safeArea,
         {
-          paddingTop: isLandscape ? 0 : insets.top,
-          paddingBottom: isLandscape ? 0 : insets.bottom,
+          paddingTop: safeTopPadding,
+          paddingBottom: isLandscape ? Math.max(insets.bottom, 4) : insets.bottom,
+          paddingLeft: safeLeftPadding,
+          paddingRight: safeRightPadding,
         },
       ]}
     >
@@ -388,7 +398,7 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
   },
   topBadgeTextLandscape: {
-    fontSize: 10,
+    fontSize: 12,
   },
   landscapeNavRow: {
     flexDirection: 'row',
@@ -422,6 +432,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     color: '#a1a1aa',
+    maxWidth: 120,
   },
   logoutBtnLandscape: {
     paddingHorizontal: 8,
