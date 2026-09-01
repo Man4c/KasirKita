@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Alert,
   Platform,
+  useWindowDimensions,
 } from 'react-native';
 import {
   Search,
@@ -33,7 +34,9 @@ import {
 } from 'lucide-react-native';
 import api from '../services/api';
 
-export default function PosScreen({ isLandscape = false }) {
+export default function PosScreen({ isLandscape = false, isCompactLandscape = false }) {
+  const { width, height } = useWindowDimensions();
+  const compact = isCompactLandscape || (isLandscape && height < 440);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -313,11 +316,11 @@ export default function PosScreen({ isLandscape = false }) {
       {/* LEFT COLUMN: Catalog & Products */}
       <View style={[styles.catalogCol, isLandscape && styles.landscapeCatalogCol]}>
         {/* Search Bar */}
-        <View style={[styles.searchContainer, isLandscape && styles.searchContainerLandscape]}>
-          <View style={styles.searchBox}>
-            <Search size={16} color="#a1a1aa" style={{ marginRight: 8 }} />
+        <View style={[styles.searchContainer, isLandscape && styles.searchContainerLandscape, compact && styles.searchContainerCompactLandscape]}>
+          <View style={[styles.searchBox, compact && styles.searchBoxCompact]}>
+            <Search size={compact ? 14 : 16} color="#a1a1aa" style={{ marginRight: 8 }} />
             <TextInput
-              style={styles.searchInput}
+              style={[styles.searchInput, compact && styles.searchInputCompact]}
               placeholder="Cari produk atau barcode..."
               placeholderTextColor="#a1a1aa"
               value={search}
@@ -332,23 +335,23 @@ export default function PosScreen({ isLandscape = false }) {
         </View>
 
         {/* Category Pills */}
-        <View style={[styles.catContainer, isLandscape && styles.catContainerLandscape]}>
+        <View style={[styles.catContainer, isLandscape && styles.catContainerLandscape, compact && styles.catContainerCompactLandscape]}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <TouchableOpacity
-              style={[styles.catChip, selectedCat === 'ALL' && styles.catChipActive]}
+              style={[styles.catChip, compact && styles.catChipCompact, selectedCat === 'ALL' && styles.catChipActive]}
               onPress={() => setSelectedCat('ALL')}
             >
-              <Text style={[styles.catChipText, selectedCat === 'ALL' && styles.catChipTextActive]}>
+              <Text style={[styles.catChipText, compact && styles.catChipTextCompact, selectedCat === 'ALL' && styles.catChipTextActive]}>
                 Semua
               </Text>
             </TouchableOpacity>
             {categories.map((c) => (
               <TouchableOpacity
                 key={c.id}
-                style={[styles.catChip, selectedCat === c.id && styles.catChipActive]}
+                style={[styles.catChip, compact && styles.catChipCompact, selectedCat === c.id && styles.catChipActive]}
                 onPress={() => setSelectedCat(c.id)}
               >
-                <Text style={[styles.catChipText, selectedCat === c.id && styles.catChipTextActive]}>
+                <Text style={[styles.catChipText, compact && styles.catChipTextCompact, selectedCat === c.id && styles.catChipTextActive]}>
                   {c.name}
                 </Text>
               </TouchableOpacity>
@@ -372,6 +375,7 @@ export default function PosScreen({ isLandscape = false }) {
               styles.gridContent,
               { paddingBottom: cart.length > 0 ? 170 : 100 },
               isLandscape && styles.gridContentLandscape,
+              compact && styles.gridContentCompactLandscape,
             ]}
             renderItem={({ item }) => {
               const inCart = cart.find((i) => i.product.id === item.id);
@@ -387,6 +391,7 @@ export default function PosScreen({ isLandscape = false }) {
                   style={[
                     styles.productCard,
                     isLandscape && styles.productCardLandscape,
+                    compact && styles.productCardCompactLandscape,
                     isOutOfStock && styles.productOutOfStock,
                   ]}
                   onPress={() => !isOutOfStock && addToCart(item)}
@@ -394,7 +399,7 @@ export default function PosScreen({ isLandscape = false }) {
                   activeOpacity={0.7}
                 >
                   {inCart && (
-                    <View style={styles.floatingBadge}>
+                    <View style={[styles.floatingBadge, compact && styles.floatingBadgeCompact]}>
                       <Text style={styles.floatingBadgeText}>
                         {inCart.quantity} {unitSymbol}
                       </Text>
@@ -407,7 +412,7 @@ export default function PosScreen({ isLandscape = false }) {
                     </Text>
                   </View>
 
-                  <Text style={[styles.cardTitle, isLandscape && styles.cardTitleLandscape]} numberOfLines={1} ellipsizeMode="tail">
+                  <Text style={[styles.cardTitle, isLandscape && styles.cardTitleLandscape, compact && styles.cardTitleCompactLandscape]} numberOfLines={1} ellipsizeMode="tail">
                     {item.name}
                   </Text>
 
@@ -432,11 +437,11 @@ export default function PosScreen({ isLandscape = false }) {
 
       {/* RIGHT COLUMN (LANDSCAPE ONLY): Persistent Cashier Register Panel */}
       {isLandscape && (
-        <View style={styles.landscapeRegisterCol}>
+        <View style={[styles.landscapeRegisterCol, compact && styles.landscapeRegisterColCompact]}>
           {/* Register Column Header */}
-          <View style={styles.registerHeader}>
+          <View style={[styles.registerHeader, compact && styles.registerHeaderCompact]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
-              <ShoppingCart size={16} color="#fb7185" />
+              <ShoppingCart size={compact ? 14 : 16} color="#fb7185" />
               <Text style={styles.registerTitle}>Keranjang</Text>
               <View style={styles.registerCountBadge}>
                 <Text style={styles.registerCountText}>{totalItemsCount}</Text>
@@ -472,17 +477,17 @@ export default function PosScreen({ isLandscape = false }) {
 
           {/* Cart Item Rows */}
           {cart.length === 0 ? (
-            <View style={styles.registerEmptyBox}>
-              <ShoppingCart size={36} color="#71717a" style={{ marginBottom: 12 }} />
-              <Text style={styles.registerEmptyTitle}>Keranjang Kosong</Text>
+            <View style={[styles.registerEmptyBox, compact && styles.registerEmptyBoxCompact]}>
+              <ShoppingCart size={compact ? 28 : 36} color="#71717a" style={{ marginBottom: compact ? 6 : 12 }} />
+              <Text style={[styles.registerEmptyTitle, compact && { fontSize: 13 }]}>Keranjang Kosong</Text>
               <Text style={styles.registerEmptySub}>Pilih produk di kiri untuk memulai pesanan.</Text>
             </View>
           ) : (
-            <ScrollView style={styles.registerItemsScroll} showsVerticalScrollIndicator={false}>
+            <ScrollView style={[styles.registerItemsScroll, compact && styles.registerItemsScrollCompact]} showsVerticalScrollIndicator={true}>
               {cart.map((item) => {
                 const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
                 return (
-                  <View key={item.product.id} style={styles.regItemRow}>
+                  <View key={item.product.id} style={[styles.regItemRow, compact && styles.regItemRowCompact]}>
                     <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
                       <Text style={styles.regItemName} numberOfLines={1}>
                         {item.product.name}
@@ -518,12 +523,12 @@ export default function PosScreen({ isLandscape = false }) {
           )}
 
           {/* Register Footer */}
-          <View style={styles.registerFooter}>
+          <View style={[styles.registerFooter, compact && styles.registerFooterCompact]}>
             {/* Quick Fee & Promo Pills */}
-            <View style={styles.regQuickOptionsRow}>
+            <View style={[styles.regQuickOptionsRow, compact && styles.regQuickOptionsRowCompact]}>
               {/* Promo button */}
               <TouchableOpacity
-                style={[styles.regQuickPill, appliedPromo && styles.regQuickPillPromoActive]}
+                style={[styles.regQuickPill, compact && styles.regQuickPillCompact, appliedPromo && styles.regQuickPillPromoActive]}
                 onPress={() => {
                   if (appliedPromo) {
                     handleRemovePromo();
@@ -542,7 +547,7 @@ export default function PosScreen({ isLandscape = false }) {
               {/* Takeaway toggle */}
               {takeawayFees.length > 0 && (
                 <TouchableOpacity
-                  style={[styles.regQuickPill, isTakeaway && styles.regQuickPillActive]}
+                  style={[styles.regQuickPill, compact && styles.regQuickPillCompact, isTakeaway && styles.regQuickPillActive]}
                   onPress={() => setIsTakeaway(!isTakeaway)}
                 >
                   <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
@@ -555,7 +560,7 @@ export default function PosScreen({ isLandscape = false }) {
               {/* Tax status chip */}
               {availableTaxes.length > 0 && (
                 <TouchableOpacity
-                  style={[styles.regQuickPill, selectedTaxId && styles.regQuickPillActive]}
+                  style={[styles.regQuickPill, compact && styles.regQuickPillCompact, selectedTaxId && styles.regQuickPillActive]}
                   onPress={() => {
                     if (selectedTaxId) {
                       setSelectedTaxId('');
@@ -574,25 +579,25 @@ export default function PosScreen({ isLandscape = false }) {
             </View>
 
             {/* Bill Summary Rows */}
-            <View style={styles.regSummaryBox}>
-              <View style={styles.regSummaryRow}>
+            <View style={[styles.regSummaryBox, compact && styles.regSummaryBoxCompact]}>
+              <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
                 <Text style={styles.regSummaryLabel}>Subtotal</Text>
                 <Text style={styles.regSummaryValue}>{formatRp(subtotal)}</Text>
               </View>
               {discount > 0 && (
-                <View style={styles.regSummaryRow}>
+                <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
                   <Text style={[styles.regSummaryLabel, { color: '#34d399' }]}>Diskon</Text>
                   <Text style={[styles.regSummaryValue, { color: '#34d399' }]}>-{formatRp(discount)}</Text>
                 </View>
               )}
               {taxAmount > 0 && (
-                <View style={styles.regSummaryRow}>
+                <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
                   <Text style={styles.regSummaryLabel}>Pajak ({activeTax?.name})</Text>
                   <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(taxAmount)}</Text>
                 </View>
               )}
               {feeAmount > 0 && (
-                <View style={styles.regSummaryRow}>
+                <View style={[styles.regSummaryRow, compact && styles.regSummaryRowCompact]}>
                   <Text style={styles.regSummaryLabel}>Biaya Layanan</Text>
                   <Text style={[styles.regSummaryValue, { color: '#fb7185' }]}>+{formatRp(feeAmount)}</Text>
                 </View>
@@ -600,22 +605,22 @@ export default function PosScreen({ isLandscape = false }) {
             </View>
 
             {/* Total Row & Pay Button */}
-            <View style={styles.regPayRow}>
+            <View style={[styles.regPayRow, compact && styles.regPayRowCompact]}>
               <View>
                 <Text style={styles.regTotalLabel}>TOTAL BAYAR</Text>
-                <Text style={styles.regTotalAmount}>{formatRp(totalAmount)}</Text>
+                <Text style={[styles.regTotalAmount, compact && styles.regTotalAmountCompact]}>{formatRp(totalAmount)}</Text>
               </View>
 
               <TouchableOpacity
-                style={[styles.regPayButton, cart.length === 0 && { opacity: 0.4 }]}
+                style={[styles.regPayButton, compact && styles.regPayButtonCompact, cart.length === 0 && { opacity: 0.4 }]}
                 disabled={cart.length === 0}
                 onPress={() => {
                   setPaidAmount(totalAmount.toString());
                   setCartModalOpen(true);
                 }}
               >
-                <Text style={styles.regPayButtonText}>Bayar Kasir</Text>
-                <ArrowRight size={15} color="#ffffff" />
+                <Text style={[styles.regPayButtonText, compact && styles.regPayButtonTextCompact]}>Bayar Kasir</Text>
+                <ArrowRight size={compact ? 13 : 15} color="#ffffff" />
               </TouchableOpacity>
             </View>
           </View>
@@ -2364,47 +2369,103 @@ const styles = StyleSheet.create({
   },
   landscapeRoot: {
     flexDirection: 'row',
+    flex: 1,
+    height: '100%',
+    overflow: 'hidden',
   },
   catalogCol: {
     flex: 1,
   },
   landscapeCatalogCol: {
     flex: 1,
+    height: '100%',
     borderRightWidth: 1,
     borderRightColor: '#27272a',
+    overflow: 'hidden',
   },
   searchContainerLandscape: {
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 8,
   },
+  searchContainerCompactLandscape: {
+    paddingHorizontal: 10,
+    paddingTop: 6,
+    paddingBottom: 4,
+  },
+  searchBoxCompact: {
+    paddingHorizontal: 10,
+  },
+  searchInputCompact: {
+    paddingVertical: 5,
+    fontSize: 12,
+  },
   catContainerLandscape: {
     paddingHorizontal: 16,
     paddingBottom: 10,
+  },
+  catContainerCompactLandscape: {
+    paddingHorizontal: 10,
+    paddingBottom: 4,
+  },
+  catChipCompact: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 6,
+    borderRadius: 12,
+  },
+  catChipTextCompact: {
+    fontSize: 12,
   },
   gridContentLandscape: {
     paddingHorizontal: 12,
     paddingTop: 4,
     paddingBottom: 40,
   },
+  gridContentCompactLandscape: {
+    paddingHorizontal: 6,
+    paddingTop: 2,
+    paddingBottom: 16,
+  },
   productCardLandscape: {
     padding: 14,
     margin: 6,
     borderRadius: 16,
+  },
+  productCardCompactLandscape: {
+    padding: 8,
+    margin: 4,
+    borderRadius: 12,
+    minHeight: 82,
   },
   cardTitleLandscape: {
     fontSize: 13,
     marginBottom: 8,
     lineHeight: 18,
   },
+  cardTitleCompactLandscape: {
+    fontSize: 12,
+    marginBottom: 3,
+    lineHeight: 16,
+  },
+  floatingBadgeCompact: {
+    top: -4,
+    right: -4,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+  },
   landscapeRegisterCol: {
     width: 360,
+    height: '100%',
     backgroundColor: '#18181b',
     borderLeftWidth: 1,
     borderLeftColor: '#27272a',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  landscapeRegisterColCompact: {
+    width: 325,
   },
   registerHeader: {
     flexDirection: 'row',
@@ -2415,6 +2476,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
     backgroundColor: '#141416',
+    flexShrink: 0,
+  },
+  registerHeaderCompact: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   registerTitle: {
     fontSize: 14,
@@ -2458,6 +2524,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
+  registerEmptyBoxCompact: {
+    padding: 12,
+  },
   registerEmptyTitle: {
     fontSize: 14,
     fontFamily: 'Poppins_600SemiBold',
@@ -2475,6 +2544,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 10,
   },
+  registerItemsScrollCompact: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+  },
   regItemRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -2482,6 +2555,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
+  },
+  regItemRowCompact: {
+    paddingVertical: 6,
   },
   regItemName: {
     fontSize: 13,
@@ -2522,12 +2598,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingTop: 14,
     paddingBottom: 16,
+    flexShrink: 0,
+  },
+  registerFooterCompact: {
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 10,
   },
   regQuickOptionsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
     marginBottom: 14,
+  },
+  regQuickOptionsRowCompact: {
+    gap: 6,
+    marginBottom: 6,
   },
   regQuickPill: {
     flexDirection: 'row',
@@ -2539,6 +2625,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
+  },
+  regQuickPillCompact: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    gap: 4,
   },
   regQuickPillActive: {
     backgroundColor: '#e11d48',
@@ -2565,11 +2657,18 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     gap: 5,
   },
+  regSummaryBoxCompact: {
+    marginBottom: 6,
+    gap: 2,
+  },
   regSummaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 2,
+  },
+  regSummaryRowCompact: {
+    paddingVertical: 0,
   },
   regSummaryLabel: {
     fontSize: 12,
@@ -2590,6 +2689,9 @@ const styles = StyleSheet.create({
     borderTopColor: '#27272a',
     paddingTop: 14,
   },
+  regPayRowCompact: {
+    paddingTop: 8,
+  },
   regTotalLabel: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
@@ -2599,6 +2701,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Poppins_700Bold',
     color: '#fb7185',
+  },
+  regTotalAmountCompact: {
+    fontSize: 16,
   },
   regPayButton: {
     backgroundColor: '#e11d48',
@@ -2610,10 +2715,19 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     flexShrink: 0,
   },
+  regPayButtonCompact: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 10,
+    gap: 6,
+  },
   regPayButtonText: {
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
+  },
+  regPayButtonTextCompact: {
+    fontSize: 12,
   },
   modalOverlayLandscape: {
     justifyContent: 'center',

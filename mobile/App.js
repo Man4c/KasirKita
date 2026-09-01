@@ -114,11 +114,12 @@ function MainApp() {
   }
 
   const androidStatusHeight = Platform.OS === 'android' ? (StatusBarNative.currentHeight || 0) : 0;
+  const isCompactLandscape = isLandscape && height < 440;
   const safeTopPadding = isLandscape
-    ? Math.max(insets.top, androidStatusHeight > 0 ? androidStatusHeight + 2 : 6)
+    ? (isCompactLandscape ? Math.max(insets.top, androidStatusHeight) : Math.max(insets.top, androidStatusHeight > 0 ? androidStatusHeight + 2 : 6))
     : Math.max(insets.top, androidStatusHeight);
-  const safeLeftPadding = isLandscape ? Math.max(insets.left, 8) : 0;
-  const safeRightPadding = isLandscape ? Math.max(insets.right, 8) : 0;
+  const safeLeftPadding = isLandscape ? Math.max(insets.left, isCompactLandscape ? 4 : 8) : 0;
+  const safeRightPadding = isLandscape ? Math.max(insets.right, isCompactLandscape ? 4 : 8) : 0;
 
   return (
     <View
@@ -126,7 +127,7 @@ function MainApp() {
         styles.safeArea,
         {
           paddingTop: safeTopPadding,
-          paddingBottom: isLandscape ? Math.max(insets.bottom, 4) : insets.bottom,
+          paddingBottom: isLandscape ? Math.max(insets.bottom, isCompactLandscape ? 2 : 4) : insets.bottom,
           paddingLeft: safeLeftPadding,
           paddingRight: safeRightPadding,
         },
@@ -135,13 +136,13 @@ function MainApp() {
       <StatusBar style="light" />
 
       {/* Top Header Bar */}
-      <View style={[styles.topBar, isLandscape && styles.topBarLandscape]}>
+      <View style={[styles.topBar, isLandscape && styles.topBarLandscape, isCompactLandscape && styles.topBarCompactLandscape]}>
         <View style={styles.headerLeft}>
           <View style={styles.brandRow}>
-            <Text style={[styles.topBrand, isLandscape && styles.topBrandLandscape]}>
+            <Text style={[styles.topBrand, isLandscape && styles.topBrandLandscape, isCompactLandscape && styles.topBrandCompact]}>
               KasirKita
             </Text>
-            <View style={[styles.topBadge, isLandscape && styles.topBadgeLandscape]}>
+            <View style={[styles.topBadge, isLandscape && styles.topBadgeLandscape, isCompactLandscape && styles.topBadgeCompact]}>
               <Text style={[styles.topBadgeText, isLandscape && styles.topBadgeTextLandscape]}>
                 {isLandscape ? 'TERMINAL POS' : 'MOBILE'}
               </Text>
@@ -156,12 +157,12 @@ function MainApp() {
 
         {/* Compact quick switcher in landscape */}
         {isLandscape && (
-          <View style={styles.landscapeNavRow}>
+          <View style={[styles.landscapeNavRow, isCompactLandscape && styles.landscapeNavRowCompact]}>
             <TouchableOpacity
-              style={[styles.landscapeTabBtn, activeTab === 'pos' && styles.landscapeTabBtnActive]}
+              style={[styles.landscapeTabBtn, isCompactLandscape && styles.landscapeTabBtnCompact, activeTab === 'pos' && styles.landscapeTabBtnActive]}
               onPress={() => handleTabChange('pos')}
             >
-              <ShoppingCart size={13} color={activeTab === 'pos' ? '#ffffff' : '#a1a1aa'} />
+              <ShoppingCart size={isCompactLandscape ? 12 : 13} color={activeTab === 'pos' ? '#ffffff' : '#a1a1aa'} />
               <Text style={[styles.landscapeTabText, activeTab === 'pos' && styles.landscapeTabTextActive]}>
                 Kasir
               </Text>
@@ -169,10 +170,10 @@ function MainApp() {
 
             {user?.role === 'owner' && (
               <TouchableOpacity
-                style={[styles.landscapeTabBtn, activeTab === 'dashboard' && styles.landscapeTabBtnActive]}
+                style={[styles.landscapeTabBtn, isCompactLandscape && styles.landscapeTabBtnCompact, activeTab === 'dashboard' && styles.landscapeTabBtnActive]}
                 onPress={() => handleTabChange('dashboard')}
               >
-                <BarChart3 size={13} color={activeTab === 'dashboard' ? '#ffffff' : '#a1a1aa'} />
+                <BarChart3 size={isCompactLandscape ? 12 : 13} color={activeTab === 'dashboard' ? '#ffffff' : '#a1a1aa'} />
                 <Text style={[styles.landscapeTabText, activeTab === 'dashboard' && styles.landscapeTabTextActive]}>
                   Laporan
                 </Text>
@@ -180,10 +181,10 @@ function MainApp() {
             )}
 
             <TouchableOpacity
-              style={[styles.landscapeTabBtn, activeTab === 'history' && styles.landscapeTabBtnActive]}
+              style={[styles.landscapeTabBtn, isCompactLandscape && styles.landscapeTabBtnCompact, activeTab === 'history' && styles.landscapeTabBtnActive]}
               onPress={() => handleTabChange('history')}
             >
-              <Receipt size={13} color={activeTab === 'history' ? '#ffffff' : '#a1a1aa'} />
+              <Receipt size={isCompactLandscape ? 12 : 13} color={activeTab === 'history' ? '#ffffff' : '#a1a1aa'} />
               <Text style={[styles.landscapeTabText, activeTab === 'history' && styles.landscapeTabTextActive]}>
                 Riwayat
               </Text>
@@ -192,13 +193,13 @@ function MainApp() {
         )}
 
         <View style={styles.headerRight}>
-          {isLandscape && (
+          {isLandscape && width >= 720 && (
             <Text style={styles.landscapeUserText} numberOfLines={1}>
               {user?.name || 'Kasir'}
             </Text>
           )}
           <TouchableOpacity
-            style={[styles.logoutBtn, isLandscape && styles.logoutBtnLandscape]}
+            style={[styles.logoutBtn, isLandscape && styles.logoutBtnLandscape, isCompactLandscape && styles.logoutBtnCompactLandscape]}
             onPress={logout}
           >
             <LogOut size={13} color="#fb7185" />
@@ -214,7 +215,7 @@ function MainApp() {
         ) : activeTab === 'history' ? (
           <TransactionHistoryScreen isLandscape={isLandscape} />
         ) : (
-          <PosScreen isLandscape={isLandscape} />
+          <PosScreen isLandscape={isLandscape} isCompactLandscape={isCompactLandscape} />
         )}
       </View>
 
@@ -380,6 +381,10 @@ const styles = StyleSheet.create({
     borderBottomColor: '#27272a',
     borderBottomWidth: 1,
   },
+  topBarCompactLandscape: {
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+  },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -393,10 +398,18 @@ const styles = StyleSheet.create({
   topBrandLandscape: {
     fontSize: 16,
   },
+  topBrandCompact: {
+    fontSize: 14,
+  },
   topBadgeLandscape: {
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
+  },
+  topBadgeCompact: {
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 6,
   },
   topBadgeTextLandscape: {
     fontSize: 12,
@@ -409,6 +422,11 @@ const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 10,
   },
+  landscapeNavRowCompact: {
+    padding: 2,
+    gap: 4,
+    borderRadius: 8,
+  },
   landscapeTabBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -416,6 +434,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
+  },
+  landscapeTabBtnCompact: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    gap: 4,
+    borderRadius: 6,
   },
   landscapeTabBtnActive: {
     backgroundColor: '#e11d48',
@@ -439,6 +463,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
+  },
+  logoutBtnCompactLandscape: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   bottomNavBar: {
     flexDirection: 'row',
