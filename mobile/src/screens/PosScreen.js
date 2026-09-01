@@ -50,6 +50,7 @@ export default function PosScreen({ isLandscape = false }) {
   const [customerSearch, setCustomerSearch] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('CASH');
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [modalTab, setModalTab] = useState('payment'); // 'payment' | 'items'
 
   // Promo & Voucher State
   const [appliedPromo, setAppliedPromo] = useState(null);
@@ -648,8 +649,114 @@ export default function PosScreen({ isLandscape = false }) {
               </TouchableOpacity>
             </View>
 
-            {/* Cart Items List */}
-            <ScrollView style={styles.modalScroll}>
+            {isLandscape && (
+              <View style={styles.modalLandscapeTabs}>
+                <TouchableOpacity
+                  style={[styles.modalLandscapeTabBtn, modalTab === 'payment' && styles.modalLandscapeTabBtnActive]}
+                  onPress={() => setModalTab('payment')}
+                >
+                  <Banknote size={14} color={modalTab === 'payment' ? '#ffffff' : '#a1a1aa'} />
+                  <Text style={[styles.modalLandscapeTabText, modalTab === 'payment' && styles.modalLandscapeTabTextActive]}>
+                    Pembayaran
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.modalLandscapeTabBtn, modalTab === 'items' && styles.modalLandscapeTabBtnActive]}
+                  onPress={() => setModalTab('items')}
+                >
+                  <ShoppingCart size={14} color={modalTab === 'items' ? '#ffffff' : '#a1a1aa'} />
+                  <Text style={[styles.modalLandscapeTabText, modalTab === 'items' && styles.modalLandscapeTabTextActive]}>
+                    Daftar Item ({totalItemsCount})
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {isLandscape && modalTab === 'payment' ? (
+              <ScrollView style={styles.modalLandscapeScroll} showsVerticalScrollIndicator={false}>
+                {/* Compact Bill Summary */}
+                <View style={styles.billSummaryBox}>
+                  <View style={styles.billRow}>
+                    <Text style={styles.billLabel}>Pelanggan:</Text>
+                    <Text style={[styles.billValue, { color: '#ffffff' }]}>
+                      {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
+                    </Text>
+                  </View>
+                  <View style={styles.billRow}>
+                    <Text style={styles.billLabel}>Total Tagihan:</Text>
+                    <Text style={[styles.billValue, { color: '#fb7185', fontSize: 16, fontFamily: 'Poppins_700Bold' }]}>
+                      {formatRp(totalAmount)}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Payment Method */}
+                <View style={styles.methodRow}>
+                  {[
+                    { id: 'CASH', label: 'Tunai', icon: Banknote },
+                    { id: 'QRIS', label: 'QRIS', icon: QrCode },
+                    { id: 'TRANSFER', label: 'Transfer', icon: CreditCard },
+                  ].map((m) => {
+                    const Icon = m.icon;
+                    const isSelected = paymentMethod === m.id;
+                    return (
+                      <TouchableOpacity
+                        key={m.id}
+                        style={[styles.methodBtn, isSelected && styles.methodBtnActive]}
+                        onPress={() => setPaymentMethod(m.id)}
+                      >
+                        <Icon size={15} color={isSelected ? '#ffffff' : '#d4d4d8'} />
+                        <Text style={[styles.methodBtnText, isSelected && styles.methodBtnTextActive]}>
+                          {m.label}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
+                {/* QRIS Surcharge Alert */}
+                {paymentMethod === 'QRIS' && feeDetails.some((f) => f.name.toLowerCase().includes('qris')) && (
+                  <View style={styles.qrisFeeAlert}>
+                    <QrCode size={14} color="#fbbf24" />
+                    <Text style={styles.qrisFeeAlertText}>
+                      Biaya Admin QRIS: +{formatRp(feeDetails.filter((f) => f.name.toLowerCase().includes('qris')).reduce((s, f) => s + f.amount, 0))}
+                    </Text>
+                  </View>
+                )}
+
+                {paymentMethod === 'CASH' && (
+                  <View style={{ marginTop: 12 }}>
+                    <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
+                    <TextInput
+                      style={styles.cashInput}
+                      keyboardType="numeric"
+                      value={paidAmount}
+                      onChangeText={setPaidAmount}
+                    />
+
+                    <View style={styles.chipsRow}>
+                      {[totalAmount, 50000, 100000, 200000].map((val, idx) => (
+                        <TouchableOpacity
+                          key={idx}
+                          style={styles.chipBtn}
+                          onPress={() => setPaidAmount(val.toString())}
+                        >
+                          <Text style={styles.chipBtnText}>{idx === 0 ? 'Pas' : formatRp(val)}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+
+                    <View style={styles.changeRow}>
+                      <Text style={styles.changeLabel}>Kembalian:</Text>
+                      <Text style={styles.changeValue}>{formatRp(changeAmount)}</Text>
+                    </View>
+                  </View>
+                )}
+              </ScrollView>
+            ) : (
+              /* Cart Items List */
+              <ScrollView style={styles.modalScroll}>
               {cart.map((item) => {
                 const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
                 return (
@@ -961,8 +1068,20 @@ export default function PosScreen({ isLandscape = false }) {
                   </View>
                 </View>
               )}
-            </ScrollView>
 
+              {isLandscape && modalTab === 'items' && (
+                <TouchableOpacity
+                  style={[styles.paySubmitBtn, { marginTop: 16 }]}
+                  onPress={() => setModalTab('payment')}
+                >
+                  <Text style={styles.paySubmitText}>Lanjut ke Pembayaran</Text>
+                  <ArrowRight size={16} color="#ffffff" style={{ marginLeft: 8 }} />
+                </TouchableOpacity>
+              )}
+            </ScrollView>
+          )}
+
+          {(!isLandscape || modalTab === 'payment') && (
             <TouchableOpacity
               style={[styles.paySubmitBtn, checkoutLoading && styles.paySubmitBtnDisabled]}
               onPress={handleProcessCheckout}
@@ -974,6 +1093,7 @@ export default function PosScreen({ isLandscape = false }) {
                 <Text style={styles.paySubmitText}>Konfirmasi Pembayaran</Text>
               )}
             </TouchableOpacity>
+          )}
           </View>
         </View>
       </Modal>
@@ -981,12 +1101,12 @@ export default function PosScreen({ isLandscape = false }) {
       {/* Mobile Customer Picker Modal */}
       <Modal
         visible={customerModalOpen}
-        animationType="slide"
+        animationType={isLandscape ? 'fade' : 'slide'}
         transparent={true}
         onRequestClose={() => setCustomerModalOpen(false)}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.customerPickerSheet}>
+        <View style={[styles.modalOverlay, isLandscape && styles.modalOverlayLandscape]}>
+          <View style={[styles.customerPickerSheet, isLandscape && styles.customerPickerSheetLandscape]}>
             {/* Header */}
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Pilih Pelanggan / Member</Text>
@@ -1084,9 +1204,9 @@ export default function PosScreen({ isLandscape = false }) {
       </Modal>
 
       {/* Promo Picker Modal */}
-      <Modal visible={promoModalOpen} animationType="slide" transparent onRequestClose={() => setPromoModalOpen(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.customerPickerSheet}>
+      <Modal visible={promoModalOpen} animationType={isLandscape ? 'fade' : 'slide'} transparent onRequestClose={() => setPromoModalOpen(false)}>
+        <View style={[styles.modalOverlay, isLandscape && styles.modalOverlayLandscape]}>
+          <View style={[styles.customerPickerSheet, isLandscape && styles.customerPickerSheetLandscape]}>
             {/* Header */}
             <View style={styles.modalHeader}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -1154,12 +1274,12 @@ export default function PosScreen({ isLandscape = false }) {
       {/* Mobile Thermal Receipt Modal */}
       <Modal
         visible={receiptModalOpen}
-        animationType="slide"
+        animationType={isLandscape ? 'fade' : 'slide'}
         transparent={true}
         onRequestClose={() => setReceiptModalOpen(false)}
       >
         <View style={styles.receiptModalOverlay}>
-          <View style={styles.receiptSheet}>
+          <View style={[styles.receiptSheet, isLandscape && styles.receiptSheetLandscape]}>
             {/* Store Header */}
             <View style={styles.receiptHeader}>
               <Text style={styles.receiptBrand}>KasirKita POS</Text>
@@ -1179,7 +1299,7 @@ export default function PosScreen({ isLandscape = false }) {
             </View>
 
             {/* Receipt Items */}
-            <ScrollView style={styles.receiptItemsList} showsVerticalScrollIndicator={false}>
+            <ScrollView style={[styles.receiptItemsList, isLandscape && styles.receiptItemsListLandscape]} showsVerticalScrollIndicator={false}>
               {completedTx?.items?.map((item, idx) => (
                 <View key={idx} style={styles.receiptItemRow}>
                   <Text style={styles.receiptItemName} numberOfLines={1} ellipsizeMode="tail">
@@ -2480,5 +2600,52 @@ const styles = StyleSheet.create({
     maxHeight: '92%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  modalLandscapeTabs: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  modalLandscapeTabBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+    backgroundColor: '#27272a',
+  },
+  modalLandscapeTabBtnActive: {
+    backgroundColor: '#e11d48',
+  },
+  modalLandscapeTabText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#a1a1aa',
+  },
+  modalLandscapeTabTextActive: {
+    color: '#ffffff',
+    fontFamily: 'Poppins_700Bold',
+  },
+  modalLandscapeScroll: {
+    maxHeight: 220,
+  },
+  customerPickerSheetLandscape: {
+    maxWidth: 500,
+    width: '100%',
+    maxHeight: '90%',
+    borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignSelf: 'center',
+  },
+  receiptSheetLandscape: {
+    maxWidth: 400,
+    maxHeight: '94%',
+    borderRadius: 20,
+  },
+  receiptItemsListLandscape: {
+    maxHeight: 110,
   },
 });

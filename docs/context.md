@@ -216,7 +216,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Mengonfigurasi antarmuka `PosScreen.js` untuk merender tata letak 2 kolom berdampingan saat `isLandscape === true`:
       - **Kolom Kiri (~60%):** Pencarian produk, filter kategori chips yang kompak, dan grid katalog barang responsif.
       - **Kolom Kanan (Lebar 350px):** Register Kasir permanen (*Persistent Visible Cart*) dengan daftar belanja aktif (+/- kuantitas, harga/item), pemilih member pelanggan, chip cepat kupon promo & pajak, rincian tagihan, serta tombol utama **"Bayar Kasir"**.
-    - Memastikan standar ketahanan layout (Defensive UI Craft): `Readability Floor Rule` (semua font $\ge 12\text{px}$), `Flexbox Pairing Rule` (`numberOfLines={1}` + `flexShrink: 0`), dan penyesuaian modal pembayaran terpusat (*centered modal dialog*) saat berada dalam mode mendatar.
+  - **Penyelesaian Fase 4: Integrasi Alur Checkout, Diskon, Pajak/Biaya, dan Struk Thermal pada Mode Landscape (`PosScreen.js` - Plan #18)**:
+    - Mengoptimalkan modal checkout pada mode landscape dengan menghadirkan tab navigasi terfokus (**Pembayaran Kasir** vs **Daftar Item**); kasir dapat langsung memilih metode bayar (Tunai/QRIS/Transfer), menekan chip uang pas / pecahan cepat, melihat kalkulasi kembalian, dan mengeksekusi transaksi secara instan tanpa scroll panjang.
+    - Mengintegrasikan dialog terpusat (*centered floating modal*) pada **Pemilih Pelanggan / Member**, **Pemilih Promo Toko**, dan **Modal Struk Thermal KasirKita** di mode landscape agar proporsional, nyaman dibaca, dan tidak terdistorsi oleh tinggi layar horizontal yang terbatas.
 
 ## Keputusan Arsitektur
 
