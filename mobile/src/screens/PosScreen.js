@@ -494,7 +494,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
       {isLandscape && (
         <View style={[styles.landscapeRegisterCol, compact && styles.landscapeRegisterColCompact]}>
           {/* Register Column Header */}
-          <View style={[styles.registerHeader, compact && styles.registerHeaderCompact]}>
+          <View style={[styles.registerHeader, styles.landscapeRegisterHeader, compact && styles.landscapeRegisterHeaderCompact]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
               <ShoppingCart size={compact ? 14 : 16} color="#fb7185" />
               <Text style={styles.registerTitle}>Keranjang</Text>
@@ -2479,7 +2479,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    height: 48,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
     backgroundColor: '#09090b',
@@ -2488,7 +2488,7 @@ const styles = StyleSheet.create({
   },
   landscapeToolbarCompact: {
     paddingHorizontal: 10,
-    paddingVertical: 6,
+    height: 44,
     gap: 6,
   },
   landscapeSearchBox: {
@@ -2601,6 +2601,16 @@ const styles = StyleSheet.create({
     borderBottomColor: '#27272a',
     backgroundColor: '#141416',
     flexShrink: 0,
+  },
+  landscapeRegisterHeader: {
+    height: 48,
+    paddingVertical: 0,
+    paddingHorizontal: 14,
+  },
+  landscapeRegisterHeaderCompact: {
+    height: 44,
+    paddingVertical: 0,
+    paddingHorizontal: 10,
   },
   registerHeaderCompact: {
     paddingHorizontal: 12,
