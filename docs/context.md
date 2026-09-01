@@ -197,6 +197,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Mengirimkan `discount_id`, `discount_code`, dan `discount_amount` pada payload checkout kasir mobile.
     - Mencantumkan rincian potongan diskon dan kode kupon secara transparan pada struk belanja thermal mobile.
     - **Resolusi Anti-Pattern Spacing Rhythm (`PosScreen.js`)**: Mengeliminasi pengulangan monoton jarak (baik 4px maupun 8px) dengan menerapkan skala ritme spasial bergradasi yang dinamis: micro-grouping 4px-6px untuk teks harga & unit, compact 10px-12px untuk jarak antar-input form dan baris rincian nota, serta generous 14px-20px untuk pemisah seksi modal dan tombol aksi utama.
+  - **Inisialisasi & Publikasi GitHub Repository**:
+    - Proyek monorepo KasirKita POS resmi diinisialisasi dengan Git dan dipush ke repositori GitHub `https://github.com/Man4c/KasirKita.git` pada branch `main`.
+    - Menyusun file `.gitignore` komprehensif di root untuk mengabaikan `node_modules/`, `vendor/`, file rahasia `.env`, build artifacts (`dist/`), serta cache temporary.
+    - Menghapus nested git submodule pada `mobile/` agar seluruh codebase backend, frontend web, dan mobile app terkelola rapi dalam satu kesatuan monorepo.
 
 ## Keputusan Arsitektur
 
