@@ -375,27 +375,28 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   topBarLandscape: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
     borderBottomColor: '#27272a',
     borderBottomWidth: 1,
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 14,
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 12,
   },
   topBrandLandscape: {
     fontSize: 16,
   },
   topBadgeLandscape: {
-    paddingHorizontal: 6,
-    paddingVertical: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
   },
   topBadgeTextLandscape: {
     fontSize: 12,
@@ -403,18 +404,18 @@ const styles = StyleSheet.create({
   landscapeNavRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
     backgroundColor: '#27272a',
-    padding: 3,
-    borderRadius: 8,
+    padding: 4,
+    borderRadius: 10,
   },
   landscapeTabBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
   landscapeTabBtnActive: {
     backgroundColor: '#e11d48',
@@ -435,8 +436,9 @@ const styles = StyleSheet.create({
     maxWidth: 120,
   },
   logoutBtnLandscape: {
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
   bottomNavBar: {
     flexDirection: 'row',
