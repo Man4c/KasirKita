@@ -36,11 +36,14 @@ import {
   ChevronDown,
   WifiOff,
   RefreshCw,
+  Printer,
 } from 'lucide-react-native';
 import api from '../services/api';
+import { storage } from '../services/storage';
 import ReceiptView from '../components/ReceiptView';
 import { offlineStorage } from '../services/offlineStorage';
 import { syncManager } from '../services/syncManager';
+import { printerService } from '../services/printerService';
 
 export default function PosScreen({ isLandscape = false, isCompactLandscape = false, onCheckoutStateChange }) {
   const { width, height } = useWindowDimensions();
@@ -435,6 +438,14 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         setReceiptModalOpen(true);
         await syncManager.refreshPendingCount();
 
+        // Auto-print receipt if enabled
+        try {
+          const savedSettings = await storage.getSettings();
+          if (savedSettings?.autoPrint) {
+            await printerService.printReceipt(offlineTx);
+          }
+        } catch (e) {}
+
         const cached = await offlineStorage.getCachedCatalog();
         if (cached.products) setProducts(cached.products);
 
@@ -480,6 +491,15 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
           setCartModalOpen(false);
           setIsCheckoutView(false);
           setReceiptModalOpen(true);
+
+          // Auto-print receipt if enabled
+          try {
+            const savedSettings = await storage.getSettings();
+            if (savedSettings?.autoPrint) {
+              await printerService.printReceipt(res.data.data);
+            }
+          } catch (e) {}
+
           fetchData();
         }
       } catch (err) {
@@ -503,6 +523,14 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
           setIsCheckoutView(false);
           setReceiptModalOpen(true);
           await syncManager.refreshPendingCount();
+
+          // Auto-print receipt if enabled
+          try {
+            const savedSettings = await storage.getSettings();
+            if (savedSettings?.autoPrint) {
+              await printerService.printReceipt(offlineTx);
+            }
+          } catch (e) {}
 
           const cached = await offlineStorage.getCachedCatalog();
           if (cached.products) setProducts(cached.products);
@@ -2271,16 +2299,44 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               />
             </ScrollView>
 
-            {/* Action CTA */}
-            <TouchableOpacity
-              style={styles.newTxButton}
-              onPress={() => {
-                setIsCheckoutView(false);
-                setReceiptModalOpen(false);
-              }}
-            >
-              <Text style={styles.newTxButtonText}>Transaksi Baru</Text>
-            </TouchableOpacity>
+            {/* Action CTA Buttons */}
+            <View style={styles.receiptActionRow}>
+              <TouchableOpacity
+                style={styles.printThermalButton}
+                activeOpacity={0.8}
+                onPress={async () => {
+                  if (!completedTx) return;
+                  const res = await printerService.printReceipt(completedTx);
+                  if (res.mode === 'bluetooth') {
+                    if (Platform.OS === 'web') {
+                      window.alert('Nota struk berhasil dikirim ke printer Bluetooth.');
+                    } else {
+                      Alert.alert('Sukses', 'Struk berhasil dicetak ke printer Bluetooth.');
+                    }
+                  } else {
+                    if (Platform.OS === 'web') {
+                      window.print();
+                    } else {
+                      Alert.alert('Simulasi Cetak', 'Perintah cetak ESC/POS disiapkan (Mode Simulasi). Hubungkan printer Bluetooth fisik di menu Pengaturan jika sudah ada perangkat.');
+                    }
+                  }
+                }}
+              >
+                <Printer size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                <Text style={styles.printThermalButtonText}>Cetak Struk</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.newTxButton, { flex: 1, marginTop: 0 }]}
+                onPress={() => {
+                  setIsCheckoutView(false);
+                  setReceiptModalOpen(false);
+                }}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.newTxButtonText}>Transaksi Baru</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -3048,6 +3104,29 @@ const styles = StyleSheet.create({
     borderTopColor: '#d4d4d8',
     borderTopWidth: 1,
     borderStyle: 'dashed',
+  },
+  receiptActionRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 10,
+    flexShrink: 0,
+  },
+  printThermalButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#18181b',
+    borderColor: '#3f3f46',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 12,
+  },
+  printThermalButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontFamily: 'Poppins_600SemiBold',
+    marginLeft: 6,
   },
   newTxButton: {
     backgroundColor: '#e11d48',

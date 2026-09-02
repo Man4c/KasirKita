@@ -45,6 +45,7 @@ import {
   Upload,
   Camera,
   Layers,
+  Bluetooth,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -52,6 +53,7 @@ import api from '../services/api';
 import ReceiptView from '../components/ReceiptView';
 import { offlineStorage } from '../services/offlineStorage';
 import { syncManager } from '../services/syncManager';
+import { printerService } from '../services/printerService';
 
 export default function SettingsScreen({ isLandscape = false }) {
   const { user, logout, updateUser } = useAuth();
@@ -63,8 +65,11 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [storeLogo, setStoreLogo] = useState(null);
   const [receiptFooter, setReceiptFooter] = useState('Terima kasih atas kunjungan Anda! Barang yang dibeli tidak dapat ditukar.');
   
-  const [selectedPrinter, setSelectedPrinter] = useState('RPP02N (58mm Bluetooth)');
+  const [selectedPrinter, setSelectedPrinter] = useState('Panda PRJ-58D (Mode Simulasi)');
   const [isPrinterConnected, setIsPrinterConnected] = useState(true);
+  const [paperSize, setPaperSize] = useState('58mm');
+  const [isScanningBluetooth, setIsScanningBluetooth] = useState(false);
+  const [isPhysicalPrinter, setIsPhysicalPrinter] = useState(false);
   const [autoPrint, setAutoPrint] = useState(false);
   const [printTwoCopies, setPrintTwoCopies] = useState(false);
   const [showLogoOnReceipt, setShowLogoOnReceipt] = useState(true);
@@ -148,6 +153,11 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (typeof saved.showPhoneOnReceipt === 'boolean') setShowPhoneOnReceipt(saved.showPhoneOnReceipt);
         if (typeof saved.soundBeep === 'boolean') setSoundBeep(saved.soundBeep);
         if (saved.orientationPref) setOrientationPref(saved.orientationPref);
+        if (saved.paperSize) {
+          setPaperSize(saved.paperSize);
+          printerService.setPaperSize(saved.paperSize);
+        }
+        await printerService.init();
       }
 
       // 2. Fetch and synchronize latest store identity from Cloud backend
@@ -657,9 +667,9 @@ export default function SettingsScreen({ isLandscape = false }) {
               <Text style={styles.menuTitle}>Printer Bluetooth Thermal</Text>
               <Text style={styles.menuSubtitle} numberOfLines={1}>{selectedPrinter}</Text>
             </View>
-            <View style={[styles.statusBadge, isPrinterConnected ? styles.statusBadgeGreen : styles.statusBadgeGray]}>
-              <Text style={[styles.statusBadgeText, isPrinterConnected ? styles.statusBadgeTextGreen : styles.statusBadgeTextGray]}>
-                {isPrinterConnected ? 'Terhubung' : 'Terputus'}
+            <View style={[styles.statusBadge, isPrinterConnected ? (isPhysicalPrinter ? styles.statusBadgeGreen : styles.statusBadgeAmber) : styles.statusBadgeGray]}>
+              <Text style={[styles.statusBadgeText, isPrinterConnected ? (isPhysicalPrinter ? styles.statusBadgeTextGreen : styles.statusBadgeTextAmber) : styles.statusBadgeTextGray]}>
+                {isPrinterConnected ? (isPhysicalPrinter ? 'Bluetooth' : 'Simulasi') : 'Terputus'}
               </Text>
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0, marginLeft: 6 }} />
@@ -667,11 +677,55 @@ export default function SettingsScreen({ isLandscape = false }) {
 
           <View style={styles.divider} />
 
+          {/* Pilihan Lebar Kertas Thermal */}
+          <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+            <View style={{ marginBottom: 8 }}>
+              <Text style={styles.switchTitle}>Lebar Kertas Thermal</Text>
+              <Text style={styles.switchSubtitle}>Format baris nota otomatis disesuaikan</Text>
+            </View>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              {[
+                { id: '58mm', label: '58 mm (Mini Portable / 32 Kolom)' },
+                { id: '80mm', label: '80 mm (Desktop / 48 Kolom)' },
+              ].map((opt) => {
+                const isActive = paperSize === opt.id;
+                return (
+                  <TouchableOpacity
+                    key={opt.id}
+                    style={[styles.orientBtn, isActive && styles.orientBtnActive]}
+                    onPress={() => {
+                      setPaperSize(opt.id);
+                      printerService.setPaperSize(opt.id);
+                      persistSettings({ paperSize: opt.id });
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[styles.orientBtnText, isActive && styles.orientBtnTextActive]}>
+                      {opt.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+
+          <View style={styles.divider} />
+
           {/* Test Print Button */}
           <TouchableOpacity
             style={styles.actionBtnRow}
             activeOpacity={0.7}
-            onPress={() => setTestReceiptOpen(true)}
+            onPress={async () => {
+              await printerService.printSample({
+                storeName,
+                storeAddress,
+                storePhone,
+                storeLogo,
+                receiptFooter,
+                showPhoneOnReceipt,
+              });
+              setTestReceiptOpen(true);
+            }}
           >
             <Printer size={16} color="#ffffff" />
             <Text style={styles.actionBtnText}>Uji Cetak Struk Contoh (Test Print)</Text>
@@ -1470,21 +1524,79 @@ export default function SettingsScreen({ isLandscape = false }) {
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={{ maxHeight: 320 }} showsVerticalScrollIndicator={false}>
+            {/* Real Bluetooth Scan Action */}
+            <TouchableOpacity
+              style={[styles.scanBluetoothBtn, isScanningBluetooth && { opacity: 0.8 }]}
+              onPress={async () => {
+                if (!printerService.isWebBluetoothSupported()) {
+                  if (Platform.OS === 'web') {
+                    window.alert('Web Bluetooth API tidak didukung pada peramban ini. Silakan gunakan Google Chrome di laptop atau HP Android.');
+                  } else {
+                    Alert.alert('Perlu Google Chrome', 'Pemindaian Bluetooth via browser memerlukan Google Chrome.');
+                  }
+                  return;
+                }
+
+                setIsScanningBluetooth(true);
+                try {
+                  const res = await printerService.scanAndConnectWebBluetooth();
+                  setSelectedPrinter(res.name);
+                  setIsPrinterConnected(true);
+                  setIsPhysicalPrinter(true);
+                  setPrinterModalOpen(false);
+                  if (Platform.OS === 'web') {
+                    window.alert(`Berhasil terhubung ke printer fisik: ${res.name}`);
+                  } else {
+                    Alert.alert('Bluetooth Terhubung', `Printer ${res.name} berhasil dipasangkan dan siap mencetak.`);
+                  }
+                } catch (err) {
+                  if (err.message && !err.message.includes('User cancelled')) {
+                    Alert.alert('Gagal Memindai', err.message);
+                  }
+                } finally {
+                  setIsScanningBluetooth(false);
+                }
+              }}
+              disabled={isScanningBluetooth}
+              activeOpacity={0.8}
+            >
+              {isScanningBluetooth ? (
+                <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 8 }} />
+              ) : (
+                <Bluetooth size={16} color="#ffffff" style={{ marginRight: 8 }} />
+              )}
+              <Text style={styles.scanBluetoothBtnText}>
+                {isScanningBluetooth ? 'Memindai Bluetooth...' : 'Pindai Printer Bluetooth Nyata'}
+              </Text>
+            </TouchableOpacity>
+
+            <View style={{ marginVertical: 10, paddingHorizontal: 4 }}>
+              <Text style={{ fontSize: 12, fontFamily: 'Poppins_600SemiBold', color: '#71717a', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                Preset / Mode Simulasi Virtual
+              </Text>
+              <Text style={{ fontSize: 12, fontFamily: 'Poppins_400Regular', color: '#a1a1aa' }}>
+                Pilih profil di bawah jika belum ada printer fisik:
+              </Text>
+            </View>
+
+            <ScrollView style={{ maxHeight: 260 }} showsVerticalScrollIndicator={false}>
               {[
-                { id: 'RPP02N (58mm Bluetooth)', desc: 'Ukuran 58mm • Portabel Mini POS' },
-                { id: 'Thermal-80 (80mm Bluetooth)', desc: 'Ukuran 80mm • Desktop POS' },
-                { id: 'Panda PRJ-58D (Bluetooth)', desc: 'Ukuran 58mm • Kertas Thermal Standard' },
-                { id: 'Iware MP-58A (Bluetooth)', desc: 'Ukuran 58mm • Koneksi Cepat' },
+                { id: 'Panda PRJ-58D (Bluetooth Thermal)', desc: 'Ukuran 58mm • Standar POS Ritel' },
+                { id: 'RPP02N Mini POS (58mm)', desc: 'Ukuran 58mm • Mini Saku Bluetooth' },
+                { id: 'Thermal-80 Desktop POS (80mm)', desc: 'Ukuran 80mm • Kasir Minimarket / Resto' },
+                { id: 'Iware MP-58A (Bluetooth Thermal)', desc: 'Ukuran 58mm • Portabel UMKM' },
+                { id: 'Printer Virtual Kasir (Simulasi)', desc: 'Cetak ke layar & dialog cetak printer biasa' },
               ].map((p) => {
                 const isSelected = selectedPrinter === p.id;
                 return (
                   <TouchableOpacity
                     key={p.id}
                     style={[styles.printerOptionRow, isSelected && styles.printerOptionRowActive]}
-                    onPress={() => {
+                    onPress={async () => {
+                      await printerService.setSimulationMode(p.id);
                       setSelectedPrinter(p.id);
                       setIsPrinterConnected(true);
+                      setIsPhysicalPrinter(false);
                       persistSettings({ selectedPrinter: p.id, isPrinterConnected: true });
                       setPrinterModalOpen(false);
                     }}
@@ -1852,6 +1964,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(52, 211, 153, 0.3)',
   },
+  statusBadgeAmber: {
+    backgroundColor: 'rgba(245, 158, 11, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 158, 11, 0.3)',
+  },
   statusBadgeGray: {
     backgroundColor: '#27272a',
     borderWidth: 1,
@@ -1864,8 +1981,26 @@ const styles = StyleSheet.create({
   statusBadgeTextGreen: {
     color: '#34d399',
   },
+  statusBadgeTextAmber: {
+    color: '#fbbf24',
+  },
   statusBadgeTextGray: {
     color: '#a1a1aa',
+  },
+  scanBluetoothBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#0284c7',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    marginBottom: 8,
+  },
+  scanBluetoothBtnText: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
   },
   actionBtnRow: {
     flexDirection: 'row',

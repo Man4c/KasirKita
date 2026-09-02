@@ -265,6 +265,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - Backend Idempotency & Real Timestamp: Kolom `offline_id` (`string(100)`, `unique`, `nullable`) pada tabel `transactions` untuk mencegah duplikasi stok/keuangan saat koneksi putus-nyambung.
       - UI Status: Banner mode offline di POS (`PosScreen.js`) dan kartu manajemen antrean offline di Pengaturan (`SettingsScreen.js`).
       - Pengujian Otomatis: `OfflineSyncTest.php` (2 test cases, 11 assertions lolos 100%, total suite backend kini 68 tests lolos).
+    14. **Universal Bluetooth Thermal ESC/POS Engine (Hardware-Ready)**:
+      - `mobile/src/services/escposGenerator.js`: Pembangun binary ESC/POS standar industri mendukung ukuran kertas 58mm (32 kolom) & 80mm (48 kolom), tata letak dua sisi otomatis, pemisah garis, dan perintah feed/cutter.
+      - `mobile/src/services/printerService.js`: Universal printer service mendukung Web Bluetooth API (`navigator.bluetooth`) untuk scanning & pairing printer fisik asli, pengiriman chunk 512-byte, serta fallback ke Mode Simulasi Virtual & dialog cetak printer biasa/PDF.
+      - UI Pengaturan: Selektor lebar kertas 58mm/80mm, tombol pemindai Bluetooth nyata, badge status terhubung (Bluetooth vs Simulasi), dan tombol uji cetak.
+      - POS Checkout: Tombol *"Cetak Struk"* di modal nota dan dukungan cetak otomatis (*Auto-Print*) saat pembayaran sukses.
   - Rencana Modul Aktif & Dalam Antrean:
     8. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
     9. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).
