@@ -55,6 +55,25 @@ export const storage = {
     return await SecureStore.getItemAsync(API_URL_KEY);
   },
 
+  async getSettings() {
+    let json;
+    if (Platform.OS === 'web') {
+      json = localStorage.getItem('kasirkita_app_settings');
+    } else {
+      json = await SecureStore.getItemAsync('kasirkita_app_settings');
+    }
+    return json ? JSON.parse(json) : null;
+  },
+
+  async setSettings(settings) {
+    const json = JSON.stringify(settings);
+    if (Platform.OS === 'web') {
+      localStorage.setItem('kasirkita_app_settings', json);
+      return;
+    }
+    await SecureStore.setItemAsync('kasirkita_app_settings', json);
+  },
+
   async clearAll() {
     if (Platform.OS === 'web') {
       localStorage.removeItem(TOKEN_KEY);

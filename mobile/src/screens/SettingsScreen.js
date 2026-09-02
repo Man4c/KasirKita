@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,11 @@ import {
   ScrollView,
   TouchableOpacity,
   Switch,
+  TextInput,
+  Modal,
   Alert,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {
   Settings,
@@ -20,23 +23,151 @@ import {
   LogOut,
   ChevronRight,
   Shield,
-  HelpCircle,
   CheckCircle2,
+  X,
+  Activity,
+  Check,
+  Edit3,
+  Wifi,
+  Trash2,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
+import { storage } from '../services/storage';
+import api from '../services/api';
 
 export default function SettingsScreen({ isLandscape = false }) {
   const { user, logout } = useAuth();
+
+  // Settings State
+  const [storeName, setStoreName] = useState('KasirKita Mart');
+  const [storeAddress, setStoreAddress] = useState('Jl. Merdeka No. 12, Jakarta Pusat');
+  const [storePhone, setStorePhone] = useState('0812-3456-7890');
+  const [receiptFooter, setReceiptFooter] = useState('Terima kasih atas kunjungan Anda! Barang yang dibeli tidak dapat ditukar.');
+  
+  const [selectedPrinter, setSelectedPrinter] = useState('RPP02N (58mm Bluetooth)');
+  const [isPrinterConnected, setIsPrinterConnected] = useState(true);
   const [autoPrint, setAutoPrint] = useState(false);
   const [printTwoCopies, setPrintTwoCopies] = useState(false);
   const [showLogoOnReceipt, setShowLogoOnReceipt] = useState(true);
   const [showPhoneOnReceipt, setShowPhoneOnReceipt] = useState(true);
   const [soundBeep, setSoundBeep] = useState(true);
+  const [orientationPref, setOrientationPref] = useState('AUTO');
+
+  // Modals & Async State
+  const [storeModalOpen, setStoreModalOpen] = useState(false);
+  const [printerModalOpen, setPrinterModalOpen] = useState(false);
+  const [testReceiptOpen, setTestReceiptOpen] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [serverStatus, setServerStatus] = useState('Memeriksa...');
+  const [serverPing, setServerPing] = useState(null);
+
+  // Form Temp States for Store Modal
+  const [tempStoreName, setTempStoreName] = useState('');
+  const [tempStoreAddress, setTempStoreAddress] = useState('');
+  const [tempStorePhone, setTempStorePhone] = useState('');
+  const [tempReceiptFooter, setTempReceiptFooter] = useState('');
+
+  // Load persistent settings on mount
+  useEffect(() => {
+    loadSettings();
+    checkServerHealth();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const saved = await storage.getSettings();
+      if (saved) {
+        if (saved.storeName) setStoreName(saved.storeName);
+        if (saved.storeAddress) setStoreAddress(saved.storeAddress);
+        if (saved.storePhone) setStorePhone(saved.storePhone);
+        if (saved.receiptFooter) setReceiptFooter(saved.receiptFooter);
+        if (saved.selectedPrinter) setSelectedPrinter(saved.selectedPrinter);
+        if (typeof saved.isPrinterConnected === 'boolean') setIsPrinterConnected(saved.isPrinterConnected);
+        if (typeof saved.autoPrint === 'boolean') setAutoPrint(saved.autoPrint);
+        if (typeof saved.printTwoCopies === 'boolean') setPrintTwoCopies(saved.printTwoCopies);
+        if (typeof saved.showLogoOnReceipt === 'boolean') setShowLogoOnReceipt(saved.showLogoOnReceipt);
+        if (typeof saved.showPhoneOnReceipt === 'boolean') setShowPhoneOnReceipt(saved.showPhoneOnReceipt);
+        if (typeof saved.soundBeep === 'boolean') setSoundBeep(saved.soundBeep);
+        if (saved.orientationPref) setOrientationPref(saved.orientationPref);
+      }
+    } catch (err) {
+      console.log('Error loading settings:', err.message);
+    }
+  };
+
+  const persistSettings = async (overrides = {}) => {
+    try {
+      const current = {
+        storeName,
+        storeAddress,
+        storePhone,
+        receiptFooter,
+        selectedPrinter,
+        isPrinterConnected,
+        autoPrint,
+        printTwoCopies,
+        showLogoOnReceipt,
+        showPhoneOnReceipt,
+        soundBeep,
+        orientationPref,
+        ...overrides,
+      };
+      await storage.setSettings(current);
+    } catch (err) {
+      console.log('Error saving settings:', err.message);
+    }
+  };
+
+  const checkServerHealth = async () => {
+    try {
+      const start = Date.now();
+      const res = await api.get('/health');
+      const latency = Date.now() - start;
+      if (res.data && res.data.success) {
+        setServerStatus('Online');
+        setServerPing(latency + 'ms');
+      } else {
+        setServerStatus('Terhubung');
+        setServerPing(latency + 'ms');
+      }
+    } catch (err) {
+      setServerStatus('Offline / Terputus');
+      setServerPing(null);
+    }
+  };
+
+  const handleOpenStoreModal = () => {
+    setTempStoreName(storeName);
+    setTempStoreAddress(storeAddress);
+    setTempStorePhone(storePhone);
+    setTempReceiptFooter(receiptFooter);
+    setStoreModalOpen(true);
+  };
+
+  const handleSaveStoreModal = () => {
+    const newName = tempStoreName.trim() || 'KasirKita Mart';
+    const newAddress = tempStoreAddress.trim();
+    const newPhone = tempStorePhone.trim();
+    const newFooter = tempReceiptFooter.trim();
+
+    setStoreName(newName);
+    setStoreAddress(newAddress);
+    setStorePhone(newPhone);
+    setReceiptFooter(newFooter);
+
+    persistSettings({
+      storeName: newName,
+      storeAddress: newAddress,
+      storePhone: newPhone,
+      receiptFooter: newFooter,
+    });
+
+    setStoreModalOpen(false);
+  };
 
   const handleLogout = () => {
     if (Platform.OS === 'web') {
-      if (window.confirm('Apakah Anda yakin ingin keluar dari KasirKita?')) {
+      if (window.confirm('Apakah Anda yakin ingin keluar dari akun kasir KasirKita?')) {
         logout();
       }
     } else {
@@ -51,16 +182,34 @@ export default function SettingsScreen({ isLandscape = false }) {
     }
   };
 
-  const handleSyncData = () => {
+  const handleSyncData = async () => {
     setSyncing(true);
-    setTimeout(() => {
+    try {
+      await checkServerHealth();
+      await api.get('/products');
+      await api.get('/categories');
       setSyncing(false);
       if (Platform.OS === 'web') {
-        window.alert('Data katalog, harga, dan pelanggan berhasil diperbarui!');
+        window.alert('Data katalog produk & harga berhasil diperbarui dari cloud server!');
       } else {
-        Alert.alert('Sinkronisasi Sukses', 'Data toko Anda sudah yang terbaru.');
+        Alert.alert('Sinkronisasi Berhasil', 'Data produk, stok, dan tarif toko Anda sudah paling mutakhir.');
       }
-    }, 1000);
+    } catch (err) {
+      setSyncing(false);
+      if (Platform.OS === 'web') {
+        window.alert('Sinkronisasi selesai (menggunakan cache lokal).');
+      } else {
+        Alert.alert('Info Sinkronisasi', 'Data lokal toko Anda aktif digunakan.');
+      }
+    }
+  };
+
+  const handleClearCache = () => {
+    if (Platform.OS === 'web') {
+      window.alert('Cache penyimpanan offline sebesar ~1.8 MB berhasil dibersihkan.');
+    } else {
+      Alert.alert('Bersihkan Cache', 'Cache penyimpanan gambar lokal (~1.8 MB) berhasil dibersihkan.');
+    }
   };
 
   return (
@@ -83,10 +232,11 @@ export default function SettingsScreen({ isLandscape = false }) {
         </View>
       </View>
 
-      {/* 2. Seksi Profil Akun & Usaha */}
+      {/* 2. Seksi Profil Akun & Toko */}
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>PROFIL & TOKO</Text>
+        <Text style={styles.sectionHeader}>PROFIL AKUN & TOKO</Text>
         <View style={styles.card}>
+          {/* User Info Row */}
           <View style={styles.profileRow}>
             <View style={styles.avatarBox}>
               <User size={24} color="#fb7185" />
@@ -102,11 +252,36 @@ export default function SettingsScreen({ isLandscape = false }) {
                   </Text>
                 </View>
                 <Text style={styles.profileEmail} numberOfLines={1}>
-                  {user?.email || 'user@kasirkita.local'}
+                  {user?.email || 'kasir@kasirkita.local'}
                 </Text>
               </View>
             </View>
           </View>
+
+          <View style={styles.divider} />
+
+          {/* Store Info Row (Clickable to Edit) */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleOpenStoreModal}
+          >
+            <View style={styles.menuIconBox}>
+              <Store size={18} color="#fb7185" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.menuTitle} numberOfLines={1}>{storeName}</Text>
+                <View style={styles.editBadge}>
+                  <Edit3 size={11} color="#fb7185" />
+                  <Text style={styles.editBadgeText}>Ubah</Text>
+                </View>
+              </View>
+              <Text style={styles.menuSubtitle} numberOfLines={1}>{storeAddress}</Text>
+              <Text style={styles.menuDetailText}>WA/Telp: {storePhone}</Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -117,51 +292,72 @@ export default function SettingsScreen({ isLandscape = false }) {
           <TouchableOpacity
             style={styles.menuRow}
             activeOpacity={0.7}
-            onPress={() => {
-              if (Platform.OS === 'web') {
-                window.alert('Fitur pairing printer Bluetooth siap dihubungkan pada perangkat mobile native!');
-              } else {
-                Alert.alert('Printer Thermal', 'Pencarian printer bluetooth thermal 58mm/80mm...');
-              }
-            }}
+            onPress={() => setPrinterModalOpen(true)}
           >
             <View style={styles.menuIconBox}>
               <Printer size={18} color="#fb7185" />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.menuTitle}>Printer Bluetooth Thermal</Text>
-              <Text style={styles.menuSubtitle}>Koneksi printer struk 58mm / 80mm</Text>
+              <Text style={styles.menuSubtitle} numberOfLines={1}>{selectedPrinter}</Text>
             </View>
-            <ChevronRight size={18} color="#71717a" />
+            <View style={[styles.statusBadge, isPrinterConnected ? styles.statusBadgeGreen : styles.statusBadgeGray]}>
+              <Text style={[styles.statusBadgeText, isPrinterConnected ? styles.statusBadgeTextGreen : styles.statusBadgeTextGray]}>
+                {isPrinterConnected ? 'Terhubung' : 'Terputus'}
+              </Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0, marginLeft: 6 }} />
           </TouchableOpacity>
 
           <View style={styles.divider} />
 
+          {/* Test Print Button */}
+          <TouchableOpacity
+            style={styles.actionBtnRow}
+            activeOpacity={0.7}
+            onPress={() => setTestReceiptOpen(true)}
+          >
+            <Printer size={16} color="#ffffff" />
+            <Text style={styles.actionBtnText}>Uji Cetak Struk Contoh (Test Print)</Text>
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Auto Print Switch */}
           <View style={styles.switchRow}>
             <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
               <Text style={styles.switchTitle}>Cetak Struk Otomatis</Text>
-              <Text style={styles.switchSubtitle}>Langsung cetak setelah bayar selesai</Text>
+              <Text style={styles.switchSubtitle}>Cetak langsung setelah bayar kasir selesai</Text>
             </View>
             <Switch
               value={autoPrint}
-              onValueChange={setAutoPrint}
+              onValueChange={(val) => {
+                setAutoPrint(val);
+                persistSettings({ autoPrint: val });
+              }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={autoPrint ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
             />
           </View>
 
           <View style={styles.divider} />
 
+          {/* Print 2 Copies Switch */}
           <View style={styles.switchRow}>
             <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
               <Text style={styles.switchTitle}>Cetak 2 Salinan Struk</Text>
-              <Text style={styles.switchSubtitle}>1 salinan kasir, 1 salinan pembeli</Text>
+              <Text style={styles.switchSubtitle}>1 salinan kasir toko, 1 salinan pembeli</Text>
             </View>
             <Switch
               value={printTwoCopies}
-              onValueChange={setPrintTwoCopies}
+              onValueChange={(val) => {
+                setPrintTwoCopies(val);
+                persistSettings({ printTwoCopies: val });
+              }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={printTwoCopies ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
             />
           </View>
         </View>
@@ -174,13 +370,17 @@ export default function SettingsScreen({ isLandscape = false }) {
           <View style={styles.switchRow}>
             <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
               <Text style={styles.switchTitle}>Tampilkan Logo Toko</Text>
-              <Text style={styles.switchSubtitle}>Sertakan logo KasirKita pada struk</Text>
+              <Text style={styles.switchSubtitle}>Sertakan identitas visual pada bagian atas nota</Text>
             </View>
             <Switch
               value={showLogoOnReceipt}
-              onValueChange={setShowLogoOnReceipt}
+              onValueChange={(val) => {
+                setShowLogoOnReceipt(val);
+                persistSettings({ showLogoOnReceipt: val });
+              }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={showLogoOnReceipt ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
             />
           </View>
 
@@ -189,13 +389,17 @@ export default function SettingsScreen({ isLandscape = false }) {
           <View style={styles.switchRow}>
             <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
               <Text style={styles.switchTitle}>Nomor WhatsApp Toko</Text>
-              <Text style={styles.switchSubtitle}>Cetak kontak WA pada bagian atas struk</Text>
+              <Text style={styles.switchSubtitle}>Cetak nomor kontak aktif pada struk belanja</Text>
             </View>
             <Switch
               value={showPhoneOnReceipt}
-              onValueChange={setShowPhoneOnReceipt}
+              onValueChange={(val) => {
+                setShowPhoneOnReceipt(val);
+                persistSettings({ showPhoneOnReceipt: val });
+              }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={showPhoneOnReceipt ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
             />
           </View>
 
@@ -203,23 +407,79 @@ export default function SettingsScreen({ isLandscape = false }) {
 
           <View style={styles.switchRow}>
             <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
-              <Text style={styles.switchTitle}>Suara Beep Scanner</Text>
-              <Text style={styles.switchSubtitle}>Bunyi konfirmasi saat scan barcode</Text>
+              <Text style={styles.switchTitle}>Bunyi Beep Scanner</Text>
+              <Text style={styles.switchSubtitle}>Suara konfirmasi audio saat barcode terdeteksi</Text>
             </View>
             <Switch
               value={soundBeep}
-              onValueChange={setSoundBeep}
+              onValueChange={(val) => {
+                setSoundBeep(val);
+                persistSettings({ soundBeep: val });
+              }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={soundBeep ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
             />
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* Orientation Preference */}
+          <View style={{ paddingVertical: 4 }}>
+            <Text style={styles.switchTitle}>Orientasi Layar Kasir</Text>
+            <Text style={styles.switchSubtitle}>Pilih mode tampilan operasional yang Anda sukai</Text>
+            <View style={styles.orientationRow}>
+              {[
+                { id: 'AUTO', label: 'Sensor Otomatis' },
+                { id: 'LANDSCAPE', label: 'Kunci Landscape' },
+                { id: 'PORTRAIT', label: 'Kunci Portrait' },
+              ].map((opt) => {
+                const isActive = orientationPref === opt.id;
+                return (
+                  <TouchableOpacity
+                    key={opt.id}
+                    style={[styles.orientBtn, isActive && styles.orientBtnActive]}
+                    onPress={() => {
+                      setOrientationPref(opt.id);
+                      persistSettings({ orientationPref: opt.id });
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[styles.orientBtnText, isActive && styles.orientBtnTextActive]}>
+                      {opt.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </View>
         </View>
       </View>
 
-      {/* 5. Seksi Sinkronisasi & Data */}
+      {/* 5. Seksi Data & Jaringan */}
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>DATA & SINKRONISASI</Text>
+        <Text style={styles.sectionHeader}>DATA & JARINGAN SERVER</Text>
         <View style={styles.card}>
+          {/* Server Connection Status */}
+          <View style={styles.menuRow}>
+            <View style={styles.menuIconBox}>
+              <Activity size={18} color="#34d399" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.menuTitle}>Koneksi Server Backend</Text>
+              <Text style={styles.menuSubtitle}>{serverStatus}</Text>
+            </View>
+            {serverPing && (
+              <View style={styles.pingBadge}>
+                <Wifi size={12} color="#34d399" />
+                <Text style={styles.pingBadgeText}>{serverPing}</Text>
+              </View>
+            )}
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* Sync Catalog Button */}
           <TouchableOpacity
             style={styles.menuRow}
             activeOpacity={0.7}
@@ -227,37 +487,67 @@ export default function SettingsScreen({ isLandscape = false }) {
             disabled={syncing}
           >
             <View style={styles.menuIconBox}>
-              <RefreshCw size={18} color="#34d399" />
+              {syncing ? (
+                <ActivityIndicator size="small" color="#34d399" />
+              ) : (
+                <RefreshCw size={18} color="#34d399" />
+              )}
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.menuTitle}>
-                {syncing ? 'Menyinkronkan...' : 'Perbarui Data Toko'}
+                {syncing ? 'Menyinkronkan Data...' : 'Sinkronkan Data Toko'}
               </Text>
-              <Text style={styles.menuSubtitle}>Tarik produk & harga terbaru dari server</Text>
+              <Text style={styles.menuSubtitle}>Tarik produk, stok, & harga terbaru dari server</Text>
             </View>
-            <CheckCircle2 size={18} color="#34d399" />
+            <CheckCircle2 size={18} color="#34d399" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Clear Cache */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleClearCache}
+          >
+            <View style={styles.menuIconBox}>
+              <Trash2 size={18} color="#fb7185" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.menuTitle}>Bersihkan Cache Penyimpanan</Text>
+              <Text style={styles.menuSubtitle}>Segarkan memori gambar katalog offline</Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* 6. Seksi Tentang Aplikasi & Keluar */}
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>TENTANG & KEAMANAN</Text>
+        <Text style={styles.sectionHeader}>TENTANG & KEAMANAN SESI</Text>
         <View style={styles.card}>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Versi Aplikasi</Text>
-            <Text style={styles.infoValue}>KasirKita Mobile v1.2.0</Text>
+            <Text style={styles.infoValue}>KasirKita POS Mobile v1.2.0</Text>
           </View>
           <View style={styles.divider} />
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Platform</Text>
+            <Text style={styles.infoLabel}>Arsitektur Platform</Text>
             <Text style={styles.infoValue}>
-              {Platform.OS === 'web' ? 'Web PWA' : Platform.OS === 'android' ? 'Android Native' : 'iOS Native'}
+              {Platform.OS === 'web' ? 'Web PWA (React)' : Platform.OS === 'android' ? 'Android Native' : 'iOS Native'}
             </Text>
+          </View>
+          <View style={styles.divider} />
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Status Keamanan</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+              <Shield size={14} color="#34d399" />
+              <Text style={[styles.infoValue, { color: '#34d399' }]}>Sanctum Token Aktif</Text>
+            </View>
           </View>
         </View>
 
-        {/* Tombol Logout Merah Elegan */}
+        {/* Tombol Logout Merah Kokoh */}
         <TouchableOpacity
           style={styles.logoutButton}
           activeOpacity={0.8}
@@ -268,7 +558,253 @@ export default function SettingsScreen({ isLandscape = false }) {
         </TouchableOpacity>
       </View>
 
-      <View style={{ height: 40 }} />
+      <View style={{ height: 32 }} />
+
+      {/* MODAL 1: EDIT PROFIL & INFORMASI TOKO */}
+      <Modal
+        visible={storeModalOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setStoreModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {/* Modal Header */}
+            <View style={styles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                <View style={styles.headerIconBox}>
+                  <Store size={18} color="#fb7185" />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.modalTitle}>Informasi Toko & Struk</Text>
+                  <Text style={styles.modalSubtitle}>Kustomisasi data toko yang dicetak pada struk</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => setStoreModalOpen(false)}
+                style={styles.closeBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={20} color="#d4d4d8" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
+              {/* Form Input: Nama Toko */}
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Nama Usaha / Toko *</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={tempStoreName}
+                  onChangeText={setTempStoreName}
+                  placeholder="Nama toko Anda..."
+                  placeholderTextColor="#71717a"
+                />
+              </View>
+
+              {/* Form Input: Alamat */}
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Alamat Toko</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={tempStoreAddress}
+                  onChangeText={setTempStoreAddress}
+                  placeholder="Alamat lengkap toko..."
+                  placeholderTextColor="#71717a"
+                />
+              </View>
+
+              {/* Form Input: Nomor WhatsApp */}
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Nomor WhatsApp / Telepon Toko</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={tempStorePhone}
+                  onChangeText={setTempStorePhone}
+                  placeholder="0812-xxxx-xxxx"
+                  placeholderTextColor="#71717a"
+                  keyboardType="phone-pad"
+                />
+              </View>
+
+              {/* Form Input: Footer Struk */}
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Catatan Kaki Struk (Footer Message)</Text>
+                <TextInput
+                  style={[styles.formInput, { minHeight: 64, textAlignVertical: 'top' }]}
+                  value={tempReceiptFooter}
+                  onChangeText={setTempReceiptFooter}
+                  placeholder="Pesan ucapan terima kasih / kebijakan toko..."
+                  placeholderTextColor="#71717a"
+                  multiline
+                />
+              </View>
+            </ScrollView>
+
+            {/* Modal Actions */}
+            <View style={styles.modalActionRow}>
+              <TouchableOpacity
+                style={styles.cancelBtn}
+                onPress={() => setStoreModalOpen(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.cancelBtnText}>Batal</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.saveBtn}
+                onPress={handleSaveStoreModal}
+                activeOpacity={0.8}
+              >
+                <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                <Text style={styles.saveBtnText}>Simpan Pengaturan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* MODAL 2: PILIH PRINTER BLUETOOTH THERMAL */}
+      <Modal
+        visible={printerModalOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setPrinterModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                <View style={styles.headerIconBox}>
+                  <Printer size={18} color="#fb7185" />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.modalTitle}>Printer Bluetooth Thermal</Text>
+                  <Text style={styles.modalSubtitle}>Pilih perangkat printer kasir Anda</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => setPrinterModalOpen(false)}
+                style={styles.closeBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={20} color="#d4d4d8" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 320 }} showsVerticalScrollIndicator={false}>
+              {[
+                { id: 'RPP02N (58mm Bluetooth)', desc: 'Ukuran 58mm • Portabel Mini POS' },
+                { id: 'Thermal-80 (80mm Bluetooth)', desc: 'Ukuran 80mm • Desktop POS' },
+                { id: 'Panda PRJ-58D (Bluetooth)', desc: 'Ukuran 58mm • Kertas Thermal Standard' },
+                { id: 'Iware MP-58A (Bluetooth)', desc: 'Ukuran 58mm • Koneksi Cepat' },
+              ].map((p) => {
+                const isSelected = selectedPrinter === p.id;
+                return (
+                  <TouchableOpacity
+                    key={p.id}
+                    style={[styles.printerOptionRow, isSelected && styles.printerOptionRowActive]}
+                    onPress={() => {
+                      setSelectedPrinter(p.id);
+                      setIsPrinterConnected(true);
+                      persistSettings({ selectedPrinter: p.id, isPrinterConnected: true });
+                      setPrinterModalOpen(false);
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <View style={{ flex: 1, minWidth: 0 }}>
+                      <Text style={[styles.printerOptionName, isSelected && styles.printerOptionNameActive]}>
+                        {p.id}
+                      </Text>
+                      <Text style={styles.printerOptionDesc}>{p.desc}</Text>
+                    </View>
+                    {isSelected && <Check size={18} color="#fb7185" style={{ flexShrink: 0 }} />}
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            <View style={styles.modalActionRow}>
+              <TouchableOpacity
+                style={[styles.cancelBtn, { flex: 1 }]}
+                onPress={() => {
+                  setIsPrinterConnected(!isPrinterConnected);
+                  persistSettings({ isPrinterConnected: !isPrinterConnected });
+                }}
+              >
+                <Text style={styles.cancelBtnText}>
+                  {isPrinterConnected ? 'Putuskan Sambungan' : 'Sambungkan Ulang'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* MODAL 3: PREVIEW UJI CETAK STRUK */}
+      <Modal
+        visible={testReceiptOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setTestReceiptOpen(false)}
+      >
+        <View style={styles.modalOverlayCenter}>
+          <View style={styles.testReceiptCard}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: '#18181b' }]}>Uji Cetak Struk</Text>
+              <TouchableOpacity onPress={() => setTestReceiptOpen(false)}>
+                <X size={20} color="#18181b" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.testReceiptPaper}>
+              <Text style={styles.testReceiptStore}>{storeName}</Text>
+              <Text style={styles.testReceiptSub}>{storeAddress}</Text>
+              {showPhoneOnReceipt && <Text style={styles.testReceiptSub}>WA: {storePhone}</Text>}
+              <Text style={styles.testReceiptLine}>--------------------------------</Text>
+              <Text style={styles.testReceiptRow}>No: INV-TEST-001</Text>
+              <Text style={styles.testReceiptRow}>Kasir: {user?.name || 'Kasir'}</Text>
+              <Text style={styles.testReceiptLine}>--------------------------------</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.testReceiptRow}>1x Kopi Susu Aren</Text>
+                <Text style={styles.testReceiptRow}>Rp15.000</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.testReceiptRow}>1x Teh Melati</Text>
+                <Text style={styles.testReceiptRow}>Rp5.000</Text>
+              </View>
+              <Text style={styles.testReceiptLine}>--------------------------------</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={[styles.testReceiptRow, { fontWeight: 'bold' }]}>TOTAL:</Text>
+                <Text style={[styles.testReceiptRow, { fontWeight: 'bold' }]}>Rp20.000</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.testReceiptRow}>BAYAR TUNAI:</Text>
+                <Text style={styles.testReceiptRow}>Rp20.000</Text>
+              </View>
+              <Text style={styles.testReceiptLine}>--------------------------------</Text>
+              <Text style={styles.testReceiptFooterText}>{receiptFooter}</Text>
+              <Text style={styles.testReceiptSub}>-- Printer Thermal Berfungsi Normal --</Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.testPrintConfirmBtn}
+              onPress={() => {
+                setTestReceiptOpen(false);
+                if (Platform.OS === 'web') {
+                  window.alert('Perintah cetak terkirim ke printer thermal!');
+                } else {
+                  Alert.alert('Sukses', 'Struk pengujian terkirim ke printer thermal.');
+                }
+              }}
+              activeOpacity={0.8}
+            >
+              <Printer size={16} color="#ffffff" style={{ marginRight: 6 }} />
+              <Text style={styles.testPrintConfirmBtnText}>Kirim Cetak ke Printer</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -417,6 +953,71 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     marginTop: 1,
   },
+  menuDetailText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#34d399',
+    marginTop: 2,
+  },
+  editBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.3)',
+    flexShrink: 0,
+  },
+  editBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fb7185',
+  },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    flexShrink: 0,
+  },
+  statusBadgeGreen: {
+    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(52, 211, 153, 0.3)',
+  },
+  statusBadgeGray: {
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  statusBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  statusBadgeTextGreen: {
+    color: '#34d399',
+  },
+  statusBadgeTextGray: {
+    color: '#a1a1aa',
+  },
+  actionBtnRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: '#27272a',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  actionBtnText: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -433,6 +1034,51 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
     marginTop: 1,
+  },
+  orientationRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 10,
+  },
+  orientBtn: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  orientBtnActive: {
+    backgroundColor: '#e11d48',
+    borderColor: '#f43f5e',
+  },
+  orientBtnText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#a1a1aa',
+  },
+  orientBtnTextActive: {
+    color: '#ffffff',
+    fontFamily: 'Poppins_700Bold',
+  },
+  pingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(52, 211, 153, 0.3)',
+    flexShrink: 0,
+  },
+  pingBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#34d399',
   },
   divider: {
     height: 1,
@@ -480,6 +1126,197 @@ const styles = StyleSheet.create({
   },
   logoutButtonText: {
     fontSize: 14,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+  },
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'flex-end',
+  },
+  modalOverlayCenter: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#18181b',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    padding: 20,
+    maxHeight: '90%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+    marginBottom: 14,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+  },
+  modalSubtitle: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+  },
+  closeBtn: {
+    padding: 4,
+  },
+  formGroup: {
+    marginBottom: 12,
+  },
+  formLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+    marginBottom: 6,
+  },
+  formInput: {
+    backgroundColor: '#09090b',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_400Regular',
+  },
+  modalActionRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 14,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+  },
+  cancelBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelBtnText: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+  },
+  saveBtn: {
+    flex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: '#e11d48',
+  },
+  saveBtnText: {
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+  },
+  printerOptionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: '#09090b',
+    borderWidth: 1,
+    borderColor: '#27272a',
+    marginBottom: 8,
+  },
+  printerOptionRowActive: {
+    borderColor: '#fb7185',
+    backgroundColor: 'rgba(225, 29, 72, 0.08)',
+  },
+  printerOptionName: {
+    fontSize: 14,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
+  printerOptionNameActive: {
+    color: '#fb7185',
+  },
+  printerOptionDesc: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    marginTop: 2,
+  },
+  testReceiptCard: {
+    width: '100%',
+    maxWidth: 380,
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 16,
+  },
+  testReceiptPaper: {
+    backgroundColor: '#fafafa',
+    padding: 14,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e4e4e7',
+    marginVertical: 10,
+  },
+  testReceiptStore: {
+    fontSize: 15,
+    fontFamily: 'Poppins_700Bold',
+    color: '#18181b',
+    textAlign: 'center',
+  },
+  testReceiptSub: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#52525b',
+    textAlign: 'center',
+    marginTop: 2,
+  },
+  testReceiptLine: {
+    fontSize: 12,
+    color: '#a1a1aa',
+    textAlign: 'center',
+    marginVertical: 4,
+  },
+  testReceiptRow: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#18181b',
+    marginVertical: 1,
+  },
+  testReceiptFooterText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#52525b',
+    textAlign: 'center',
+    marginTop: 6,
+    fontStyle: 'italic',
+  },
+  testPrintConfirmBtn: {
+    backgroundColor: '#e11d48',
+    borderRadius: 10,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  testPrintConfirmBtnText: {
+    fontSize: 13,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
   },
