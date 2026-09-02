@@ -34,6 +34,7 @@ import {
   Trash2,
   ShoppingCart,
   ChevronDown,
+} from 'lucide-react-native';
 import api from '../services/api';
 import ReceiptView from '../components/ReceiptView';
 
