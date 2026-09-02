@@ -1792,11 +1792,10 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 </View>
                 {selectedTaxId === '' ? (
                   <View style={[styles.taxOptionBadge, styles.taxOptionBadgeActive]}>
-                    <Check size={12} color="#ffffff" />
                     <Text style={styles.taxOptionBadgeTextActive}>Aktif</Text>
                   </View>
                 ) : (
-                  <View style={[styles.taxOptionBadge, styles.taxOptionBadgeInactive]}>
+                  <View style={styles.taxOptionBadge}>
                     <Text style={styles.taxOptionBadgeTextInactive}>Pilih</Text>
                   </View>
                 )}
@@ -1830,11 +1829,10 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
                     {isSelected ? (
                       <View style={[styles.taxOptionBadge, styles.taxOptionBadgeActive]}>
-                        <Check size={12} color="#ffffff" />
                         <Text style={styles.taxOptionBadgeTextActive}>Aktif</Text>
                       </View>
                     ) : (
-                      <View style={[styles.taxOptionBadge, styles.taxOptionBadgeInactive]}>
+                      <View style={styles.taxOptionBadge}>
                         <Text style={styles.taxOptionBadgeTextInactive}>Pilih</Text>
                       </View>
                     )}
@@ -2899,30 +2897,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#132820',
   },
   taxOptionBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    minWidth: 64,
-    justifyContent: 'center',
-  },
-  taxOptionBadgeInactive: {
     backgroundColor: '#3f3f46',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 46,
   },
   taxOptionBadgeActive: {
     backgroundColor: '#059669',
   },
   taxOptionBadgeTextInactive: {
-    color: '#d4d4d8',
+    color: '#ffffff',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
   taxOptionBadgeTextActive: {
     color: '#ffffff',
     fontSize: 12,
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins_600SemiBold',
   },
   taxFeeControlSection: {
     backgroundColor: '#27272a',
