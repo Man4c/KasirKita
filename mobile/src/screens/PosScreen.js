@@ -2464,7 +2464,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   cartSheetEmptySub: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     textAlign: 'center',
@@ -2548,7 +2548,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
   cartSheetTotalQty: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
