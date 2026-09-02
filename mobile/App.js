@@ -147,13 +147,13 @@ function MainApp() {
                 <Text style={styles.topBadgeText}>MOBILE</Text>
               </View>
             </View>
-            <Text style={styles.topUser}>
+            <Text style={styles.topUser} numberOfLines={1} ellipsizeMode="tail">
               {user?.name || 'Kasir'} • <Text style={{ textTransform: 'capitalize' }}>{user?.role}</Text>
             </Text>
           </View>
 
           <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+            <TouchableOpacity style={styles.logoutBtn} onPress={logout} activeOpacity={0.7}>
               <LogOut size={13} color="#fb7185" />
               <Text style={styles.logoutText}>Keluar</Text>
             </TouchableOpacity>
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderBottomColor: '#27272a',
     borderBottomWidth: 1,
     backgroundColor: '#18181b',
@@ -297,19 +297,19 @@ const styles = StyleSheet.create({
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   topBrand: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
     letterSpacing: -0.5,
   },
   topBadge: {
     backgroundColor: '#e11d48',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
     alignSelf: 'center',
   },
   topBadgeText: {
@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
   topUser: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#d4d4d8',
-    marginTop: 2,
+    color: '#a1a1aa',
+    marginTop: 1,
   },
   logoutBtn: {
     backgroundColor: '#27272a',
@@ -332,6 +332,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 10,
+    flexShrink: 0,
   },
   logoutText: {
     color: '#fb7185',
@@ -349,14 +350,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
+    flex: 1,
+    minWidth: 0,
+    marginRight: 10,
   },
   headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
+    flexShrink: 0,
   },
   topBrandLandscape: {
     fontSize: 16,
