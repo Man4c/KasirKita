@@ -78,6 +78,7 @@ function MainApp() {
   const [activeTab, setActiveTab] = useState('pos');
   const [portraitTab, setPortraitTab] = useState('pos');
   const prevIsLandscapeRef = useRef(isLandscape);
+  const [isCheckoutActive, setIsCheckoutActive] = useState(false);
   const insets = useSafeAreaInsets();
 
   // Auto-switch to Kasir POS upon rotating to landscape, restore upon rotating back to portrait
@@ -91,6 +92,7 @@ function MainApp() {
   }, [isLandscape, portraitTab]);
 
   const handleTabChange = (newTab) => {
+    setIsCheckoutActive(false);
     setActiveTab(newTab);
     if (!isLandscape) {
       setPortraitTab(newTab);
@@ -135,8 +137,8 @@ function MainApp() {
     >
       <StatusBar style="light" />
 
-      {/* Top Header Bar (Portrait Only - Landscape is dedicated 100% full-screen POS Terminal) */}
-      {!isLandscape && (
+      {/* Top Header Bar (Portrait Only - Hidden when inside dedicated checkout screen or landscape) */}
+      {!isLandscape && !isCheckoutActive && (
         <View style={styles.topBar}>
           <View style={styles.headerLeft}>
             <View style={styles.brandRow}>
@@ -162,13 +164,21 @@ function MainApp() {
       {/* Screen Body */}
       <View style={styles.body}>
         {isLandscape ? (
-          <PosScreen isLandscape={true} isCompactLandscape={isCompactLandscape} />
+          <PosScreen
+            isLandscape={true}
+            isCompactLandscape={isCompactLandscape}
+            onCheckoutStateChange={setIsCheckoutActive}
+          />
         ) : activeTab === 'dashboard' && user?.role === 'owner' ? (
           <DashboardScreen isLandscape={false} />
         ) : activeTab === 'history' ? (
           <TransactionHistoryScreen isLandscape={false} />
         ) : (
-          <PosScreen isLandscape={false} isCompactLandscape={false} />
+          <PosScreen
+            isLandscape={false}
+            isCompactLandscape={false}
+            onCheckoutStateChange={setIsCheckoutActive}
+          />
         )}
       </View>
 

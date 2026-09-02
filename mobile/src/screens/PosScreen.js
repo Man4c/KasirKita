@@ -36,7 +36,7 @@ import {
 } from 'lucide-react-native';
 import api from '../services/api';
 
-export default function PosScreen({ isLandscape = false, isCompactLandscape = false }) {
+export default function PosScreen({ isLandscape = false, isCompactLandscape = false, onCheckoutStateChange }) {
   const { width, height } = useWindowDimensions();
   const compact = isCompactLandscape || (isLandscape && height < 440);
   const [products, setProducts] = useState([]);
@@ -49,6 +49,12 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
   // Cart & Checkout Screen View State
   const [isCheckoutView, setIsCheckoutView] = useState(false);
+
+  useEffect(() => {
+    if (onCheckoutStateChange) {
+      onCheckoutStateChange(isCheckoutView);
+    }
+  }, [isCheckoutView, onCheckoutStateChange]);
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [paidAmount, setPaidAmount] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState(null); // null = Pelanggan Umum
