@@ -79,6 +79,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [showLogoOnReceipt, setShowLogoOnReceipt] = useState(true);
   const [showPhoneOnReceipt, setShowPhoneOnReceipt] = useState(true);
   const [soundBeep, setSoundBeep] = useState(true);
+  const [showCustomerPicker, setShowCustomerPicker] = useState(true);
   const [orientationPref, setOrientationPref] = useState('AUTO');
 
   // Modals & Async State
@@ -158,6 +159,7 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (typeof saved.showLogoOnReceipt === 'boolean') setShowLogoOnReceipt(saved.showLogoOnReceipt);
         if (typeof saved.showPhoneOnReceipt === 'boolean') setShowPhoneOnReceipt(saved.showPhoneOnReceipt);
         if (typeof saved.soundBeep === 'boolean') setSoundBeep(saved.soundBeep);
+        if (typeof saved.showCustomerPicker === 'boolean') setShowCustomerPicker(saved.showCustomerPicker);
         if (saved.orientationPref) {
           setOrientationPref(saved.orientationPref);
           orientationService.applyPreference(saved.orientationPref);
@@ -221,6 +223,7 @@ export default function SettingsScreen({ isLandscape = false }) {
         showLogoOnReceipt,
         showPhoneOnReceipt,
         soundBeep,
+        showCustomerPicker,
         orientationPref,
         ...overrides,
       };
@@ -899,6 +902,25 @@ export default function SettingsScreen({ isLandscape = false }) {
               }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={soundBeep ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
+            />
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.switchRow}>
+            <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
+              <Text style={styles.switchTitle}>Pemilihan Pelanggan di Kasir</Text>
+              <Text style={styles.switchSubtitle}>Tampilkan kartu pemilihan pelanggan/member saat checkout. Jika dimatikan, pembeli otomatis tercatat sebagai Pelanggan Umum</Text>
+            </View>
+            <Switch
+              value={showCustomerPicker}
+              onValueChange={(val) => {
+                setShowCustomerPicker(val);
+                persistSettings({ showCustomerPicker: val });
+              }}
+              trackColor={{ false: '#27272a', true: '#e11d48' }}
+              thumbColor={showCustomerPicker ? '#ffffff' : '#a1a1aa'}
               style={{ flexShrink: 0 }}
             />
           </View>

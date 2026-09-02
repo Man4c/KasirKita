@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Toggle Pemilihan Pelanggan Kasir & Penataan Ulang Hierarki Checkout (`SettingsScreen.js`, `PosScreen.js`)**:
+  - **Toggle Pengaturan**: Menambahkan opsi Switch `"Pemilihan Pelanggan di Kasir"` di Pengaturan Kasir (`SettingsScreen.js`) yang tersimpan secara persisten di storage. Bila dimatikan (OFF), kartu pelanggan di layar checkout akan disembunyikan sehingga layar lebih lega dan transaksi otomatis tercatat sebagai Pelanggan Umum.
+  - **Penataan Ulang Urutan Checkout Kasir (Landscape & Portrait)**: Memastikan hierarki kasir di `PosScreen.js` tertata sesuai urutan ritel yang disepakati:
+    1. **Daftar Pesanan** (Atas / Scrollable dengan item breakdown)
+    2. **Pelanggan Umum / Member** (Kondisional sesuai toggle setting)
+    3. **Voucher & Pajak** (Pill options cepat)
+    4. **TOTAL TAGIHAN** (Banner merah di bagian bawah / pinned)
+  - **Verifikasi Build**: Bundling Expo Android lolos 100% tanpa error (2.567 modules).
+
 - **Penyempurnaan Hierarki Checkout & Keranjang POS Mobile (`PosCheckoutView.js`, `LandscapeRegisterPanel.js`)**:
   - **Badge Keranjang**: Mengubah warna background badge jumlah item pada header panel keranjang menjadi merah crimson khas KasirKita (`#e11d48`) dengan angka tebal putih (`#ffffff`, `Poppins_700Bold`), membuang teks "pcs" sehingga hanya menampilkan angka murni yang terpusat simetris (`includeFontPadding: false`).
   - **Penataan Ulang Hierarki Kolom Checkout (Landscape & Portrait)**:

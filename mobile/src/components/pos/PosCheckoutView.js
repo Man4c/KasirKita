@@ -35,6 +35,7 @@ export default function PosCheckoutView({
   totalItemsCount,
   totalAmount,
   selectedCustomer,
+  showCustomerPicker = true,
   onOpenCustomerModal,
   onClearCustomer,
   hasBillAdjustments,
@@ -204,6 +205,7 @@ export default function PosCheckoutView({
             </ScrollView>
 
             {/* 2. Customer / Member Card */}
+            {showCustomerPicker && (
             <View
               style={[
                 styles.checkoutCustomerCard,
@@ -262,6 +264,7 @@ export default function PosCheckoutView({
                 </TouchableOpacity>
               </View>
             </View>
+            )}
 
             {/* 3. Promo, Takeaway & Tax Pills Bar */}
             {((availablePromos.length > 0 || appliedPromo) ||
@@ -842,6 +845,7 @@ export default function PosCheckoutView({
           </View>
 
           {/* 2. Customer Selector Bar */}
+          {showCustomerPicker && (
           <View style={styles.checkoutCustomerCardPortrait}>
             <View style={styles.checkoutCustomerCardLeft}>
               <View
@@ -894,6 +898,7 @@ export default function PosCheckoutView({
               </TouchableOpacity>
             </View>
           </View>
+          )}
 
           {/* 3. Voucher & Adjustments Section */}
           <View style={styles.checkoutVoucherSectionPortrait}>
