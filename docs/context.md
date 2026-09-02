@@ -245,6 +245,7 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Modul Mobile POS Lanjutan (Telah Selesai 100%):
     6. `plans/260901-18-mobile-bottom-navigation-dan-landscape-pos/plan.md` (Prioritas P1: Bottom Navigation Bar ramah jempol di mode Portrait, dan Mode Kasir Register 2-Kolom otomatis saat perangkat diputar mendatar ke Landscape).
     7. `plans/260902-19-mobile-dedicated-checkout-screen/plan.md` (Prioritas P1: Layar Pembayaran Penuh / Dedicated Checkout Screen dengan Tata Letak 2 Kolom Landscape dan Numpad Kasir Virtual Terintegrasi tanpa Keyboard HP - Telah Selesai 100%).
+    8. **Peningkatan Mobile Tax Selector Modal**: Menambahkan `Tax Picker Sheet Modal` di Mobile POS (`PosScreen.js`). Jika toko memiliki lebih dari 1 pajak aktif (misal: PPN 11% dan PB1 Restoran 10%), kasir dapat memilih salah satu tarif pajak atau opsi 'Tanpa Pajak' via modal interaktif ramah sentuh baik di mode Landscape maupun mode Portrait Dedicated Checkout.
   - Rencana Modul Aktif & Dalam Antrean:
     8. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
     9. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).

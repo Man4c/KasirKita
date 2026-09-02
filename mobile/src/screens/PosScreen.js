@@ -33,6 +33,7 @@ import {
   Package,
   Trash2,
   ShoppingCart,
+  ChevronDown,
 } from 'lucide-react-native';
 import api from '../services/api';
 
@@ -74,6 +75,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   // Taxes & Additional Fees State
   const [taxesAndFees, setTaxesAndFees] = useState([]);
   const [selectedTaxId, setSelectedTaxId] = useState('');
+  const [taxModalOpen, setTaxModalOpen] = useState(false);
   const [selectedManualFeeIds, setSelectedManualFeeIds] = useState([]);
   const [isTakeaway, setIsTakeaway] = useState(false);
 
@@ -659,11 +661,14 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                   <TouchableOpacity
                     style={[styles.regQuickPill, compact && styles.regQuickPillCompact, selectedTaxId && styles.regQuickPillActive]}
                     onPress={() => {
-                      if (selectedTaxId) {
-                        setSelectedTaxId('');
+                      if (availableTaxes.length > 1) {
+                        setTaxModalOpen(true);
                       } else {
-                        const def = availableTaxes.find((t) => t.is_default) || availableTaxes[0];
-                        setSelectedTaxId(def?.id || '');
+                        if (selectedTaxId) {
+                          setSelectedTaxId('');
+                        } else {
+                          setSelectedTaxId(availableTaxes[0]?.id || '');
+                        }
                       }
                     }}
                   >
@@ -671,6 +676,9 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                     <Text style={[styles.regQuickPillText, selectedTaxId && styles.regQuickPillTextActive]}>
                       {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
                     </Text>
+                    {availableTaxes.length > 1 && (
+                      <ChevronDown size={10} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} style={{ marginLeft: 2 }} />
+                    )}
                   </TouchableOpacity>
                 )}
               </View>
@@ -847,6 +855,69 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                     </TouchableOpacity>
                   </View>
                 </View>
+
+                {/* Quick Transaction Options (Promo Voucher, Bungkus, Pajak) */}
+                {((availablePromos.length > 0 || appliedPromo) || takeawayFees.length > 0 || availableTaxes.length > 0) && (
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                    {/* Promo Voucher */}
+                    {(availablePromos.length > 0 || appliedPromo) && (
+                      <TouchableOpacity
+                        style={[styles.regQuickPill, appliedPromo && styles.regQuickPillPromoActive]}
+                        onPress={() => {
+                          if (appliedPromo) {
+                            handleRemoveVoucher();
+                          } else {
+                            setPromoModalOpen(true);
+                          }
+                        }}
+                      >
+                        <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
+                        <Text style={[styles.regQuickPillText, appliedPromo && styles.regQuickPillPromoTextActive]}>
+                          {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+
+                    {/* Bungkus / Takeaway */}
+                    {takeawayFees.length > 0 && (
+                      <TouchableOpacity
+                        style={[styles.regQuickPill, isTakeaway && styles.regQuickPillActive]}
+                        onPress={() => setIsTakeaway((prev) => !prev)}
+                      >
+                        <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
+                        <Text style={[styles.regQuickPillText, isTakeaway && styles.regQuickPillTextActive]}>
+                          Bungkus
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+
+                    {/* Tax status chip */}
+                    {availableTaxes.length > 0 && (
+                      <TouchableOpacity
+                        style={[styles.regQuickPill, selectedTaxId && styles.regQuickPillActive]}
+                        onPress={() => {
+                          if (availableTaxes.length > 1) {
+                            setTaxModalOpen(true);
+                          } else {
+                            if (selectedTaxId) {
+                              setSelectedTaxId('');
+                            } else {
+                              setSelectedTaxId(availableTaxes[0]?.id || '');
+                            }
+                          }
+                        }}
+                      >
+                        <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
+                        <Text style={[styles.regQuickPillText, selectedTaxId && styles.regQuickPillTextActive]}>
+                          {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
+                        </Text>
+                        {availableTaxes.length > 1 && (
+                          <ChevronDown size={10} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} style={{ marginLeft: 2 }} />
+                        )}
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
 
                 {/* 3. Financial Breakdown (Subtotal, Diskon, Pajak, Biaya Layanan) */}
                 {hasBillAdjustments && (
@@ -1685,6 +1756,87 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                   </Text>
                 </View>
               )}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Tax Picker Modal */}
+      <Modal visible={taxModalOpen} animationType={isLandscape ? 'fade' : 'slide'} transparent onRequestClose={() => setTaxModalOpen(false)}>
+        <View style={[styles.modalOverlay, isLandscape && styles.modalOverlayLandscape]}>
+          <View style={[styles.customerPickerSheet, isLandscape && styles.customerPickerSheetLandscape]}>
+            {/* Header */}
+            <View style={styles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Percent size={20} color="#fb7185" />
+                <Text style={styles.modalTitle}>Pilih Tarif Pajak</Text>
+              </View>
+              <TouchableOpacity onPress={() => setTaxModalOpen(false)}>
+                <X size={20} color="#d4d4d8" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 380 }} showsVerticalScrollIndicator={false}>
+              {/* Option: Tanpa Pajak */}
+              <TouchableOpacity
+                style={[styles.customerOptionItem, selectedTaxId === '' && styles.customerOptionItemActive]}
+                onPress={() => {
+                  setSelectedTaxId('');
+                  setTaxModalOpen(false);
+                }}
+              >
+                <View style={styles.customerOptionInfo}>
+                  <Text style={styles.customerOptionName}>Tanpa Pajak (0%)</Text>
+                  <Text style={styles.customerOptionSub}>Tidak mengenakan pajak pada transaksi ini</Text>
+                </View>
+                {selectedTaxId === '' ? (
+                  <View style={styles.promoOptionActionBtnActive}>
+                    <Text style={styles.promoOptionActionBtnTextActive}>Aktif</Text>
+                  </View>
+                ) : (
+                  <View style={styles.promoOptionActionBtn}>
+                    <Text style={styles.promoOptionActionBtnText}>Pilih</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+
+              {/* Options: Active Taxes */}
+              {availableTaxes.map((tax) => {
+                const isSelected = selectedTaxId === tax.id;
+                const rateDisplay = tax.type === 'PERCENTAGE' ? `${parseFloat(tax.value)}%` : formatRp(tax.value);
+                return (
+                  <TouchableOpacity
+                    key={tax.id}
+                    style={[styles.customerOptionItem, isSelected && styles.customerOptionItemActive]}
+                    onPress={() => {
+                      setSelectedTaxId(tax.id);
+                      setTaxModalOpen(false);
+                    }}
+                  >
+                    <View style={styles.customerOptionInfo}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Text style={styles.customerOptionName}>{tax.name}</Text>
+                        <View style={styles.membershipBadgeSmall}>
+                          <Text style={styles.membershipBadgeSmallText}>{rateDisplay}</Text>
+                        </View>
+                      </View>
+                      <Text style={styles.customerOptionSub}>
+                        {tax.description || `${rateDisplay} dari subtotal belanja`}
+                      </Text>
+                    </View>
+
+                    {isSelected ? (
+                      <View style={styles.promoOptionActionBtnActive}>
+                        <Text style={styles.promoOptionActionBtnTextActive}>Aktif</Text>
+                      </View>
+                    ) : (
+                      <View style={styles.promoOptionActionBtn}>
+                        <Text style={styles.promoOptionActionBtnText}>Pilih</Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
             </ScrollView>
           </View>
         </View>
