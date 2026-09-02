@@ -1,6 +1,6 @@
 {
-  "name": "mobile",
-  "version": "1.0.0",
+  "name": "kasirkita-mobile",
+  "version": "1.3.0",
   "main": "index.js",
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.4.1",

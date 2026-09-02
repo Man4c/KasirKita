@@ -55,6 +55,9 @@ import { offlineStorage } from '../services/offlineStorage';
 import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
+import appConfig from '../../app.json';
+
+const APP_VERSION = appConfig?.expo?.version || '1.3.0';
 
 export default function SettingsScreen({ isLandscape = false }) {
   const { user, logout, updateUser } = useAuth();
@@ -1082,7 +1085,7 @@ export default function SettingsScreen({ isLandscape = false }) {
         <View style={styles.card}>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Versi Aplikasi</Text>
-            <Text style={styles.infoValue}>KasirKita POS Mobile v1.2.0</Text>
+            <Text style={styles.infoValue}>KasirKita POS Mobile v{APP_VERSION}</Text>
           </View>
           <View style={styles.divider} />
           <View style={styles.infoRow}>
