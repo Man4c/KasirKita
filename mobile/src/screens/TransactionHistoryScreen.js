@@ -26,6 +26,7 @@ import {
   AlertCircle,
 } from 'lucide-react-native';
 import api from '../services/api';
+import ReceiptView from '../components/ReceiptView';
 
 export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [transactions, setTransactions] = useState([]);
@@ -262,111 +263,10 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-              {/* Store Header */}
-              <View style={styles.receiptHeader}>
-                <Text style={styles.receiptBrand}>KasirKita POS</Text>
-                <Text style={styles.receiptSubtitleText}>UMKM Ritel Modern</Text>
-                <Text style={styles.receiptInvoice}>{selectedTx?.invoice_number}</Text>
-                <Text style={styles.receiptDate}>
-                  {selectedTx
-                    ? new Date(selectedTx.created_at).toLocaleString('id-ID')
-                    : ''}
-                </Text>
-                <Text style={styles.receiptCustomer}>
-                  Kasir: <Text style={{ fontWeight: 'bold' }}>{selectedTx?.cashier?.name || '-'}</Text> • Pelanggan: <Text style={{ fontWeight: 'bold' }}>{selectedTx?.customer_name || 'Pelanggan Umum'}</Text>
-                </Text>
-              </View>
-
-              {/* Items List */}
-              <View style={styles.receiptItemsList}>
-                {selectedTx?.items?.map((item, idx) => (
-                  <View key={idx} style={styles.receiptItemRow}>
-                    <Text style={styles.receiptItemName} numberOfLines={1}>
-                      {Number(item.quantity)}x {item.product_name}
-                    </Text>
-                    <Text style={styles.receiptItemPrice}>
-                      {formatRp(item.subtotal)}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-
-              {/* Calculations */}
-              <View style={styles.receiptSummary}>
-                <View style={styles.receiptRow}>
-                  <Text style={styles.receiptRowLabel}>Subtotal:</Text>
-                  <Text style={styles.receiptRowValue}>
-                    {formatRp(selectedTx?.subtotal)}
-                  </Text>
-                </View>
-                {Number(selectedTx?.discount_amount) > 0 && (
-                  <View style={styles.receiptRow}>
-                    <Text style={[styles.receiptRowLabel, { color: '#e11d48' }]}>
-                      Diskon {selectedTx?.discount_code ? `(${selectedTx.discount_code})` : ''}:
-                    </Text>
-                    <Text style={[styles.receiptRowValue, { color: '#e11d48', fontWeight: 'bold' }]}>
-                      -{formatRp(selectedTx.discount_amount)}
-                    </Text>
-                  </View>
-                )}
-                {Number(selectedTx?.tax_amount) > 0 && (
-                  <View style={styles.receiptRow}>
-                    <Text style={styles.receiptRowLabel}>Pajak (PPN/PB1):</Text>
-                    <Text style={styles.receiptRowValue}>
-                      +{formatRp(selectedTx.tax_amount)}
-                    </Text>
-                  </View>
-                )}
-                {Number(selectedTx?.fee_amount) > 0 && (
-                  <>
-                    <View style={styles.receiptRow}>
-                      <Text style={styles.receiptRowLabel}>Biaya Tambahan:</Text>
-                      <Text style={styles.receiptRowValue}>
-                        +{formatRp(selectedTx.fee_amount)}
-                      </Text>
-                    </View>
-                    {Array.isArray(selectedTx?.fee_details) &&
-                      selectedTx.fee_details.map((f, idx) => (
-                        <View key={idx} style={[styles.receiptRow, { paddingLeft: 8 }]}>
-                          <Text style={[styles.receiptRowLabel, { fontSize: 12, color: '#71717a' }]}>
-                            • {f.name}:
-                          </Text>
-                          <Text style={[styles.receiptRowValue, { fontSize: 12, color: '#52525b' }]}>
-                            +{formatRp(f.amount)}
-                          </Text>
-                        </View>
-                      ))}
-                  </>
-                )}
-                <View style={styles.receiptTotalRow}>
-                  <Text style={styles.receiptTotalLabel}>TOTAL:</Text>
-                  <Text style={styles.receiptTotalValue}>
-                    {formatRp(selectedTx?.total_amount)}
-                  </Text>
-                </View>
-                <View style={styles.receiptRow}>
-                  <Text style={styles.receiptRowLabel}>Metode Bayar:</Text>
-                  <Text style={styles.receiptRowValue}>
-                    {selectedTx?.payment_method}
-                  </Text>
-                </View>
-                <View style={styles.receiptRow}>
-                  <Text style={styles.receiptRowLabel}>Uang Diterima:</Text>
-                  <Text style={styles.receiptRowValue}>
-                    {formatRp(selectedTx?.paid_amount)}
-                  </Text>
-                </View>
-                <View style={styles.receiptRow}>
-                  <Text style={styles.receiptRowLabel}>Kembalian:</Text>
-                  <Text style={styles.receiptRowValue}>
-                    {formatRp(selectedTx?.change_amount)}
-                  </Text>
-                </View>
-              </View>
-
-              <Text style={styles.receiptFooterText}>
-                Terima kasih atas kunjungan Anda!
-              </Text>
+              <ReceiptView
+                transaction={selectedTx}
+                formatRp={formatRp}
+              />
             </ScrollView>
 
             <TouchableOpacity

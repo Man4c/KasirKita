@@ -48,6 +48,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
 import api from '../services/api';
+import ReceiptView from '../components/ReceiptView';
 
 export default function SettingsScreen({ isLandscape = false }) {
   const { user, logout, updateUser } = useAuth();
@@ -1323,46 +1324,38 @@ export default function SettingsScreen({ isLandscape = false }) {
               </TouchableOpacity>
             </View>
 
-            <View style={styles.testReceiptPaper}>
-              {showLogoOnReceipt ? (
-                <View style={styles.testReceiptLogoBox}>
-                  {storeLogo ? (
-                    <Image source={{ uri: storeLogo }} style={styles.testReceiptLogoImg} resizeMode="contain" />
-                  ) : (
-                    <View style={styles.testReceiptLogoPlaceholder}>
-                      <Store size={22} color="#52525b" />
-                    </View>
-                  )}
-                </View>
-              ) : null}
-              <Text style={styles.testReceiptStore}>{storeName}</Text>
-              <Text style={styles.testReceiptSub}>{storeAddress}</Text>
-              {showPhoneOnReceipt && <Text style={styles.testReceiptSub}>WA: {storePhone}</Text>}
-              <Text style={styles.testReceiptLine}>--------------------------------</Text>
-              <Text style={styles.testReceiptRow}>No: INV-TEST-001</Text>
-              <Text style={styles.testReceiptRow}>Kasir: {user?.name || 'Kasir'}</Text>
-              <Text style={styles.testReceiptLine}>--------------------------------</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={[styles.testReceiptRow, { flex: 1, minWidth: 0 }]} numberOfLines={1}>1x Beras Ramos 5kg</Text>
-                <Text style={[styles.testReceiptRow, { flexShrink: 0, marginLeft: 8 }]}>Rp68.000</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={[styles.testReceiptRow, { flex: 1, minWidth: 0 }]} numberOfLines={1}>1x Minyak Goreng 2L</Text>
-                <Text style={[styles.testReceiptRow, { flexShrink: 0, marginLeft: 8 }]}>Rp34.000</Text>
-              </View>
-              <Text style={styles.testReceiptLine}>--------------------------------</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={[styles.testReceiptRow, { fontWeight: 'bold', flex: 1, minWidth: 0 }]} numberOfLines={1}>TOTAL:</Text>
-                <Text style={[styles.testReceiptRow, { fontWeight: 'bold', flexShrink: 0, marginLeft: 8 }]}>Rp102.000</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={[styles.testReceiptRow, { flex: 1, minWidth: 0 }]} numberOfLines={1}>BAYAR TUNAI:</Text>
-                <Text style={[styles.testReceiptRow, { flexShrink: 0, marginLeft: 8 }]}>Rp102.000</Text>
-              </View>
-              <Text style={styles.testReceiptLine}>--------------------------------</Text>
-              <Text style={styles.testReceiptFooterText}>{receiptFooter}</Text>
-              <Text style={styles.testReceiptSub}>-- Printer Thermal Berfungsi Normal --</Text>
-            </View>
+            <ScrollView style={{ maxHeight: 460, width: '100%' }} showsVerticalScrollIndicator={false}>
+              <ReceiptView
+                transaction={{
+                  invoice_number: 'INV-TEST-001',
+                  created_at: new Date().toISOString(),
+                  customer_name: 'Pelanggan Umum',
+                  cashier_name: user?.name || 'Kasir Toko',
+                  items: [
+                    { product_name: 'Beras Ramos 5kg', quantity: 1, subtotal: 68000 },
+                    { product_name: 'Minyak Goreng 2L', quantity: 1, subtotal: 34000 },
+                  ],
+                  subtotal: 102000,
+                  discount_amount: 0,
+                  tax_amount: 0,
+                  fee_amount: 0,
+                  total_amount: 102000,
+                  payment_method: 'CASH',
+                  paid_amount: 102000,
+                  change_amount: 0,
+                }}
+                storeSettings={{
+                  storeName,
+                  storeAddress,
+                  storePhone,
+                  storeLogo,
+                  showLogoOnReceipt,
+                  showPhoneOnReceipt,
+                  receiptFooter,
+                }}
+                isTestPrint={true}
+              />
+            </ScrollView>
 
             <TouchableOpacity
               style={styles.testPrintConfirmBtn}
