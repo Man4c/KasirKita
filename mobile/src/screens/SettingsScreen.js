@@ -29,6 +29,10 @@ import {
   BookOpen,
   Info,
   Layers,
+  Check,
+  CheckCircle2,
+  Wifi,
+  Trash2,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
