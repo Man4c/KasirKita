@@ -757,7 +757,9 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               activeOpacity={0.7}
             >
               <ArrowLeft size={18} color="#fb7185" style={{ marginRight: 6 }} />
-              <Text style={styles.checkoutBackText}>Kembali ke Keranjang</Text>
+              <Text style={styles.checkoutBackText}>
+                {isLandscape ? 'Kembali ke Keranjang' : 'Kembali'}
+              </Text>
             </TouchableOpacity>
 
             <View style={styles.checkoutTitleBox}>
@@ -1143,49 +1145,137 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
             </View>
           ) : (
             /* Portrait Dedicated Checkout View */
-            <ScrollView style={styles.checkoutBodyPortrait} contentContainerStyle={{ padding: 16 }}>
-              {/* Bill Summary Box */}
-              <View style={styles.billSummaryBox}>
-                <View style={styles.billRow}>
-                  <Text style={styles.billLabel}>Total Tagihan:</Text>
-                  <Text style={[styles.billValue, { color: '#fb7185', fontSize: 18, fontFamily: 'Poppins_700Bold' }]}>
+            <ScrollView style={styles.checkoutBodyPortrait} contentContainerStyle={{ padding: 14, paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
+              {/* 1. Total Tagihan Banner */}
+              <View style={styles.checkoutBillBannerPortrait}>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.checkoutBillBannerLabel}>TOTAL TAGIHAN</Text>
+                  <Text style={styles.checkoutBillBannerAmountPortrait} numberOfLines={1}>
                     {formatRp(totalAmount)}
                   </Text>
                 </View>
-                <View style={styles.billRow}>
-                  <Text style={styles.billLabel}>Pelanggan:</Text>
-                  <Text style={[styles.billValue, { color: '#ffffff' }]}>
-                    {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
-                  </Text>
+                <View style={styles.checkoutBillItemBadge}>
+                  <Text style={styles.checkoutBillItemBadgeText}>{totalItemsCount} pcs</Text>
                 </View>
               </View>
 
-              {/* Items in Cart */}
-              <View style={[styles.checkoutLeftHeader, { marginTop: 10 }]}>
-                <Text style={styles.checkoutSectionTitle}>Daftar Pesanan ({cart.length})</Text>
+              {/* 2. Customer / Member Card */}
+              <View style={styles.checkoutCustomerCardPortrait}>
+                <View style={styles.checkoutCustomerCardLeft}>
+                  <View style={[styles.checkoutCustomerAvatar, selectedCustomer && styles.checkoutCustomerAvatarActive]}>
+                    <Users size={16} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
+                  </View>
+                  <View style={{ flex: 1, minWidth: 0 }}>
+                    <Text style={styles.checkoutCustomerName} numberOfLines={1} ellipsizeMode="tail">
+                      {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
+                    </Text>
+                    {selectedCustomer ? (
+                      <View style={styles.checkoutCustomerMetaRow}>
+                        <View style={styles.checkoutMembershipBadge}>
+                          <Text style={styles.checkoutMembershipBadgeText}>
+                            {selectedCustomer.membership_type || 'REGULAR'}
+                          </Text>
+                        </View>
+                        {selectedCustomer.phone && (
+                          <Text style={styles.checkoutCustomerPhone} numberOfLines={1}>
+                            {selectedCustomer.phone}
+                          </Text>
+                        )}
+                      </View>
+                    ) : (
+                      <Text style={styles.checkoutCustomerSub}>Walk-in (Tanpa Member)</Text>
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.checkoutCustomerCardRight}>
+                  {selectedCustomer && (
+                    <TouchableOpacity
+                      style={styles.checkoutCustomerResetBtn}
+                      onPress={() => setSelectedCustomer(null)}
+                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    >
+                      <X size={14} color="#a1a1aa" />
+                    </TouchableOpacity>
+                  )}
+                  <TouchableOpacity
+                    style={styles.checkoutCustomerChangeBtn}
+                    onPress={() => setCustomerModalOpen(true)}
+                  >
+                    <Text style={styles.checkoutCustomerChangeBtnText}>
+                      {selectedCustomer ? 'Ganti' : 'Pilih'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              {cart.map((item) => {
-                const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
-                return (
-                  <View key={item.product.id} style={styles.checkoutItemRowMini}>
-                    <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
-                      <Text style={styles.checkoutItemNameMini} numberOfLines={1}>
-                        {item.product.name}
+
+              {/* 3. Financial Adjustments Breakdown (if any discount, tax, or fees) */}
+              {hasBillAdjustments && (
+                <View style={styles.checkoutAdjustmentsBoxPortrait}>
+                  <View style={styles.checkoutAdjustmentRow}>
+                    <Text style={styles.checkoutAdjustmentLabel}>Subtotal</Text>
+                    <Text style={styles.checkoutAdjustmentVal}>{formatRp(subtotal)}</Text>
+                  </View>
+                  {discount > 0 && (
+                    <View style={styles.checkoutAdjustmentRow}>
+                      <Text style={[styles.checkoutAdjustmentLabel, { color: '#34d399' }]} numberOfLines={1}>
+                        Diskon ({appliedPromo?.discount_code || 'Promo'})
                       </Text>
-                      <Text style={styles.checkoutItemPriceMini}>
-                        {item.quantity} {itemUnit} x {formatRp(item.product.price)}
+                      <Text style={[styles.checkoutAdjustmentVal, { color: '#34d399' }]}>
+                        -{formatRp(discount)}
                       </Text>
                     </View>
-                    <Text style={styles.checkoutItemSubtotalMini}>
-                      {formatRp(item.quantity * Number(item.product.price))}
-                    </Text>
-                  </View>
-                );
-              })}
+                  )}
+                  {taxAmount > 0 && (
+                    <View style={styles.checkoutAdjustmentRow}>
+                      <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
+                        Pajak ({activeTax?.name || 'PPN'})
+                      </Text>
+                      <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                        +{formatRp(taxAmount)}
+                      </Text>
+                    </View>
+                  )}
+                  {feeAmount > 0 && (
+                    <View style={styles.checkoutAdjustmentRow}>
+                      <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>Biaya Layanan</Text>
+                      <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                        +{formatRp(feeAmount)}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              )}
 
-              {/* Payment Method */}
-              <Text style={[styles.inputLabel, { marginTop: 16 }]}>Metode Pembayaran</Text>
-              <View style={styles.methodRow}>
+              {/* 4. Order Items Card */}
+              <View style={styles.checkoutOrderCardPortrait}>
+                <View style={styles.checkoutItemsHeader}>
+                  <Text style={styles.checkoutItemsTitle}>Daftar Pesanan ({cart.length})</Text>
+                  <Text style={styles.checkoutItemsTotalQty}>{totalItemsCount} Total Qty</Text>
+                </View>
+                {cart.map((item) => {
+                  const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
+                  return (
+                    <View key={item.product.id} style={styles.checkoutItemRowMiniPortrait}>
+                      <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
+                        <Text style={styles.checkoutItemNameMini} numberOfLines={1} ellipsizeMode="tail">
+                          {item.product.name}
+                        </Text>
+                        <Text style={styles.checkoutItemPriceMini}>
+                          {item.quantity} {itemUnit} x {formatRp(item.product.price)}
+                        </Text>
+                      </View>
+                      <Text style={styles.checkoutItemSubtotalMini}>
+                        {formatRp(item.quantity * Number(item.product.price))}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
+
+              {/* 5. Payment Method Selector */}
+              <Text style={styles.checkoutSectionLabelPortrait}>Metode Pembayaran</Text>
+              <View style={styles.checkoutMethodRowPortrait}>
                 {[
                   { id: 'CASH', label: 'Tunai', icon: Banknote },
                   { id: 'QRIS', label: 'QRIS', icon: QrCode },
@@ -1196,11 +1286,12 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                   return (
                     <TouchableOpacity
                       key={m.id}
-                      style={[styles.methodBtn, isSelected && styles.methodBtnActive]}
+                      style={[styles.checkoutMethodBtnPortrait, isSelected && styles.checkoutMethodBtnActive]}
                       onPress={() => setPaymentMethod(m.id)}
+                      activeOpacity={0.7}
                     >
                       <Icon size={16} color={isSelected ? '#ffffff' : '#d4d4d8'} />
-                      <Text style={[styles.methodBtnText, isSelected && styles.methodBtnTextActive]}>
+                      <Text style={[styles.checkoutMethodBtnText, isSelected && styles.checkoutMethodBtnTextActive]}>
                         {m.label}
                       </Text>
                     </TouchableOpacity>
@@ -1208,46 +1299,199 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 })}
               </View>
 
-              {paymentMethod === 'CASH' && (
-                <View style={{ marginTop: 14 }}>
-                  <Text style={styles.inputLabel}>Uang Diterima (Rp):</Text>
-                  <TextInput
-                    style={styles.cashInput}
-                    keyboardType="numeric"
-                    value={paidAmount}
-                    onChangeText={setPaidAmount}
-                    placeholder="0"
-                    placeholderTextColor="#71717a"
-                  />
-
-                  <View style={styles.chipsRow}>
-                    {[totalAmount, 50000, 100000, 200000].map((val, idx) => (
+              {/* 6. Mode Content */}
+              {paymentMethod === 'CASH' ? (
+                <View style={{ marginTop: 2 }}>
+                  {/* Live Cash Monitor Display (Uang Diterima & Kembalian) */}
+                  <View style={styles.cashDisplayBoxPortrait}>
+                    <View style={{ flex: 1, minWidth: 0 }}>
+                      <Text style={styles.cashDisplayLabel}>Uang Diterima:</Text>
+                      <Text style={styles.cashDisplayAmountPortrait} numberOfLines={1}>
+                        {paidAmount ? formatRp(Number(paidAmount)) : 'Rp0'}
+                      </Text>
+                    </View>
+                    <View style={{ alignItems: 'flex-end', flexShrink: 0 }}>
+                      <Text style={styles.cashDisplayLabel}>
+                        {Number(paidAmount) >= totalAmount ? 'Kembalian:' : 'Kurang:'}
+                      </Text>
+                      <Text style={[
+                        styles.cashDisplayChangePortrait,
+                        Number(paidAmount) >= totalAmount ? styles.cashDisplayChangePositive : styles.cashDisplayChangeNegative
+                      ]}>
+                        {Number(paidAmount) >= totalAmount
+                          ? formatRp(changeAmount)
+                          : `-${formatRp(totalAmount - (Number(paidAmount) || 0))}`}
+                      </Text>
+                    </View>
+                    {paidAmount ? (
                       <TouchableOpacity
-                        key={idx}
-                        style={styles.chipBtn}
-                        onPress={() => setPaidAmount(val.toString())}
+                        style={styles.cashDisplayClearBtn}
+                        onPress={handleNumpadClear}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       >
-                        <Text style={styles.chipBtnText}>{idx === 0 ? 'Pas' : formatRp(val)}</Text>
+                        <X size={14} color="#a1a1aa" />
                       </TouchableOpacity>
-                    ))}
+                    ) : null}
                   </View>
 
-                  <View style={styles.changeRow}>
-                    <Text style={styles.changeLabel}>Kembalian:</Text>
-                    <Text style={styles.changeValue}>{formatRp(changeAmount)}</Text>
+                  {/* Quick Cash Presets Row */}
+                  <View style={styles.numpadPresetsRowPortrait}>
+                    <TouchableOpacity
+                      style={[
+                        styles.numpadPresetChipPortrait,
+                        styles.numpadPresetBtnPas,
+                        Number(paidAmount) === totalAmount && styles.numpadPresetBtnActive
+                      ]}
+                      onPress={() => handleNominalShortcut(totalAmount)}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={[
+                        styles.numpadPresetTextPas,
+                        Number(paidAmount) === totalAmount && styles.numpadPresetTextActive
+                      ]}>
+                        Uang Pas
+                      </Text>
+                    </TouchableOpacity>
+
+                    {[50000, 100000, 200000].map((val) => {
+                      const isSelected = Number(paidAmount) === val;
+                      return (
+                        <TouchableOpacity
+                          key={val}
+                          style={[
+                            styles.numpadPresetChipPortrait,
+                            isSelected && styles.numpadPresetBtnActive
+                          ]}
+                          onPress={() => handleNominalShortcut(val)}
+                          activeOpacity={0.7}
+                        >
+                          <Text style={[
+                            styles.numpadPresetText,
+                            isSelected && styles.numpadPresetTextActive
+                          ]}>
+                            {formatRp(val)}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
+
+                  {/* Integrated Numpad Grid (Portrait) */}
+                  <View style={styles.numpadGridPortrait}>
+                    <View style={styles.numpadRowPortrait}>
+                      {['1', '2', '3'].map((d) => (
+                        <TouchableOpacity
+                          key={d}
+                          style={styles.numpadKeyPortrait}
+                          onPress={() => handleNumpadDigit(d)}
+                          activeOpacity={0.6}
+                        >
+                          <Text style={styles.numpadKeyText}>{d}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                    <View style={styles.numpadRowPortrait}>
+                      {['4', '5', '6'].map((d) => (
+                        <TouchableOpacity
+                          key={d}
+                          style={styles.numpadKeyPortrait}
+                          onPress={() => handleNumpadDigit(d)}
+                          activeOpacity={0.6}
+                        >
+                          <Text style={styles.numpadKeyText}>{d}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                    <View style={styles.numpadRowPortrait}>
+                      {['7', '8', '9'].map((d) => (
+                        <TouchableOpacity
+                          key={d}
+                          style={styles.numpadKeyPortrait}
+                          onPress={() => handleNumpadDigit(d)}
+                          activeOpacity={0.6}
+                        >
+                          <Text style={styles.numpadKeyText}>{d}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                    <View style={styles.numpadRowPortrait}>
+                      <TouchableOpacity
+                        style={[styles.numpadKeyPortrait, styles.numpadKeySecondary]}
+                        onPress={() => handleNumpadDigit('00')}
+                        activeOpacity={0.6}
+                      >
+                        <Text style={[styles.numpadKeyText, styles.numpadKeyTextSecondary]}>00</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.numpadKeyPortrait}
+                        onPress={() => handleNumpadDigit('0')}
+                        activeOpacity={0.6}
+                      >
+                        <Text style={styles.numpadKeyText}>0</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.numpadKeyPortrait, styles.numpadKeyDelete]}
+                        onPress={handleNumpadBackspace}
+                        activeOpacity={0.6}
+                      >
+                        <Delete size={20} color="#fb7185" />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              ) : paymentMethod === 'QRIS' ? (
+                <View style={[styles.checkoutQrisCard, { marginTop: 8, maxWidth: '100%' }]}>
+                  <View style={styles.checkoutQrisIconBox}>
+                    <QrCode size={40} color="#fb7185" />
+                  </View>
+                  <Text style={styles.checkoutQrisTitle}>Pindai QRIS Statis / EDC</Text>
+                  <Text style={styles.checkoutQrisSub}>
+                    Minta pembeli scan kode QRIS kasir dan konfirmasi pembayaran di aplikasi e-wallet / m-banking.
+                  </Text>
+                  {feeDetails.some((f) => f.name.toLowerCase().includes('qris')) && (
+                    <View style={styles.qrisFeeAlert}>
+                      <QrCode size={14} color="#fbbf24" />
+                      <Text style={styles.qrisFeeAlertText}>
+                        Biaya Admin QRIS: +{formatRp(feeDetails.filter((f) => f.name.toLowerCase().includes('qris')).reduce((s, f) => s + f.amount, 0))}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ) : (
+                <View style={[styles.checkoutTransferCard, { marginTop: 8, maxWidth: '100%' }]}>
+                  <View style={styles.checkoutTransferIconBox}>
+                    <CreditCard size={40} color="#60a5fa" />
+                  </View>
+                  <Text style={styles.checkoutTransferTitle}>Transfer Bank / EDC</Text>
+                  <Text style={styles.checkoutTransferSub}>
+                    Pastikan mutasi dana atau struk EDC telah keluar sebelum mengonfirmasi pembayaran.
+                  </Text>
                 </View>
               )}
 
+              {/* 7. Action CTA Button */}
               <TouchableOpacity
-                style={[styles.paySubmitBtn, { marginTop: 20 }, checkoutLoading && styles.paySubmitBtnDisabled]}
+                style={[
+                  styles.checkoutSubmitBtn,
+                  { marginTop: 16, paddingVertical: 14, borderRadius: 14 },
+                  (paymentMethod === 'CASH' && Number(paidAmount) < totalAmount) && styles.checkoutSubmitBtnDisabled,
+                  checkoutLoading && styles.checkoutSubmitBtnDisabled
+                ]}
                 onPress={handleProcessCheckout}
-                disabled={checkoutLoading}
+                disabled={checkoutLoading || (paymentMethod === 'CASH' && Number(paidAmount) < totalAmount)}
+                activeOpacity={0.8}
               >
                 {checkoutLoading ? (
-                  <ActivityIndicator color="#fff" />
+                  <ActivityIndicator color="#ffffff" />
                 ) : (
-                  <Text style={styles.paySubmitText}>Konfirmasi Pembayaran</Text>
+                  <View style={styles.checkoutSubmitBtnContent}>
+                    <Check size={18} color="#ffffff" style={{ marginRight: 6 }} />
+                    <Text style={[styles.checkoutSubmitBtnText, { fontSize: 14 }]}>
+                      {paymentMethod === 'CASH' && Number(paidAmount) < totalAmount
+                        ? `Uang Kurang (${formatRp(totalAmount - (Number(paidAmount) || 0))})`
+                        : 'Selesaikan Pembayaran'}
+                    </Text>
+                  </View>
                 )}
               </TouchableOpacity>
             </ScrollView>
@@ -3624,6 +3868,139 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
+  },
+  checkoutBillBannerPortrait: {
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(244, 63, 94, 0.25)',
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  checkoutBillBannerAmountPortrait: {
+    fontSize: 22,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+    marginTop: 2,
+  },
+  checkoutCustomerCardPortrait: {
+    backgroundColor: '#18181b',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 12,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  checkoutAdjustmentsBoxPortrait: {
+    backgroundColor: '#141416',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginBottom: 12,
+    gap: 6,
+  },
+  checkoutOrderCardPortrait: {
+    backgroundColor: '#141416',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 14,
+    marginBottom: 14,
+  },
+  checkoutItemRowMiniPortrait: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+  },
+  checkoutSectionLabelPortrait: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+    marginBottom: 8,
+  },
+  checkoutMethodRowPortrait: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 12,
+  },
+  checkoutMethodBtnPortrait: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
+  },
+  cashDisplayBoxPortrait: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#141416',
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 12,
+  },
+  cashDisplayAmountPortrait: {
+    fontSize: 20,
+    fontFamily: 'Poppins_700Bold',
+    color: '#34d399',
+    marginTop: 2,
+  },
+  cashDisplayChangePortrait: {
+    fontSize: 17,
+    fontFamily: 'Poppins_700Bold',
+  },
+  numpadPresetsRowPortrait: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 12,
+  },
+  numpadPresetChipPortrait: {
+    flex: 1,
+    backgroundColor: '#18181b',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  numpadGridPortrait: {
+    gap: 8,
+    marginBottom: 14,
+  },
+  numpadRowPortrait: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  numpadKeyPortrait: {
+    flex: 1,
+    height: 48,
+    backgroundColor: '#18181b',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkoutBodyPortrait: {
     flex: 1,
