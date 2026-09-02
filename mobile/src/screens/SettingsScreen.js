@@ -1178,19 +1178,34 @@ export default function SettingsScreen({ isLandscape = false }) {
                         style={styles.logoRemoveBadge}
                         onPress={handleRemoveLogo}
                         activeOpacity={0.8}
-                        hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                       >
                         <X size={12} color="#ffffff" />
                       </TouchableOpacity>
                     </View>
                   ) : (
                     <View style={styles.logoEmptyBox}>
-                      <ImageIcon size={24} color="#71717a" />
-                      <Text style={styles.logoEmptyText}>Belum Ada</Text>
+                      <ImageIcon size={28} color="#a1a1aa" />
                     </View>
                   )}
 
-                  <View style={{ flex: 1, minWidth: 0, justifyContent: 'center', gap: 4 }}>
+                  <View style={styles.logoInfoCol}>
+                    <View style={styles.logoStatusRow}>
+                      <Text style={[styles.logoStatusTitle, tempStoreLogo && styles.logoStatusTitleActive]} numberOfLines={1}>
+                        {tempStoreLogo ? '✓ Logo Terpasang' : 'Belum Ada Logo'}
+                      </Text>
+                      {tempStoreLogo && (
+                        <TouchableOpacity
+                          onPress={handleRemoveLogo}
+                          activeOpacity={0.7}
+                          style={styles.logoDeleteTextBtn}
+                        >
+                          <Trash2 size={12} color="#fb7185" style={{ marginRight: 3 }} />
+                          <Text style={styles.logoDeleteText}>Hapus</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+
                     <TouchableOpacity
                       style={styles.uploadLogoBtn}
                       onPress={handlePickLogo}
@@ -1198,11 +1213,12 @@ export default function SettingsScreen({ isLandscape = false }) {
                     >
                       <Upload size={14} color="#ffffff" style={{ marginRight: 6 }} />
                       <Text style={styles.uploadLogoBtnText}>
-                        {tempStoreLogo ? 'Ganti Logo Toko' : 'Pilih Logo Galeri'}
+                        {tempStoreLogo ? 'Ganti Logo dari Galeri' : 'Pilih Logo dari Galeri'}
                       </Text>
                     </TouchableOpacity>
+
                     <Text style={styles.logoHelpText}>
-                      Rekomendasi gambar persegi (PNG/JPG).
+                      Format persegi 1:1 (PNG/JPG transparan)
                     </Text>
                   </View>
                 </View>
@@ -2150,63 +2166,98 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 14,
     backgroundColor: '#09090b',
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: '#27272a',
-    padding: 12,
+    padding: 14,
   },
   logoPreviewWrapper: {
     position: 'relative',
-    width: 64,
-    height: 64,
-    borderRadius: 12,
+    width: 68,
+    height: 68,
+    borderRadius: 14,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   logoPreviewImage: {
-    width: 56,
-    height: 56,
-    borderRadius: 8,
+    width: 58,
+    height: 58,
+    borderRadius: 10,
   },
   logoRemoveBadge: {
     position: 'absolute',
-    top: -4,
-    right: -4,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    top: -6,
+    right: -6,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
     backgroundColor: '#e11d48',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#09090b',
   },
   logoEmptyBox: {
-    width: 64,
-    height: 64,
-    borderRadius: 12,
+    width: 68,
+    height: 68,
+    borderRadius: 14,
     backgroundColor: '#18181b',
-    borderWidth: 1,
-    borderColor: '#27272a',
+    borderWidth: 1.5,
+    borderColor: '#3f3f46',
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
-  logoEmptyText: {
+  logoInfoCol: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: 'center',
+    gap: 6,
+  },
+  logoStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 2,
+  },
+  logoStatusTitle: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+    flex: 1,
+    minWidth: 0,
+  },
+  logoStatusTitleActive: {
+    color: '#34d399',
+  },
+  logoDeleteTextBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    flexShrink: 0,
+    marginLeft: 6,
+  },
+  logoDeleteText: {
     fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
-    marginTop: 2,
+    fontFamily: 'Poppins_500Medium',
+    color: '#fb7185',
   },
   uploadLogoBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#27272a',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 9,
     borderWidth: 1,
     borderColor: '#3f3f46',
   },
