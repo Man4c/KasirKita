@@ -1674,9 +1674,13 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   paymentMethodTabTextCompact: {
     fontSize: 12,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   paymentMethodTabTextActive: {
     color: '#ffffff',
@@ -1960,6 +1964,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   checkoutBodyPortrait: {
     flex: 1,
