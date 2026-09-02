@@ -43,7 +43,7 @@ Untuk menjamin keamanan kode selama refactoring:
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | **Safety Net & Setup:** Buat folder `mobile/src/components/settings/` dan persiapkan interface props untuk setiap sub-komponen. | pending |
+| 1 | **Safety Net & Setup:** Buat folder `mobile/src/components/settings/` dan persiapkan interface props untuk setiap sub-komponen. | completed |
 | 2 | **User & Password Modals Extraction:** Ekstraksi `UserProfileModal.js` dan `ChangePasswordModal.js` beserta StyleSheet lokal. | pending |
 | 3 | **Store Identity Modal Extraction:** Ekstraksi `StoreIdentityModal.js` (ImagePicker, upload logo, switch toggle logo/telepon). | pending |
 | 4 | **Printer & Hardware Modals Extraction:** Ekstraksi `PrinterSettingsModal.js`, `PrinterGuideModal.js`, dan `TestReceiptModal.js`. | pending |
