@@ -1054,12 +1054,20 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                             styles.numpadPresetBtn,
                             styles.numpadPresetBtnPas,
                             compact && styles.numpadPresetBtnCompact,
-                            Number(paidAmount) === totalAmount && styles.numpadPresetBtnActive
+                            Number(paidAmount) === totalAmount && styles.numpadPresetBtnActivePas
                           ]}
                           onPress={() => handleNominalShortcut(totalAmount)}
                           activeOpacity={0.7}
                         >
-                          <Text style={[styles.numpadPresetTextPas, compact && styles.numpadPresetTextCompact]}>Uang Pas</Text>
+                          <Text
+                            style={[
+                              styles.numpadPresetText,
+                              compact && styles.numpadPresetTextCompact,
+                              Number(paidAmount) === totalAmount ? styles.numpadPresetTextActive : styles.numpadPresetTextPas
+                            ]}
+                          >
+                            Uang Pas
+                          </Text>
                         </TouchableOpacity>
 
                         {[50000, 100000, 200000].map((val) => {
@@ -1075,11 +1083,13 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                               onPress={() => handleNominalShortcut(val)}
                               activeOpacity={0.7}
                             >
-                              <Text style={[
-                                styles.numpadPresetText,
-                                compact && styles.numpadPresetTextCompact,
-                                isSelected && styles.numpadPresetTextActive
-                              ]}>
+                              <Text
+                                style={[
+                                  styles.numpadPresetText,
+                                  compact && styles.numpadPresetTextCompact,
+                                  isSelected && styles.numpadPresetTextActive
+                                ]}
+                              >
                                 {formatRp(val)}
                               </Text>
                             </TouchableOpacity>
@@ -1346,15 +1356,17 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                       style={[
                         styles.numpadPresetChipPortrait,
                         styles.numpadPresetBtnPas,
-                        Number(paidAmount) === totalAmount && styles.numpadPresetBtnActive
+                        Number(paidAmount) === totalAmount && styles.numpadPresetBtnActivePas
                       ]}
                       onPress={() => handleNominalShortcut(totalAmount)}
                       activeOpacity={0.7}
                     >
-                      <Text style={[
-                        styles.numpadPresetTextPas,
-                        Number(paidAmount) === totalAmount && styles.numpadPresetTextActive
-                      ]}>
+                      <Text
+                        style={[
+                          styles.numpadPresetText,
+                          Number(paidAmount) === totalAmount ? styles.numpadPresetTextActive : styles.numpadPresetTextPas
+                        ]}
+                      >
                         Uang Pas
                       </Text>
                     </TouchableOpacity>
@@ -1371,10 +1383,12 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                           onPress={() => handleNominalShortcut(val)}
                           activeOpacity={0.7}
                         >
-                          <Text style={[
-                            styles.numpadPresetText,
-                            isSelected && styles.numpadPresetTextActive
-                          ]}>
+                          <Text
+                            style={[
+                              styles.numpadPresetText,
+                              isSelected && styles.numpadPresetTextActive
+                            ]}
+                          >
                             {formatRp(val)}
                           </Text>
                         </TouchableOpacity>
@@ -3414,12 +3428,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   checkoutBillItemBadge: {
-    backgroundColor: 'rgba(244, 63, 94, 0.25)',
+    backgroundColor: '#881337',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(244, 63, 94, 0.35)',
+    borderColor: '#9f1239',
   },
   checkoutBillItemBadgeText: {
     fontSize: 12,
@@ -3757,6 +3771,10 @@ const styles = StyleSheet.create({
   numpadPresetBtnActive: {
     backgroundColor: '#e11d48',
     borderColor: '#f43f5e',
+  },
+  numpadPresetBtnActivePas: {
+    backgroundColor: '#047857',
+    borderColor: '#10b981',
   },
   numpadPresetText: {
     fontSize: 12,
