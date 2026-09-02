@@ -337,13 +337,8 @@ export default function SettingsScreen({ isLandscape = false }) {
     >
       {/* 1. Header Ringkas */}
       <View style={styles.header}>
-        <View style={styles.headerIconBox}>
-          <Settings size={22} color="#fb7185" />
-        </View>
-        <View style={{ flex: 1, minWidth: 0 }}>
-          <Text style={styles.headerTitle}>Pengaturan</Text>
-          <Text style={styles.headerSubtitle}>Konfigurasi toko, printer, & preferensi kasir</Text>
-        </View>
+        <Text style={styles.headerTitle}>Pengaturan</Text>
+        <Text style={styles.headerSubtitle}>Konfigurasi toko, printer, & preferensi kasir</Text>
       </View>
 
       {/* 2. Seksi Profil Akun & Toko */}
@@ -1179,24 +1174,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
     marginBottom: 20,
     paddingTop: 4,
   },
-  headerIconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
-    backgroundColor: 'rgba(225, 29, 72, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(225, 29, 72, 0.3)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
   },
@@ -1204,6 +1186,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    marginTop: 2,
   },
   section: {
     marginBottom: 20,

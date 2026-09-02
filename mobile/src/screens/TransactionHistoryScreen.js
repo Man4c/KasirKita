@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#ffffff',
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: 'Poppins_700Bold',
     letterSpacing: -0.3,
   },

@@ -148,7 +148,8 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#d4d4d8',
+    color: '#a1a1aa',
+    marginTop: 2,
     marginBottom: 16,
   },
   card: {
