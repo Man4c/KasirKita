@@ -5,3 +5,4 @@ export { default as StoreIdentityModal } from './StoreIdentityModal';
 export { default as PrinterSettingsModal } from './PrinterSettingsModal';
 export { default as PrinterGuideModal } from './PrinterGuideModal';
 export { default as TestReceiptModal } from './TestReceiptModal';
+export { default as SecurityAuditModal } from './SecurityAuditModal';
