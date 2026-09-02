@@ -31,7 +31,7 @@ import TransactionHistoryScreen from './src/screens/TransactionHistoryScreen';
 // Intercept and eliminate transition: padding injected by web safe area libraries
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
   const originalCreateElement = document.createElement.bind(document);
-  document.createElement = function(tagName, options) {
+  document.createElement = function (tagName, options) {
     const el = originalCreateElement(tagName, options);
     if (tagName && tagName.toLowerCase() === 'div') {
       const originalSetProperty = el.style.setProperty.bind(el.style);
@@ -184,7 +184,7 @@ function MainApp() {
 
       {/* Bottom Navigation Bar (Hidden in Landscape to give full height to Kasir Terminal) */}
       {!isLandscape && (
-        <View style={[styles.bottomNavBar, { paddingBottom: Math.max(insets.bottom, 10) }]}>
+        <View style={[styles.bottomNavBar, { height: 60 + insets.bottom, paddingBottom: Math.max(insets.bottom, 6) }]}>
           {/* 1. Kasir POS */}
           <TouchableOpacity
             style={styles.navItem}
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#18181b',
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    paddingTop: 10,
+    paddingTop: 6,
     paddingHorizontal: 12,
     ...Platform.select({
       ios: {
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 2,
+    gap: 4,
   },
   navIconPill: {
     paddingVertical: 4,
@@ -473,7 +473,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     color: '#a1a1aa',
-    marginTop: 2,
   },
   navTextActive: {
     color: '#fb7185',
