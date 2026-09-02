@@ -3383,9 +3383,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   checkoutBillBanner: {
-    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    backgroundColor: '#1c1215',
     borderWidth: 1,
-    borderColor: 'rgba(244, 63, 94, 0.25)',
+    borderColor: 'rgba(244, 63, 94, 0.35)',
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -3402,7 +3402,7 @@ const styles = StyleSheet.create({
   checkoutBillBannerLabel: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#fb7185',
+    color: '#ffffff',
     letterSpacing: 0.5,
   },
   checkoutBillBannerAmount: {
@@ -3414,15 +3414,17 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   checkoutBillItemBadge: {
-    backgroundColor: 'rgba(244, 63, 94, 0.2)',
+    backgroundColor: 'rgba(244, 63, 94, 0.25)',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(244, 63, 94, 0.35)',
   },
   checkoutBillItemBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#fb7185',
+    color: '#ffffff',
   },
   checkoutCustomerCard: {
     backgroundColor: '#18181b',
@@ -3876,9 +3878,9 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   checkoutBillBannerPortrait: {
-    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    backgroundColor: '#1c1215',
     borderWidth: 1,
-    borderColor: 'rgba(244, 63, 94, 0.25)',
+    borderColor: 'rgba(244, 63, 94, 0.35)',
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 14,
