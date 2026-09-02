@@ -360,28 +360,18 @@ export default function SettingsScreen({ isLandscape = false }) {
               <User size={24} color="#fb7185" />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Text style={styles.profileName} numberOfLines={1}>
-                  {user?.name || 'Kasir Toko'}
+              <Text style={styles.profileName} numberOfLines={1}>
+                {user?.name || 'Kasir Toko'}{' '}
+                <Text style={styles.profileRoleInline}>
+                  ({user?.role === 'owner' ? 'Owner' : 'Kasir'})
                 </Text>
-                <View style={styles.editBadge}>
-                  <Edit3 size={11} color="#fb7185" />
-                  <Text style={styles.editBadgeText}>Ubah</Text>
-                </View>
-              </View>
-              <View style={styles.roleBadgeRow}>
-                <View style={styles.roleBadge}>
-                  <Text style={styles.roleBadgeText}>
-                    {user?.role === 'owner' ? 'OWNER / PEMILIK' : 'KASIR'}
-                  </Text>
-                </View>
-                <Text style={styles.profileEmail} numberOfLines={1}>
-                  {user?.email || 'kasir@kasirkita.local'}
-                </Text>
-              </View>
-              {user?.phone ? (
-                <Text style={styles.menuDetailText}>No. HP: {user.phone}</Text>
-              ) : null}
+              </Text>
+              <Text style={styles.profileEmail} numberOfLines={1}>
+                {user?.email || 'kasir@kasirkita.local'}
+              </Text>
+              <Text style={styles.menuDetailText}>
+                No. HP: {user?.phone || '-'}
+              </Text>
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
           </TouchableOpacity>
@@ -416,13 +406,7 @@ export default function SettingsScreen({ isLandscape = false }) {
               <Store size={18} color="#fb7185" />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Text style={styles.menuTitle} numberOfLines={1}>{storeName}</Text>
-                <View style={styles.editBadge}>
-                  <Edit3 size={11} color="#fb7185" />
-                  <Text style={styles.editBadgeText}>Ubah</Text>
-                </View>
-              </View>
+              <Text style={styles.menuTitle} numberOfLines={1}>{storeName}</Text>
               <Text style={styles.menuSubtitle} numberOfLines={1}>{storeAddress}</Text>
               <Text style={styles.menuDetailText}>WA/Telp: {storePhone}</Text>
             </View>
@@ -1272,6 +1256,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
+  },
+  profileRoleInline: {
+    fontSize: 14,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
   },
   roleBadgeRow: {
     flexDirection: 'row',
