@@ -43,9 +43,9 @@ Menghadirkan layar **Pengaturan** (*Settings Screen*) terpusat pada KasirKita Mo
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | Pendaftaran Tab Navigasi Bawah 'Pengaturan' dengan Ikon `Settings` di `mobile/App.js` | in-progress |
-| 2 | Pembuatan Komponen Layar `mobile/src/screens/SettingsScreen.js` dengan Desain Modular & Defensive UI | pending |
-| 3 | Implementasi Seksi Profil Pengguna, Info Toko, & Keamanan Akun | pending |
+| 1 | Pendaftaran Tab Navigasi Bawah 'Pengaturan' dengan Ikon `Settings` di `mobile/App.js` | completed |
+| 2 | Pembuatan Komponen Layar `mobile/src/screens/SettingsScreen.js` dengan Desain Modular & Defensive UI | completed |
+| 3 | Implementasi Seksi Profil Pengguna, Info Toko, & Keamanan Akun | in-progress |
 | 4 | Implementasi Seksi Perangkat Keras (Pengaturan Printer Bluetooth & Opsi Cetak Struk) | pending |
 | 5 | Implementasi Seksi Preferensi Struk, Tampilan POS, & Sinkronisasi Data | pending |
 | 6 | Verifikasi Aksesibilitas WCAG AA, Build Web & Mobile, serta Dokumentasi Arsitektur | pending |
@@ -54,8 +54,8 @@ Menghadirkan layar **Pengaturan** (*Settings Screen*) terpusat pada KasirKita Mo
 
 ## Key Deliverables
 
-- [ ] Tab bilah navigasi bawah menampilkan label **"Pengaturan"** dengan ikon `Settings` (Lucide) proporsional.
-- [ ] Layar `SettingsScreen.js` dengan arsitektur kartu yang rapi, hierarki visual jelas, dan kontras tinggi standar WCAG AA.
+- [x] Tab bilah navigasi bawah menampilkan label **"Pengaturan"** dengan ikon `Settings` (Lucide) proporsional.
+- [x] Layar `SettingsScreen.js` dengan arsitektur kartu yang rapi, hierarki visual jelas, dan kontras tinggi standar WCAG AA.
 - [ ] Seksi identitas pengguna aktif dan toko yang informatif.
 - [ ] Konfigurasi printer bluetooth thermal dan toggle cetak otomatis.
 - [ ] Kustomisasi teks footer struk belanja.

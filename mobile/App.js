@@ -21,12 +21,13 @@ import {
   Poppins_600SemiBold,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
-import { ShoppingCart, BarChart3, Receipt, LogOut } from 'lucide-react-native';
+import { ShoppingCart, BarChart3, Receipt, LogOut, Settings } from 'lucide-react-native';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import LoginScreen from './src/screens/LoginScreen';
 import PosScreen from './src/screens/PosScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import TransactionHistoryScreen from './src/screens/TransactionHistoryScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 
 // Intercept and eliminate transition: padding injected by web safe area libraries
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -173,6 +174,8 @@ function MainApp() {
           <DashboardScreen isLandscape={false} />
         ) : activeTab === 'history' ? (
           <TransactionHistoryScreen isLandscape={false} />
+        ) : activeTab === 'settings' ? (
+          <SettingsScreen isLandscape={false} />
         ) : (
           <PosScreen
             isLandscape={false}
@@ -197,7 +200,7 @@ function MainApp() {
                 color={activeTab === 'pos' ? '#fb7185' : '#71717a'}
               />
             </View>
-            <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]}>
+            <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]} numberOfLines={1}>
               Kasir POS
             </Text>
           </TouchableOpacity>
@@ -215,7 +218,7 @@ function MainApp() {
                   color={activeTab === 'dashboard' ? '#fb7185' : '#71717a'}
                 />
               </View>
-              <Text style={[styles.navText, activeTab === 'dashboard' && styles.navTextActive]}>
+              <Text style={[styles.navText, activeTab === 'dashboard' && styles.navTextActive]} numberOfLines={1}>
                 Laporan Toko
               </Text>
             </TouchableOpacity>
@@ -233,8 +236,25 @@ function MainApp() {
                 color={activeTab === 'history' ? '#fb7185' : '#71717a'}
               />
             </View>
-            <Text style={[styles.navText, activeTab === 'history' && styles.navTextActive]}>
+            <Text style={[styles.navText, activeTab === 'history' && styles.navTextActive]} numberOfLines={1}>
               Riwayat
+            </Text>
+          </TouchableOpacity>
+
+          {/* 4. Pengaturan */}
+          <TouchableOpacity
+            style={styles.navItem}
+            activeOpacity={0.7}
+            onPress={() => handleTabChange('settings')}
+          >
+            <View style={[styles.navIconPill, activeTab === 'settings' && styles.navIconPillActive]}>
+              <Settings
+                size={20}
+                color={activeTab === 'settings' ? '#fb7185' : '#71717a'}
+              />
+            </View>
+            <Text style={[styles.navText, activeTab === 'settings' && styles.navTextActive]} numberOfLines={1}>
+              Pengaturan
             </Text>
           </TouchableOpacity>
         </View>
@@ -462,7 +482,7 @@ const styles = StyleSheet.create({
   },
   navIconPill: {
     paddingVertical: 4,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     borderRadius: 14,
     backgroundColor: 'transparent',
   },
