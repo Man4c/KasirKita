@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
 const TOKEN_KEY = 'kasirkita_bearer_token';
@@ -56,22 +57,34 @@ export const storage = {
   },
 
   async getSettings() {
-    let json;
-    if (Platform.OS === 'web') {
-      json = localStorage.getItem('kasirkita_app_settings');
-    } else {
-      json = await SecureStore.getItemAsync('kasirkita_app_settings');
+    try {
+      let json;
+      if (Platform.OS === 'web') {
+        json = localStorage.getItem('kasirkita_app_settings');
+      } else {
+        json = await AsyncStorage.getItem('kasirkita_app_settings');
+        // Fallback backward compatibility with old SecureStore settings
+        if (!json) {
+          json = await SecureStore.getItemAsync('kasirkita_app_settings');
+        }
+      }
+      return json ? JSON.parse(json) : null;
+    } catch (e) {
+      return null;
     }
-    return json ? JSON.parse(json) : null;
   },
 
   async setSettings(settings) {
-    const json = JSON.stringify(settings);
-    if (Platform.OS === 'web') {
-      localStorage.setItem('kasirkita_app_settings', json);
-      return;
+    try {
+      const json = JSON.stringify(settings);
+      if (Platform.OS === 'web') {
+        localStorage.setItem('kasirkita_app_settings', json);
+        return;
+      }
+      await AsyncStorage.setItem('kasirkita_app_settings', json);
+    } catch (e) {
+      console.warn('Gagal menyimpan pengaturan:', e);
     }
-    await SecureStore.setItemAsync('kasirkita_app_settings', json);
   },
 
   async clearAll() {

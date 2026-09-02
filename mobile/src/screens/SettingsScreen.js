@@ -12,7 +12,9 @@ import {
   Platform,
   ActivityIndicator,
   Linking,
+  Image,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import {
   Settings,
   User,
@@ -39,6 +41,9 @@ import {
   BookOpen,
   CircleAlert,
   Info,
+  Image as ImageIcon,
+  Upload,
+  Camera,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -51,6 +56,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [storeName, setStoreName] = useState('KasirKita Mart');
   const [storeAddress, setStoreAddress] = useState('Jl. Merdeka No. 12, Jakarta Pusat');
   const [storePhone, setStorePhone] = useState('0812-3456-7890');
+  const [storeLogo, setStoreLogo] = useState(null);
   const [receiptFooter, setReceiptFooter] = useState('Terima kasih atas kunjungan Anda! Barang yang dibeli tidak dapat ditukar.');
   
   const [selectedPrinter, setSelectedPrinter] = useState('RPP02N (58mm Bluetooth)');
@@ -94,6 +100,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [tempStoreAddress, setTempStoreAddress] = useState('');
   const [tempStorePhone, setTempStorePhone] = useState('');
   const [tempReceiptFooter, setTempReceiptFooter] = useState('');
+  const [tempStoreLogo, setTempStoreLogo] = useState(null);
   const [tempShowLogoOnReceipt, setTempShowLogoOnReceipt] = useState(true);
   const [tempShowPhoneOnReceipt, setTempShowPhoneOnReceipt] = useState(true);
 
@@ -113,6 +120,7 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (saved.storeName) setStoreName(saved.storeName);
         if (saved.storeAddress) setStoreAddress(saved.storeAddress);
         if (saved.storePhone) setStorePhone(saved.storePhone);
+        if (saved.storeLogo) setStoreLogo(saved.storeLogo);
         if (saved.receiptFooter) setReceiptFooter(saved.receiptFooter);
         if (saved.selectedPrinter) setSelectedPrinter(saved.selectedPrinter);
         if (typeof saved.isPrinterConnected === 'boolean') setIsPrinterConnected(saved.isPrinterConnected);
@@ -134,6 +142,7 @@ export default function SettingsScreen({ isLandscape = false }) {
         storeName,
         storeAddress,
         storePhone,
+        storeLogo,
         receiptFooter,
         selectedPrinter,
         isPrinterConnected,
@@ -261,9 +270,49 @@ export default function SettingsScreen({ isLandscape = false }) {
     setTempStoreAddress(storeAddress);
     setTempStorePhone(storePhone);
     setTempReceiptFooter(receiptFooter);
+    setTempStoreLogo(storeLogo);
     setTempShowLogoOnReceipt(showLogoOnReceipt);
     setTempShowPhoneOnReceipt(showPhoneOnReceipt);
     setStoreModalOpen(true);
+  };
+
+  const handlePickLogo = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        if (Platform.OS === 'web') {
+          window.alert('Izin akses galeri diperlukan untuk memilih logo toko.');
+        } else {
+          Alert.alert('Izin Ditolak', 'Aplikasi memerlukan izin galeri untuk memilih foto logo toko.');
+        }
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.6,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets && result.assets[0]) {
+        const asset = result.assets[0];
+        const uri = asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
+        setTempStoreLogo(uri);
+      }
+    } catch (err) {
+      console.warn('Gagal memilih logo:', err);
+      if (Platform.OS === 'web') {
+        window.alert('Gagal membuka galeri gambar.');
+      } else {
+        Alert.alert('Gagal', 'Terjadi kendala saat membuka galeri gambar.');
+      }
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setTempStoreLogo(null);
   };
 
   const handleSaveStoreModal = () => {
@@ -276,6 +325,7 @@ export default function SettingsScreen({ isLandscape = false }) {
     setStoreAddress(newAddress);
     setStorePhone(newPhone);
     setReceiptFooter(newFooter);
+    setStoreLogo(tempStoreLogo);
     setShowLogoOnReceipt(tempShowLogoOnReceipt);
     setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
 
@@ -284,6 +334,7 @@ export default function SettingsScreen({ isLandscape = false }) {
       storeAddress: newAddress,
       storePhone: newPhone,
       receiptFooter: newFooter,
+      storeLogo: tempStoreLogo,
       showLogoOnReceipt: tempShowLogoOnReceipt,
       showPhoneOnReceipt: tempShowPhoneOnReceipt,
     });
@@ -424,7 +475,11 @@ export default function SettingsScreen({ isLandscape = false }) {
             onPress={handleOpenStoreModal}
           >
             <View style={styles.menuIconBox}>
-              <Store size={18} color="#fb7185" />
+              {storeLogo ? (
+                <Image source={{ uri: storeLogo }} style={{ width: 26, height: 26, borderRadius: 6 }} resizeMode="contain" />
+              ) : (
+                <Store size={18} color="#fb7185" />
+              )}
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.menuTitle} numberOfLines={1}>{storeName}</Text>
@@ -1031,6 +1086,47 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
 
             <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
+              {/* Form Input: Logo Toko */}
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Logo Toko untuk Struk</Text>
+                <View style={styles.logoPickerContainer}>
+                  {tempStoreLogo ? (
+                    <View style={styles.logoPreviewWrapper}>
+                      <Image source={{ uri: tempStoreLogo }} style={styles.logoPreviewImage} resizeMode="contain" />
+                      <TouchableOpacity
+                        style={styles.logoRemoveBadge}
+                        onPress={handleRemoveLogo}
+                        activeOpacity={0.8}
+                        hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                      >
+                        <X size={12} color="#ffffff" />
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View style={styles.logoEmptyBox}>
+                      <ImageIcon size={24} color="#71717a" />
+                      <Text style={styles.logoEmptyText}>Belum Ada</Text>
+                    </View>
+                  )}
+
+                  <View style={{ flex: 1, minWidth: 0, justifyContent: 'center', gap: 4 }}>
+                    <TouchableOpacity
+                      style={styles.uploadLogoBtn}
+                      onPress={handlePickLogo}
+                      activeOpacity={0.8}
+                    >
+                      <Upload size={14} color="#ffffff" style={{ marginRight: 6 }} />
+                      <Text style={styles.uploadLogoBtnText}>
+                        {tempStoreLogo ? 'Ganti Logo Toko' : 'Pilih Logo Galeri'}
+                      </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.logoHelpText}>
+                      Rekomendasi gambar persegi (PNG/JPG).
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
               {/* Form Input: Nama Toko */}
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Nama Usaha / Toko *</Text>
@@ -1228,6 +1324,17 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
 
             <View style={styles.testReceiptPaper}>
+              {showLogoOnReceipt ? (
+                <View style={styles.testReceiptLogoBox}>
+                  {storeLogo ? (
+                    <Image source={{ uri: storeLogo }} style={styles.testReceiptLogoImg} resizeMode="contain" />
+                  ) : (
+                    <View style={styles.testReceiptLogoPlaceholder}>
+                      <Store size={22} color="#52525b" />
+                    </View>
+                  )}
+                </View>
+              ) : null}
               <Text style={styles.testReceiptStore}>{storeName}</Text>
               <Text style={styles.testReceiptSub}>{storeAddress}</Text>
               {showPhoneOnReceipt && <Text style={styles.testReceiptSub}>WA: {storePhone}</Text>}
@@ -1954,5 +2061,101 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
     lineHeight: 18,
+  },
+  logoPickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    backgroundColor: '#09090b',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 12,
+  },
+  logoPreviewWrapper: {
+    position: 'relative',
+    width: 64,
+    height: 64,
+    borderRadius: 12,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoPreviewImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 8,
+  },
+  logoRemoveBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#e11d48',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoEmptyBox: {
+    width: 64,
+    height: 64,
+    borderRadius: 12,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
+    borderStyle: 'dashed',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoEmptyText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#71717a',
+    marginTop: 2,
+  },
+  uploadLogoBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#27272a',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  uploadLogoBtnText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
+  logoHelpText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    lineHeight: 16,
+  },
+  testReceiptLogoBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
+  },
+  testReceiptLogoImg: {
+    width: 44,
+    height: 44,
+    borderRadius: 6,
+  },
+  testReceiptLogoPlaceholder: {
+    width: 38,
+    height: 38,
+    borderRadius: 8,
+    backgroundColor: '#f4f4f5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#e4e4e7',
   },
 });
