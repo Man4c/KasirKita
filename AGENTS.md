@@ -20,6 +20,10 @@ Setelah sesi kerja atau ada keputusan penting, update `docs/context.md` dan `pla
   1. *The Flexbox Pairing Rule:* Setiap kontainer 2-sisi (`flex justify-between`), teks dinamis (nama produk/kategori/pelanggan) WAJIB memakai `min-w-0 truncate`, dan pasangan lawannya (harga, stok, badge status, ikon) WAJIB memakai `shrink-0 whitespace-nowrap`.
   2. *The Readability Floor Rule:* Dilarang keras menggunakan ukuran font kustom di bawah 12px (`text-[10px]`, `text-[11px]`). Ukuran teks terkecil yang diizinkan adalah `text-xs` (12px) demi memenuhi standar keterbacaan WCAG.
   3. *The Data Table Protection Rule:* Seluruh sel tabel untuk nominal mata uang, kuantitas stok, tanggal/jam, badge status, dan tombol aksi WAJIB memakai `whitespace-nowrap` agar tidak terlipat/patah 2 baris saat layar menyempit.
+- **Arsitektur Modular Layar Kasir Mobile (`PosScreen.js`):**
+  - `mobile/src/screens/PosScreen.js` WAJIB selalu berstatus **modular** (~800 baris) dan DILARANG KERAS diubah kembali menjadi monolitik.
+  - Seluruh sub-komponen layar kasir harus selalu diedit di file masing-masing dalam `mobile/src/components/pos/` (`ProductGrid`, `LandscapeRegisterPanel`, `PosCheckoutView`, `PosCartModal`, `CustomerPickerModal`, `PromoVoucherModal`, `TaxFeeModal`, `PosReceiptModal`).
+  - State transaksi dan checkout kasir harus selalu dikelola melalui hook `mobile/src/hooks/useCheckoutState.js`.
 - Selalu gunakan bahasa yang mudah dipahami orang awam saat menjelaskan.
 - Jangan refactor besar kecuali dibutuhkan oleh task.
 - Ikuti pola file dan style yang sudah ada.
