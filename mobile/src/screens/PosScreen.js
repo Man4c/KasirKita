@@ -3744,8 +3744,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   numpadKeyDelete: {
-    backgroundColor: 'rgba(244, 63, 94, 0.12)',
-    borderColor: 'rgba(244, 63, 94, 0.25)',
+    backgroundColor: '#241217',
+    borderColor: '#4c1d24',
   },
   numpadPresetsCol: {
     flex: 1.4,
@@ -3765,8 +3765,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   numpadPresetBtnPas: {
-    backgroundColor: 'rgba(52, 211, 153, 0.12)',
-    borderColor: 'rgba(52, 211, 153, 0.3)',
+    backgroundColor: '#132820',
+    borderColor: '#059669',
   },
   numpadPresetBtnActive: {
     backgroundColor: '#e11d48',
@@ -3828,7 +3828,9 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     borderRadius: 27,
-    backgroundColor: 'rgba(244, 63, 94, 0.12)',
+    backgroundColor: '#241217',
+    borderWidth: 1,
+    borderColor: '#4c1d24',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
@@ -3837,7 +3839,9 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     borderRadius: 27,
-    backgroundColor: 'rgba(96, 165, 250, 0.12)',
+    backgroundColor: '#131e2e',
+    borderWidth: 1,
+    borderColor: '#1e3a5f',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
