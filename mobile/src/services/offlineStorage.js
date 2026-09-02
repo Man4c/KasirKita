@@ -169,4 +169,60 @@ export const offlineStorage = {
   async clearOfflineQueue() {
     await AsyncStorage.removeItem(KEYS.QUEUE);
   },
+
+  /**
+   * Get size of offline catalog cache in bytes.
+   */
+  async getCatalogCacheSize() {
+    try {
+      const pairs = await AsyncStorage.multiGet([
+        KEYS.PRODUCTS,
+        KEYS.CATEGORIES,
+        KEYS.CUSTOMERS,
+        KEYS.PROMOS,
+        KEYS.TAXES_FEES,
+        KEYS.LAST_SYNC,
+      ]);
+      let totalBytes = 0;
+      for (const [_, val] of pairs) {
+        if (val) {
+          totalBytes += typeof val === 'string' ? val.length : 0;
+        }
+      }
+      return totalBytes;
+    } catch {
+      return 0;
+    }
+  },
+
+  /**
+   * Get formatted cache size string (e.g. '240.5 KB', '1.2 MB').
+   */
+  async getFormattedCacheSize() {
+    const bytes = await this.getCatalogCacheSize();
+    if (bytes === 0) return '0 KB';
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  },
+
+  /**
+   * Clear offline catalog cache safely (strictly preserving transaction queue).
+   */
+  async clearCatalogCache() {
+    try {
+      await AsyncStorage.multiRemove([
+        KEYS.PRODUCTS,
+        KEYS.CATEGORIES,
+        KEYS.CUSTOMERS,
+        KEYS.PROMOS,
+        KEYS.TAXES_FEES,
+        KEYS.LAST_SYNC,
+      ]);
+      return true;
+    } catch (err) {
+      console.warn('Gagal membersihkan cache katalog:', err.message);
+      return false;
+    }
+  },
 };

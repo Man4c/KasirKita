@@ -87,6 +87,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [syncing, setSyncing] = useState(false);
   const [serverStatus, setServerStatus] = useState('Memeriksa...');
   const [serverPing, setServerPing] = useState(null);
+  const [cacheSize, setCacheSize] = useState('...');
 
   // Form Temp States for User Profile Modal
   const [tempUserName, setTempUserName] = useState('');
@@ -162,6 +163,14 @@ export default function SettingsScreen({ isLandscape = false }) {
           printerService.setPaperSize(saved.paperSize);
         }
         await printerService.init();
+      }
+
+      // 1b. Calculate actual offline cache size
+      try {
+        const sz = await offlineStorage.getFormattedCacheSize();
+        setCacheSize(sz);
+      } catch (e) {
+        setCacheSize('0 KB');
       }
 
       // 2. Fetch and synchronize latest store identity from Cloud backend
@@ -555,11 +564,45 @@ export default function SettingsScreen({ isLandscape = false }) {
     }
   };
 
-  const handleClearCache = () => {
+  const handleClearCache = async () => {
+    let currentSize = cacheSize;
+    try {
+      currentSize = await offlineStorage.getFormattedCacheSize();
+      setCacheSize(currentSize);
+    } catch (e) {
+      // keep fallback
+    }
+
+    const executeClear = async () => {
+      await offlineStorage.clearCatalogCache();
+      const updatedSize = await offlineStorage.getFormattedCacheSize();
+      setCacheSize(updatedSize);
+      if (Platform.OS === 'web') {
+        window.alert('Cache katalog offline berhasil dibersihkan. Memori HP kini lebih lega dan katalog akan disegarkan otomatis dari server.');
+      } else {
+        Alert.alert('Sukses', 'Cache katalog offline berhasil dibersihkan. Memori HP kini lebih lega dan katalog akan disegarkan otomatis dari server.');
+      }
+    };
+
+    const confirmMsg = `Ukuran cache saat ini: ${currentSize}.\n\nApakah Anda yakin ingin membersihkan data katalog sementara di HP? Pengaturan toko dan antrean nota kasir tetap aman.`;
+
     if (Platform.OS === 'web') {
-      window.alert('Cache penyimpanan offline sebesar ~1.8 MB berhasil dibersihkan.');
+      if (window.confirm(confirmMsg)) {
+        await executeClear();
+      }
     } else {
-      Alert.alert('Bersihkan Cache', 'Cache penyimpanan gambar lokal (~1.8 MB) berhasil dibersihkan.');
+      Alert.alert(
+        'Bersihkan Cache Penyimpanan',
+        confirmMsg,
+        [
+          { text: 'Batal', style: 'cancel' },
+          {
+            text: 'Bersihkan',
+            style: 'destructive',
+            onPress: executeClear,
+          },
+        ]
+      );
     }
   };
 
@@ -980,8 +1023,13 @@ export default function SettingsScreen({ isLandscape = false }) {
               <Trash2 size={18} color="#fb7185" />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={styles.menuTitle}>Bersihkan Cache Penyimpanan</Text>
-              <Text style={styles.menuSubtitle}>Segarkan memori gambar katalog offline</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.menuTitle}>Bersihkan Cache Penyimpanan</Text>
+                <View style={styles.cacheBadge}>
+                  <Text style={styles.cacheBadgeText}>{cacheSize}</Text>
+                </View>
+              </View>
+              <Text style={styles.menuSubtitle}>Segarkan data & memori katalog offline</Text>
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
           </TouchableOpacity>
@@ -2217,6 +2265,19 @@ const styles = StyleSheet.create({
   },
   paperSizeSpecActive: {
     color: '#fecdd3',
+  },
+  cacheBadge: {
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  cacheBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#a1a1aa',
   },
   pingBadge: {
     flexDirection: 'row',
