@@ -184,7 +184,7 @@ function MainApp() {
 
       {/* Bottom Navigation Bar (Hidden in Landscape to give full height to Kasir Terminal) */}
       {!isLandscape && (
-        <View style={[styles.bottomNavBar, { height: 60 + insets.bottom, paddingBottom: Math.max(insets.bottom, 6) }]}>
+        <View style={[styles.bottomNavBar, { paddingBottom: Math.max(insets.bottom, 12) }]}>
           {/* 1. Kasir POS */}
           <TouchableOpacity
             style={styles.navItem}
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#18181b',
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    paddingTop: 6,
+    paddingTop: 10,
     paddingHorizontal: 12,
     ...Platform.select({
       ios: {
