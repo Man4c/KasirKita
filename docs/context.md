@@ -258,6 +258,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - Mobile: Sinkronisasi otomatis dua arah saat aplikasi dibuka dan saat Owner menekan simpan pengaturan toko, dengan fallback cache offline `AsyncStorage`.
       - Web React: Menampilkan nama toko dan logo toko pada sidebar desktop (`AppLayout.jsx`) serta struk belanja kasir web (`Pos.jsx`), memastikan konsistensi 100% antar perangkat (smartphone, laptop, dan tablet).
       - Pengujian Otomatis: `StoreSettingTest.php` (4 test cases, 12 assertions lolos 100%, total suite backend 66 tests lolos).
+    13. `plans/260902-21-mobile-offline-first-mode/plan.md` (Prioritas P1: Mode Kasir Offline-First Penuh & Auto-Sync Engine):
+      - Mobile Local Storage (`offlineStorage.js`): Menyimpan salinan katalog produk, kategori, pelanggan, voucher promo, dan tarif pajak offline. Mengurangi stok lokal di HP seketika saat penjualan tunai offline.
+      - Offline Transaction Queue: Menampung transaksi offline dengan nomor faktur sementara (`INV-OFF-YYYYMMDDHHMMSS-XXXX`) dan timestamp transaksi asli.
+      - Background Sync Engine (`syncManager.js`): Heartbeat otomatis mendeteksi koneksi pulih dan mengunggah seluruh nota antrean offline (*FIFO*) ke server backend.
+      - Backend Idempotency & Real Timestamp: Kolom `offline_id` (`string(100)`, `unique`, `nullable`) pada tabel `transactions` untuk mencegah duplikasi stok/keuangan saat koneksi putus-nyambung.
+      - UI Status: Banner mode offline di POS (`PosScreen.js`) dan kartu manajemen antrean offline di Pengaturan (`SettingsScreen.js`).
+      - Pengujian Otomatis: `OfflineSyncTest.php` (2 test cases, 11 assertions lolos 100%, total suite backend kini 68 tests lolos).
   - Rencana Modul Aktif & Dalam Antrean:
     8. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
     9. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).

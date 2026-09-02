@@ -38,6 +38,16 @@ class PosService
             throw new Exception('Keranjang transaksi kasir tidak boleh kosong.');
         }
 
+        // Idempotency check: prevent duplicate checkout if offline_id already processed
+        if (!empty($data['offline_id'])) {
+            $existing = Transaction::with(['cashier:id,name,role', 'items'])
+                ->where('offline_id', $data['offline_id'])
+                ->first();
+            if ($existing) {
+                return $existing;
+            }
+        }
+
         return DB::transaction(function () use ($data, $cashier) {
             $subtotal = 0;
             $itemsToProcess = [];
@@ -165,8 +175,9 @@ class PosService
             }
 
             // 3. Create Transaction Header
-            $transaction = Transaction::create([
+            $transactionData = [
                 'invoice_number' => $invoiceNumber,
+                'offline_id' => $data['offline_id'] ?? null,
                 'user_id' => $cashier->id,
                 'customer_id' => $customerId,
                 'customer_name' => $customerName,
@@ -184,7 +195,13 @@ class PosService
                 'payment_method' => $paymentMethod,
                 'payment_status' => 'COMPLETED',
                 'notes' => $data['notes'] ?? null,
-            ]);
+            ];
+
+            if (!empty($data['created_at'])) {
+                $transactionData['created_at'] = $data['created_at'];
+            }
+
+            $transaction = Transaction::create($transactionData);
 
             // 4. Create Items & Deduct Stocks
             foreach ($itemsToProcess as $processed) {

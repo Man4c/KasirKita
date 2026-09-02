@@ -35,6 +35,8 @@ class PosController extends Controller
             'fee_details' => ['nullable', 'array'],
             'paid_amount' => ['required', 'numeric', 'min:0'],
             'payment_method' => ['required', 'string', 'in:CASH,QRIS,TRANSFER,DEBIT'],
+            'offline_id' => ['nullable', 'string', 'max:100'],
+            'created_at' => ['nullable', 'date'],
             'notes' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'exists:products,id'],

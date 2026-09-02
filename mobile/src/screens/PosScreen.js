@@ -34,9 +34,13 @@ import {
   Trash2,
   ShoppingCart,
   ChevronDown,
+  WifiOff,
+  RefreshCw,
 } from 'lucide-react-native';
 import api from '../services/api';
 import ReceiptView from '../components/ReceiptView';
+import { offlineStorage } from '../services/offlineStorage';
+import { syncManager } from '../services/syncManager';
 
 export default function PosScreen({ isLandscape = false, isCompactLandscape = false, onCheckoutStateChange }) {
   const { width, height } = useWindowDimensions();
@@ -84,8 +88,24 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   const [completedTx, setCompletedTx] = useState(null);
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
 
+  // Offline-First & Background Sync State
+  const [isOnline, setIsOnline] = useState(true);
+  const [pendingOfflineCount, setPendingOfflineCount] = useState(0);
+  const [isSyncing, setIsSyncing] = useState(false);
+
   useEffect(() => {
     fetchData();
+    syncManager.init();
+
+    const unsubscribe = syncManager.subscribe((state) => {
+      setIsOnline(state.isOnline);
+      setIsSyncing(state.isSyncing);
+      setPendingOfflineCount(state.pendingCount);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const fetchData = async () => {
@@ -98,22 +118,68 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         api.get('/discounts?status=active&all=true').catch(() => ({ data: { success: false, data: [] } })),
         api.get('/taxes-and-fees?is_active=true').catch(() => ({ data: { success: false, data: [] } })),
       ]);
-      if (prodRes.data.success) setProducts(prodRes.data.data.data);
-      if (catRes.data.success) setCategories(catRes.data.data);
-      if (custRes.data.success) setCustomers(custRes.data.data);
-      if (promoRes.data.success) setAvailablePromos(promoRes.data.data);
-      if (taxFeeRes.data.success) {
-        const tfData = taxFeeRes.data.data;
-        setTaxesAndFees(tfData);
-        const defTax = tfData.find((i) => i.is_tax && i.is_default);
-        if (defTax) setSelectedTaxId(defTax.id);
-        const defFees = tfData.filter((i) => !i.is_tax && i.apply_to === 'MANUAL' && i.is_default).map((i) => i.id);
-        setSelectedManualFeeIds(defFees);
-      }
+
+      const prods = prodRes.data.success ? prodRes.data.data.data : [];
+      const cats = catRes.data.success ? catRes.data.data : [];
+      const custs = custRes.data.success ? custRes.data.data : [];
+      const promos = promoRes.data.success ? promoRes.data.data : [];
+      const tfData = taxFeeRes.data.success ? taxFeeRes.data.data : [];
+
+      setProducts(prods);
+      setCategories(cats);
+      setCustomers(custs);
+      setAvailablePromos(promos);
+      setTaxesAndFees(tfData);
+
+      const defTax = tfData.find((i) => i.is_tax && i.is_default);
+      if (defTax) setSelectedTaxId(defTax.id);
+      const defFees = tfData.filter((i) => !i.is_tax && i.apply_to === 'MANUAL' && i.is_default).map((i) => i.id);
+      setSelectedManualFeeIds(defFees);
+
+      // Cache catalog offline snapshot
+      await offlineStorage.cacheCatalog({
+        products: prods,
+        categories: cats,
+        customers: custs,
+        promos,
+        taxesAndFees: tfData,
+      });
     } catch (err) {
-      console.log('Error fetching POS data:', err.message);
+      console.log('Error fetching online POS data, falling back to offline cache:', err.message);
+      // Offline fallback: load from local cache
+      const cached = await offlineStorage.getCachedCatalog();
+      if (cached.products && cached.products.length > 0) {
+        setProducts(cached.products);
+        if (cached.categories) setCategories(cached.categories);
+        if (cached.customers) setCustomers(cached.customers);
+        if (cached.promos) setAvailablePromos(cached.promos);
+        if (cached.taxesAndFees) {
+          setTaxesAndFees(cached.taxesAndFees);
+          const defTax = cached.taxesAndFees.find((i) => i.is_tax && i.is_default);
+          if (defTax) setSelectedTaxId(defTax.id);
+        }
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleManualSync = async () => {
+    if (isSyncing) return;
+    const result = await syncManager.syncPendingTransactions();
+    if (result.success && result.synced > 0) {
+      if (Platform.OS === 'web') {
+        window.alert(`Berhasil menyinkronkan ${result.synced} transaksi offline ke server cloud!`);
+      } else {
+        Alert.alert('Sinkronisasi Sukses', `${result.synced} transaksi offline berhasil diunggah ke server cloud.`);
+      }
+      fetchData();
+    } else if (!isOnline) {
+      if (Platform.OS === 'web') {
+        window.alert('Gagal menyinkronkan: Tidak ada koneksi internet ke server.');
+      } else {
+        Alert.alert('Gagal Sinkronisasi', 'Server backend belum terjangkau. Periksa koneksi internet Anda.');
+      }
     }
   };
 
@@ -314,6 +380,16 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
     setCheckoutLoading(true);
     try {
+      const receiptItems = cart.map((i) => ({
+        id: i.product.id,
+        product_id: i.product.id,
+        product_name: i.product.name,
+        quantity: i.quantity,
+        unit_name: i.unit_name || i.product.base_unit?.symbol || 'pcs',
+        price: i.product.price,
+        subtotal: Number(i.product.price) * Number(i.quantity),
+      }));
+
       const payload = {
         customer_id: selectedCustomer?.id || null,
         customer_name: selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum',
@@ -324,18 +400,29 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         tax_amount: taxAmount,
         fee_amount: feeAmount,
         fee_details: feeDetails,
+        subtotal: subtotal,
+        total_amount: totalAmount,
         paid_amount: paymentMethod === 'CASH' ? Number(paidAmount) : totalAmount,
+        change_amount: paymentMethod === 'CASH' ? Math.max(0, Number(paidAmount) - totalAmount) : 0,
         payment_method: paymentMethod,
         items: cart.map((i) => ({
           product_id: i.product.id,
           quantity: i.quantity,
           unit_id: i.unit_id || i.product.base_unit_id || null,
+          product_name: i.product.name,
+          price: i.product.price,
+          subtotal: Number(i.product.price) * Number(i.quantity),
         })),
       };
 
-      const res = await api.post('/pos/checkout', payload);
-      if (res.data.success) {
-        setCompletedTx(res.data.data);
+      // 1. Direct offline handling if offline
+      if (!isOnline && paymentMethod === 'CASH') {
+        const offlineTx = await offlineStorage.enqueueOfflineTransaction({
+          ...payload,
+          items: receiptItems,
+        }, null);
+
+        setCompletedTx(offlineTx);
         setCart([]);
         setPaidAmount('');
         setSelectedCustomer(null);
@@ -343,17 +430,105 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         setDiscount(0);
         setVoucherInput('');
         setIsTakeaway(false);
-        const defTax = taxesAndFees.find((i) => i.is_tax && i.is_default);
-        setSelectedTaxId(defTax ? defTax.id : '');
-        const defFees = taxesAndFees.filter((i) => !i.is_tax && i.apply_to === 'MANUAL' && i.is_default).map((i) => i.id);
-        setSelectedManualFeeIds(defFees);
         setCartModalOpen(false);
         setIsCheckoutView(false);
         setReceiptModalOpen(true);
-        fetchData();
+        await syncManager.refreshPendingCount();
+
+        const cached = await offlineStorage.getCachedCatalog();
+        if (cached.products) setProducts(cached.products);
+
+        if (Platform.OS === 'web') {
+          window.alert('⚡ Transaksi Tunai disimpan dalam Mode Offline. Struk berhasil dibuat dan akan otomatis disinkronkan saat online.');
+        } else {
+          Alert.alert(
+            '⚡ Mode Offline Aktif',
+            'Transaksi tunai berhasil disimpan di memori HP. Struk siap dicetak dan nota otomatis terkirim ke server saat internet kembali.'
+          );
+        }
+        return;
       }
-    } catch (err) {
-      Alert.alert('Gagal', err.response?.data?.message || 'Terjadi kesalahan transaksi.');
+
+      if (!isOnline && paymentMethod !== 'CASH') {
+        if (Platform.OS === 'web') {
+          window.alert('Koneksi internet terputus. Pembayaran non-tunai memerlukan internet aktif. Silakan pilih metode TUNAI.');
+        } else {
+          Alert.alert(
+            'Perlu Koneksi Internet',
+            'Metode pembayaran QRIS dan Transfer memerlukan koneksi internet aktif. Silakan pilih metode TUNAI untuk bertransaksi offline.'
+          );
+        }
+        return;
+      }
+
+      // 2. Online checkout attempt
+      try {
+        const res = await api.post('/pos/checkout', payload);
+        if (res.data.success) {
+          setCompletedTx(res.data.data);
+          setCart([]);
+          setPaidAmount('');
+          setSelectedCustomer(null);
+          setAppliedPromo(null);
+          setDiscount(0);
+          setVoucherInput('');
+          setIsTakeaway(false);
+          const defTax = taxesAndFees.find((i) => i.is_tax && i.is_default);
+          setSelectedTaxId(defTax ? defTax.id : '');
+          const defFees = taxesAndFees.filter((i) => !i.is_tax && i.apply_to === 'MANUAL' && i.is_default).map((i) => i.id);
+          setSelectedManualFeeIds(defFees);
+          setCartModalOpen(false);
+          setIsCheckoutView(false);
+          setReceiptModalOpen(true);
+          fetchData();
+        }
+      } catch (err) {
+        const isNetworkErr = !err.response || err.code === 'ERR_NETWORK' || err.message?.includes('Network');
+        if (isNetworkErr && paymentMethod === 'CASH') {
+          // Fallback to offline queue
+          const offlineTx = await offlineStorage.enqueueOfflineTransaction({
+            ...payload,
+            items: receiptItems,
+          }, null);
+
+          setCompletedTx(offlineTx);
+          setCart([]);
+          setPaidAmount('');
+          setSelectedCustomer(null);
+          setAppliedPromo(null);
+          setDiscount(0);
+          setVoucherInput('');
+          setIsTakeaway(false);
+          setCartModalOpen(false);
+          setIsCheckoutView(false);
+          setReceiptModalOpen(true);
+          await syncManager.refreshPendingCount();
+
+          const cached = await offlineStorage.getCachedCatalog();
+          if (cached.products) setProducts(cached.products);
+
+          if (Platform.OS === 'web') {
+            window.alert('⚡ Koneksi ke server terputus. Transaksi disimpan aman di memori HP (Mode Offline).');
+          } else {
+            Alert.alert(
+              '⚡ Koneksi Terputus - Mode Offline',
+              'Transaksi berhasil disimpan di memori HP. Struk siap dicetak dan nota otomatis terkirim ke server saat internet kembali.'
+            );
+          }
+          return;
+        }
+
+        if (isNetworkErr && paymentMethod !== 'CASH') {
+          if (Platform.OS === 'web') {
+            window.alert('Koneksi internet terputus. Pembayaran non-tunai memerlukan internet. Silakan pilih metode TUNAI.');
+          } else {
+            Alert.alert('Perlu Internet', 'Pembayaran non-tunai memerlukan koneksi internet. Silakan pilih metode TUNAI saat offline.');
+          }
+          return;
+        }
+
+        Alert.alert('Gagal', err.response?.data?.message || 'Terjadi kesalahan transaksi.');
+      }
     } finally {
       setCheckoutLoading(false);
     }
@@ -363,6 +538,38 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
   return (
     <View style={[styles.container, isLandscape && styles.landscapeRoot]}>
+      {/* Offline Status & Sync Alert Banner */}
+      {(!isOnline || pendingOfflineCount > 0) && (
+        <View style={[styles.offlineBanner, !isOnline ? styles.offlineBannerWarning : styles.offlineBannerInfo]}>
+          <View style={styles.offlineBannerLeft}>
+            <WifiOff size={14} color={!isOnline ? '#f59e0b' : '#38bdf8'} style={{ marginRight: 6 }} />
+            <Text style={styles.offlineBannerText} numberOfLines={1}>
+              {!isOnline
+                ? `Mode Offline • ${pendingOfflineCount} nota tersimpan di HP`
+                : `${pendingOfflineCount} nota offline menunggu sinkronisasi`}
+            </Text>
+          </View>
+
+          {isOnline && pendingOfflineCount > 0 && (
+            <TouchableOpacity
+              style={styles.offlineSyncBtn}
+              onPress={handleManualSync}
+              disabled={isSyncing}
+              activeOpacity={0.8}
+            >
+              {isSyncing ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <>
+                  <RefreshCw size={12} color="#ffffff" style={{ marginRight: 4 }} />
+                  <Text style={styles.offlineSyncBtnText}>Sinkronkan</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
       {!isCheckoutView ? (
         <>
           {/* LEFT COLUMN: Catalog & Products */}
@@ -4610,5 +4817,50 @@ const styles = StyleSheet.create({
   checkoutBodyPortrait: {
     flex: 1,
     backgroundColor: '#09090b',
+  },
+  offlineBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    zIndex: 20,
+  },
+  offlineBannerWarning: {
+    backgroundColor: '#451a03',
+    borderBottomColor: '#b45309',
+  },
+  offlineBannerInfo: {
+    backgroundColor: '#082f49',
+    borderBottomColor: '#0284c7',
+  },
+  offlineBannerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    minWidth: 0,
+    marginRight: 8,
+  },
+  offlineBannerText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#ffffff',
+    flex: 1,
+    minWidth: 0,
+  },
+  offlineSyncBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0284c7',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    flexShrink: 0,
+  },
+  offlineSyncBtnText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
   },
 });

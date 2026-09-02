@@ -44,11 +44,14 @@ import {
   Image as ImageIcon,
   Upload,
   Camera,
+  Layers,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
 import api from '../services/api';
 import ReceiptView from '../components/ReceiptView';
+import { offlineStorage } from '../services/offlineStorage';
+import { syncManager } from '../services/syncManager';
 
 export default function SettingsScreen({ isLandscape = false }) {
   const { user, logout, updateUser } = useAuth();
@@ -105,6 +108,8 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [tempShowLogoOnReceipt, setTempShowLogoOnReceipt] = useState(true);
   const [tempShowPhoneOnReceipt, setTempShowPhoneOnReceipt] = useState(true);
   const [savingStore, setSavingStore] = useState(false);
+  const [pendingOfflineCount, setPendingOfflineCount] = useState(0);
+  const [isSyncingOffline, setIsSyncingOffline] = useState(false);
 
   // Guide Modal State
   const [printerGuideOpen, setPrinterGuideOpen] = useState(false);
@@ -113,6 +118,16 @@ export default function SettingsScreen({ isLandscape = false }) {
   useEffect(() => {
     loadSettings();
     checkServerHealth();
+    syncManager.init();
+
+    const unsubscribe = syncManager.subscribe((state) => {
+      setPendingOfflineCount(state.pendingCount);
+      setIsSyncingOffline(state.isSyncing);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const loadSettings = async () => {
@@ -443,9 +458,30 @@ export default function SettingsScreen({ isLandscape = false }) {
     setSyncing(true);
     try {
       await checkServerHealth();
-      await api.get('/products');
-      await api.get('/categories');
-      const storeRes = await api.get('/settings/store');
+      const [prodRes, catRes, custRes, promoRes, taxFeeRes, storeRes] = await Promise.all([
+        api.get('/products?is_active=true&per_page=100'),
+        api.get('/categories'),
+        api.get('/customers?all=true'),
+        api.get('/discounts?status=active&all=true').catch(() => ({ data: { success: false, data: [] } })),
+        api.get('/taxes-and-fees?is_active=true').catch(() => ({ data: { success: false, data: [] } })),
+        api.get('/settings/store').catch(() => ({ data: { success: false, data: null } })),
+      ]);
+
+      const prods = prodRes.data.success ? prodRes.data.data.data : [];
+      const cats = catRes.data.success ? catRes.data.data : [];
+      const custs = custRes.data.success ? custRes.data.data : [];
+      const promos = promoRes.data.success ? promoRes.data.data : [];
+      const tfData = taxFeeRes.data.success ? taxFeeRes.data.data : [];
+
+      // Save fresh catalog snapshot to local offline cache
+      await offlineStorage.cacheCatalog({
+        products: prods,
+        categories: cats,
+        customers: custs,
+        promos,
+        taxesAndFees: tfData,
+      });
+
       if (storeRes.data?.success && storeRes.data?.data) {
         const cloud = storeRes.data.data;
         if (cloud.name) setStoreName(cloud.name);
@@ -456,11 +492,16 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (typeof cloud.show_logo_on_receipt === 'boolean') setShowLogoOnReceipt(cloud.show_logo_on_receipt);
         if (typeof cloud.show_phone_on_receipt === 'boolean') setShowPhoneOnReceipt(cloud.show_phone_on_receipt);
       }
+
+      // Also sync any pending offline transactions
+      const syncRes = await syncManager.syncPendingTransactions();
+
       setSyncing(false);
+      const syncInfo = syncRes.synced > 0 ? ` serta ${syncRes.synced} nota offline berhasil terunggah.` : '.';
       if (Platform.OS === 'web') {
-        window.alert('Data toko, katalog produk & harga berhasil disinkronkan dari cloud server!');
+        window.alert(`Data toko & katalog offline berhasil disinkronkan dari cloud server${syncInfo}`);
       } else {
-        Alert.alert('Sinkronisasi Berhasil', 'Identitas toko, produk, stok, dan tarif toko Anda sudah paling mutakhir.');
+        Alert.alert('Sinkronisasi Berhasil', `Katalog offline dan pengaturan toko Anda sudah paling mutakhir${syncInfo}`);
       }
     } catch (err) {
       setSyncing(false);
@@ -469,6 +510,34 @@ export default function SettingsScreen({ isLandscape = false }) {
       } else {
         Alert.alert('Info Sinkronisasi', 'Data lokal toko Anda aktif digunakan.');
       }
+    }
+  };
+
+  const handleSyncOfflineTransactions = async () => {
+    setIsSyncingOffline(true);
+    try {
+      const result = await syncManager.syncPendingTransactions();
+      if (result.success && result.synced > 0) {
+        if (Platform.OS === 'web') {
+          window.alert(`Berhasil mengunggah ${result.synced} nota transaksi offline ke server cloud!`);
+        } else {
+          Alert.alert('Sukses', `${result.synced} nota transaksi offline berhasil disinkronkan ke server cloud.`);
+        }
+      } else if (result.remaining === 0) {
+        if (Platform.OS === 'web') {
+          window.alert('Semua nota transaksi offline sudah tersinkronkan.');
+        } else {
+          Alert.alert('Info', 'Tidak ada antrean transaksi offline yang tertunda.');
+        }
+      } else {
+        if (Platform.OS === 'web') {
+          window.alert('Server backend belum dapat dijangkau. Periksa koneksi internet Anda.');
+        } else {
+          Alert.alert('Gagal', 'Server backend belum dapat dijangkau. Periksa koneksi internet Anda.');
+        }
+      }
+    } finally {
+      setIsSyncingOffline(false);
     }
   };
 
@@ -788,6 +857,42 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
             <CheckCircle2 size={18} color="#34d399" style={{ flexShrink: 0 }} />
           </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Offline Transaction Queue Status */}
+          <View style={styles.menuRow}>
+            <View style={[styles.menuIconBox, { backgroundColor: pendingOfflineCount > 0 ? 'rgba(245, 158, 11, 0.15)' : '#27272a' }]}>
+              <Layers size={18} color={pendingOfflineCount > 0 ? '#f59e0b' : '#a1a1aa'} />
+            </View>
+            <View style={{ flex: 1, minWidth: 0, paddingRight: 8 }}>
+              <Text style={styles.menuTitle}>Antrean Transaksi Offline</Text>
+              <Text style={styles.menuSubtitle}>
+                {pendingOfflineCount > 0
+                  ? `${pendingOfflineCount} nota tersimpan di HP belum terunggah`
+                  : 'Semua transaksi kasir sudah tersinkronkan ke cloud'}
+              </Text>
+            </View>
+            {pendingOfflineCount > 0 ? (
+              <TouchableOpacity
+                style={styles.syncOfflineBtn}
+                onPress={handleSyncOfflineTransactions}
+                disabled={isSyncingOffline}
+                activeOpacity={0.8}
+              >
+                {isSyncingOffline ? (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                  <>
+                    <RefreshCw size={12} color="#ffffff" style={{ marginRight: 4 }} />
+                    <Text style={styles.syncOfflineBtnText}>Kirim</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            ) : (
+              <CheckCircle2 size={18} color="#34d399" style={{ flexShrink: 0 }} />
+            )}
+          </View>
 
           <View style={styles.divider} />
 
@@ -2291,5 +2396,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#e4e4e7',
+  },
+  syncOfflineBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#b45309',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    flexShrink: 0,
+  },
+  syncOfflineBtnText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
   },
 });
