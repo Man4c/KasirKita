@@ -54,6 +54,7 @@ import ReceiptView from '../components/ReceiptView';
 import { offlineStorage } from '../services/offlineStorage';
 import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
+import { orientationService } from '../services/orientationService';
 
 export default function SettingsScreen({ isLandscape = false }) {
   const { user, logout, updateUser } = useAuth();
@@ -152,7 +153,10 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (typeof saved.showLogoOnReceipt === 'boolean') setShowLogoOnReceipt(saved.showLogoOnReceipt);
         if (typeof saved.showPhoneOnReceipt === 'boolean') setShowPhoneOnReceipt(saved.showPhoneOnReceipt);
         if (typeof saved.soundBeep === 'boolean') setSoundBeep(saved.soundBeep);
-        if (saved.orientationPref) setOrientationPref(saved.orientationPref);
+        if (saved.orientationPref) {
+          setOrientationPref(saved.orientationPref);
+          orientationService.applyPreference(saved.orientationPref);
+        }
         if (saved.paperSize) {
           setPaperSize(saved.paperSize);
           printerService.setPaperSize(saved.paperSize);
@@ -864,9 +868,10 @@ export default function SettingsScreen({ isLandscape = false }) {
                   <TouchableOpacity
                     key={opt.id}
                     style={[styles.orientBtn, isActive && styles.orientBtnActive]}
-                    onPress={() => {
+                    onPress={async () => {
                       setOrientationPref(opt.id);
                       persistSettings({ orientationPref: opt.id });
+                      await orientationService.applyPreference(opt.id);
                     }}
                     activeOpacity={0.7}
                   >

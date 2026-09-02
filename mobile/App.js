@@ -28,6 +28,8 @@ import PosScreen from './src/screens/PosScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import TransactionHistoryScreen from './src/screens/TransactionHistoryScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import { orientationService } from './src/services/orientationService';
+import { storage } from './src/services/storage';
 
 // Intercept and eliminate transition: padding injected by web safe area libraries
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -81,6 +83,15 @@ function MainApp() {
   const prevIsLandscapeRef = useRef(isLandscape);
   const [isCheckoutActive, setIsCheckoutActive] = useState(false);
   const insets = useSafeAreaInsets();
+
+  // Apply saved orientation preference on app start
+  useEffect(() => {
+    storage.getSettings().then((saved) => {
+      if (saved?.orientationPref) {
+        orientationService.applyPreference(saved.orientationPref);
+      }
+    }).catch(() => {});
+  }, []);
 
   // Auto-switch to Kasir POS upon rotating to landscape, restore upon rotating back to portrait
   useEffect(() => {
