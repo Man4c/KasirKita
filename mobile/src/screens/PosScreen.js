@@ -1917,7 +1917,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#ffffff',
-    marginBottom: 6,
+    marginBottom: 4,
     minHeight: 36,
     lineHeight: 18,
   },
@@ -1925,7 +1925,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 12,
   },
   cardPrice: {
     fontSize: 15,
@@ -2893,7 +2893,7 @@ const styles = StyleSheet.create({
   catChipCompact: {
     paddingHorizontal: 12,
     paddingVertical: 5,
-    marginRight: 8,
+    marginRight: 4,
     borderRadius: 12,
   },
   catChipTextCompact: {
@@ -2910,7 +2910,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   productCardLandscape: {
-    padding: 12,
+    padding: 14,
     margin: 6,
     borderRadius: 14,
   },
@@ -2922,7 +2922,7 @@ const styles = StyleSheet.create({
   },
   cardTitleLandscape: {
     fontSize: 13,
-    marginBottom: 6,
+    marginBottom: 4,
     lineHeight: 18,
   },
   cardTitleCompactLandscape: {
@@ -2993,10 +2993,10 @@ const styles = StyleSheet.create({
   regCustomerBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
     backgroundColor: '#27272a',
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 5,
     borderRadius: 10,
     maxWidth: 130,
   },
@@ -3014,8 +3014,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 24,
-    gap: 10,
+    padding: 32,
+    gap: 12,
   },
   registerEmptyBoxCompact: {
     padding: 12,
@@ -3091,7 +3091,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#141416',
     paddingHorizontal: 16,
     paddingTop: 14,
-    paddingBottom: 16,
+    paddingBottom: 20,
     flexShrink: 0,
   },
   registerFooterCompact: {
@@ -3203,7 +3203,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e11d48',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 14,
