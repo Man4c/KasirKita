@@ -679,20 +679,20 @@ export default function SettingsScreen({ isLandscape = false }) {
 
           {/* Pilihan Lebar Kertas Thermal */}
           <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
-            <View style={{ marginBottom: 8 }}>
+            <View style={{ marginBottom: 10 }}>
               <Text style={styles.switchTitle}>Lebar Kertas Thermal</Text>
               <Text style={styles.switchSubtitle}>Format baris nota otomatis disesuaikan</Text>
             </View>
-            <View style={{ flexDirection: 'row', gap: 8 }}>
+            <View style={styles.paperSizeRow}>
               {[
-                { id: '58mm', label: '58 mm (Mini Portable / 32 Kolom)' },
-                { id: '80mm', label: '80 mm (Desktop / 48 Kolom)' },
+                { id: '58mm', title: '58 mm', desc: 'Mini Portable • 32 Kolom' },
+                { id: '80mm', title: '80 mm', desc: 'Desktop POS • 48 Kolom' },
               ].map((opt) => {
                 const isActive = paperSize === opt.id;
                 return (
                   <TouchableOpacity
                     key={opt.id}
-                    style={[styles.orientBtn, isActive && styles.orientBtnActive]}
+                    style={[styles.paperSizeBtn, isActive && styles.paperSizeBtnActive]}
                     onPress={() => {
                       setPaperSize(opt.id);
                       printerService.setPaperSize(opt.id);
@@ -700,8 +700,18 @@ export default function SettingsScreen({ isLandscape = false }) {
                     }}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.orientBtnText, isActive && styles.orientBtnTextActive]}>
-                      {opt.label}
+                    <View style={styles.paperSizeBtnHeader}>
+                      <Text style={[styles.paperSizeTitle, isActive && styles.paperSizeTitleActive]}>
+                        {opt.title}
+                      </Text>
+                      {isActive && (
+                        <View style={styles.paperSizeCheckCircle}>
+                          <Check size={11} color="#ffffff" />
+                        </View>
+                      )}
+                    </View>
+                    <Text style={[styles.paperSizeDesc, isActive && styles.paperSizeDescActive]} numberOfLines={1}>
+                      {opt.desc}
                     </Text>
                   </TouchableOpacity>
                 );
@@ -837,12 +847,12 @@ export default function SettingsScreen({ isLandscape = false }) {
           {/* Orientation Preference */}
           <View style={{ paddingVertical: 4 }}>
             <Text style={styles.switchTitle}>Orientasi Layar Kasir</Text>
-            <Text style={styles.switchSubtitle}>Pilih mode tampilan operasional yang Anda sukai</Text>
+            <Text style={styles.switchSubtitle}>Pilih mode rotasi tampilan kasir yang Anda sukai</Text>
             <View style={styles.orientationRow}>
               {[
-                { id: 'AUTO', label: 'Sensor Otomatis' },
-                { id: 'LANDSCAPE', label: 'Kunci Landscape' },
-                { id: 'PORTRAIT', label: 'Kunci Portrait' },
+                { id: 'AUTO', label: 'Otomatis' },
+                { id: 'LANDSCAPE', label: 'Landscape' },
+                { id: 'PORTRAIT', label: 'Portrait' },
               ].map((opt) => {
                 const isActive = orientationPref === opt.id;
                 return (
@@ -855,7 +865,7 @@ export default function SettingsScreen({ isLandscape = false }) {
                     }}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.orientBtnText, isActive && styles.orientBtnTextActive]}>
+                    <Text style={[styles.orientBtnText, isActive && styles.orientBtnTextActive]} numberOfLines={1}>
                       {opt.label}
                     </Text>
                   </TouchableOpacity>
@@ -2050,13 +2060,14 @@ const styles = StyleSheet.create({
   },
   orientBtn: {
     flex: 1,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: '#27272a',
+    height: 42,
+    borderRadius: 10,
+    backgroundColor: '#18181b',
     borderWidth: 1,
-    borderColor: '#3f3f46',
+    borderColor: '#27272a',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 6,
   },
   orientBtnActive: {
     backgroundColor: '#e11d48',
@@ -2064,12 +2075,61 @@ const styles = StyleSheet.create({
   },
   orientBtnText: {
     fontSize: 12,
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'Poppins_600SemiBold',
     color: '#a1a1aa',
+    textAlign: 'center',
   },
   orientBtnTextActive: {
     color: '#ffffff',
     fontFamily: 'Poppins_700Bold',
+  },
+  paperSizeRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  paperSizeBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
+    justifyContent: 'center',
+  },
+  paperSizeBtnActive: {
+    backgroundColor: '#e11d48',
+    borderColor: '#f43f5e',
+  },
+  paperSizeBtnHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 2,
+  },
+  paperSizeTitle: {
+    fontSize: 15,
+    fontFamily: 'Poppins_700Bold',
+    color: '#e4e4e7',
+  },
+  paperSizeTitleActive: {
+    color: '#ffffff',
+  },
+  paperSizeCheckCircle: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paperSizeDesc: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#71717a',
+  },
+  paperSizeDescActive: {
+    color: '#fecdd3',
   },
   pingBadge: {
     flexDirection: 'row',
