@@ -30,6 +30,7 @@ Setelah sesi kerja atau ada keputusan penting, update `docs/context.md` dan `pla
 - Jangan revert perubahan user yang tidak terkait.
 - Gunakan tool edit yang aman.
 - Jalankan test/check yang relevan setelah perubahan.
+- **Git Commit Protocol:** WAJIB melakukan `git commit` setelah setiap task/fitur/refaktorisasi selesai diuji, agar progress tersimpan permanen dan tidak berisiko ter-overwrite di sesi berikutnya.
 
 ## Project Memory
 
