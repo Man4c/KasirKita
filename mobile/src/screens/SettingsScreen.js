@@ -30,13 +30,15 @@ import {
   Edit3,
   Wifi,
   Trash2,
+  KeyRound,
+  Lock,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
 import api from '../services/api';
 
 export default function SettingsScreen({ isLandscape = false }) {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
 
   // Settings State
   const [storeName, setStoreName] = useState('KasirKita Mart');
@@ -54,12 +56,25 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [orientationPref, setOrientationPref] = useState('AUTO');
 
   // Modals & Async State
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [storeModalOpen, setStoreModalOpen] = useState(false);
   const [printerModalOpen, setPrinterModalOpen] = useState(false);
   const [testReceiptOpen, setTestReceiptOpen] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [serverStatus, setServerStatus] = useState('Memeriksa...');
   const [serverPing, setServerPing] = useState(null);
+
+  // Form Temp States for User Profile Modal
+  const [tempUserName, setTempUserName] = useState('');
+  const [tempUserPhone, setTempUserPhone] = useState('');
+  const [savingUser, setSavingUser] = useState(false);
+
+  // Form Temp States for Password Modal
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [savingPassword, setSavingPassword] = useState(false);
 
   // Form Temp States for Store Modal
   const [tempStoreName, setTempStoreName] = useState('');
@@ -133,6 +148,97 @@ export default function SettingsScreen({ isLandscape = false }) {
     } catch (err) {
       setServerStatus('Offline / Terputus');
       setServerPing(null);
+    }
+  };
+
+  const handleOpenUserModal = () => {
+    setTempUserName(user?.name || '');
+    setTempUserPhone(user?.phone || '');
+    setUserModalOpen(true);
+  };
+
+  const handleSaveUserProfile = async () => {
+    if (!tempUserName.trim()) {
+      if (Platform.OS === 'web') window.alert('Nama pengguna tidak boleh kosong.');
+      else Alert.alert('Peringatan', 'Nama pengguna tidak boleh kosong.');
+      return;
+    }
+
+    setSavingUser(true);
+    try {
+      const res = await api.put('/auth/profile', {
+        name: tempUserName.trim(),
+        phone: tempUserPhone.trim() || null,
+      });
+
+      if (res.data && res.data.success) {
+        if (updateUser) {
+          updateUser(res.data.data);
+        }
+        setUserModalOpen(false);
+        if (Platform.OS === 'web') {
+          window.alert('Profil kasir berhasil diperbarui!');
+        } else {
+          Alert.alert('Sukses', 'Profil kasir berhasil diperbarui.');
+        }
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || 'Gagal menyimpan profil.';
+      if (Platform.OS === 'web') window.alert(msg);
+      else Alert.alert('Gagal', msg);
+    } finally {
+      setSavingUser(false);
+    }
+  };
+
+  const handleOpenPasswordModal = () => {
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setPasswordModalOpen(true);
+  };
+
+  const handleChangePassword = async () => {
+    if (!currentPassword) {
+      if (Platform.OS === 'web') window.alert('Masukkan kata sandi saat ini.');
+      else Alert.alert('Peringatan', 'Masukkan kata sandi saat ini.');
+      return;
+    }
+    if (newPassword.length < 6) {
+      if (Platform.OS === 'web') window.alert('Kata sandi baru minimal 6 karakter.');
+      else Alert.alert('Peringatan', 'Kata sandi baru minimal 6 karakter.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      if (Platform.OS === 'web') window.alert('Konfirmasi kata sandi baru tidak cocok.');
+      else Alert.alert('Peringatan', 'Konfirmasi kata sandi baru tidak cocok.');
+      return;
+    }
+
+    setSavingPassword(true);
+    try {
+      const res = await api.put('/auth/password', {
+        current_password: currentPassword,
+        new_password: newPassword,
+      });
+
+      if (res.data && res.data.success) {
+        setPasswordModalOpen(false);
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        if (Platform.OS === 'web') {
+          window.alert('Kata sandi berhasil diubah! Harap ingat sandi baru Anda.');
+        } else {
+          Alert.alert('Sukses', 'Kata sandi berhasil diubah.');
+        }
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || 'Gagal mengubah kata sandi.';
+      if (Platform.OS === 'web') window.alert(msg);
+      else Alert.alert('Gagal', msg);
+    } finally {
+      setSavingPassword(false);
     }
   };
 
@@ -237,14 +343,24 @@ export default function SettingsScreen({ isLandscape = false }) {
         <Text style={styles.sectionHeader}>PROFIL AKUN & TOKO</Text>
         <View style={styles.card}>
           {/* User Info Row */}
-          <View style={styles.profileRow}>
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleOpenUserModal}
+          >
             <View style={styles.avatarBox}>
               <User size={24} color="#fb7185" />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={styles.profileName} numberOfLines={1}>
-                {user?.name || 'Kasir Toko'}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.profileName} numberOfLines={1}>
+                  {user?.name || 'Kasir Toko'}
+                </Text>
+                <View style={styles.editBadge}>
+                  <Edit3 size={11} color="#fb7185" />
+                  <Text style={styles.editBadgeText}>Ubah</Text>
+                </View>
+              </View>
               <View style={styles.roleBadgeRow}>
                 <View style={styles.roleBadge}>
                   <Text style={styles.roleBadgeText}>
@@ -255,8 +371,30 @@ export default function SettingsScreen({ isLandscape = false }) {
                   {user?.email || 'kasir@kasirkita.local'}
                 </Text>
               </View>
+              {user?.phone ? (
+                <Text style={styles.menuDetailText}>No. HP: {user.phone}</Text>
+              ) : null}
             </View>
-          </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Keamanan & Sandi Row */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleOpenPasswordModal}
+          >
+            <View style={styles.menuIconBox}>
+              <KeyRound size={18} color="#fb7185" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.menuTitle}>Keamanan & Kata Sandi</Text>
+              <Text style={styles.menuSubtitle}>Ganti kata sandi / PIN akun kasir Anda</Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
 
           <View style={styles.divider} />
 
@@ -558,7 +696,191 @@ export default function SettingsScreen({ isLandscape = false }) {
         </TouchableOpacity>
       </View>
 
-      <View style={{ height: 32 }} />
+      {/* MODAL 0A: EDIT PROFIL PENGGUNA */}
+      <Modal
+        visible={userModalOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setUserModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                <View style={styles.headerIconBox}>
+                  <User size={18} color="#fb7185" />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.modalTitle}>Ubah Profil Pengguna</Text>
+                  <Text style={styles.modalSubtitle}>Perbarui nama dan kontak akun kasir Anda</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => setUserModalOpen(false)}
+                style={styles.closeBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={20} color="#d4d4d8" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Nama Lengkap / Nama Kasir *</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={tempUserName}
+                  onChangeText={setTempUserName}
+                  placeholder="Nama kasir Anda..."
+                  placeholderTextColor="#71717a"
+                />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Nomor HP / WhatsApp Aktif</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={tempUserPhone}
+                  onChangeText={setTempUserPhone}
+                  placeholder="0812-xxxx-xxxx"
+                  placeholderTextColor="#71717a"
+                  keyboardType="phone-pad"
+                />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Email Terdaftar (Hanya Baca)</Text>
+                <TextInput
+                  style={[styles.formInput, { backgroundColor: '#18181b', color: '#a1a1aa' }]}
+                  value={user?.email || ''}
+                  editable={false}
+                />
+              </View>
+            </ScrollView>
+
+            <View style={styles.modalActionRow}>
+              <TouchableOpacity
+                style={styles.cancelBtn}
+                onPress={() => setUserModalOpen(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.cancelBtnText}>Batal</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.saveBtn}
+                onPress={handleSaveUserProfile}
+                activeOpacity={0.8}
+                disabled={savingUser}
+              >
+                {savingUser ? (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                  <>
+                    <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                    <Text style={styles.saveBtnText}>Simpan Perubahan</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* MODAL 0B: GANTI KATA SANDI AKUN */}
+      <Modal
+        visible={passwordModalOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setPasswordModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                <View style={styles.headerIconBox}>
+                  <KeyRound size={18} color="#fb7185" />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.modalTitle}>Ganti Kata Sandi</Text>
+                  <Text style={styles.modalSubtitle}>Tingkatkan keamanan akun kasir Anda</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => setPasswordModalOpen(false)}
+                style={styles.closeBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={20} color="#d4d4d8" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Kata Sandi Saat Ini *</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={currentPassword}
+                  onChangeText={setCurrentPassword}
+                  placeholder="Masukkan sandi saat ini..."
+                  placeholderTextColor="#71717a"
+                  secureTextEntry
+                />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Kata Sandi Baru * (Min. 6 Karakter)</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                  placeholder="Masukkan sandi baru..."
+                  placeholderTextColor="#71717a"
+                  secureTextEntry
+                />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Konfirmasi Kata Sandi Baru *</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  placeholder="Ulangi sandi baru..."
+                  placeholderTextColor="#71717a"
+                  secureTextEntry
+                />
+              </View>
+            </ScrollView>
+
+            <View style={styles.modalActionRow}>
+              <TouchableOpacity
+                style={styles.cancelBtn}
+                onPress={() => setPasswordModalOpen(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.cancelBtnText}>Batal</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.saveBtn}
+                onPress={handleChangePassword}
+                activeOpacity={0.8}
+                disabled={savingPassword}
+              >
+                {savingPassword ? (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                  <>
+                    <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                    <Text style={styles.saveBtnText}>Perbarui Sandi</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       {/* MODAL 1: EDIT PROFIL & INFORMASI TOKO */}
       <Modal

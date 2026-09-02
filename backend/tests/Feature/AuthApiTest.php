@@ -121,4 +121,82 @@ class AuthApiTest extends TestCase
 
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
+
+    public function test_authenticated_user_can_update_profile(): void
+    {
+        $user = User::create([
+            'name' => 'Kasir Awal',
+            'email' => 'kasir@kasirkita.com',
+            'phone' => '081111111111',
+            'password' => Hash::make('password123'),
+            'role' => 'cashier',
+            'is_active' => true,
+        ]);
+
+        $token = $user->createToken('test-token')->plainTextToken;
+
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->putJson('/api/auth/profile', [
+                'name' => 'Kasir Baru',
+                'phone' => '082222222222',
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Profil pengguna berhasil diperbarui.',
+                'data' => [
+                    'name' => 'Kasir Baru',
+                    'phone' => '082222222222',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => 'Kasir Baru',
+            'phone' => '082222222222',
+        ]);
+    }
+
+    public function test_authenticated_user_can_change_password(): void
+    {
+        $user = User::create([
+            'name' => 'Kasir Toko',
+            'email' => 'kasir2@kasirkita.com',
+            'password' => Hash::make('oldpassword123'),
+            'role' => 'cashier',
+            'is_active' => true,
+        ]);
+
+        $token = $user->createToken('test-token')->plainTextToken;
+
+        // Fails with wrong current password
+        $failResponse = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->putJson('/api/auth/password', [
+                'current_password' => 'wrongpass',
+                'new_password' => 'newpassword123',
+            ]);
+
+        $failResponse->assertStatus(422)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Kata sandi saat ini tidak cocok.',
+            ]);
+
+        // Succeeds with correct current password
+        $successResponse = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->putJson('/api/auth/password', [
+                'current_password' => 'oldpassword123',
+                'new_password' => 'newpassword123',
+            ]);
+
+        $successResponse->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Kata sandi berhasil diubah.',
+            ]);
+
+        $user->refresh();
+        $this->assertTrue(Hash::check('newpassword123', $user->password));
+    }
 }

@@ -80,4 +80,51 @@ class AuthController extends Controller
 
         return $this->successResponse(null, 'Logout berhasil.');
     }
+
+    /**
+     * Update current authenticated user profile.
+     */
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $user->update([
+            'name' => $validated['name'],
+            'phone' => $validated['phone'] ?? null,
+        ]);
+
+        return $this->successResponse([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'phone' => $user->phone,
+        ], 'Profil pengguna berhasil diperbarui.');
+    }
+
+    /**
+     * Change current authenticated user password.
+     */
+    public function changePassword(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $validated = $request->validate([
+            'current_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', 'min:6'],
+        ]);
+
+        if (! Hash::check($validated['current_password'], $user->password)) {
+            return $this->errorResponse('Kata sandi saat ini tidak cocok.', 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($validated['new_password']),
+        ]);
+
+        return $this->successResponse(null, 'Kata sandi berhasil diubah.');
+    }
 }

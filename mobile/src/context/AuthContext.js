@@ -69,6 +69,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (newUserData) => {
+    const updated = { ...user, ...newUserData };
+    setUser(updated);
+    await storage.setUser(updated);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -77,6 +83,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
+        updateUser,
         isAuthenticated: !!token,
         isOwner: user?.role === 'owner',
       }}
