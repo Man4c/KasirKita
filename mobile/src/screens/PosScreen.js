@@ -97,10 +97,8 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   const [taxesAndFees, setTaxesAndFees] = useState([]);
   const [availablePromos, setAvailablePromos] = useState([]);
 
-  // Offline-First & Background Sync State
+  // Offline-First Network Connectivity State
   const [isOnline, setIsOnline] = useState(true);
-  const [pendingOfflineCount, setPendingOfflineCount] = useState(0);
-  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -115,8 +113,6 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
     const unsubscribe = syncManager.subscribe((state) => {
       setIsOnline(state.isOnline);
-      setIsSyncing(state.isSyncing);
-      setPendingOfflineCount(state.pendingCount);
     });
 
     return () => {
@@ -427,10 +423,6 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         await printerService.printReceipt(offlineTx);
       }
     } catch (e) {}
-
-    // Refresh pending offline count
-    const pending = await offlineStorage.getPendingQueue();
-    setPendingOfflineCount(pending.length);
   };
 
   // Process Checkout
