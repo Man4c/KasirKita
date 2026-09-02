@@ -1,7 +1,7 @@
 ---
 title: Mobile Dedicated Checkout Screen & Integrated Cashier Numpad
 description: Transformasi alur checkout kasir mobile dari modal mengambang sempit menjadi Layar Pembayaran Penuh (Dedicated Screen) dengan tata letak 2 kolom landscape dan Numpad Kasir Virtual terintegrasi tanpa keyboard HP.
-status: in-progress
+status: completed
 priority: P1
 effort: 5h
 tags: [mobile, react-native, expo, checkout, pos, numpad, landscape-pos, ui-ux]
@@ -33,7 +33,7 @@ Mengeliminasi masalah keterbatasan ruang dan keyboard bawaan HP yang menutupi an
 | 2 | Perancangan Kolom Kiri Landscape: Panel Nota Tagihan, Ringkasan Belanja, & Member Pelanggan | completed |
 | 3 | Perancangan Kolom Kanan Landscape: Terminal Pembayaran & Numpad Kasir Virtual Terintegrasi | completed |
 | 4 | Adaptasi Responsif Layar Penuh pada Mode Portrait (Single Full-Page Checkout Flow) | completed |
-| 5 | Pengujian Standar Aksesibilitas WCAG AA, Defensive UI Craft, & Validasi Build Final | pending |
+| 5 | Pengujian Standar Aksesibilitas WCAG AA, Defensive UI Craft, & Validasi Build Final | completed |
 
 ---
 
