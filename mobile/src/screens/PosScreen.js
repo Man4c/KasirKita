@@ -2898,12 +2898,11 @@ const styles = StyleSheet.create({
   },
   taxOptionBadge: {
     backgroundColor: '#3f3f46',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    width: 58,
+    height: 28,
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 46,
   },
   taxOptionBadgeActive: {
     backgroundColor: '#059669',
