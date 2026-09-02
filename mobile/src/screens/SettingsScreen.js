@@ -56,6 +56,7 @@ import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
 import { showAlert } from '../utils/alert';
+import { UserProfileModal, ChangePasswordModal } from '../components/settings';
 import appConfig from '../../app.json';
 
 const APP_VERSION = appConfig?.expo?.version || '1.3.0';
@@ -94,23 +95,6 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [serverPing, setServerPing] = useState(null);
   const [cacheSize, setCacheSize] = useState('...');
   const [securityModalOpen, setSecurityModalOpen] = useState(false);
-
-  // Form Temp States for User Profile Modal
-  const [tempUserName, setTempUserName] = useState('');
-  const [tempUserPhone, setTempUserPhone] = useState('');
-  const [savingUser, setSavingUser] = useState(false);
-  const [userFormError, setUserFormError] = useState('');
-
-  // Form Temp States for Password Modal
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [savingPassword, setSavingPassword] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordFormError, setPasswordFormError] = useState('');
-  const [passwordFormSuccess, setPasswordFormSuccess] = useState('');
 
   // Form Temp States for Store Modal
   const [tempStoreName, setTempStoreName] = useState('');
@@ -249,93 +233,6 @@ export default function SettingsScreen({ isLandscape = false }) {
     } catch (err) {
       setServerStatus('Offline / Terputus');
       setServerPing(null);
-    }
-  };
-
-  const handleOpenUserModal = () => {
-    setTempUserName(user?.name || '');
-    setTempUserPhone(user?.phone || '');
-    setUserFormError('');
-    setUserModalOpen(true);
-  };
-
-  const handleSaveUserProfile = async () => {
-    if (!tempUserName.trim()) {
-      setUserFormError('Nama lengkap pengguna wajib diisi.');
-      return;
-    }
-
-    setUserFormError('');
-    setSavingUser(true);
-    try {
-      const res = await api.put('/auth/profile', {
-        name: tempUserName.trim(),
-        phone: tempUserPhone.trim() || null,
-      });
-
-      if (res.data && res.data.success) {
-        if (updateUser) {
-          updateUser(res.data.data);
-        }
-        setUserModalOpen(false);
-      }
-    } catch (err) {
-      const msg = err.response?.data?.message || err.message || 'Gagal menyimpan profil.';
-      setUserFormError(msg);
-    } finally {
-      setSavingUser(false);
-    }
-  };
-
-  const handleOpenPasswordModal = () => {
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    setShowCurrentPassword(false);
-    setShowNewPassword(false);
-    setShowConfirmPassword(false);
-    setPasswordFormError('');
-    setPasswordFormSuccess('');
-    setPasswordModalOpen(true);
-  };
-
-  const handleChangePassword = async () => {
-    if (!currentPassword) {
-      setPasswordFormError('Masukkan kata sandi saat ini.');
-      return;
-    }
-    if (newPassword.length < 6) {
-      setPasswordFormError('Kata sandi baru minimal 6 karakter.');
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordFormError('Konfirmasi kata sandi baru tidak cocok.');
-      return;
-    }
-
-    setPasswordFormError('');
-    setSavingPassword(true);
-    try {
-      const res = await api.put('/auth/password', {
-        current_password: currentPassword,
-        new_password: newPassword,
-      });
-
-      if (res.data && res.data.success) {
-        setPasswordFormSuccess('Kata sandi berhasil diubah!');
-        setTimeout(() => {
-          setPasswordModalOpen(false);
-          setCurrentPassword('');
-          setNewPassword('');
-          setConfirmPassword('');
-          setPasswordFormSuccess('');
-        }, 1000);
-      }
-    } catch (err) {
-      const msg = err.response?.data?.message || err.message || 'Gagal mengubah kata sandi.';
-      setPasswordFormError(msg);
-    } finally {
-      setSavingPassword(false);
     }
   };
 
@@ -617,7 +514,7 @@ export default function SettingsScreen({ isLandscape = false }) {
           <TouchableOpacity
             style={styles.menuRow}
             activeOpacity={0.7}
-            onPress={handleOpenUserModal}
+            onPress={() => setUserModalOpen(true)}
           >
             <View style={styles.avatarBox}>
               <User size={24} color="#fb7185" />
@@ -645,7 +542,7 @@ export default function SettingsScreen({ isLandscape = false }) {
           <TouchableOpacity
             style={styles.menuRow}
             activeOpacity={0.7}
-            onPress={handleOpenPasswordModal}
+            onPress={() => setPasswordModalOpen(true)}
           >
             <View style={styles.menuIconBox}>
               <KeyRound size={18} color="#fb7185" />
@@ -1125,257 +1022,19 @@ export default function SettingsScreen({ isLandscape = false }) {
         </TouchableOpacity>
       </View>
 
-      {/* MODAL 0A: EDIT PROFIL PENGGUNA */}
-      <Modal
+      {/* MODAL 0A: UBAH PROFIL PENGGUNA */}
+      <UserProfileModal
         visible={userModalOpen}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setUserModalOpen(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                <View style={styles.headerIconBox}>
-                  <User size={18} color="#fb7185" />
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.modalTitle}>Ubah Profil Pengguna</Text>
-                  <Text style={styles.modalSubtitle}>Perbarui nama dan kontak akun kasir Anda</Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                onPress={() => setUserModalOpen(false)}
-                style={styles.closeBtn}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <X size={20} color="#d4d4d8" />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
-              {userFormError ? (
-                <View style={styles.inlineErrorBox}>
-                  <CircleAlert size={14} color="#fb7185" style={{ flexShrink: 0 }} />
-                  <Text style={styles.inlineErrorText}>{userFormError}</Text>
-                </View>
-              ) : null}
-
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Nama Lengkap / Nama Kasir *</Text>
-                <TextInput
-                  style={[styles.formInput, userFormError ? styles.inputErrorBorder : null]}
-                  value={tempUserName}
-                  onChangeText={(val) => {
-                    setTempUserName(val);
-                    if (userFormError) setUserFormError('');
-                  }}
-                  placeholder="Nama kasir Anda..."
-                  placeholderTextColor="#71717a"
-                />
-              </View>
-
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Nomor HP / WhatsApp Aktif</Text>
-                <TextInput
-                  style={styles.formInput}
-                  value={tempUserPhone}
-                  onChangeText={setTempUserPhone}
-                  placeholder="0812-xxxx-xxxx"
-                  placeholderTextColor="#71717a"
-                  keyboardType="phone-pad"
-                />
-              </View>
-
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Email Terdaftar (Hanya Baca)</Text>
-                <TextInput
-                  style={[styles.formInput, { backgroundColor: '#18181b', color: '#a1a1aa' }]}
-                  value={user?.email || ''}
-                  editable={false}
-                />
-              </View>
-            </ScrollView>
-
-            <View style={styles.modalActionRow}>
-              <TouchableOpacity
-                style={styles.cancelBtn}
-                onPress={() => setUserModalOpen(false)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.cancelBtnText}>Batal</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.saveBtn}
-                onPress={handleSaveUserProfile}
-                activeOpacity={0.8}
-                disabled={savingUser}
-              >
-                {savingUser ? (
-                  <ActivityIndicator size="small" color="#ffffff" />
-                ) : (
-                  <>
-                    <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
-                    <Text style={styles.saveBtnText}>Simpan Perubahan</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setUserModalOpen(false)}
+        user={user}
+        updateUser={updateUser}
+      />
 
       {/* MODAL 0B: GANTI KATA SANDI AKUN */}
-      <Modal
+      <ChangePasswordModal
         visible={passwordModalOpen}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setPasswordModalOpen(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                <View style={styles.headerIconBox}>
-                  <KeyRound size={18} color="#fb7185" />
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.modalTitle}>Ganti Kata Sandi</Text>
-                  <Text style={styles.modalSubtitle}>Tingkatkan keamanan akun kasir Anda</Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                onPress={() => setPasswordModalOpen(false)}
-                style={styles.closeBtn}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <X size={20} color="#d4d4d8" />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
-              {passwordFormError ? (
-                <View style={styles.inlineErrorBox}>
-                  <CircleAlert size={14} color="#fb7185" style={{ flexShrink: 0 }} />
-                  <Text style={styles.inlineErrorText}>{passwordFormError}</Text>
-                </View>
-              ) : null}
-
-              {passwordFormSuccess ? (
-                <View style={[styles.inlineErrorBox, styles.inlineSuccessBox]}>
-                  <CheckCircle2 size={14} color="#34d399" style={{ flexShrink: 0 }} />
-                  <Text style={[styles.inlineErrorText, { color: '#34d399' }]}>{passwordFormSuccess}</Text>
-                </View>
-              ) : null}
-
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Kata Sandi Saat Ini *</Text>
-                <View style={[styles.passwordInputRow, passwordFormError ? styles.inputErrorBorder : null]}>
-                  <TextInput
-                    style={styles.passwordTextInput}
-                    value={currentPassword}
-                    onChangeText={setCurrentPassword}
-                    placeholder="Masukkan sandi saat ini..."
-                    placeholderTextColor="#71717a"
-                    secureTextEntry={!showCurrentPassword}
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeBtn}
-                    onPress={() => setShowCurrentPassword(!showCurrentPassword)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    activeOpacity={0.7}
-                  >
-                    {showCurrentPassword ? (
-                      <EyeOff size={18} color="#a1a1aa" />
-                    ) : (
-                      <Eye size={18} color="#a1a1aa" />
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Kata Sandi Baru * (Min. 6 Karakter)</Text>
-                <View style={styles.passwordInputRow}>
-                  <TextInput
-                    style={styles.passwordTextInput}
-                    value={newPassword}
-                    onChangeText={setNewPassword}
-                    placeholder="Masukkan sandi baru..."
-                    placeholderTextColor="#71717a"
-                    secureTextEntry={!showNewPassword}
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeBtn}
-                    onPress={() => setShowNewPassword(!showNewPassword)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    activeOpacity={0.7}
-                  >
-                    {showNewPassword ? (
-                      <EyeOff size={18} color="#a1a1aa" />
-                    ) : (
-                      <Eye size={18} color="#a1a1aa" />
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Konfirmasi Kata Sandi Baru *</Text>
-                <View style={styles.passwordInputRow}>
-                  <TextInput
-                    style={styles.passwordTextInput}
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                    placeholder="Ulangi sandi baru..."
-                    placeholderTextColor="#71717a"
-                    secureTextEntry={!showConfirmPassword}
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeBtn}
-                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    activeOpacity={0.7}
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff size={18} color="#a1a1aa" />
-                    ) : (
-                      <Eye size={18} color="#a1a1aa" />
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
-
-            <View style={styles.modalActionRow}>
-              <TouchableOpacity
-                style={styles.cancelBtn}
-                onPress={() => setPasswordModalOpen(false)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.cancelBtnText}>Batal</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.saveBtn}
-                onPress={handleChangePassword}
-                activeOpacity={0.8}
-                disabled={savingPassword}
-              >
-                {savingPassword ? (
-                  <ActivityIndicator size="small" color="#ffffff" />
-                ) : (
-                  <>
-                    <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
-                    <Text style={styles.saveBtnText}>Perbarui Sandi</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setPasswordModalOpen(false)}
+      />
 
       {/* MODAL 1: EDIT PROFIL & INFORMASI TOKO */}
       <Modal
