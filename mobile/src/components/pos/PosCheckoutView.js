@@ -115,35 +115,100 @@ export default function PosCheckoutView({
               compact && styles.checkoutLeftColCompactLandscape,
             ]}
           >
-            {/* 1. Total Tagihan Banner */}
-            <View
+            {/* 1. Items List & Adjustments (Daftar Pesanan) */}
+            <ScrollView
               style={[
-                styles.checkoutBillBanner,
-                compact && styles.checkoutBillBannerCompact,
+                styles.checkoutLeftScroll,
+                compact && styles.checkoutLeftScrollCompact,
               ]}
+              showsVerticalScrollIndicator={true}
             >
-              <View style={{ flex: 1, minWidth: 0 }}>
-                <Text style={styles.checkoutBillBannerLabel}>TOTAL TAGIHAN</Text>
-                <Text
+              {/* Items List */}
+              <View style={styles.checkoutItemsListCard}>
+                <View style={styles.checkoutItemsHeader}>
+                  <Text style={styles.checkoutItemsTitle}>Daftar Pesanan ({cart.length})</Text>
+                  <Text style={styles.checkoutItemsTotalQty}>{totalItemsCount} Total Qty</Text>
+                </View>
+                {cart.map((item) => {
+                  const itemUnit =
+                    item.product.unitSymbol ||
+                    item.product.base_unit?.symbol ||
+                    item.product.baseUnit?.symbol ||
+                    'pcs';
+                  return (
+                    <View key={item.product.id} style={styles.checkoutItemRowMini}>
+                      <View style={{ flex: 1, minWidth: 0, marginRight: 6 }}>
+                        <Text style={styles.checkoutItemNameMini} numberOfLines={1}>
+                          {item.product.name}
+                        </Text>
+                        <Text style={styles.checkoutItemPriceMini}>
+                          {item.quantity} {itemUnit} x {formatRp(item.product.price)} ={' '}
+                          <Text style={{ color: '#fb7185', fontWeight: 'bold' }}>
+                            {formatRp(item.quantity * Number(item.product.price))}
+                          </Text>
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+
+              {/* Breakdown */}
+              {hasBillAdjustments && (
+                <View
                   style={[
-                    styles.checkoutBillBannerAmount,
-                    compact && styles.checkoutBillBannerAmountCompact,
+                    styles.checkoutAdjustmentsBox,
+                    compact && styles.checkoutAdjustmentsBoxCompact,
+                    { marginTop: 6 },
                   ]}
-                  numberOfLines={1}
                 >
-                  {formatRp(totalAmount)}
-                </Text>
-              </View>
-              <View style={styles.checkoutBillItemBadge}>
-                <Text style={styles.checkoutBillItemBadgeText}>{totalItemsCount} pcs</Text>
-              </View>
-            </View>
+                  <View style={styles.checkoutAdjustmentRow}>
+                    <Text style={styles.checkoutAdjustmentLabel}>Subtotal</Text>
+                    <Text style={styles.checkoutAdjustmentVal}>{formatRp(subtotal)}</Text>
+                  </View>
+                  {discount > 0 && (
+                    <View style={styles.checkoutAdjustmentRow}>
+                      <Text
+                        style={[styles.checkoutAdjustmentLabel, { color: '#34d399' }]}
+                        numberOfLines={1}
+                      >
+                        Diskon ({appliedPromo?.discount_code || 'Promo'})
+                      </Text>
+                      <Text style={[styles.checkoutAdjustmentVal, { color: '#34d399' }]}>
+                        -{formatRp(discount)}
+                      </Text>
+                    </View>
+                  )}
+                  {taxAmount > 0 && (
+                    <View style={styles.checkoutAdjustmentRow}>
+                      <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
+                        Pajak ({activeTax?.name || 'PPN'})
+                      </Text>
+                      <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                        +{formatRp(taxAmount)}
+                      </Text>
+                    </View>
+                  )}
+                  {feeAmount > 0 && (
+                    <View style={styles.checkoutAdjustmentRow}>
+                      <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
+                        Biaya Layanan
+                      </Text>
+                      <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                        +{formatRp(feeAmount)}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              )}
+            </ScrollView>
 
             {/* 2. Customer / Member Card */}
             <View
               style={[
                 styles.checkoutCustomerCard,
                 compact && styles.checkoutCustomerCardCompact,
+                { marginTop: 6, marginBottom: 4 },
               ]}
             >
               <View style={styles.checkoutCustomerCardLeft}>
@@ -198,183 +263,121 @@ export default function PosCheckoutView({
               </View>
             </View>
 
-            {/* 3. Items Summary & Adjustments List */}
-            <ScrollView
-              style={[
-                styles.checkoutLeftScroll,
-                compact && styles.checkoutLeftScrollCompact,
-              ]}
-              showsVerticalScrollIndicator={true}
-            >
-              {/* Promo, Takeaway & Tax Pills Bar */}
-              {((availablePromos.length > 0 || appliedPromo) ||
-                takeawayFees.length > 0 ||
-                availableTaxes.length > 0) && (
-                <View style={[styles.regQuickOptionsRow, { marginBottom: 10 }]}>
-                  {/* Promo button */}
-                  {(availablePromos.length > 0 || appliedPromo) && (
-                    <TouchableOpacity
+            {/* 3. Promo, Takeaway & Tax Pills Bar */}
+            {((availablePromos.length > 0 || appliedPromo) ||
+              takeawayFees.length > 0 ||
+              availableTaxes.length > 0) && (
+              <View style={[styles.regQuickOptionsRow, { marginBottom: 6 }]}>
+                {/* Promo button */}
+                {(availablePromos.length > 0 || appliedPromo) && (
+                  <TouchableOpacity
+                    style={[
+                      styles.regQuickPill,
+                      appliedPromo && styles.regQuickPillPromoActive,
+                    ]}
+                    onPress={() => {
+                      if (appliedPromo) {
+                        onRemovePromo();
+                      } else {
+                        onOpenPromoModal();
+                      }
+                    }}
+                  >
+                    <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
+                    <Text
                       style={[
-                        styles.regQuickPill,
-                        appliedPromo && styles.regQuickPillPromoActive,
+                        styles.regQuickPillText,
+                        appliedPromo && styles.regQuickPillPromoTextActive,
                       ]}
-                      onPress={() => {
-                        if (appliedPromo) {
-                          onRemovePromo();
-                        } else {
-                          onOpenPromoModal();
-                        }
-                      }}
                     >
-                      <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
-                      <Text
-                        style={[
-                          styles.regQuickPillText,
-                          appliedPromo && styles.regQuickPillPromoTextActive,
-                        ]}
-                      >
-                        {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
-                      </Text>
-                      {appliedPromo && <X size={11} color="#ffffff" style={{ marginLeft: 2 }} />}
-                    </TouchableOpacity>
-                  )}
+                      {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
+                    </Text>
+                    {appliedPromo && <X size={11} color="#ffffff" style={{ marginLeft: 2 }} />}
+                  </TouchableOpacity>
+                )}
 
-                  {/* Takeaway toggle */}
-                  {takeawayFees.length > 0 && (
-                    <TouchableOpacity
-                      style={[styles.regQuickPill, isTakeaway && styles.regQuickPillActive]}
-                      onPress={onToggleTakeaway}
-                    >
-                      <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
-                      <Text
-                        style={[
-                          styles.regQuickPillText,
-                          isTakeaway && styles.regQuickPillTextActive,
-                        ]}
-                      >
-                        {isTakeaway ? 'Bungkus (+)' : 'Dine In'}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-
-                  {/* Tax status chip */}
-                  {availableTaxes.length > 0 && (
-                    <TouchableOpacity
+                {/* Takeaway toggle */}
+                {takeawayFees.length > 0 && (
+                  <TouchableOpacity
+                    style={[styles.regQuickPill, isTakeaway && styles.regQuickPillActive]}
+                    onPress={onToggleTakeaway}
+                  >
+                    <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
+                    <Text
                       style={[
-                        styles.regQuickPill,
-                        selectedTaxId && styles.regQuickPillActive,
+                        styles.regQuickPillText,
+                        isTakeaway && styles.regQuickPillTextActive,
                       ]}
-                      onPress={() => {
-                        if (availableTaxes.length > 1) {
-                          onOpenTaxModal();
-                        } else {
-                          if (selectedTaxId) {
-                            onSelectTax('');
-                          } else {
-                            onSelectTax(availableTaxes[0]?.id || '');
-                          }
-                        }
-                      }}
                     >
-                      <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
-                      <Text
-                        style={[
-                          styles.regQuickPillText,
-                          selectedTaxId && styles.regQuickPillTextActive,
-                        ]}
-                      >
-                        {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
-                      </Text>
-                      {availableTaxes.length > 1 && (
-                        <ChevronDown
-                          size={10}
-                          color={selectedTaxId ? '#ffffff' : '#a1a1aa'}
-                          style={{ marginLeft: 2 }}
-                        />
-                      )}
-                    </TouchableOpacity>
-                  )}
-                </View>
-              )}
+                      {isTakeaway ? 'Bungkus (+)' : 'Dine In'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
 
-              {/* Breakdown */}
-              {hasBillAdjustments && (
-                <View
-                  style={[
-                    styles.checkoutAdjustmentsBox,
-                    compact && styles.checkoutAdjustmentsBoxCompact,
-                  ]}
-                >
-                  <View style={styles.checkoutAdjustmentRow}>
-                    <Text style={styles.checkoutAdjustmentLabel}>Subtotal</Text>
-                    <Text style={styles.checkoutAdjustmentVal}>{formatRp(subtotal)}</Text>
-                  </View>
-                  {discount > 0 && (
-                    <View style={styles.checkoutAdjustmentRow}>
-                      <Text
-                        style={[styles.checkoutAdjustmentLabel, { color: '#34d399' }]}
-                        numberOfLines={1}
-                      >
-                        Diskon ({appliedPromo?.discount_code || 'Promo'})
-                      </Text>
-                      <Text style={[styles.checkoutAdjustmentVal, { color: '#34d399' }]}>
-                        -{formatRp(discount)}
-                      </Text>
-                    </View>
-                  )}
-                  {taxAmount > 0 && (
-                    <View style={styles.checkoutAdjustmentRow}>
-                      <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
-                        Pajak ({activeTax?.name || 'PPN'})
-                      </Text>
-                      <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
-                        +{formatRp(taxAmount)}
-                      </Text>
-                    </View>
-                  )}
-                  {feeAmount > 0 && (
-                    <View style={styles.checkoutAdjustmentRow}>
-                      <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
-                        Biaya Layanan
-                      </Text>
-                      <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
-                        +{formatRp(feeAmount)}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              )}
-
-              {/* Items List */}
-              <View style={styles.checkoutItemsListCard}>
-                <View style={styles.checkoutItemsHeader}>
-                  <Text style={styles.checkoutItemsTitle}>Daftar Pesanan ({cart.length})</Text>
-                  <Text style={styles.checkoutItemsTotalQty}>{totalItemsCount} Total Qty</Text>
-                </View>
-                {cart.map((item) => {
-                  const itemUnit =
-                    item.product.unitSymbol ||
-                    item.product.base_unit?.symbol ||
-                    item.product.baseUnit?.symbol ||
-                    'pcs';
-                  return (
-                    <View key={item.product.id} style={styles.checkoutItemRowMini}>
-                      <View style={{ flex: 1, minWidth: 0, marginRight: 6 }}>
-                        <Text style={styles.checkoutItemNameMini} numberOfLines={1}>
-                          {item.product.name}
-                        </Text>
-                        <Text style={styles.checkoutItemPriceMini}>
-                          {item.quantity} {itemUnit} x {formatRp(item.product.price)} ={' '}
-                          <Text style={{ color: '#fb7185', fontWeight: 'bold' }}>
-                            {formatRp(item.quantity * Number(item.product.price))}
-                          </Text>
-                        </Text>
-                      </View>
-                    </View>
-                  );
-                })}
+                {/* Tax status chip */}
+                {availableTaxes.length > 0 && (
+                  <TouchableOpacity
+                    style={[
+                      styles.regQuickPill,
+                      selectedTaxId && styles.regQuickPillActive,
+                    ]}
+                    onPress={() => {
+                      if (availableTaxes.length > 1) {
+                        onOpenTaxModal();
+                      } else {
+                        if (selectedTaxId) {
+                          onSelectTax('');
+                        } else {
+                          onSelectTax(availableTaxes[0]?.id || '');
+                        }
+                      }
+                    }}
+                  >
+                    <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
+                    <Text
+                      style={[
+                        styles.regQuickPillText,
+                        selectedTaxId && styles.regQuickPillTextActive,
+                      ]}
+                    >
+                      {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
+                    </Text>
+                    {availableTaxes.length > 1 && (
+                      <ChevronDown
+                        size={10}
+                        color={selectedTaxId ? '#ffffff' : '#a1a1aa'}
+                        style={{ marginLeft: 2 }}
+                      />
+                    )}
+                  </TouchableOpacity>
+                )}
               </View>
-            </ScrollView>
+            )}
+
+            {/* 4. Total Tagihan Banner (Sticky at Bottom) */}
+            <View
+              style={[
+                styles.checkoutBillBanner,
+                compact && styles.checkoutBillBannerCompact,
+                { marginBottom: 0 },
+              ]}
+            >
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Text style={styles.checkoutBillBannerLabel}>TOTAL TAGIHAN</Text>
+                <Text
+                  style={[
+                    styles.checkoutBillBannerAmount,
+                    compact && styles.checkoutBillBannerAmountCompact,
+                  ]}
+                  numberOfLines={1}
+                >
+                  {formatRp(totalAmount)}
+                </Text>
+              </View>
+              <View style={styles.checkoutBillItemBadge}>
+                <Text style={styles.checkoutBillItemBadgeText}>{totalItemsCount} pcs</Text>
+              </View>
+            </View>
           </View>
 
           {/* Right Column: Payment Methods, Numpad & Final CTA */}
@@ -774,117 +777,7 @@ export default function PosCheckoutView({
           contentContainerStyle={{ padding: 14, paddingBottom: 30 }}
           showsVerticalScrollIndicator={false}
         >
-          {/* 1. Total Tagihan Banner */}
-          <View style={styles.checkoutBillBannerPortrait}>
-            <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={styles.checkoutBillBannerLabel}>TOTAL TAGIHAN</Text>
-              <Text style={styles.checkoutBillBannerAmountPortrait} numberOfLines={1}>
-                {formatRp(totalAmount)}
-              </Text>
-            </View>
-            <View style={styles.checkoutBillItemBadge}>
-              <Text style={styles.checkoutBillItemBadgeText}>{totalItemsCount} pcs</Text>
-            </View>
-          </View>
-
-          {/* 2. Customer Selector Bar */}
-          <View style={styles.checkoutCustomerCardPortrait}>
-            <View style={styles.checkoutCustomerCardLeft}>
-              <View
-                style={[
-                  styles.checkoutCustomerAvatar,
-                  selectedCustomer && styles.checkoutCustomerAvatarActive,
-                ]}
-              >
-                <Users size={15} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
-              </View>
-              <View style={{ flex: 1, minWidth: 0 }}>
-                <Text style={styles.checkoutCustomerName} numberOfLines={1} ellipsizeMode="tail">
-                  {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
-                </Text>
-                {selectedCustomer ? (
-                  <View style={styles.checkoutCustomerMetaRow}>
-                    <View style={styles.checkoutMembershipBadge}>
-                      <Text style={styles.checkoutMembershipBadgeText}>
-                        {selectedCustomer.membership_type || 'REGULAR'}
-                      </Text>
-                    </View>
-                    {selectedCustomer.phone && (
-                      <Text style={styles.checkoutCustomerPhone} numberOfLines={1}>
-                        {selectedCustomer.phone}
-                      </Text>
-                    )}
-                  </View>
-                ) : (
-                  <Text style={styles.checkoutCustomerSub}>Walk-in (Tanpa Member)</Text>
-                )}
-              </View>
-            </View>
-
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              {selectedCustomer && (
-                <TouchableOpacity
-                  onPress={onClearCustomer}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                >
-                  <X size={14} color="#a1a1aa" />
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity
-                style={styles.checkoutCustomerChangeBtn}
-                onPress={onOpenCustomerModal}
-              >
-                <Text style={styles.checkoutCustomerChangeBtnText}>
-                  {selectedCustomer ? 'Ganti' : 'Pilih'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* 3. Financial Adjustments Breakdown */}
-          {hasBillAdjustments && (
-            <View style={styles.checkoutAdjustmentsBoxPortrait}>
-              <View style={styles.checkoutAdjustmentRow}>
-                <Text style={styles.checkoutAdjustmentLabel}>Subtotal</Text>
-                <Text style={styles.checkoutAdjustmentVal}>{formatRp(subtotal)}</Text>
-              </View>
-              {discount > 0 && (
-                <View style={styles.checkoutAdjustmentRow}>
-                  <Text
-                    style={[styles.checkoutAdjustmentLabel, { color: '#34d399' }]}
-                    numberOfLines={1}
-                  >
-                    Diskon ({appliedPromo?.discount_code || 'Promo'})
-                  </Text>
-                  <Text style={[styles.checkoutAdjustmentVal, { color: '#34d399' }]}>
-                    -{formatRp(discount)}
-                  </Text>
-                </View>
-              )}
-              {taxAmount > 0 && (
-                <View style={styles.checkoutAdjustmentRow}>
-                  <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
-                    Pajak ({activeTax?.name || 'PPN'})
-                  </Text>
-                  <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
-                    +{formatRp(taxAmount)}
-                  </Text>
-                </View>
-              )}
-              {feeAmount > 0 && (
-                <View style={styles.checkoutAdjustmentRow}>
-                  <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
-                    Biaya Layanan
-                  </Text>
-                  <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
-                    +{formatRp(feeAmount)}
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
-
-          {/* 4. Order Items Card */}
+          {/* 1. Order Items Card (Daftar Pesanan) */}
           <View style={styles.checkoutOrderCardPortrait}>
             <View style={styles.checkoutItemsHeader}>
               <Text style={styles.checkoutItemsTitle}>Daftar Pesanan ({cart.length})</Text>
@@ -948,7 +841,61 @@ export default function PosCheckoutView({
             })}
           </View>
 
-          {/* 5. Voucher & Adjustments Section */}
+          {/* 2. Customer Selector Bar */}
+          <View style={styles.checkoutCustomerCardPortrait}>
+            <View style={styles.checkoutCustomerCardLeft}>
+              <View
+                style={[
+                  styles.checkoutCustomerAvatar,
+                  selectedCustomer && styles.checkoutCustomerAvatarActive,
+                ]}
+              >
+                <Users size={15} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
+              </View>
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Text style={styles.checkoutCustomerName} numberOfLines={1} ellipsizeMode="tail">
+                  {selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum'}
+                </Text>
+                {selectedCustomer ? (
+                  <View style={styles.checkoutCustomerMetaRow}>
+                    <View style={styles.checkoutMembershipBadge}>
+                      <Text style={styles.checkoutMembershipBadgeText}>
+                        {selectedCustomer.membership_type || 'REGULAR'}
+                      </Text>
+                    </View>
+                    {selectedCustomer.phone && (
+                      <Text style={styles.checkoutCustomerPhone} numberOfLines={1}>
+                        {selectedCustomer.phone}
+                      </Text>
+                    )}
+                  </View>
+                ) : (
+                  <Text style={styles.checkoutCustomerSub}>Walk-in (Tanpa Member)</Text>
+                )}
+              </View>
+            </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {selectedCustomer && (
+                <TouchableOpacity
+                  onPress={onClearCustomer}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <X size={14} color="#a1a1aa" />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                style={styles.checkoutCustomerChangeBtn}
+                onPress={onOpenCustomerModal}
+              >
+                <Text style={styles.checkoutCustomerChangeBtnText}>
+                  {selectedCustomer ? 'Ganti' : 'Pilih'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* 3. Voucher & Adjustments Section */}
           <View style={styles.checkoutVoucherSectionPortrait}>
             {appliedPromo ? (
               <View style={styles.appliedPromoBadgePortrait}>
@@ -1064,6 +1011,62 @@ export default function PosCheckoutView({
                   )}
                 </TouchableOpacity>
               )}
+            </View>
+          </View>
+
+          {/* 4. Financial Adjustments Breakdown */}
+          {hasBillAdjustments && (
+            <View style={styles.checkoutAdjustmentsBoxPortrait}>
+              <View style={styles.checkoutAdjustmentRow}>
+                <Text style={styles.checkoutAdjustmentLabel}>Subtotal</Text>
+                <Text style={styles.checkoutAdjustmentVal}>{formatRp(subtotal)}</Text>
+              </View>
+              {discount > 0 && (
+                <View style={styles.checkoutAdjustmentRow}>
+                  <Text
+                    style={[styles.checkoutAdjustmentLabel, { color: '#34d399' }]}
+                    numberOfLines={1}
+                  >
+                    Diskon ({appliedPromo?.discount_code || 'Promo'})
+                  </Text>
+                  <Text style={[styles.checkoutAdjustmentVal, { color: '#34d399' }]}>
+                    -{formatRp(discount)}
+                  </Text>
+                </View>
+              )}
+              {taxAmount > 0 && (
+                <View style={styles.checkoutAdjustmentRow}>
+                  <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
+                    Pajak ({activeTax?.name || 'PPN'})
+                  </Text>
+                  <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                    +{formatRp(taxAmount)}
+                  </Text>
+                </View>
+              )}
+              {feeAmount > 0 && (
+                <View style={styles.checkoutAdjustmentRow}>
+                  <Text style={styles.checkoutAdjustmentLabel} numberOfLines={1}>
+                    Biaya Layanan
+                  </Text>
+                  <Text style={[styles.checkoutAdjustmentVal, { color: '#fb7185' }]}>
+                    +{formatRp(feeAmount)}
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+
+          {/* 5. Total Tagihan Banner */}
+          <View style={[styles.checkoutBillBannerPortrait, { marginBottom: 14 }]}>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.checkoutBillBannerLabel}>TOTAL TAGIHAN</Text>
+              <Text style={styles.checkoutBillBannerAmountPortrait} numberOfLines={1}>
+                {formatRp(totalAmount)}
+              </Text>
+            </View>
+            <View style={styles.checkoutBillItemBadge}>
+              <Text style={styles.checkoutBillItemBadgeText}>{totalItemsCount} pcs</Text>
             </View>
           </View>
 
@@ -1535,9 +1538,11 @@ const styles = StyleSheet.create({
   },
   checkoutLeftScroll: {
     flex: 1,
+    minHeight: 0,
   },
   checkoutLeftScrollCompact: {
-    maxHeight: 180,
+    flex: 1,
+    minHeight: 0,
   },
   regQuickOptionsRow: {
     flexDirection: 'row',
