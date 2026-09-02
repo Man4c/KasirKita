@@ -1894,7 +1894,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
     gap: 4,
   },
   cardCategory: {
@@ -1925,7 +1925,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 6,
+    marginTop: 10,
   },
   cardPrice: {
     fontSize: 15,
@@ -2836,18 +2836,18 @@ const styles = StyleSheet.create({
   landscapeToolbar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    height: 48,
+    paddingHorizontal: 16,
+    height: 50,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
     backgroundColor: '#09090b',
-    gap: 8,
+    gap: 12,
     flexShrink: 0,
   },
   landscapeToolbarCompact: {
     paddingHorizontal: 10,
     height: 44,
-    gap: 6,
+    gap: 8,
   },
   landscapeSearchBox: {
     flexDirection: 'row',
@@ -2856,9 +2856,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#27272a',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    width: 170,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    width: 175,
     flexShrink: 0,
   },
   landscapeSearchBoxCompact: {
@@ -2883,36 +2883,36 @@ const styles = StyleSheet.create({
     width: 1,
     height: 20,
     backgroundColor: '#27272a',
-    marginHorizontal: 2,
+    marginHorizontal: 4,
     flexShrink: 0,
   },
   landscapeCatScrollContent: {
     alignItems: 'center',
-    paddingRight: 10,
+    paddingRight: 12,
   },
   catChipCompact: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    marginRight: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    marginRight: 8,
     borderRadius: 12,
   },
   catChipTextCompact: {
     fontSize: 12,
   },
   gridContentLandscape: {
-    paddingHorizontal: 12,
-    paddingTop: 8,
+    paddingHorizontal: 16,
+    paddingTop: 12,
     paddingBottom: 24,
   },
   gridContentCompactLandscape: {
-    paddingHorizontal: 6,
-    paddingTop: 2,
+    paddingHorizontal: 8,
+    paddingTop: 4,
     paddingBottom: 16,
   },
   productCardLandscape: {
-    padding: 14,
+    padding: 12,
     margin: 6,
-    borderRadius: 16,
+    borderRadius: 14,
   },
   productCardCompactLandscape: {
     padding: 8,
@@ -2922,7 +2922,7 @@ const styles = StyleSheet.create({
   },
   cardTitleLandscape: {
     fontSize: 13,
-    marginBottom: 8,
+    marginBottom: 6,
     lineHeight: 18,
   },
   cardTitleCompactLandscape: {
@@ -2961,9 +2961,9 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   landscapeRegisterHeader: {
-    height: 48,
+    height: 50,
     paddingVertical: 0,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
   },
   landscapeRegisterHeaderCompact: {
     height: 44,
@@ -2995,7 +2995,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     backgroundColor: '#27272a',
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 10,
     maxWidth: 130,
@@ -3015,9 +3015,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
+    gap: 10,
   },
   registerEmptyBoxCompact: {
     padding: 12,
+    gap: 6,
   },
   registerEmptyTitle: {
     fontSize: 14,
@@ -3033,8 +3035,8 @@ const styles = StyleSheet.create({
   },
   registerItemsScroll: {
     flex: 1,
-    paddingHorizontal: 18,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   registerItemsScrollCompact: {
     paddingHorizontal: 12,
@@ -3087,7 +3089,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#27272a',
     backgroundColor: '#141416',
-    paddingHorizontal: 18,
+    paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 16,
     flexShrink: 0,
@@ -3100,8 +3102,8 @@ const styles = StyleSheet.create({
   regQuickOptionsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 14,
+    gap: 10,
+    marginBottom: 12,
   },
   regQuickOptionsRowCompact: {
     gap: 6,
@@ -3146,8 +3148,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   regSummaryBox: {
-    marginBottom: 14,
-    gap: 5,
+    marginBottom: 12,
+    gap: 6,
   },
   regSummaryBoxCompact: {
     marginBottom: 6,
@@ -3179,7 +3181,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    paddingTop: 14,
+    paddingTop: 16,
   },
   regPayRowCompact: {
     paddingTop: 8,
