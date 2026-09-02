@@ -1,10 +1,10 @@
 ---
 title: Mobile Screen Pengaturan (Store, Hardware & POS Preferences)
 description: Pembuatan layar Pengaturan (Settings) komprehensif pada aplikasi Mobile KasirKita dengan tab navigasi bawah bertuliskan 'Pengaturan', mencakup profil toko, integrasi printer bluetooth thermal, preferensi struk, sinkronisasi data, dan manajemen akun.
-status: in-progress
+status: completed
 priority: P1
 effort: 6h
-tags: [mobile, react-native, expo, settings, pengaturan, bluetooth-printer, receipt, profile, ui-ux]
+tags: [mobile, react-native, expo, settings, pengaturan, bluetooth-printer, receipt, profile, store-settings, cloud-sync, ui-ux]
 created: 2026-09-02
 assignee: Mobile UI/UX Specialist
 ---
@@ -17,7 +17,8 @@ Menghadirkan layar **Pengaturan** (*Settings Screen*) terpusat pada KasirKita Mo
 ### Struktur Fitur Layar Pengaturan:
 1. **Profil Akun & Toko (Store & Profile Identity):**
    - Kartu identitas pengguna aktif (Nama, Role: *Owner* / *Kasir*, Email/Username).
-   - Profil Usaha (Nama Toko, Alamat, No. WhatsApp/Telepon Toko).
+   - Profil Usaha (Nama Toko, Alamat, No. WhatsApp/Telepon Toko, dan Upload Logo Toko dari galeri).
+   - Sinkronisasi Cloud Backend: Data identitas toko tersimpan terpusat di database server Laravel (`store_settings`) via REST API (`/api/settings/store`), sehingga perubahan oleh Owner di smartphone otomatis tersinkronisasi ke Web dan perangkat kasir lain.
 2. **Perangkat Keras / Hardware (Printer Thermal & Scanner):**
    - Status & Koneksi Printer Bluetooth Thermal (58mm / 80mm).
    - Tombol Uji Cetak (*Test Print Sample Receipt*).
@@ -25,13 +26,14 @@ Menghadirkan layar **Pengaturan** (*Settings Screen*) terpusat pada KasirKita Mo
 3. **Preferensi Transaksi & Struk (Receipt & Checkout Preferences):**
    - Pengaturan footer struk belanja (catatan terima kasih/kebijakan retur).
    - Tampilkan Logo Toko & Kontak WhatsApp pada struk.
+   - Komponen struk terpadu (`ReceiptView.js`) seragam di POS kasir, riwayat, dan uji cetak.
    - Konfigurasi Pembulatan Nominal Kasir (*Cash Rounding*).
 4. **Tampilan & Antarmuka Kasir (Interface & UX):**
    - Preferensi orientasi layar (*Auto Gyro*, *Kunci Landscape POS*, *Kunci Portrait*).
    - Pengaturan tata letak katalog produk (Grid 2 Kolom, Grid 3 Kolom Kompak, atau List Baris).
 5. **Data, Jaringan & Sinkronisasi (Sync & Storage):**
    - Status koneksi API Backend server dan latensi ping.
-   - Tombol *Sinkronisasi Ulang Data* (produk, kategori, pajak, pelanggan).
+   - Tombol *Sinkronisasi Ulang Data* (produk, kategori, pajak, pelanggan, dan identitas toko cloud).
    - Bersihkan Cache Penyimpanan Lokal.
 6. **Tentang Aplikasi & Sesi (About & Security):**
    - Versi Aplikasi (`KasirKita Mobile POS v1.2.0`).
@@ -48,7 +50,7 @@ Menghadirkan layar **Pengaturan** (*Settings Screen*) terpusat pada KasirKita Mo
 | 3 | Implementasi Seksi Profil Pengguna, Info Toko, & Keamanan Akun | completed |
 | 4 | Implementasi Seksi Perangkat Keras (Pengaturan Printer Bluetooth & Opsi Cetak Struk) | completed |
 | 5 | Implementasi Seksi Preferensi Struk, Tampilan POS, & Sinkronisasi Data | completed |
-| 6 | Verifikasi Aksesibilitas WCAG AA, Build Web & Mobile, serta Dokumentasi Arsitektur | in-progress |
+| 6 | Verifikasi Aksesibilitas WCAG AA, Build Web & Mobile, serta Dokumentasi Arsitektur | completed |
 
 ---
 
@@ -57,6 +59,9 @@ Menghadirkan layar **Pengaturan** (*Settings Screen*) terpusat pada KasirKita Mo
 - [x] Tab bilah navigasi bawah menampilkan label **"Pengaturan"** dengan ikon `Settings` (Lucide) proporsional.
 - [x] Layar `SettingsScreen.js` dengan arsitektur kartu yang rapi, hierarki visual jelas, dan kontras tinggi standar WCAG AA.
 - [x] Seksi identitas pengguna aktif dan toko yang informatif.
+- [x] Fitur unggah foto logo toko dari galeri HP (`expo-image-picker`) dengan pratinjau instan.
+- [x] Backend database `store_settings` dan API RESTful `/api/settings/store` untuk sinkronisasi cloud multi-platform.
+- [x] Komponen struk terpadu (`ReceiptView.js`) seragam di POS, Riwayat Transaksi, dan Uji Cetak.
 - [x] Konfigurasi printer bluetooth thermal dan toggle cetak otomatis.
 - [x] Kustomisasi teks footer struk belanja.
 - [x] Tombol sinkronisasi ulang data katalog offline/online.

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\PosController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StockOpnameController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\StoreSettingController;
 use App\Http\Controllers\Api\TaxAndFeeController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\UserController;
@@ -79,8 +80,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/taxes-and-fees', [TaxAndFeeController::class, 'index']);
     Route::get('/taxes-and-fees/{id}', [TaxAndFeeController::class, 'show']);
 
+    // Store Settings API (Read for all staff)
+    Route::get('/settings/store', [StoreSettingController::class, 'getStore']);
+
     // Owner-Only Administrative & Financial Routes
     Route::middleware('role:owner')->group(function () {
+        // Store Settings update
+        Route::put('/settings/store', [StoreSettingController::class, 'updateStore']);
+
         // Taxes & Fees management
         Route::post('/taxes-and-fees', [TaxAndFeeController::class, 'store']);
         Route::put('/taxes-and-fees/{id}', [TaxAndFeeController::class, 'update']);

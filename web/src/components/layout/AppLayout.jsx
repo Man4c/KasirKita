@@ -23,6 +23,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import api from '../../services/api';
 
 export default function AppLayout() {
   const { user, logout, isOwner } = useAuth();
@@ -31,10 +32,19 @@ export default function AppLayout() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [storeInfo, setStoreInfo] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    api.get('/settings/store').then((res) => {
+      if (res.data?.success && res.data?.data) {
+        setStoreInfo(res.data.data);
+      }
+    }).catch(() => {});
   }, []);
 
   const handleLogout = async () => {
@@ -89,14 +99,20 @@ export default function AppLayout() {
       >
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-6 h-16 border-b border-zinc-800/80">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-rose-500 text-white font-bold">
-            <Store className="w-5 h-5" />
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700/80 overflow-hidden shrink-0">
+            {storeInfo?.logo ? (
+              <img src={storeInfo.logo} alt={storeInfo.name} className="w-full h-full object-contain p-1" />
+            ) : (
+              <Store className="w-5 h-5 text-rose-500" />
+            )}
           </div>
-          <div>
-            <h1 className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
-              KasirKita <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded bg-rose-500 text-white shadow-sm">POS</span>
+          <div className="min-w-0 flex-1">
+            <h1 className="font-bold text-sm tracking-tight text-white truncate">
+              {storeInfo?.name || 'KasirKita Mart'}
             </h1>
-            <p className="text-xs text-zinc-400 font-normal">UMKM Ritel Modern</p>
+            <p className="text-xs text-zinc-400 font-normal truncate">
+              {storeInfo?.address || 'KasirKita POS'}
+            </p>
           </div>
         </div>
 

@@ -73,6 +73,7 @@ export default function Pos() {
   // Receipt Modal State
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
   const [completedTransaction, setCompletedTransaction] = useState(null);
+  const [storeSetting, setStoreSetting] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -81,17 +82,19 @@ export default function Pos() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [prodRes, catRes, custRes, promoRes, taxFeeRes] = await Promise.all([
+      const [prodRes, catRes, custRes, promoRes, taxFeeRes, storeRes] = await Promise.all([
         api.get('/products?is_active=true&per_page=100'),
         api.get('/categories'),
         api.get('/customers?all=true'),
         api.get('/discounts?status=active&all=true').catch(() => ({ data: { success: false, data: [] } })),
         api.get('/taxes-and-fees?is_active=true').catch(() => ({ data: { success: false, data: [] } })),
+        api.get('/settings/store').catch(() => ({ data: { success: false, data: null } })),
       ]);
       if (prodRes.data.success) setProducts(prodRes.data.data.data);
       if (catRes.data.success) setCategories(catRes.data.data);
       if (custRes.data.success) setCustomers(custRes.data.data);
       if (promoRes.data.success) setAvailablePromos(promoRes.data.data);
+      if (storeRes.data?.success && storeRes.data?.data) setStoreSetting(storeRes.data.data);
       if (taxFeeRes.data.success) {
         const tfData = taxFeeRes.data.data;
         setTaxesAndFees(tfData);
@@ -1438,8 +1441,22 @@ export default function Pos() {
 
             {/* Receipt Header */}
             <div className="text-center pb-3 border-b border-dashed border-zinc-400">
-              <h2 id="receipt-title" className="font-bold text-base uppercase text-zinc-900 font-sans tracking-tight">KasirKita POS</h2>
-              <p className="text-xs text-zinc-600 font-sans">UMKM Ritel Modern</p>
+              {storeSetting?.show_logo_on_receipt !== false && storeSetting?.logo ? (
+                <div className="flex justify-center mb-2">
+                  <img src={storeSetting.logo} alt="Logo" className="w-12 h-12 object-contain rounded-md" />
+                </div>
+              ) : null}
+              <h2 id="receipt-title" className="font-bold text-base uppercase text-zinc-900 font-sans tracking-tight">
+                {storeSetting?.name || 'KasirKita POS'}
+              </h2>
+              {storeSetting?.address ? (
+                <p className="text-xs text-zinc-600 font-sans">{storeSetting.address}</p>
+              ) : (
+                <p className="text-xs text-zinc-600 font-sans">UMKM Ritel Modern</p>
+              )}
+              {storeSetting?.show_phone_on_receipt !== false && storeSetting?.phone ? (
+                <p className="text-xs text-zinc-600 font-sans">WA: {storeSetting.phone}</p>
+              ) : null}
               <p className="text-xs text-zinc-500 mt-1 font-mono">{completedTransaction.invoice_number}</p>
               <p className="text-xs text-zinc-500 font-mono">{new Date(completedTransaction.created_at).toLocaleString('id-ID')}</p>
               <p className="text-xs text-zinc-700 mt-1 font-sans">
@@ -1512,7 +1529,7 @@ export default function Pos() {
 
             {/* Footer Greeting */}
             <div className="text-center py-2 text-xs text-zinc-500 border-t border-dashed border-zinc-400 font-sans">
-              Terima kasih atas kunjungan Anda!
+              {storeSetting?.receipt_footer || 'Terima kasih atas kunjungan Anda!'}
             </div>
 
             {/* Action Buttons */}

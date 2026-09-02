@@ -104,6 +104,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [tempStoreLogo, setTempStoreLogo] = useState(null);
   const [tempShowLogoOnReceipt, setTempShowLogoOnReceipt] = useState(true);
   const [tempShowPhoneOnReceipt, setTempShowPhoneOnReceipt] = useState(true);
+  const [savingStore, setSavingStore] = useState(false);
 
   // Guide Modal State
   const [printerGuideOpen, setPrinterGuideOpen] = useState(false);
@@ -116,6 +117,7 @@ export default function SettingsScreen({ isLandscape = false }) {
 
   const loadSettings = async () => {
     try {
+      // 1. Initial fast load from local offline storage
       const saved = await storage.getSettings();
       if (saved) {
         if (saved.storeName) setStoreName(saved.storeName);
@@ -132,8 +134,33 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (typeof saved.soundBeep === 'boolean') setSoundBeep(saved.soundBeep);
         if (saved.orientationPref) setOrientationPref(saved.orientationPref);
       }
+
+      // 2. Fetch and synchronize latest store identity from Cloud backend
+      const res = await api.get('/settings/store');
+      if (res.data?.success && res.data?.data) {
+        const cloud = res.data.data;
+        if (cloud.name) setStoreName(cloud.name);
+        if (cloud.address !== undefined) setStoreAddress(cloud.address || '');
+        if (cloud.phone !== undefined) setStorePhone(cloud.phone || '');
+        if (cloud.logo !== undefined) setStoreLogo(cloud.logo);
+        if (cloud.receipt_footer !== undefined) setReceiptFooter(cloud.receipt_footer || '');
+        if (typeof cloud.show_logo_on_receipt === 'boolean') setShowLogoOnReceipt(cloud.show_logo_on_receipt);
+        if (typeof cloud.show_phone_on_receipt === 'boolean') setShowPhoneOnReceipt(cloud.show_phone_on_receipt);
+
+        // Cache cloud identity to local storage
+        await storage.setSettings({
+          ...(saved || {}),
+          storeName: cloud.name,
+          storeAddress: cloud.address || '',
+          storePhone: cloud.phone || '',
+          storeLogo: cloud.logo,
+          receiptFooter: cloud.receipt_footer || '',
+          showLogoOnReceipt: cloud.show_logo_on_receipt,
+          showPhoneOnReceipt: cloud.show_phone_on_receipt,
+        });
+      }
     } catch (err) {
-      console.log('Error loading settings:', err.message);
+      console.log('Error loading settings from cloud:', err.message);
     }
   };
 
@@ -316,31 +343,73 @@ export default function SettingsScreen({ isLandscape = false }) {
     setTempStoreLogo(null);
   };
 
-  const handleSaveStoreModal = () => {
+  const handleSaveStoreModal = async () => {
     const newName = tempStoreName.trim() || 'KasirKita Mart';
     const newAddress = tempStoreAddress.trim();
     const newPhone = tempStorePhone.trim();
     const newFooter = tempReceiptFooter.trim();
 
-    setStoreName(newName);
-    setStoreAddress(newAddress);
-    setStorePhone(newPhone);
-    setReceiptFooter(newFooter);
-    setStoreLogo(tempStoreLogo);
-    setShowLogoOnReceipt(tempShowLogoOnReceipt);
-    setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
+    setSavingStore(true);
+    try {
+      // 1. If user is owner, sync to Cloud backend
+      if (user?.role === 'owner') {
+        await api.put('/settings/store', {
+          name: newName,
+          address: newAddress,
+          phone: newPhone,
+          logo: tempStoreLogo,
+          receipt_footer: newFooter,
+          show_logo_on_receipt: tempShowLogoOnReceipt,
+          show_phone_on_receipt: tempShowPhoneOnReceipt,
+        });
+      }
 
-    persistSettings({
-      storeName: newName,
-      storeAddress: newAddress,
-      storePhone: newPhone,
-      receiptFooter: newFooter,
-      storeLogo: tempStoreLogo,
-      showLogoOnReceipt: tempShowLogoOnReceipt,
-      showPhoneOnReceipt: tempShowPhoneOnReceipt,
-    });
+      // 2. Update local state
+      setStoreName(newName);
+      setStoreAddress(newAddress);
+      setStorePhone(newPhone);
+      setReceiptFooter(newFooter);
+      setStoreLogo(tempStoreLogo);
+      setShowLogoOnReceipt(tempShowLogoOnReceipt);
+      setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
 
-    setStoreModalOpen(false);
+      // 3. Persist locally to storage
+      await persistSettings({
+        storeName: newName,
+        storeAddress: newAddress,
+        storePhone: newPhone,
+        receiptFooter: newFooter,
+        storeLogo: tempStoreLogo,
+        showLogoOnReceipt: tempShowLogoOnReceipt,
+        showPhoneOnReceipt: tempShowPhoneOnReceipt,
+      });
+
+      setStoreModalOpen(false);
+    } catch (err) {
+      console.warn('Gagal menyimpan ke server cloud:', err.message);
+      // Fallback local update
+      setStoreName(newName);
+      setStoreAddress(newAddress);
+      setStorePhone(newPhone);
+      setReceiptFooter(newFooter);
+      setStoreLogo(tempStoreLogo);
+      setShowLogoOnReceipt(tempShowLogoOnReceipt);
+      setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
+
+      await persistSettings({
+        storeName: newName,
+        storeAddress: newAddress,
+        storePhone: newPhone,
+        receiptFooter: newFooter,
+        storeLogo: tempStoreLogo,
+        showLogoOnReceipt: tempShowLogoOnReceipt,
+        showPhoneOnReceipt: tempShowPhoneOnReceipt,
+      });
+
+      setStoreModalOpen(false);
+    } finally {
+      setSavingStore(false);
+    }
   };
 
   const handleOpenWhatsAppSupport = () => {
@@ -376,11 +445,22 @@ export default function SettingsScreen({ isLandscape = false }) {
       await checkServerHealth();
       await api.get('/products');
       await api.get('/categories');
+      const storeRes = await api.get('/settings/store');
+      if (storeRes.data?.success && storeRes.data?.data) {
+        const cloud = storeRes.data.data;
+        if (cloud.name) setStoreName(cloud.name);
+        if (cloud.address !== undefined) setStoreAddress(cloud.address || '');
+        if (cloud.phone !== undefined) setStorePhone(cloud.phone || '');
+        if (cloud.logo !== undefined) setStoreLogo(cloud.logo);
+        if (cloud.receipt_footer !== undefined) setReceiptFooter(cloud.receipt_footer || '');
+        if (typeof cloud.show_logo_on_receipt === 'boolean') setShowLogoOnReceipt(cloud.show_logo_on_receipt);
+        if (typeof cloud.show_phone_on_receipt === 'boolean') setShowPhoneOnReceipt(cloud.show_phone_on_receipt);
+      }
       setSyncing(false);
       if (Platform.OS === 'web') {
-        window.alert('Data katalog produk & harga berhasil diperbarui dari cloud server!');
+        window.alert('Data toko, katalog produk & harga berhasil disinkronkan dari cloud server!');
       } else {
-        Alert.alert('Sinkronisasi Berhasil', 'Data produk, stok, dan tarif toko Anda sudah paling mutakhir.');
+        Alert.alert('Sinkronisasi Berhasil', 'Identitas toko, produk, stok, dan tarif toko Anda sudah paling mutakhir.');
       }
     } catch (err) {
       setSyncing(false);
@@ -1219,12 +1299,22 @@ export default function SettingsScreen({ isLandscape = false }) {
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.saveBtn}
+                style={[styles.saveBtn, savingStore && { opacity: 0.8 }]}
                 onPress={handleSaveStoreModal}
+                disabled={savingStore}
                 activeOpacity={0.8}
               >
-                <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
-                <Text style={styles.saveBtnText}>Simpan Pengaturan</Text>
+                {savingStore ? (
+                  <>
+                    <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 6 }} />
+                    <Text style={styles.saveBtnText}>Menyimpan ke Cloud...</Text>
+                  </>
+                ) : (
+                  <>
+                    <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                    <Text style={styles.saveBtnText}>Simpan Pengaturan</Text>
+                  </>
+                )}
               </TouchableOpacity>
             </View>
           </View>

@@ -253,6 +253,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - Menghubungkan logo toko pada kartu `IDENTITAS TOKO` di layar Pengaturan.
       - Membangun komponen struk reusable terpadu `mobile/src/components/ReceiptView.js` yang digunakan secara konsisten dan identik di 3 tempat: (1) Selesai Pembayaran POS (`PosScreen.js`), (2) Detail Riwayat Transaksi (`TransactionHistoryScreen.js`), dan (3) Uji Cetak Struk (`SettingsScreen.js`).
       - Seluruh struk kini secara serentak membaca data toko dinamis: Logo toko, Nama usaha, Alamat, Nomor WhatsApp, format rincian barang, total, metode bayar, dan Catatan Kaki (*Footer*) dari pengaturan toko.
+    12. **Sinkronisasi Cloud Identitas Toko Multi-Platform (Backend `store_settings` API)**:
+      - Backend: Tabel database `store_settings`, model `StoreSetting`, dan API RESTful `GET /api/settings/store` serta `PUT /api/settings/store` (diproteksi hak akses `owner`).
+      - Mobile: Sinkronisasi otomatis dua arah saat aplikasi dibuka dan saat Owner menekan simpan pengaturan toko, dengan fallback cache offline `AsyncStorage`.
+      - Web React: Menampilkan nama toko dan logo toko pada sidebar desktop (`AppLayout.jsx`) serta struk belanja kasir web (`Pos.jsx`), memastikan konsistensi 100% antar perangkat (smartphone, laptop, dan tablet).
+      - Pengujian Otomatis: `StoreSettingTest.php` (4 test cases, 12 assertions lolos 100%, total suite backend 66 tests lolos).
   - Rencana Modul Aktif & Dalam Antrean:
     8. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
     9. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Store } from 'lucide-react-native';
 import { storage } from '../services/storage';
+import api from '../services/api';
 
 export const defaultFormatRp = (val) => 'Rp' + Number(val || 0).toLocaleString('id-ID');
 
@@ -18,6 +19,22 @@ export default function ReceiptView({
       storage.getSettings().then((saved) => {
         if (saved) setLocalSettings(saved);
       });
+
+      // Synchronize latest store identity from Cloud backend
+      api.get('/settings/store').then((res) => {
+        if (res.data?.success && res.data?.data) {
+          const cloud = res.data.data;
+          setLocalSettings({
+            storeName: cloud.name,
+            storeAddress: cloud.address || '',
+            storePhone: cloud.phone || '',
+            storeLogo: cloud.logo,
+            receiptFooter: cloud.receipt_footer || '',
+            showLogoOnReceipt: cloud.show_logo_on_receipt,
+            showPhoneOnReceipt: cloud.show_phone_on_receipt,
+          });
+        }
+      }).catch(() => {});
     }
   }, [propStoreSettings]);
 
