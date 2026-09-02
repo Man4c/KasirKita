@@ -11,6 +11,7 @@ import {
   Alert,
   Platform,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import {
   Settings,
@@ -34,6 +35,10 @@ import {
   Lock,
   Eye,
   EyeOff,
+  MessageCircle,
+  BookOpen,
+  CircleAlert,
+  Info,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -71,6 +76,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [tempUserName, setTempUserName] = useState('');
   const [tempUserPhone, setTempUserPhone] = useState('');
   const [savingUser, setSavingUser] = useState(false);
+  const [userFormError, setUserFormError] = useState('');
 
   // Form Temp States for Password Modal
   const [currentPassword, setCurrentPassword] = useState('');
@@ -80,12 +86,19 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordFormError, setPasswordFormError] = useState('');
+  const [passwordFormSuccess, setPasswordFormSuccess] = useState('');
 
   // Form Temp States for Store Modal
   const [tempStoreName, setTempStoreName] = useState('');
   const [tempStoreAddress, setTempStoreAddress] = useState('');
   const [tempStorePhone, setTempStorePhone] = useState('');
   const [tempReceiptFooter, setTempReceiptFooter] = useState('');
+  const [tempShowLogoOnReceipt, setTempShowLogoOnReceipt] = useState(true);
+  const [tempShowPhoneOnReceipt, setTempShowPhoneOnReceipt] = useState(true);
+
+  // Guide Modal State
+  const [printerGuideOpen, setPrinterGuideOpen] = useState(false);
 
   // Load persistent settings on mount
   useEffect(() => {
@@ -159,16 +172,17 @@ export default function SettingsScreen({ isLandscape = false }) {
   const handleOpenUserModal = () => {
     setTempUserName(user?.name || '');
     setTempUserPhone(user?.phone || '');
+    setUserFormError('');
     setUserModalOpen(true);
   };
 
   const handleSaveUserProfile = async () => {
     if (!tempUserName.trim()) {
-      if (Platform.OS === 'web') window.alert('Nama pengguna tidak boleh kosong.');
-      else Alert.alert('Peringatan', 'Nama pengguna tidak boleh kosong.');
+      setUserFormError('Nama lengkap pengguna wajib diisi.');
       return;
     }
 
+    setUserFormError('');
     setSavingUser(true);
     try {
       const res = await api.put('/auth/profile', {
@@ -181,16 +195,10 @@ export default function SettingsScreen({ isLandscape = false }) {
           updateUser(res.data.data);
         }
         setUserModalOpen(false);
-        if (Platform.OS === 'web') {
-          window.alert('Profil kasir berhasil diperbarui!');
-        } else {
-          Alert.alert('Sukses', 'Profil kasir berhasil diperbarui.');
-        }
       }
     } catch (err) {
       const msg = err.response?.data?.message || err.message || 'Gagal menyimpan profil.';
-      if (Platform.OS === 'web') window.alert(msg);
-      else Alert.alert('Gagal', msg);
+      setUserFormError(msg);
     } finally {
       setSavingUser(false);
     }
@@ -203,26 +211,26 @@ export default function SettingsScreen({ isLandscape = false }) {
     setShowCurrentPassword(false);
     setShowNewPassword(false);
     setShowConfirmPassword(false);
+    setPasswordFormError('');
+    setPasswordFormSuccess('');
     setPasswordModalOpen(true);
   };
 
   const handleChangePassword = async () => {
     if (!currentPassword) {
-      if (Platform.OS === 'web') window.alert('Masukkan kata sandi saat ini.');
-      else Alert.alert('Peringatan', 'Masukkan kata sandi saat ini.');
+      setPasswordFormError('Masukkan kata sandi saat ini.');
       return;
     }
     if (newPassword.length < 6) {
-      if (Platform.OS === 'web') window.alert('Kata sandi baru minimal 6 karakter.');
-      else Alert.alert('Peringatan', 'Kata sandi baru minimal 6 karakter.');
+      setPasswordFormError('Kata sandi baru minimal 6 karakter.');
       return;
     }
     if (newPassword !== confirmPassword) {
-      if (Platform.OS === 'web') window.alert('Konfirmasi kata sandi baru tidak cocok.');
-      else Alert.alert('Peringatan', 'Konfirmasi kata sandi baru tidak cocok.');
+      setPasswordFormError('Konfirmasi kata sandi baru tidak cocok.');
       return;
     }
 
+    setPasswordFormError('');
     setSavingPassword(true);
     try {
       const res = await api.put('/auth/password', {
@@ -231,20 +239,18 @@ export default function SettingsScreen({ isLandscape = false }) {
       });
 
       if (res.data && res.data.success) {
-        setPasswordModalOpen(false);
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-        if (Platform.OS === 'web') {
-          window.alert('Kata sandi berhasil diubah! Harap ingat sandi baru Anda.');
-        } else {
-          Alert.alert('Sukses', 'Kata sandi berhasil diubah.');
-        }
+        setPasswordFormSuccess('Kata sandi berhasil diubah!');
+        setTimeout(() => {
+          setPasswordModalOpen(false);
+          setCurrentPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
+          setPasswordFormSuccess('');
+        }, 1000);
       }
     } catch (err) {
       const msg = err.response?.data?.message || err.message || 'Gagal mengubah kata sandi.';
-      if (Platform.OS === 'web') window.alert(msg);
-      else Alert.alert('Gagal', msg);
+      setPasswordFormError(msg);
     } finally {
       setSavingPassword(false);
     }
@@ -255,6 +261,8 @@ export default function SettingsScreen({ isLandscape = false }) {
     setTempStoreAddress(storeAddress);
     setTempStorePhone(storePhone);
     setTempReceiptFooter(receiptFooter);
+    setTempShowLogoOnReceipt(showLogoOnReceipt);
+    setTempShowPhoneOnReceipt(showPhoneOnReceipt);
     setStoreModalOpen(true);
   };
 
@@ -268,13 +276,30 @@ export default function SettingsScreen({ isLandscape = false }) {
     setStoreAddress(newAddress);
     setStorePhone(newPhone);
     setReceiptFooter(newFooter);
+    setShowLogoOnReceipt(tempShowLogoOnReceipt);
+    setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
 
     persistSettings({
       storeName: newName,
       storeAddress: newAddress,
       storePhone: newPhone,
       receiptFooter: newFooter,
+      showLogoOnReceipt: tempShowLogoOnReceipt,
+      showPhoneOnReceipt: tempShowPhoneOnReceipt,
     });
+
+    setStoreModalOpen(false);
+  };
+
+  const handleOpenWhatsAppSupport = () => {
+    const phone = '6281234567890';
+    const text = encodeURIComponent('Halo Tim Bantuan KasirKita, saya butuh panduan terkait operasional kasir / printer.');
+    const url = `https://wa.me/${phone}?text=${text}`;
+    Linking.openURL(url).catch(() => {
+      if (Platform.OS === 'web') window.open(url, '_blank');
+      else Alert.alert('Bantuan CS', 'Silakan hubungi WhatsApp CS KasirKita di: +62 812-3456-7890');
+    });
+  };
 
     setStoreModalOpen(false);
   };
@@ -341,9 +366,9 @@ export default function SettingsScreen({ isLandscape = false }) {
         <Text style={styles.headerSubtitle}>Konfigurasi toko, printer, & preferensi kasir</Text>
       </View>
 
-      {/* 2. Seksi Profil Akun & Toko */}
+      {/* 2. Seksi Akun Pengguna */}
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>PROFIL AKUN & TOKO</Text>
+        <Text style={styles.sectionHeader}>AKUN PENGGUNA</Text>
         <View style={styles.card}>
           {/* User Info Row */}
           <TouchableOpacity
@@ -388,9 +413,13 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
           </TouchableOpacity>
+        </View>
+      </View>
 
-          <View style={styles.divider} />
-
+      {/* 3. Seksi Identitas Toko */}
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>IDENTITAS TOKO</Text>
+        <View style={styles.card}>
           {/* Store Info Row (Clickable to Edit) */}
           <TouchableOpacity
             style={styles.menuRow}
@@ -647,9 +676,49 @@ export default function SettingsScreen({ isLandscape = false }) {
         </View>
       </View>
 
-      {/* 6. Seksi Tentang Aplikasi & Keluar */}
+      {/* 6. Seksi Bantuan & Panduan Kasir */}
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>TENTANG & KEAMANAN SESI</Text>
+        <Text style={styles.sectionHeader}>BANTUAN & PANDUAN KASIR</Text>
+        <View style={styles.card}>
+          {/* WhatsApp CS Button */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleOpenWhatsAppSupport}
+          >
+            <View style={[styles.menuIconBox, { backgroundColor: 'rgba(52, 211, 153, 0.15)', borderColor: 'rgba(52, 211, 153, 0.3)' }]}>
+              <MessageCircle size={18} color="#34d399" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.menuTitle}>Layanan Bantuan CS WhatsApp</Text>
+              <Text style={styles.menuSubtitle}>Bantuan cepat kendala operasional kasir & printer</Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Printer Troubleshooting Guide */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={() => setPrinterGuideOpen(true)}
+          >
+            <View style={styles.menuIconBox}>
+              <BookOpen size={18} color="#fb7185" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.menuTitle}>Panduan Printer Bluetooth</Text>
+              <Text style={styles.menuSubtitle}>Solusi cepat jika printer tidak mau mencetak</Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* 7. Seksi Tentang Aplikasi & Keluar */}
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>TENTANG APLIKASI & SESI</Text>
         <View style={styles.card}>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Versi Aplikasi</Text>
@@ -657,9 +726,9 @@ export default function SettingsScreen({ isLandscape = false }) {
           </View>
           <View style={styles.divider} />
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Arsitektur Platform</Text>
+            <Text style={styles.infoLabel}>Tipe Aplikasi</Text>
             <Text style={styles.infoValue}>
-              {Platform.OS === 'web' ? 'Web PWA (React)' : Platform.OS === 'android' ? 'Android Native' : 'iOS Native'}
+              {Platform.OS === 'web' ? 'KasirKita Web POS' : Platform.OS === 'android' ? 'KasirKita Android POS' : 'KasirKita iOS POS'}
             </Text>
           </View>
           <View style={styles.divider} />
@@ -667,7 +736,7 @@ export default function SettingsScreen({ isLandscape = false }) {
             <Text style={styles.infoLabel}>Status Keamanan</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 0 }}>
               <Shield size={14} color="#34d399" />
-              <Text style={[styles.infoValue, { color: '#34d399' }]}>Sanctum Token Aktif</Text>
+              <Text style={[styles.infoValue, { color: '#34d399' }]}>Sesi Terenkripsi & Aman</Text>
             </View>
           </View>
         </View>
@@ -712,12 +781,22 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
 
             <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
+              {userFormError ? (
+                <View style={styles.inlineErrorBox}>
+                  <CircleAlert size={14} color="#fb7185" style={{ flexShrink: 0 }} />
+                  <Text style={styles.inlineErrorText}>{userFormError}</Text>
+                </View>
+              ) : null}
+
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Nama Lengkap / Nama Kasir *</Text>
                 <TextInput
-                  style={styles.formInput}
+                  style={[styles.formInput, userFormError ? styles.inputErrorBorder : null]}
                   value={tempUserName}
-                  onChangeText={setTempUserName}
+                  onChangeText={(val) => {
+                    setTempUserName(val);
+                    if (userFormError) setUserFormError('');
+                  }}
                   placeholder="Nama kasir Anda..."
                   placeholderTextColor="#71717a"
                 />
@@ -803,9 +882,23 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
 
             <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
+              {passwordFormError ? (
+                <View style={styles.inlineErrorBox}>
+                  <CircleAlert size={14} color="#fb7185" style={{ flexShrink: 0 }} />
+                  <Text style={styles.inlineErrorText}>{passwordFormError}</Text>
+                </View>
+              ) : null}
+
+              {passwordFormSuccess ? (
+                <View style={[styles.inlineErrorBox, styles.inlineSuccessBox]}>
+                  <CheckCircle2 size={14} color="#34d399" style={{ flexShrink: 0 }} />
+                  <Text style={[styles.inlineErrorText, { color: '#34d399' }]}>{passwordFormSuccess}</Text>
+                </View>
+              ) : null}
+
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Kata Sandi Saat Ini *</Text>
-                <View style={styles.passwordInputRow}>
+                <View style={[styles.passwordInputRow, passwordFormError ? styles.inputErrorBorder : null]}>
                   <TextInput
                     style={styles.passwordTextInput}
                     value={currentPassword}
@@ -978,16 +1071,45 @@ export default function SettingsScreen({ isLandscape = false }) {
                 />
               </View>
 
-              {/* Form Input: Footer Struk */}
+              {/* Form Input: Pesan Penutup Struk */}
               <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Catatan Kaki Struk (Footer Message)</Text>
+                <Text style={styles.formLabel}>Pesan Penutup Struk Belanja</Text>
                 <TextInput
                   style={[styles.formInput, { minHeight: 64, textAlignVertical: 'top' }]}
                   value={tempReceiptFooter}
                   onChangeText={setTempReceiptFooter}
-                  placeholder="Pesan ucapan terima kasih / kebijakan toko..."
+                  placeholder="Contoh: Terima kasih atas kunjungan Anda..."
                   placeholderTextColor="#71717a"
                   multiline
+                />
+              </View>
+
+              <View style={styles.divider} />
+
+              {/* Co-located Receipt Toggles */}
+              <View style={styles.switchRow}>
+                <View style={{ flex: 1, minWidth: 0, paddingRight: 10 }}>
+                  <Text style={styles.switchTitle}>Tampilkan Logo Toko di Struk</Text>
+                  <Text style={styles.switchSubtitle}>Cetak lambang ikon toko di baris teratas nota</Text>
+                </View>
+                <Switch
+                  value={tempShowLogoOnReceipt}
+                  onValueChange={setTempShowLogoOnReceipt}
+                  trackColor={{ false: '#27272a', true: '#e11d48' }}
+                  thumbColor={tempShowLogoOnReceipt ? '#fb7185' : '#71717a'}
+                />
+              </View>
+
+              <View style={styles.switchRow}>
+                <View style={{ flex: 1, minWidth: 0, paddingRight: 10 }}>
+                  <Text style={styles.switchTitle}>Tampilkan No. WhatsApp di Struk</Text>
+                  <Text style={styles.switchSubtitle}>Cetak kontak WhatsApp toko untuk pesanan antar</Text>
+                </View>
+                <Switch
+                  value={tempShowPhoneOnReceipt}
+                  onValueChange={setTempShowPhoneOnReceipt}
+                  trackColor={{ false: '#27272a', true: '#e11d48' }}
+                  thumbColor={tempShowPhoneOnReceipt ? '#fb7185' : '#71717a'}
                 />
               </View>
             </ScrollView>
@@ -1116,22 +1238,22 @@ export default function SettingsScreen({ isLandscape = false }) {
               <Text style={styles.testReceiptRow}>No: INV-TEST-001</Text>
               <Text style={styles.testReceiptRow}>Kasir: {user?.name || 'Kasir'}</Text>
               <Text style={styles.testReceiptLine}>--------------------------------</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.testReceiptRow}>1x Kopi Susu Aren</Text>
-                <Text style={styles.testReceiptRow}>Rp15.000</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={[styles.testReceiptRow, { flex: 1, minWidth: 0 }]} numberOfLines={1}>1x Beras Ramos 5kg</Text>
+                <Text style={[styles.testReceiptRow, { flexShrink: 0, marginLeft: 8 }]}>Rp68.000</Text>
               </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.testReceiptRow}>1x Teh Melati</Text>
-                <Text style={styles.testReceiptRow}>Rp5.000</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={[styles.testReceiptRow, { flex: 1, minWidth: 0 }]} numberOfLines={1}>1x Minyak Goreng 2L</Text>
+                <Text style={[styles.testReceiptRow, { flexShrink: 0, marginLeft: 8 }]}>Rp34.000</Text>
               </View>
               <Text style={styles.testReceiptLine}>--------------------------------</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={[styles.testReceiptRow, { fontWeight: 'bold' }]}>TOTAL:</Text>
-                <Text style={[styles.testReceiptRow, { fontWeight: 'bold' }]}>Rp20.000</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={[styles.testReceiptRow, { fontWeight: 'bold', flex: 1, minWidth: 0 }]} numberOfLines={1}>TOTAL:</Text>
+                <Text style={[styles.testReceiptRow, { fontWeight: 'bold', flexShrink: 0, marginLeft: 8 }]}>Rp102.000</Text>
               </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.testReceiptRow}>BAYAR TUNAI:</Text>
-                <Text style={styles.testReceiptRow}>Rp20.000</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={[styles.testReceiptRow, { flex: 1, minWidth: 0 }]} numberOfLines={1}>BAYAR TUNAI:</Text>
+                <Text style={[styles.testReceiptRow, { flexShrink: 0, marginLeft: 8 }]}>Rp102.000</Text>
               </View>
               <Text style={styles.testReceiptLine}>--------------------------------</Text>
               <Text style={styles.testReceiptFooterText}>{receiptFooter}</Text>
@@ -1153,6 +1275,98 @@ export default function SettingsScreen({ isLandscape = false }) {
               <Printer size={16} color="#ffffff" style={{ marginRight: 6 }} />
               <Text style={styles.testPrintConfirmBtnText}>Kirim Cetak ke Printer</Text>
             </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* MODAL 4: PANDUAN PRINTER BLUETOOTH */}
+      <Modal
+        visible={printerGuideOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setPrinterGuideOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                <View style={styles.headerIconBox}>
+                  <BookOpen size={18} color="#fb7185" />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.modalTitle}>Panduan Printer Bluetooth</Text>
+                  <Text style={styles.modalSubtitle}>4 langkah praktis menyambungkan printer</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => setPrinterGuideOpen(false)}
+                style={styles.closeBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={20} color="#d4d4d8" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 380 }} showsVerticalScrollIndicator={false}>
+              <View style={styles.guideStepItem}>
+                <View style={styles.guideStepBadge}>
+                  <Text style={styles.guideStepBadgeText}>1</Text>
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.guideStepTitle}>Nyalakan Printer Kasir</Text>
+                  <Text style={styles.guideStepDesc}>
+                    Tekan tombol daya (power) printer hingga lampu indikator menyala biru/hijau dan kertas siap keluar.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.guideStepItem}>
+                <View style={styles.guideStepBadge}>
+                  <Text style={styles.guideStepBadgeText}>2</Text>
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.guideStepTitle}>Aktifkan Bluetooth Smartphone</Text>
+                  <Text style={styles.guideStepDesc}>
+                    Pastikan koneksi Bluetooth di HP Anda dalam kondisi aktif dan izin lokasi perangkat telah diberikan.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.guideStepItem}>
+                <View style={styles.guideStepBadge}>
+                  <Text style={styles.guideStepBadgeText}>3</Text>
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.guideStepTitle}>Pasangkan (Pairing) Perangkat</Text>
+                  <Text style={styles.guideStepDesc}>
+                    Buka menu Bluetooth HP, pilih nama printer Anda (misal: RPP02N atau Panda). Jika diminta PIN, ketik 0000 atau 1234.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.guideStepItem}>
+                <View style={styles.guideStepBadge}>
+                  <Text style={styles.guideStepBadgeText}>4</Text>
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.guideStepTitle}>Uji Cetak Struk Belanja</Text>
+                  <Text style={styles.guideStepDesc}>
+                    Kembali ke aplikasi KasirKita, pilih model printer Anda (58mm/80mm), lalu tekan tombol "Uji Cetak Struk Contoh".
+                  </Text>
+                </View>
+              </View>
+            </ScrollView>
+
+            <View style={styles.modalActionRow}>
+              <TouchableOpacity
+                style={[styles.saveBtn, { width: '100%' }]}
+                onPress={() => setPrinterGuideOpen(false)}
+                activeOpacity={0.8}
+              >
+                <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                <Text style={styles.saveBtnText}>Saya Mengerti</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -1684,5 +1898,64 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
+  },
+  inlineErrorBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.35)',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 12,
+  },
+  inlineSuccessBox: {
+    backgroundColor: 'rgba(52, 211, 153, 0.15)',
+    borderColor: 'rgba(52, 211, 153, 0.35)',
+  },
+  inlineErrorText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#fb7185',
+    flex: 1,
+  },
+  inputErrorBorder: {
+    borderColor: '#fb7185',
+  },
+  guideStepItem: {
+    flexDirection: 'row',
+    gap: 12,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+  },
+  guideStepBadge: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: '#e11d48',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    marginTop: 2,
+  },
+  guideStepBadgeText: {
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+  },
+  guideStepTitle: {
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+    marginBottom: 2,
+  },
+  guideStepDesc: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    lineHeight: 18,
   },
 });
