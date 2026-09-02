@@ -55,6 +55,7 @@ import { offlineStorage } from '../services/offlineStorage';
 import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
+import { showAlert } from '../utils/alert';
 import appConfig from '../../app.json';
 
 const APP_VERSION = appConfig?.expo?.version || '1.3.0';
@@ -353,11 +354,7 @@ export default function SettingsScreen({ isLandscape = false }) {
     try {
       const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (!permissionResult.granted) {
-        if (Platform.OS === 'web') {
-          window.alert('Izin akses galeri diperlukan untuk memilih logo toko.');
-        } else {
-          Alert.alert('Izin Ditolak', 'Aplikasi memerlukan izin galeri untuk memilih foto logo toko.');
-        }
+        showAlert('Izin Ditolak', 'Aplikasi memerlukan izin galeri untuk memilih foto logo toko.');
         return;
       }
 
@@ -376,11 +373,7 @@ export default function SettingsScreen({ isLandscape = false }) {
       }
     } catch (err) {
       console.warn('Gagal memilih logo:', err);
-      if (Platform.OS === 'web') {
-        window.alert('Gagal membuka galeri gambar.');
-      } else {
-        Alert.alert('Gagal', 'Terjadi kendala saat membuka galeri gambar.');
-      }
+      showAlert('Gagal', 'Terjadi kendala saat membuka galeri gambar.');
     }
   };
 
@@ -431,27 +424,34 @@ export default function SettingsScreen({ isLandscape = false }) {
 
       setStoreModalOpen(false);
     } catch (err) {
-      console.warn('Gagal menyimpan ke server cloud:', err.message);
-      // Fallback local update
-      setStoreName(newName);
-      setStoreAddress(newAddress);
-      setStorePhone(newPhone);
-      setReceiptFooter(newFooter);
-      setStoreLogo(tempStoreLogo);
-      setShowLogoOnReceipt(tempShowLogoOnReceipt);
-      setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
+      const isNetworkErr = !err.response || err.code === 'ERR_NETWORK' || err.message?.includes('Network');
+      if (isNetworkErr) {
+        console.warn('Gagal menyimpan ke server cloud (offline), menyimpan ke cache lokal:', err.message);
+        // Fallback local update when offline
+        setStoreName(newName);
+        setStoreAddress(newAddress);
+        setStorePhone(newPhone);
+        setReceiptFooter(newFooter);
+        setStoreLogo(tempStoreLogo);
+        setShowLogoOnReceipt(tempShowLogoOnReceipt);
+        setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
 
-      await persistSettings({
-        storeName: newName,
-        storeAddress: newAddress,
-        storePhone: newPhone,
-        receiptFooter: newFooter,
-        storeLogo: tempStoreLogo,
-        showLogoOnReceipt: tempShowLogoOnReceipt,
-        showPhoneOnReceipt: tempShowPhoneOnReceipt,
-      });
+        await persistSettings({
+          storeName: newName,
+          storeAddress: newAddress,
+          storePhone: newPhone,
+          receiptFooter: newFooter,
+          storeLogo: tempStoreLogo,
+          showLogoOnReceipt: tempShowLogoOnReceipt,
+          showPhoneOnReceipt: tempShowPhoneOnReceipt,
+        });
 
-      setStoreModalOpen(false);
+        setStoreModalOpen(false);
+      } else {
+        // Backend validation or authorization error
+        const errMsg = err.response?.data?.message || 'Gagal menyimpan pengaturan toko ke server.';
+        showAlert('Gagal Menyimpan', errMsg);
+      }
     } finally {
       setSavingStore(false);
     }
@@ -528,18 +528,10 @@ export default function SettingsScreen({ isLandscape = false }) {
 
       setSyncing(false);
       const syncInfo = syncRes.synced > 0 ? ` serta ${syncRes.synced} nota offline berhasil terunggah.` : '.';
-      if (Platform.OS === 'web') {
-        window.alert(`Data toko & katalog offline berhasil disinkronkan dari cloud server${syncInfo}`);
-      } else {
-        Alert.alert('Sinkronisasi Berhasil', `Katalog offline dan pengaturan toko Anda sudah paling mutakhir${syncInfo}`);
-      }
+      showAlert('Sinkronisasi Berhasil', `Katalog offline dan pengaturan toko Anda sudah paling mutakhir${syncInfo}`);
     } catch (err) {
       setSyncing(false);
-      if (Platform.OS === 'web') {
-        window.alert('Sinkronisasi selesai (menggunakan cache lokal).');
-      } else {
-        Alert.alert('Info Sinkronisasi', 'Data lokal toko Anda aktif digunakan.');
-      }
+      showAlert('Info Sinkronisasi', 'Data lokal toko Anda aktif digunakan.');
     }
   };
 
@@ -548,23 +540,11 @@ export default function SettingsScreen({ isLandscape = false }) {
     try {
       const result = await syncManager.syncPendingTransactions();
       if (result.success && result.synced > 0) {
-        if (Platform.OS === 'web') {
-          window.alert(`Berhasil mengunggah ${result.synced} nota transaksi offline ke server cloud!`);
-        } else {
-          Alert.alert('Sukses', `${result.synced} nota transaksi offline berhasil disinkronkan ke server cloud.`);
-        }
+        showAlert('Sukses', `${result.synced} nota transaksi offline berhasil disinkronkan ke server cloud.`);
       } else if (result.remaining === 0) {
-        if (Platform.OS === 'web') {
-          window.alert('Semua nota transaksi offline sudah tersinkronkan.');
-        } else {
-          Alert.alert('Info', 'Tidak ada antrean transaksi offline yang tertunda.');
-        }
+        showAlert('Info', 'Tidak ada antrean transaksi offline yang tertunda.');
       } else {
-        if (Platform.OS === 'web') {
-          window.alert('Server backend belum dapat dijangkau. Periksa koneksi internet Anda.');
-        } else {
-          Alert.alert('Gagal', 'Server backend belum dapat dijangkau. Periksa koneksi internet Anda.');
-        }
+        showAlert('Gagal', 'Server backend belum dapat dijangkau. Periksa koneksi internet Anda.');
       }
     } finally {
       setIsSyncingOffline(false);
@@ -584,11 +564,7 @@ export default function SettingsScreen({ isLandscape = false }) {
       await offlineStorage.clearCatalogCache();
       const updatedSize = await offlineStorage.getFormattedCacheSize();
       setCacheSize(updatedSize);
-      if (Platform.OS === 'web') {
-        window.alert('Cache katalog offline berhasil dibersihkan. Memori HP kini lebih lega dan katalog akan disegarkan otomatis dari server.');
-      } else {
-        Alert.alert('Sukses', 'Cache katalog offline berhasil dibersihkan. Memori HP kini lebih lega dan katalog akan disegarkan otomatis dari server.');
-      }
+      showAlert('Sukses', 'Cache katalog offline berhasil dibersihkan. Memori HP kini lebih lega dan katalog akan disegarkan otomatis dari server.');
     };
 
     const confirmMsg = `Ukuran cache saat ini: ${currentSize}.\n\nApakah Anda yakin ingin membersihkan data katalog sementara di HP? Pengaturan toko dan antrean nota kasir tetap aman.`;
@@ -613,7 +589,7 @@ export default function SettingsScreen({ isLandscape = false }) {
     }
   };
 
-  const isOnline = serverStatus === 'Tersambung';
+  const isOnline = serverStatus === 'Online' || serverStatus === 'Terhubung' || serverStatus === 'Tersambung';
   const isNativeKeystore = Platform.OS !== 'web';
   const securityTitle = isOnline ? 'Terenkripsi & Aman' : 'Mode Offline (Aman)';
   const securityColor = isOnline ? '#6ee7b7' : '#fde68a';
