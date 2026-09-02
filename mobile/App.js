@@ -138,8 +138,8 @@ function MainApp() {
     >
       <StatusBar style="light" />
 
-      {/* Top Header Bar (Portrait Only - Hidden when inside dedicated checkout screen or landscape) */}
-      {!isLandscape && !isCheckoutActive && (
+      {/* Top Header Bar (Portrait Only - Only shown on Kasir POS screen) */}
+      {!isLandscape && !isCheckoutActive && activeTab === 'pos' && (
         <View style={styles.topBar}>
           <View style={styles.headerLeft}>
             <View style={styles.brandRow}>
