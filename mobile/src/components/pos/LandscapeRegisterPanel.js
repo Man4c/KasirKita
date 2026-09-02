@@ -24,6 +24,7 @@ export default function LandscapeRegisterPanel({
   compact,
   totalItemsCount,
   selectedCustomer,
+  showCustomerPicker = true,
   onOpenCustomerModal,
   cart,
   onClearCart,
@@ -69,21 +70,23 @@ export default function LandscapeRegisterPanel({
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           {/* Customer Chip */}
-          <TouchableOpacity
-            style={styles.regCustomerBtn}
-            onPress={onOpenCustomerModal}
-          >
-            <Users size={12} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
-            <Text
-              style={[
-                styles.regCustomerBtnText,
-                selectedCustomer && { color: '#fb7185', fontWeight: 'bold' },
-              ]}
-              numberOfLines={1}
+          {showCustomerPicker && (
+            <TouchableOpacity
+              style={styles.regCustomerBtn}
+              onPress={onOpenCustomerModal}
             >
-              {selectedCustomer ? selectedCustomer.name : 'Pelanggan'}
-            </Text>
-          </TouchableOpacity>
+              <Users size={12} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
+              <Text
+                style={[
+                  styles.regCustomerBtnText,
+                  selectedCustomer && { color: '#fb7185', fontWeight: 'bold' },
+                ]}
+                numberOfLines={1}
+              >
+                {selectedCustomer ? selectedCustomer.name : 'Pelanggan'}
+              </Text>
+            </TouchableOpacity>
+          )}
 
           {/* Clear Cart Button */}
           {cart.length > 0 && (

@@ -565,6 +565,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               compact={compact}
               totalItemsCount={totalItemsCount}
               selectedCustomer={selectedCustomer}
+              showCustomerPicker={showCustomerPicker}
               onOpenCustomerModal={() => setCustomerModalOpen(true)}
               cart={cart}
               onClearCart={() => setCart([])}
