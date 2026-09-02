@@ -153,39 +153,46 @@ class PrinterService {
         settings = {};
       }
     }
-    const bytes = buildReceiptEscpos(transaction, settings, this.paperSize);
+    const shouldPrintTwo = typeof settings.printTwoCopies === 'boolean' ? settings.printTwoCopies : this.printTwoCopies;
+    const copies = shouldPrintTwo ? ['SALINAN KASIR', 'SALINAN PELANGGAN'] : [null];
 
-    // 1. If real Bluetooth characteristic is connected
-    if (this.writeCharacteristic && this.gattServer?.connected) {
-      try {
-        // Send in 512-byte chunks to avoid buffer overflow
-        const chunkSize = 512;
-        for (let i = 0; i < bytes.length; i += chunkSize) {
-          const chunk = bytes.slice(i, i + chunkSize);
-          if (this.writeCharacteristic.writeValueWithoutResponse) {
-            await this.writeCharacteristic.writeValueWithoutResponse(chunk);
-          } else {
-            await this.writeCharacteristic.writeValue(chunk);
+    for (let c = 0; c < copies.length; c++) {
+      const copyLabel = copies[c];
+      const bytes = buildReceiptEscpos(transaction, settings, this.paperSize, copyLabel);
+
+      // 1. If real Bluetooth characteristic is connected
+      if (this.writeCharacteristic && this.gattServer?.connected) {
+        try {
+          // Send in 512-byte chunks to avoid buffer overflow
+          const chunkSize = 512;
+          for (let i = 0; i < bytes.length; i += chunkSize) {
+            const chunk = bytes.slice(i, i + chunkSize);
+            if (this.writeCharacteristic.writeValueWithoutResponse) {
+              await this.writeCharacteristic.writeValueWithoutResponse(chunk);
+            } else {
+              await this.writeCharacteristic.writeValue(chunk);
+            }
+            await new Promise((r) => setTimeout(r, 30));
           }
-          await new Promise((r) => setTimeout(r, 30));
-        }
 
-        return {
-          success: true,
-          mode: 'bluetooth',
-          message: `Struk berhasil dicetak ke ${this.deviceName}`,
-        };
-      } catch (err) {
-        console.warn('Error writing to Bluetooth thermal printer:', err.message);
-        // Fallback to simulation response
+          // Small delay between 2 copies so cutter/tear has time to complete
+          if (c < copies.length - 1) {
+            await new Promise((r) => setTimeout(r, 800));
+          }
+        } catch (err) {
+          console.warn('Error writing to Bluetooth thermal printer:', err.message);
+        }
       }
     }
 
-    // 2. Simulation / Virtual fallback
+    const isBt = Boolean(this.writeCharacteristic && this.gattServer?.connected);
     return {
       success: true,
-      mode: 'simulation',
-      message: `Simulasi cetak (${this.paperSize}): ${bytes.length} bytes ESC/POS siap dikirim`,
+      mode: isBt ? 'bluetooth' : 'simulation',
+      copies: copies.length,
+      message: shouldPrintTwo
+        ? `2 salinan struk berhasil dicetak (Kasir & Pelanggan)`
+        : `Struk berhasil dicetak ke ${this.deviceName}`,
     };
   }
 

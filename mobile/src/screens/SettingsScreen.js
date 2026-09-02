@@ -1700,23 +1700,84 @@ export default function SettingsScreen({ isLandscape = false }) {
                   receiptFooter,
                 }}
                 isTestPrint={true}
+                copyLabel={printTwoCopies ? 'SALINAN KASIR / TOKO' : null}
               />
+
+              {printTwoCopies && (
+                <>
+                  <View style={{ marginVertical: 12, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 12, fontFamily: 'Poppins_500Medium', color: '#71717a', fontStyle: 'italic' }}>
+                      - - - - - - - POTONG KERTAS (STRUK 2) - - - - - - -
+                    </Text>
+                  </View>
+                  <ReceiptView
+                    transaction={{
+                      invoice_number: 'INV-TEST-001',
+                      created_at: new Date().toISOString(),
+                      customer_name: 'Pelanggan Umum',
+                      cashier_name: user?.name || 'Kasir Toko',
+                      items: [
+                        { product_name: 'Beras Ramos 5kg', quantity: 1, subtotal: 68000 },
+                        { product_name: 'Minyak Goreng 2L', quantity: 1, subtotal: 34000 },
+                      ],
+                      subtotal: 102000,
+                      discount_amount: 0,
+                      tax_amount: 0,
+                      fee_amount: 0,
+                      total_amount: 102000,
+                      payment_method: 'CASH',
+                      paid_amount: 102000,
+                      change_amount: 0,
+                    }}
+                    storeSettings={{
+                      storeName,
+                      storeAddress,
+                      storePhone,
+                      storeLogo,
+                      showLogoOnReceipt,
+                      showPhoneOnReceipt,
+                      receiptFooter,
+                    }}
+                    isTestPrint={true}
+                    copyLabel="SALINAN PELANGGAN"
+                  />
+                </>
+              )}
             </ScrollView>
 
             <TouchableOpacity
               style={styles.testPrintConfirmBtn}
-              onPress={() => {
+              onPress={async () => {
                 setTestReceiptOpen(false);
-                if (Platform.OS === 'web') {
-                  window.alert('Perintah cetak terkirim ke printer thermal!');
+                const res = await printerService.printSample({
+                  storeName,
+                  storeAddress,
+                  storePhone,
+                  storeLogo,
+                  showPhoneOnReceipt,
+                  receiptFooter,
+                  printTwoCopies,
+                });
+                if (res.mode === 'bluetooth') {
+                  if (Platform.OS === 'web') {
+                    window.alert(res.message || 'Struk terkirim ke printer!');
+                  } else {
+                    Alert.alert('Sukses', res.message || 'Struk berhasil dicetak.');
+                  }
                 } else {
-                  Alert.alert('Sukses', 'Struk pengujian terkirim ke printer thermal.');
+                  if (Platform.OS === 'web') {
+                    window.print();
+                  } else {
+                    Alert.alert('Simulasi Cetak', `${res.copies} salinan struk disiapkan.`);
+                  }
                 }
               }}
               activeOpacity={0.8}
             >
               <Printer size={16} color="#ffffff" style={{ marginRight: 6 }} />
-              <Text style={styles.testPrintConfirmBtnText}>Kirim Cetak ke Printer</Text>
+              <Text style={styles.testPrintConfirmBtnText}>
+                {printTwoCopies ? 'Kirim Cetak 2 Salinan Struk' : 'Kirim Cetak ke Printer'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

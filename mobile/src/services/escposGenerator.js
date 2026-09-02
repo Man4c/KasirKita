@@ -141,7 +141,7 @@ export const defaultFormatRp = (val) => 'Rp' + Number(val || 0).toLocaleString('
 /**
  * Build complete ESC/POS binary receipt for a KasirKita transaction.
  */
-export function buildReceiptEscpos(transaction = {}, storeSettings = {}, paperSize = '58mm') {
+export function buildReceiptEscpos(transaction = {}, storeSettings = {}, paperSize = '58mm', copyLabel = null) {
   const builder = new EscposBuilder(paperSize);
 
   const tx = transaction || {};
@@ -152,8 +152,13 @@ export function buildReceiptEscpos(transaction = {}, storeSettings = {}, paperSi
   const showPhone = typeof settings.showPhoneOnReceipt === 'boolean' ? settings.showPhoneOnReceipt : true;
   const receiptFooter = settings.receiptFooter || settings.receipt_footer || 'Terima kasih atas kunjungan Anda!';
 
-  // 1. Header Toko
+  // 1. Header Toko & Tanda Salinan
   builder.alignCenter();
+  if (copyLabel) {
+    builder.bold(true);
+    builder.textLine(`*** ${copyLabel.toUpperCase()} ***`);
+    builder.bold(false);
+  }
   builder.bold(true).doubleHeight(true);
   builder.textLine(storeName);
   builder.bold(false).doubleHeight(false);

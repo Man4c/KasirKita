@@ -11,6 +11,7 @@ export default function ReceiptView({
   storeSettings: propStoreSettings,
   formatRp = defaultFormatRp,
   isTestPrint = false,
+  copyLabel = null,
 }) {
   const [localSettings, setLocalSettings] = useState(null);
 
@@ -82,6 +83,13 @@ export default function ReceiptView({
 
   return (
     <View style={styles.paper}>
+      {/* Salinan Label jika ada */}
+      {copyLabel ? (
+        <View style={styles.copyLabelBanner}>
+          <Text style={styles.copyLabelText}>*** {copyLabel.toUpperCase()} ***</Text>
+        </View>
+      ) : null}
+
       {/* 1. Header Toko & Logo */}
       <View style={styles.header}>
         {showLogo ? (
@@ -381,5 +389,22 @@ const styles = StyleSheet.create({
     color: '#059669',
     textAlign: 'center',
     marginTop: 6,
+  },
+  copyLabelBanner: {
+    backgroundColor: '#f4f4f5',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#e4e4e7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  copyLabelText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_700Bold',
+    color: '#18181b',
+    letterSpacing: 0.5,
   },
 });
