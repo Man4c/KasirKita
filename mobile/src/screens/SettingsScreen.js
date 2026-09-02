@@ -56,7 +56,7 @@ import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
 import { showAlert } from '../utils/alert';
-import { UserProfileModal, ChangePasswordModal } from '../components/settings';
+import { UserProfileModal, ChangePasswordModal, StoreIdentityModal } from '../components/settings';
 import appConfig from '../../app.json';
 
 const APP_VERSION = appConfig?.expo?.version || '1.3.0';
@@ -96,15 +96,6 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [cacheSize, setCacheSize] = useState('...');
   const [securityModalOpen, setSecurityModalOpen] = useState(false);
 
-  // Form Temp States for Store Modal
-  const [tempStoreName, setTempStoreName] = useState('');
-  const [tempStoreAddress, setTempStoreAddress] = useState('');
-  const [tempStorePhone, setTempStorePhone] = useState('');
-  const [tempReceiptFooter, setTempReceiptFooter] = useState('');
-  const [tempStoreLogo, setTempStoreLogo] = useState(null);
-  const [tempShowLogoOnReceipt, setTempShowLogoOnReceipt] = useState(true);
-  const [tempShowPhoneOnReceipt, setTempShowPhoneOnReceipt] = useState(true);
-  const [savingStore, setSavingStore] = useState(false);
   const [pendingOfflineCount, setPendingOfflineCount] = useState(0);
   const [isSyncingOffline, setIsSyncingOffline] = useState(false);
 
@@ -233,124 +224,6 @@ export default function SettingsScreen({ isLandscape = false }) {
     } catch (err) {
       setServerStatus('Offline / Terputus');
       setServerPing(null);
-    }
-  };
-
-  const handleOpenStoreModal = () => {
-    setTempStoreName(storeName);
-    setTempStoreAddress(storeAddress);
-    setTempStorePhone(storePhone);
-    setTempReceiptFooter(receiptFooter);
-    setTempStoreLogo(storeLogo);
-    setTempShowLogoOnReceipt(showLogoOnReceipt);
-    setTempShowPhoneOnReceipt(showPhoneOnReceipt);
-    setStoreModalOpen(true);
-  };
-
-  const handlePickLogo = async () => {
-    try {
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!permissionResult.granted) {
-        showAlert('Izin Ditolak', 'Aplikasi memerlukan izin galeri untuk memilih foto logo toko.');
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.6,
-        base64: true,
-      });
-
-      if (!result.canceled && result.assets && result.assets[0]) {
-        const asset = result.assets[0];
-        const uri = asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
-        setTempStoreLogo(uri);
-      }
-    } catch (err) {
-      console.warn('Gagal memilih logo:', err);
-      showAlert('Gagal', 'Terjadi kendala saat membuka galeri gambar.');
-    }
-  };
-
-  const handleRemoveLogo = () => {
-    setTempStoreLogo(null);
-  };
-
-  const handleSaveStoreModal = async () => {
-    const newName = tempStoreName.trim() || 'KasirKita Mart';
-    const newAddress = tempStoreAddress.trim();
-    const newPhone = tempStorePhone.trim();
-    const newFooter = tempReceiptFooter.trim();
-
-    setSavingStore(true);
-    try {
-      // 1. If user is owner, sync to Cloud backend
-      if (user?.role === 'owner') {
-        await api.put('/settings/store', {
-          name: newName,
-          address: newAddress,
-          phone: newPhone,
-          logo: tempStoreLogo,
-          receipt_footer: newFooter,
-          show_logo_on_receipt: tempShowLogoOnReceipt,
-          show_phone_on_receipt: tempShowPhoneOnReceipt,
-        });
-      }
-
-      // 2. Update local state
-      setStoreName(newName);
-      setStoreAddress(newAddress);
-      setStorePhone(newPhone);
-      setReceiptFooter(newFooter);
-      setStoreLogo(tempStoreLogo);
-      setShowLogoOnReceipt(tempShowLogoOnReceipt);
-      setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
-
-      // 3. Persist locally to storage
-      await persistSettings({
-        storeName: newName,
-        storeAddress: newAddress,
-        storePhone: newPhone,
-        receiptFooter: newFooter,
-        storeLogo: tempStoreLogo,
-        showLogoOnReceipt: tempShowLogoOnReceipt,
-        showPhoneOnReceipt: tempShowPhoneOnReceipt,
-      });
-
-      setStoreModalOpen(false);
-    } catch (err) {
-      const isNetworkErr = !err.response || err.code === 'ERR_NETWORK' || err.message?.includes('Network');
-      if (isNetworkErr) {
-        console.warn('Gagal menyimpan ke server cloud (offline), menyimpan ke cache lokal:', err.message);
-        // Fallback local update when offline
-        setStoreName(newName);
-        setStoreAddress(newAddress);
-        setStorePhone(newPhone);
-        setReceiptFooter(newFooter);
-        setStoreLogo(tempStoreLogo);
-        setShowLogoOnReceipt(tempShowLogoOnReceipt);
-        setShowPhoneOnReceipt(tempShowPhoneOnReceipt);
-
-        await persistSettings({
-          storeName: newName,
-          storeAddress: newAddress,
-          storePhone: newPhone,
-          receiptFooter: newFooter,
-          storeLogo: tempStoreLogo,
-          showLogoOnReceipt: tempShowLogoOnReceipt,
-          showPhoneOnReceipt: tempShowPhoneOnReceipt,
-        });
-
-        setStoreModalOpen(false);
-      } else {
-        // Backend validation or authorization error
-        const errMsg = err.response?.data?.message || 'Gagal menyimpan pengaturan toko ke server.';
-        showAlert('Gagal Menyimpan', errMsg);
-      }
-    } finally {
-      setSavingStore(false);
     }
   };
 
@@ -564,7 +437,7 @@ export default function SettingsScreen({ isLandscape = false }) {
           <TouchableOpacity
             style={styles.menuRow}
             activeOpacity={0.7}
-            onPress={handleOpenStoreModal}
+            onPress={() => setStoreModalOpen(true)}
           >
             <View style={styles.menuIconBox}>
               {storeLogo ? (
@@ -1036,189 +909,40 @@ export default function SettingsScreen({ isLandscape = false }) {
         onClose={() => setPasswordModalOpen(false)}
       />
 
-      {/* MODAL 1: EDIT PROFIL & INFORMASI TOKO */}
-      <Modal
+      {/* MODAL 1: INFORMASI TOKO & STRUK */}
+      <StoreIdentityModal
         visible={storeModalOpen}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setStoreModalOpen(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {/* Modal Header */}
-            <View style={styles.modalHeader}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                <View style={styles.headerIconBox}>
-                  <Store size={18} color="#fb7185" />
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.modalTitle}>Informasi Toko & Struk</Text>
-                  <Text style={styles.modalSubtitle}>Kustomisasi data toko yang dicetak pada struk</Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                onPress={() => setStoreModalOpen(false)}
-                style={styles.closeBtn}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <X size={20} color="#d4d4d8" />
-              </TouchableOpacity>
-            </View>
+        onClose={() => setStoreModalOpen(false)}
+        storeSettings={{
+          storeName,
+          storeAddress,
+          storePhone,
+          receiptFooter,
+          storeLogo,
+          showLogoOnReceipt,
+          showPhoneOnReceipt,
+        }}
+        isOwner={user?.role === 'owner'}
+        onSaveSuccess={async (updated) => {
+          setStoreName(updated.storeName);
+          setStoreAddress(updated.storeAddress);
+          setStorePhone(updated.storePhone);
+          setReceiptFooter(updated.receiptFooter);
+          setStoreLogo(updated.storeLogo);
+          setShowLogoOnReceipt(updated.showLogoOnReceipt);
+          setShowPhoneOnReceipt(updated.showPhoneOnReceipt);
 
-            <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
-              {/* Form Input: Logo Toko */}
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Logo Toko untuk Struk</Text>
-                <View style={styles.logoPickerContainer}>
-                  {tempStoreLogo ? (
-                    <View style={styles.logoPreviewWrapper}>
-                      <Image source={{ uri: tempStoreLogo }} style={styles.logoPreviewImage} resizeMode="contain" />
-                      <TouchableOpacity
-                        style={styles.logoRemoveBadge}
-                        onPress={handleRemoveLogo}
-                        activeOpacity={0.8}
-                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                      >
-                        <X size={12} color="#ffffff" />
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <View style={styles.logoEmptyBox}>
-                      <ImageIcon size={28} color="#a1a1aa" />
-                    </View>
-                  )}
-
-                  <View style={styles.logoInfoCol}>
-                    <TouchableOpacity
-                      style={styles.uploadLogoBtn}
-                      onPress={handlePickLogo}
-                      activeOpacity={0.8}
-                    >
-                      <Upload size={14} color="#ffffff" style={{ marginRight: 6 }} />
-                      <Text style={styles.uploadLogoBtnText}>
-                        {tempStoreLogo ? 'Ganti Logo dari Galeri' : 'Pilih Logo dari Galeri'}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <Text style={styles.logoHelpText}>
-                      Format persegi 1:1 (PNG/JPG transparan)
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
-              {/* Form Input: Nama Toko */}
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Nama Usaha / Toko *</Text>
-                <TextInput
-                  style={styles.formInput}
-                  value={tempStoreName}
-                  onChangeText={setTempStoreName}
-                  placeholder="Nama toko Anda..."
-                  placeholderTextColor="#71717a"
-                />
-              </View>
-
-              {/* Form Input: Alamat */}
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Alamat Toko</Text>
-                <TextInput
-                  style={styles.formInput}
-                  value={tempStoreAddress}
-                  onChangeText={setTempStoreAddress}
-                  placeholder="Alamat lengkap toko..."
-                  placeholderTextColor="#71717a"
-                />
-              </View>
-
-              {/* Form Input: Nomor WhatsApp */}
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Nomor WhatsApp / Telepon Toko</Text>
-                <TextInput
-                  style={styles.formInput}
-                  value={tempStorePhone}
-                  onChangeText={setTempStorePhone}
-                  placeholder="0812-xxxx-xxxx"
-                  placeholderTextColor="#71717a"
-                  keyboardType="phone-pad"
-                />
-              </View>
-
-              {/* Form Input: Pesan Penutup Struk */}
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Pesan Penutup Struk Belanja</Text>
-                <TextInput
-                  style={[styles.formInput, { minHeight: 64, textAlignVertical: 'top' }]}
-                  value={tempReceiptFooter}
-                  onChangeText={setTempReceiptFooter}
-                  placeholder="Contoh: Terima kasih atas kunjungan Anda..."
-                  placeholderTextColor="#71717a"
-                  multiline
-                />
-              </View>
-
-              <View style={styles.divider} />
-
-              {/* Co-located Receipt Toggles */}
-              <View style={styles.switchRow}>
-                <View style={{ flex: 1, minWidth: 0, paddingRight: 10 }}>
-                  <Text style={styles.switchTitle}>Tampilkan Logo Toko di Struk</Text>
-                  <Text style={styles.switchSubtitle}>Cetak lambang ikon toko di baris teratas nota</Text>
-                </View>
-                <Switch
-                  value={tempShowLogoOnReceipt}
-                  onValueChange={setTempShowLogoOnReceipt}
-                  trackColor={{ false: '#27272a', true: '#e11d48' }}
-                  thumbColor={tempShowLogoOnReceipt ? '#fb7185' : '#71717a'}
-                />
-              </View>
-
-              <View style={styles.switchRow}>
-                <View style={{ flex: 1, minWidth: 0, paddingRight: 10 }}>
-                  <Text style={styles.switchTitle}>Tampilkan No. WhatsApp di Struk</Text>
-                  <Text style={styles.switchSubtitle}>Cetak kontak WhatsApp toko untuk pesanan antar</Text>
-                </View>
-                <Switch
-                  value={tempShowPhoneOnReceipt}
-                  onValueChange={setTempShowPhoneOnReceipt}
-                  trackColor={{ false: '#27272a', true: '#e11d48' }}
-                  thumbColor={tempShowPhoneOnReceipt ? '#fb7185' : '#71717a'}
-                />
-              </View>
-            </ScrollView>
-
-            {/* Modal Actions */}
-            <View style={styles.modalActionRow}>
-              <TouchableOpacity
-                style={styles.cancelBtn}
-                onPress={() => setStoreModalOpen(false)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.cancelBtnText}>Batal</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.saveBtn, savingStore && { opacity: 0.8 }]}
-                onPress={handleSaveStoreModal}
-                disabled={savingStore}
-                activeOpacity={0.8}
-              >
-                {savingStore ? (
-                  <>
-                    <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 6 }} />
-                    <Text style={styles.saveBtnText}>Menyimpan ke Cloud...</Text>
-                  </>
-                ) : (
-                  <>
-                    <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
-                    <Text style={styles.saveBtnText}>Simpan Pengaturan</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+          await persistSettings({
+            storeName: updated.storeName,
+            storeAddress: updated.storeAddress,
+            storePhone: updated.storePhone,
+            receiptFooter: updated.receiptFooter,
+            storeLogo: updated.storeLogo,
+            showLogoOnReceipt: updated.showLogoOnReceipt,
+            showPhoneOnReceipt: updated.showPhoneOnReceipt,
+          });
+        }}
+      />
 
       {/* MODAL 2: PILIH PRINTER BLUETOOTH THERMAL */}
       <Modal
