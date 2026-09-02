@@ -301,9 +301,6 @@ export default function SettingsScreen({ isLandscape = false }) {
     });
   };
 
-    setStoreModalOpen(false);
-  };
-
   const handleLogout = () => {
     if (Platform.OS === 'web') {
       if (window.confirm('Apakah Anda yakin ingin keluar dari akun kasir KasirKita?')) {
