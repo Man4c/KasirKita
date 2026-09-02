@@ -20,6 +20,30 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyempurnaan Hierarki Checkout & Keranjang POS Mobile (`PosCheckoutView.js`, `LandscapeRegisterPanel.js`)**:
+  - **Badge Keranjang**: Mengubah warna background badge jumlah item pada header panel keranjang menjadi merah crimson khas KasirKita (`#e11d48`) dengan angka tebal putih (`#ffffff`, `Poppins_700Bold`), membuang teks "pcs" sehingga hanya menampilkan angka murni yang terpusat simetris (`includeFontPadding: false`).
+  - **Penataan Ulang Hierarki Kolom Checkout (Landscape & Portrait)**:
+    1. **Daftar Pesanan (Atas / Scrollable)**: Mengikuti hierarki alami nota kalkulasi ritel, daftar item dan subtotal diletakkan di urutan pertama dalam container `ScrollView` (`flex: 1`) sehingga bila item banyak, daftar pesanan dapat digulir tanpa mendorong keluar elemen penting lainnya.
+    2. **Pelanggan Umum / Member**: Pemilihan pelanggan diposisikan mendahului diskon promo agar penentuan hak member dapat dilakukan sebelum kalkulasi voucher.
+    3. **Voucher & Pajak**: Pill options untuk kode promo diskon dan tarif pajak (PPN/PB1).
+    4. **TOTAL TAGIHAN (Bawah / Pinned Sticky Footer)**: Banner merah total tagihan dikunci di posisi paling bawah sehingga nominal akhir pembayaran selalu terlihat jelas tanpa tertutup/tenggelam oleh daftar belanjaan yang panjang.
+  - **Presisi Typografi Numpad & Tombol Pembayaran**: Mengatasi isu intrinsik Android Google Font Poppins descender padding dengan menerapkan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada seluruh tombol numpad, preset uang pas, tab metode pembayaran (TUNAI/QRIS/TRANSFER), dan tombol submit pembayaran.
+
+- **Refaktorisasi & Modularisasi Skrip Layar Kasir Mobile (`PosScreen.js`) - Plan #22 SELESAI (100%)**:
+  - Pemecahan file monolitik `PosScreen.js` (~4.900 baris) menjadi ~840 baris dengan mengekstrak 8 sub-komponen terisolasi di `mobile/src/components/pos/`:
+    1. `CustomerPickerModal.js`: Modal pemilihan pelanggan & member dengan live search dan badge keanggotaan.
+    2. `PromoVoucherModal.js`: Modal daftar voucher toko dan promo diskon aktif.
+    3. `TaxFeeModal.js`: Modal pemilihan tarif pajak PPN/PB1 transaksi.
+    4. `PosReceiptModal.js`: Modal nota struk thermal Bluetooth ESC/POS lengkap dengan opsi print fisik & simulasi.
+    5. `PosCartModal.js`: Bottom sheet interaktif keranjang belanja khusus mode portrait.
+    6. `ProductGrid.js`: Grid katalog produk responsive, toolbar pencarian, filter kategori, dan kartu stok.
+    7. `LandscapeRegisterPanel.js`: Kolom kasir kanan persisten untuk mode tablet/landscape.
+    8. `PosCheckoutView.js`: Tampilan dedicated checkout view (landscape 2-kolom & portrait) dengan input voucher, tabs metode pembayaran CASH/QRIS/TRANSFER, dan integrated cashier numpad 3x4 + quick nominal presets.
+  - Pemangkasan ribuan baris StyleSheet monolitik mati dari `PosScreen.js`, menyisakan container dasar dan floating cart.
+  - Integrasi custom hook `useCheckoutReducer` (`mobile/src/hooks/useCheckoutState.js`) menggantikan belasan state flat.
+  - Audit Defensive UI & WCAG Accessibility: Semua ukuran font terkecil memenuhi batas lantai keterbacaan (≥12px / `text-xs`), flexbox pairing (`min-w-0 truncate` vs `shrink-0 whitespace-nowrap`), serta detektor Impeccable 0 defect (`[]`).
+  - Verifikasi automated test PHPUnit (`EndToEndFlowTest`) lolos 100% (13 assertions) dan bundler Expo Web lulus 100% (2.204 modules).
+
 - Inisialisasi arsitektur backend Laravel REST API & Laravel Sanctum di folder `backend/`.
 - Perancangan ERD dan implementasi skema PostgreSQL lengkap dengan UUID & Indexing (`docs/ERD-Database.md`).
 - Implementasi API Endpoint Otentikasi (`/api/auth/login`, `/api/auth/logout`, `/api/auth/me`, `/api/health`).
@@ -277,6 +301,8 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
         - *Spesifikasi Lebar Kertas Nonaktif (`paperSizeSpec`)*: Mengganti teks abu gelap `#71717a` di atas kartu `#18181b` menjadi `#a1a1aa`, menaikkan rasio kontras dari 3.7:1 menjadi **6.78:1** (memenuhi batas WCAG AA > 4.5:1).
         - *Badge Latensi Ping Server (`pingBadge`)*: Mengganti latar tembus pandang hijau pudar dengan latar dark emerald tegas (`backgroundColor: '#062d22'`, `borderColor: '#065f46'`) dan teks serta ikon WiFi hijau cerah (`#6ee7b7`), mengeliminasi benturan kontras identik 1.0:1 (`#34d399` on `#34d399`) menjadi rasio prima **10.7:1** (WCAG AAA).
         - *Pills Audit Keamanan Sesi (`statusPill`)*: Memperbarui pil status di Modal Keamanan dari inline `rgba(...)` dengan teks berwarna pudar (`#34d399`, `#fbbf24`, `#38bdf8` yang memicu temuan 1.0:1) menjadi varian solid beraksen gelap (`statusPillGreen` #062d22/teks #6ee7b7 rasio 10.7:1, `statusPillAmber` #2e1d05/teks #fde68a rasio 12.8:1, `statusPillSky` #082f49/teks #7dd3fc rasio 8.43:1), melampaui seluruh kriteria WCAG AAA.
+        - *Kartu Katalog Produk Kasir & Register (`ProductGrid.js`, `LandscapeRegisterPanel.js`, `PosCheckoutView.js`)*: Mengganti warna teks nama kategori (`cardCategory`), unit satuan harga (`cardPriceUnit`), sub-status keranjang kosong (`registerEmptySub`), label total bayar register (`regTotalLabel`), sub-identitas pelanggan (`checkoutCustomerSub`), dan label display kalkulasi uang kasir (`cashDisplayLabel`) dari abu gelap `#71717a` (3.7:1) menjadi `#a1a1aa` (6.78:1), menuntaskan 10 temuan aksesibilitas kontras rendah di antarmuka kasir POS secara serentak.
+        - *Badge Kuantitas Tagihan Checkout (`checkoutBillItemBadge`)*: Mengganti latar tembus pandang pudar dengan latar dark rose solid (`backgroundColor: '#3b0d19'`, `borderColor: '#881337'`) serta teks putih murni (`#ffffff`), menaikkan rasio kontras dari 1.7:1 (`#fb7185` on `#e11d48`) menjadi **16.2:1** (WCAG AAA). Sekaligus menyelaraskan chip dan pil opsi kilat di modal checkout (`checkoutMembershipBadge`, `regQuickPillActive`, `checkoutQuickChipActive`).
     15. **Universal Bluetooth Thermal ESC/POS Engine (Hardware-Ready)**:
       - `mobile/src/services/escposGenerator.js`: Pembangun binary ESC/POS standar industri mendukung ukuran kertas 58mm (32 kolom) & 80mm (48 kolom), tata letak dua sisi otomatis, pemisah garis, dan perintah feed/cutter.
       - `mobile/src/services/printerService.js`: Universal printer service mendukung Web Bluetooth API (`navigator.bluetooth`) untuk scanning & pairing printer fisik asli, pengiriman chunk 512-byte, serta fallback ke Mode Simulasi Virtual & dialog cetak printer biasa/PDF.
@@ -285,6 +311,7 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Rencana Modul Aktif & Dalam Antrean:
     8. `plans/260831-16-master-meja-dan-antrean/plan.md` (Prioritas P2: Manajemen meja kafe/resto, indikator meja realtime Kosong/Terisi, split bill, antrean takeaway, dan slip order dapur).
     9. `plans/260831-17-master-cabang-dan-outlet/plan.md` (Prioritas P1: Multi-outlet, isolasi level stok per cabang, transfer stok antar cabang, penugasan staf kasir per gerai, dan konsolidasi omzet).
+    10. `plans/260902-22-mobile-pos-screen-refactoring/plan.md` (Prioritas P1: Modularisasi & Refactoring PosScreen.js ~4900 baris, useMemo kalkulasi, useReducer state machine, normalisasi API, dan konsolidasi offline fallback).
 - **Autentikasi Multi-Platform:**
   - Web: Laravel Sanctum berbasis stateful/cookies atau bearer token.
   - Mobile: Laravel Sanctum stateless bearer token disimpan di SecureStore.
