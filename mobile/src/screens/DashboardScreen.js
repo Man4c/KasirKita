@@ -58,8 +58,10 @@ export default function DashboardScreen({ isLandscape = false }) {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.headerTitle}>Laporan Toko Hari Ini</Text>
-      <Text style={styles.headerSubtitle}>Ringkasan performa penjualan dan keuangan</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Laporan Toko Hari Ini</Text>
+        <Text style={styles.headerSubtitle}>Ringkasan performa penjualan dan keuangan</Text>
+      </View>
 
       {/* Card 1: Omzet */}
       <View style={styles.card}>
@@ -140,6 +142,9 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 40,
   },
+  header: {
+    marginBottom: 16,
+  },
   headerTitle: {
     fontSize: 22,
     fontFamily: 'Poppins_700Bold',
@@ -150,7 +155,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
     marginTop: 2,
-    marginBottom: 16,
   },
   card: {
     backgroundColor: '#18181b',

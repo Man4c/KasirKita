@@ -1175,7 +1175,6 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 20,
-    paddingTop: 4,
   },
   headerTitle: {
     fontSize: 22,
