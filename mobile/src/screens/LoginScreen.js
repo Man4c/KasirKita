@@ -17,6 +17,8 @@ import {
   LogIn,
   Settings,
   AlertCircle,
+  Eye,
+  EyeOff,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -43,6 +45,7 @@ export default function LoginScreen() {
   const [showConfig, setShowConfig] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
 
@@ -131,15 +134,27 @@ export default function LoginScreen() {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Kata Sandi</Text>
             <View style={styles.inputRow}>
-              <Lock size={16} color="#a1a1aa" style={{ marginRight: 10 }} />
+              <Lock size={16} color="#a1a1aa" style={{ marginRight: 10, flexShrink: 0 }} />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { flex: 1, minWidth: 0 }]}
                 placeholder="••••••••"
                 placeholderTextColor="#71717a"
-                secureTextEntry
+                secureTextEntry={!showPassword}
                 value={password}
                 onChangeText={setPassword}
               />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                style={styles.eyeBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                activeOpacity={0.7}
+              >
+                {showPassword ? (
+                  <EyeOff size={18} color="#a1a1aa" />
+                ) : (
+                  <Eye size={18} color="#a1a1aa" />
+                )}
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -298,6 +313,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Poppins_400Regular',
     color: '#ffffff',
+  },
+  eyeBtn: {
+    padding: 6,
+    flexShrink: 0,
+    marginLeft: 6,
   },
   inputSingle: {
     backgroundColor: '#09090b',

@@ -32,6 +32,8 @@ import {
   Trash2,
   KeyRound,
   Lock,
+  Eye,
+  EyeOff,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -75,6 +77,9 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [savingPassword, setSavingPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Form Temp States for Store Modal
   const [tempStoreName, setTempStoreName] = useState('');
@@ -195,6 +200,9 @@ export default function SettingsScreen({ isLandscape = false }) {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
+    setShowCurrentPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
     setPasswordModalOpen(true);
   };
 
@@ -818,38 +826,80 @@ export default function SettingsScreen({ isLandscape = false }) {
             <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Kata Sandi Saat Ini *</Text>
-                <TextInput
-                  style={styles.formInput}
-                  value={currentPassword}
-                  onChangeText={setCurrentPassword}
-                  placeholder="Masukkan sandi saat ini..."
-                  placeholderTextColor="#71717a"
-                  secureTextEntry
-                />
+                <View style={styles.passwordInputRow}>
+                  <TextInput
+                    style={styles.passwordTextInput}
+                    value={currentPassword}
+                    onChangeText={setCurrentPassword}
+                    placeholder="Masukkan sandi saat ini..."
+                    placeholderTextColor="#71717a"
+                    secureTextEntry={!showCurrentPassword}
+                  />
+                  <TouchableOpacity
+                    style={styles.eyeBtn}
+                    onPress={() => setShowCurrentPassword(!showCurrentPassword)}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    activeOpacity={0.7}
+                  >
+                    {showCurrentPassword ? (
+                      <EyeOff size={18} color="#a1a1aa" />
+                    ) : (
+                      <Eye size={18} color="#a1a1aa" />
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Kata Sandi Baru * (Min. 6 Karakter)</Text>
-                <TextInput
-                  style={styles.formInput}
-                  value={newPassword}
-                  onChangeText={setNewPassword}
-                  placeholder="Masukkan sandi baru..."
-                  placeholderTextColor="#71717a"
-                  secureTextEntry
-                />
+                <View style={styles.passwordInputRow}>
+                  <TextInput
+                    style={styles.passwordTextInput}
+                    value={newPassword}
+                    onChangeText={setNewPassword}
+                    placeholder="Masukkan sandi baru..."
+                    placeholderTextColor="#71717a"
+                    secureTextEntry={!showNewPassword}
+                  />
+                  <TouchableOpacity
+                    style={styles.eyeBtn}
+                    onPress={() => setShowNewPassword(!showNewPassword)}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    activeOpacity={0.7}
+                  >
+                    {showNewPassword ? (
+                      <EyeOff size={18} color="#a1a1aa" />
+                    ) : (
+                      <Eye size={18} color="#a1a1aa" />
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Konfirmasi Kata Sandi Baru *</Text>
-                <TextInput
-                  style={styles.formInput}
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  placeholder="Ulangi sandi baru..."
-                  placeholderTextColor="#71717a"
-                  secureTextEntry
-                />
+                <View style={styles.passwordInputRow}>
+                  <TextInput
+                    style={styles.passwordTextInput}
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    placeholder="Ulangi sandi baru..."
+                    placeholderTextColor="#71717a"
+                    secureTextEntry={!showConfirmPassword}
+                  />
+                  <TouchableOpacity
+                    style={styles.eyeBtn}
+                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    activeOpacity={0.7}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff size={18} color="#a1a1aa" />
+                    ) : (
+                      <Eye size={18} color="#a1a1aa" />
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
             </ScrollView>
 
@@ -1514,6 +1564,28 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
+  },
+  passwordInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#09090b',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingHorizontal: 12,
+  },
+  passwordTextInput: {
+    flex: 1,
+    minWidth: 0,
+    paddingVertical: 10,
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_400Regular',
+  },
+  eyeBtn: {
+    padding: 6,
+    flexShrink: 0,
+    marginLeft: 6,
   },
   modalActionRow: {
     flexDirection: 'row',
