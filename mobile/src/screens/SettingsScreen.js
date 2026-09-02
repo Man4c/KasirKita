@@ -56,7 +56,14 @@ import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
 import { showAlert } from '../utils/alert';
-import { UserProfileModal, ChangePasswordModal, StoreIdentityModal } from '../components/settings';
+import {
+  UserProfileModal,
+  ChangePasswordModal,
+  StoreIdentityModal,
+  PrinterSettingsModal,
+  PrinterGuideModal,
+  TestReceiptModal,
+} from '../components/settings';
 import appConfig from '../../app.json';
 
 const APP_VERSION = appConfig?.expo?.version || '1.3.0';
@@ -945,368 +952,50 @@ export default function SettingsScreen({ isLandscape = false }) {
       />
 
       {/* MODAL 2: PILIH PRINTER BLUETOOTH THERMAL */}
-      <Modal
+      <PrinterSettingsModal
         visible={printerModalOpen}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setPrinterModalOpen(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                <View style={styles.headerIconBox}>
-                  <Printer size={18} color="#fb7185" />
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.modalTitle}>Printer Bluetooth Thermal</Text>
-                  <Text style={styles.modalSubtitle}>Pilih perangkat printer kasir Anda</Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                onPress={() => setPrinterModalOpen(false)}
-                style={styles.closeBtn}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <X size={20} color="#d4d4d8" />
-              </TouchableOpacity>
-            </View>
-
-            {/* Real Bluetooth Scan Action */}
-            <TouchableOpacity
-              style={[styles.scanBluetoothBtn, isScanningBluetooth && { opacity: 0.8 }]}
-              onPress={async () => {
-                if (!printerService.isWebBluetoothSupported()) {
-                  if (Platform.OS === 'web') {
-                    window.alert('Web Bluetooth memerlukan peramban Google Chrome atau Microsoft Edge dengan fitur Bluetooth aktif.');
-                  } else {
-                    Alert.alert(
-                      'Koneksi Bluetooth Smartphone',
-                      'Saat ini aplikasi dibuka melalui wadah uji coba Expo Go di HP Anda. Akses perangkat keras Bluetooth printer fisik (seperti Panda PRJ-58D atau RPP02N) akan otomatis aktif penuh saat aplikasi di-build menjadi file APK resmi toko Anda.\n\nUntuk latihan dan uji cetak saat ini, silakan pilih model printer di daftar bawah agar format kertas struk (58mm/80mm) disesuaikan.',
-                      [{ text: 'Paham & Lanjutkan', style: 'default' }]
-                    );
-                  }
-                  return;
-                }
-
-                setIsScanningBluetooth(true);
-                try {
-                  const res = await printerService.scanAndConnectWebBluetooth();
-                  setSelectedPrinter(res.name);
-                  setIsPrinterConnected(true);
-                  setIsPhysicalPrinter(true);
-                  setPrinterModalOpen(false);
-                  if (Platform.OS === 'web') {
-                    window.alert(`Berhasil terhubung ke printer fisik: ${res.name}`);
-                  } else {
-                    Alert.alert('Bluetooth Terhubung', `Printer ${res.name} berhasil dipasangkan dan siap mencetak.`);
-                  }
-                } catch (err) {
-                  if (err.message && !err.message.includes('User cancelled')) {
-                    Alert.alert('Gagal Memindai', err.message);
-                  }
-                } finally {
-                  setIsScanningBluetooth(false);
-                }
-              }}
-              disabled={isScanningBluetooth}
-              activeOpacity={0.8}
-            >
-              {isScanningBluetooth ? (
-                <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 8 }} />
-              ) : (
-                <Bluetooth size={16} color="#ffffff" style={{ marginRight: 8 }} />
-              )}
-              <Text style={styles.scanBluetoothBtnText}>
-                {isScanningBluetooth
-                  ? 'Memindai Bluetooth...'
-                  : Platform.OS === 'web'
-                  ? 'Pindai Printer Bluetooth (Web Bluetooth)'
-                  : 'Hubungkan Printer Bluetooth HP'}
-              </Text>
-            </TouchableOpacity>
-
-            <View style={{ marginVertical: 10, paddingHorizontal: 4 }}>
-              <Text style={{ fontSize: 12, fontFamily: 'Poppins_600SemiBold', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                Preset / Mode Simulasi Virtual
-              </Text>
-              <Text style={{ fontSize: 12, fontFamily: 'Poppins_400Regular', color: '#a1a1aa' }}>
-                Pilih profil di bawah jika belum ada printer fisik:
-              </Text>
-            </View>
-
-            <ScrollView style={{ maxHeight: 260 }} showsVerticalScrollIndicator={false}>
-              {[
-                { id: 'Panda PRJ-58D (Bluetooth Thermal)', desc: 'Ukuran 58mm • Standar POS Ritel' },
-                { id: 'RPP02N Mini POS (58mm)', desc: 'Ukuran 58mm • Mini Saku Bluetooth' },
-                { id: 'Thermal-80 Desktop POS (80mm)', desc: 'Ukuran 80mm • Kasir Minimarket / Resto' },
-                { id: 'Iware MP-58A (Bluetooth Thermal)', desc: 'Ukuran 58mm • Portabel UMKM' },
-                { id: 'Printer Virtual Kasir (Simulasi)', desc: 'Cetak ke layar & dialog cetak printer biasa' },
-              ].map((p) => {
-                const isSelected = selectedPrinter === p.id;
-                return (
-                  <TouchableOpacity
-                    key={p.id}
-                    style={[styles.printerOptionRow, isSelected && styles.printerOptionRowActive]}
-                    onPress={async () => {
-                      await printerService.setSimulationMode(p.id);
-                      setSelectedPrinter(p.id);
-                      setIsPrinterConnected(true);
-                      setIsPhysicalPrinter(false);
-                      persistSettings({ selectedPrinter: p.id, isPrinterConnected: true });
-                      setPrinterModalOpen(false);
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <View style={{ flex: 1, minWidth: 0 }}>
-                      <Text style={[styles.printerOptionName, isSelected && styles.printerOptionNameActive]}>
-                        {p.id}
-                      </Text>
-                      <Text style={styles.printerOptionDesc}>{p.desc}</Text>
-                    </View>
-                    {isSelected && <Check size={18} color="#fb7185" style={{ flexShrink: 0 }} />}
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-
-            <View style={styles.modalActionRow}>
-              <TouchableOpacity
-                style={[styles.cancelBtn, { flex: 1 }]}
-                onPress={() => {
-                  setIsPrinterConnected(!isPrinterConnected);
-                  persistSettings({ isPrinterConnected: !isPrinterConnected });
-                }}
-              >
-                <Text style={styles.cancelBtnText}>
-                  {isPrinterConnected ? 'Putuskan Sambungan' : 'Sambungkan Ulang'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setPrinterModalOpen(false)}
+        selectedPrinter={selectedPrinter}
+        onSelectPrinter={(printerId, connected, physical) => {
+          setSelectedPrinter(printerId);
+          setIsPrinterConnected(connected);
+          setIsPhysicalPrinter(physical);
+          persistSettings({ selectedPrinter: printerId, isPrinterConnected: connected });
+        }}
+        isPrinterConnected={isPrinterConnected}
+        onToggleConnection={() => {
+          const nextState = !isPrinterConnected;
+          setIsPrinterConnected(nextState);
+          persistSettings({ isPrinterConnected: nextState });
+        }}
+        isScanningBluetooth={isScanningBluetooth}
+        setIsScanningBluetooth={setIsScanningBluetooth}
+        isPhysicalPrinter={isPhysicalPrinter}
+        setIsPhysicalPrinter={setIsPhysicalPrinter}
+      />
 
       {/* MODAL 3: PREVIEW UJI CETAK STRUK */}
-      <Modal
+      <TestReceiptModal
         visible={testReceiptOpen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setTestReceiptOpen(false)}
-      >
-        <View style={styles.modalOverlayCenter}>
-          <View style={styles.testReceiptCard}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: '#18181b' }]}>Uji Cetak Struk</Text>
-              <TouchableOpacity onPress={() => setTestReceiptOpen(false)}>
-                <X size={20} color="#18181b" />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView style={{ maxHeight: 460, width: '100%' }} showsVerticalScrollIndicator={false}>
-              <ReceiptView
-                transaction={{
-                  invoice_number: 'INV-TEST-001',
-                  created_at: new Date().toISOString(),
-                  customer_name: 'Pelanggan Umum',
-                  cashier_name: user?.name || 'Kasir Toko',
-                  items: [
-                    { product_name: 'Beras Ramos 5kg', quantity: 1, subtotal: 68000 },
-                    { product_name: 'Minyak Goreng 2L', quantity: 1, subtotal: 34000 },
-                  ],
-                  subtotal: 102000,
-                  discount_amount: 0,
-                  tax_amount: 0,
-                  fee_amount: 0,
-                  total_amount: 102000,
-                  payment_method: 'CASH',
-                  paid_amount: 102000,
-                  change_amount: 0,
-                }}
-                storeSettings={{
-                  storeName,
-                  storeAddress,
-                  storePhone,
-                  storeLogo,
-                  showLogoOnReceipt,
-                  showPhoneOnReceipt,
-                  receiptFooter,
-                }}
-                isTestPrint={true}
-                copyLabel={printTwoCopies ? 'SALINAN KASIR / TOKO' : null}
-              />
-
-              {printTwoCopies && (
-                <>
-                  <View style={{ marginVertical: 12, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 12, fontFamily: 'Poppins_500Medium', color: '#71717a', fontStyle: 'italic' }}>
-                      - - - - - - - POTONG KERTAS (STRUK 2) - - - - - - -
-                    </Text>
-                  </View>
-                  <ReceiptView
-                    transaction={{
-                      invoice_number: 'INV-TEST-001',
-                      created_at: new Date().toISOString(),
-                      customer_name: 'Pelanggan Umum',
-                      cashier_name: user?.name || 'Kasir Toko',
-                      items: [
-                        { product_name: 'Beras Ramos 5kg', quantity: 1, subtotal: 68000 },
-                        { product_name: 'Minyak Goreng 2L', quantity: 1, subtotal: 34000 },
-                      ],
-                      subtotal: 102000,
-                      discount_amount: 0,
-                      tax_amount: 0,
-                      fee_amount: 0,
-                      total_amount: 102000,
-                      payment_method: 'CASH',
-                      paid_amount: 102000,
-                      change_amount: 0,
-                    }}
-                    storeSettings={{
-                      storeName,
-                      storeAddress,
-                      storePhone,
-                      storeLogo,
-                      showLogoOnReceipt,
-                      showPhoneOnReceipt,
-                      receiptFooter,
-                    }}
-                    isTestPrint={true}
-                    copyLabel="SALINAN PELANGGAN"
-                  />
-                </>
-              )}
-            </ScrollView>
-
-            <TouchableOpacity
-              style={styles.testPrintConfirmBtn}
-              onPress={async () => {
-                setTestReceiptOpen(false);
-                const res = await printerService.printSample({
-                  storeName,
-                  storeAddress,
-                  storePhone,
-                  storeLogo,
-                  showPhoneOnReceipt,
-                  receiptFooter,
-                  printTwoCopies,
-                });
-                if (res.mode === 'bluetooth') {
-                  if (Platform.OS === 'web') {
-                    window.alert(res.message || 'Struk terkirim ke printer!');
-                  } else {
-                    Alert.alert('Sukses', res.message || 'Struk berhasil dicetak.');
-                  }
-                } else {
-                  if (Platform.OS === 'web') {
-                    window.print();
-                  } else {
-                    Alert.alert('Simulasi Cetak', `${res.copies} salinan struk disiapkan.`);
-                  }
-                }
-              }}
-              activeOpacity={0.8}
-            >
-              <Printer size={16} color="#ffffff" style={{ marginRight: 6 }} />
-              <Text style={styles.testPrintConfirmBtnText}>
-                {printTwoCopies ? 'Kirim Cetak 2 Salinan Struk' : 'Kirim Cetak ke Printer'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setTestReceiptOpen(false)}
+        storeSettings={{
+          storeName,
+          storeAddress,
+          storePhone,
+          storeLogo,
+          showLogoOnReceipt,
+          showPhoneOnReceipt,
+          receiptFooter,
+        }}
+        user={user}
+        printTwoCopies={printTwoCopies}
+      />
 
       {/* MODAL 4: PANDUAN PRINTER BLUETOOTH */}
-      <Modal
+      <PrinterGuideModal
         visible={printerGuideOpen}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setPrinterGuideOpen(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                <View style={styles.headerIconBox}>
-                  <BookOpen size={18} color="#fb7185" />
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.modalTitle}>Panduan Printer Bluetooth</Text>
-                  <Text style={styles.modalSubtitle}>4 langkah praktis menyambungkan printer</Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                onPress={() => setPrinterGuideOpen(false)}
-                style={styles.closeBtn}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <X size={20} color="#d4d4d8" />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView style={{ maxHeight: 380 }} showsVerticalScrollIndicator={false}>
-              <View style={styles.guideStepItem}>
-                <View style={styles.guideStepBadge}>
-                  <Text style={styles.guideStepBadgeText}>1</Text>
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.guideStepTitle}>Nyalakan Printer Kasir</Text>
-                  <Text style={styles.guideStepDesc}>
-                    Tekan tombol daya (power) printer hingga lampu indikator menyala biru/hijau dan kertas siap keluar.
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.guideStepItem}>
-                <View style={styles.guideStepBadge}>
-                  <Text style={styles.guideStepBadgeText}>2</Text>
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.guideStepTitle}>Aktifkan Bluetooth Smartphone</Text>
-                  <Text style={styles.guideStepDesc}>
-                    Pastikan koneksi Bluetooth di HP Anda dalam kondisi aktif dan izin lokasi perangkat telah diberikan.
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.guideStepItem}>
-                <View style={styles.guideStepBadge}>
-                  <Text style={styles.guideStepBadgeText}>3</Text>
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.guideStepTitle}>Pasangkan (Pairing) Perangkat</Text>
-                  <Text style={styles.guideStepDesc}>
-                    Buka menu Bluetooth HP, pilih nama printer Anda (misal: RPP02N atau Panda). Jika diminta PIN, ketik 0000 atau 1234.
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.guideStepItem}>
-                <View style={styles.guideStepBadge}>
-                  <Text style={styles.guideStepBadgeText}>4</Text>
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={styles.guideStepTitle}>Uji Cetak Struk Belanja</Text>
-                  <Text style={styles.guideStepDesc}>
-                    Kembali ke aplikasi KasirKita, pilih model printer Anda (58mm/80mm), lalu tekan tombol "Uji Cetak Struk Contoh".
-                  </Text>
-                </View>
-              </View>
-            </ScrollView>
-
-            <View style={styles.modalActionRow}>
-              <TouchableOpacity
-                style={[styles.saveBtn, { width: '100%' }]}
-                onPress={() => setPrinterGuideOpen(false)}
-                activeOpacity={0.8}
-              >
-                <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
-                <Text style={styles.saveBtnText}>Saya Mengerti</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setPrinterGuideOpen(false)}
+      />
 
       {/* MODAL 5: AUDIT & STATUS KEAMANAN SESI */}
       <Modal
