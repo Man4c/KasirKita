@@ -48,4 +48,4 @@ Untuk menjamin keamanan kode selama refactoring:
 | 3 | **Store Identity Modal Extraction:** Ekstraksi `StoreIdentityModal.js` (ImagePicker, upload logo, switch toggle logo/telepon). | completed |
 | 4 | **Printer & Hardware Modals Extraction:** Ekstraksi `PrinterSettingsModal.js`, `PrinterGuideModal.js`, dan `TestReceiptModal.js`. | completed |
 | 5 | **Security Modal & Orchestrator Cleanup:** Ekstraksi `SecurityAuditModal.js`, integrasi seluruh modal ke `SettingsScreen.js`, dan pembersihan StyleSheet monolitik. | completed |
-| 6 | **Testing, WCAG Readability & Verification:** Verifikasi seluruh alur penyimpanan setting, live Bluetooth scan, dark mode UI craft, dan commit Git final. | pending |
+| 6 | **Testing, WCAG Readability & Verification:** Verifikasi seluruh alur penyimpanan setting, live Bluetooth scan, dark mode UI craft, dan commit Git final. | completed |

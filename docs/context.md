@@ -20,6 +20,20 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Refaktorisasi & Modularisasi Layar Pengaturan Mobile (`SettingsScreen.js`) - Plan #23 SELESAI (100%)**:
+  - Berhasil memecah file monolitik `SettingsScreen.js` dari **~2.940 baris** menjadi **~1.430 baris** (berkurang lebih dari 1.500 baris kode / 51% lebih ringkas) dengan mengekstrak 7 sub-komponen modal modular di `mobile/src/components/settings/`:
+    1. `UserProfileModal.js`: Modal form edit profil nama dan telepon kasir beserta validasi mandiri.
+    2. `ChangePasswordModal.js`: Modal form ganti kata sandi dengan toggle intip sandi dan validasi konfirmasi sandi.
+    3. `StoreIdentityModal.js`: Modal profil toko lengkap dengan pemilih logo via ImagePicker, preview, serta toggle cetak logo/telepon nota.
+    4. `PrinterSettingsModal.js`: Modal pemindai printer Bluetooth fisik (Web Bluetooth / native BLE) & preset simulasi (Panda, RPP02N, Thermal-80, Iware).
+    5. `PrinterGuideModal.js`: Modal panduan 4 langkah mudah menyambungkan printer thermal kasir.
+    6. `TestReceiptModal.js`: Modal pratinjau struk belanja kasir dengan opsi uji cetak 2 salinan (toko & pelanggan).
+    7. `SecurityAuditModal.js`: Modal audit perlindungan brankas hardware AES-256, enkripsi TLS Sanctum, dan integritas UUID nota offline.
+  - Menghapus lebih dari 20 temporary `useState` lokal form dan ratusan baris StyleSheet monolitik mati dari file utama.
+  - Memperbaiki bug logic `isOnline` string mismatch dan silent network error handling pada sinkronisasi pengaturan toko.
+  - Memastikan audit WCAG: seluruh ukuran teks mematuhi batas lantai keterbacaan (≥12px / `text-xs`) dan tidak ada font kustom yang terlalu kecil.
+  - Bundling Expo Web lolos 100% (2.212 modules).
+
 - **Toggle Pemilihan Pelanggan Kasir & Penataan Ulang Hierarki Checkout (`SettingsScreen.js`, `PosScreen.js`)**:
   - **Toggle Pengaturan**: Menambahkan opsi Switch `"Pemilihan Pelanggan di Kasir"` di Pengaturan Kasir (`SettingsScreen.js`) yang tersimpan secara persisten di storage. Bila dimatikan (OFF), kartu pelanggan di layar checkout akan disembunyikan sehingga layar lebih lega dan transaksi otomatis tercatat sebagai Pelanggan Umum.
   - **Penataan Ulang Urutan Checkout Kasir (Landscape & Portrait)**: Memastikan hierarki kasir di `PosScreen.js` tertata sesuai urutan ritel yang disepakati:
