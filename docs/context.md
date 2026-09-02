@@ -280,6 +280,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 - **Manajemen Inventaris:**
   - Metode pencatatan stok Perpetual System (update kartu stok langsung saat ada pergerakan barang).
   - Metode valuasi HPP (Harga Pokok Penjualan) menggunakan *Average Cost* (Biaya Rata-Rata).
+- **Pengaturan Hardware & Penyimpanan Mobile (React Native):**
+  - **Kunci Orientasi Layar Kasir:** Mengintegrasikan `expo-screen-orientation` via `orientationService.js` untuk mengontrol orientasi sistem operasi secara aktif: `AUTO` (`unlockAsync`), `LANDSCAPE` (`lockAsync(LANDSCAPE)`), dan `PORTRAIT` (`lockAsync(PORTRAIT_UP)`), disimpan persisten dan diterapkan otomatis saat app dibuka (`App.js`).
+  - **Pembersih Cache Penyimpanan Fungsional:** Mengukur kapasitas data katalog offline aktual secara real time (`offlineStorage.getFormattedCacheSize()`), menampilkan badge ukuran dinamis pada baris pengaturan, memunculkan dialog konfirmasi kasir, dan membersihkan snapshot katalog lama secara aman tanpa menghapus antrean transaksi nota kasir offline (`KEYS.QUEUE`).
 
 ## Keputusan UI
 
