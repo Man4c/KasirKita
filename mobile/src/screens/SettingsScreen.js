@@ -613,7 +613,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const isOnline = serverStatus === 'Tersambung';
   const isNativeKeystore = Platform.OS !== 'web';
   const securityTitle = isOnline ? 'Terenkripsi & Aman' : 'Mode Offline (Aman)';
-  const securityColor = isOnline ? '#34d399' : '#fbbf24';
+  const securityColor = isOnline ? '#6ee7b7' : '#fde68a';
 
   return (
     <ScrollView
@@ -953,7 +953,7 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
             {serverPing && (
               <View style={styles.pingBadge}>
-                <Wifi size={12} color="#34d399" />
+                <Wifi size={12} color="#6ee7b7" />
                 <Text style={styles.pingBadgeText}>{serverPing}</Text>
               </View>
             )}
@@ -1432,22 +1432,6 @@ export default function SettingsScreen({ isLandscape = false }) {
                   )}
 
                   <View style={styles.logoInfoCol}>
-                    <View style={styles.logoStatusRow}>
-                      <Text style={[styles.logoStatusTitle, tempStoreLogo && styles.logoStatusTitleActive]} numberOfLines={1}>
-                        {tempStoreLogo ? '✓ Logo Terpasang' : 'Belum Ada Logo'}
-                      </Text>
-                      {tempStoreLogo && (
-                        <TouchableOpacity
-                          onPress={handleRemoveLogo}
-                          activeOpacity={0.7}
-                          style={styles.logoDeleteTextBtn}
-                        >
-                          <Trash2 size={12} color="#fb7185" style={{ marginRight: 3 }} />
-                          <Text style={styles.logoDeleteText}>Hapus</Text>
-                        </TouchableOpacity>
-                      )}
-                    </View>
-
                     <TouchableOpacity
                       style={styles.uploadLogoBtn}
                       onPress={handlePickLogo}
@@ -1662,7 +1646,7 @@ export default function SettingsScreen({ isLandscape = false }) {
             </TouchableOpacity>
 
             <View style={{ marginVertical: 10, paddingHorizontal: 4 }}>
-              <Text style={{ fontSize: 12, fontFamily: 'Poppins_600SemiBold', color: '#71717a', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              <Text style={{ fontSize: 12, fontFamily: 'Poppins_600SemiBold', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 Preset / Mode Simulasi Virtual
               </Text>
               <Text style={{ fontSize: 12, fontFamily: 'Poppins_400Regular', color: '#a1a1aa' }}>
@@ -1954,8 +1938,8 @@ export default function SettingsScreen({ isLandscape = false }) {
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                <View style={[styles.headerIconBox, { backgroundColor: isOnline ? 'rgba(52, 211, 153, 0.15)' : 'rgba(251, 191, 36, 0.15)' }]}>
-                  <Shield size={18} color={isOnline ? '#34d399' : '#fbbf24'} />
+                <View style={[styles.headerIconBox, { backgroundColor: isOnline ? '#062d22' : '#2e1d05', borderWidth: 1, borderColor: isOnline ? '#065f46' : '#78350f' }]}>
+                  <Shield size={18} color={isOnline ? '#6ee7b7' : '#fde68a'} />
                 </View>
                 <View style={{ flex: 1, minWidth: 0 }}>
                   <Text style={styles.modalTitle}>Keamanan & Status Sesi</Text>
@@ -1975,10 +1959,10 @@ export default function SettingsScreen({ isLandscape = false }) {
               {/* Item 1: Brankas Hardware */}
               <View style={styles.guideStepCard}>
                 <View style={styles.securityItemHeader}>
-                  <Lock size={16} color="#34d399" />
+                  <Lock size={16} color="#6ee7b7" />
                   <Text style={styles.guideStepTitle}>Brankas Token Kasir</Text>
-                  <View style={[styles.statusPill, { backgroundColor: 'rgba(52, 211, 153, 0.15)' }]}>
-                    <Text style={[styles.statusPillText, { color: '#34d399' }]}>Hardware AES-256</Text>
+                  <View style={[styles.statusPill, styles.statusPillGreen]}>
+                    <Text style={[styles.statusPillText, styles.statusPillTextGreen]}>Hardware AES-256</Text>
                   </View>
                 </View>
                 <Text style={styles.guideStepDesc}>
@@ -1991,10 +1975,10 @@ export default function SettingsScreen({ isLandscape = false }) {
               {/* Item 2: Otentikasi Cloud & Jaringan */}
               <View style={styles.guideStepCard}>
                 <View style={styles.securityItemHeader}>
-                  <Activity size={16} color={isOnline ? '#34d399' : '#fbbf24'} />
+                  <Activity size={16} color={isOnline ? '#6ee7b7' : '#fde68a'} />
                   <Text style={styles.guideStepTitle}>Otentikasi & Jaringan</Text>
-                  <View style={[styles.statusPill, { backgroundColor: isOnline ? 'rgba(52, 211, 153, 0.15)' : 'rgba(251, 191, 36, 0.15)' }]}>
-                    <Text style={[styles.statusPillText, { color: isOnline ? '#34d399' : '#fbbf24' }]}>
+                  <View style={[styles.statusPill, isOnline ? styles.statusPillGreen : styles.statusPillAmber]}>
+                    <Text style={[styles.statusPillText, isOnline ? styles.statusPillTextGreen : styles.statusPillTextAmber]}>
                       {isOnline ? 'Tersambung (REST TLS)' : 'Offline (Lokal)'}
                     </Text>
                   </View>
@@ -2009,10 +1993,10 @@ export default function SettingsScreen({ isLandscape = false }) {
               {/* Item 3: Proteksi Nota Offline */}
               <View style={styles.guideStepCard}>
                 <View style={styles.securityItemHeader}>
-                  <CheckCircle2 size={16} color="#38bdf8" />
+                  <CheckCircle2 size={16} color="#7dd3fc" />
                   <Text style={styles.guideStepTitle}>Integritas Data Transaksi</Text>
-                  <View style={[styles.statusPill, { backgroundColor: 'rgba(56, 189, 248, 0.15)' }]}>
-                    <Text style={[styles.statusPillText, { color: '#38bdf8' }]}>Idempoten UUID</Text>
+                  <View style={[styles.statusPill, styles.statusPillSky]}>
+                    <Text style={[styles.statusPillText, styles.statusPillTextSky]}>Idempoten UUID</Text>
                   </View>
                 </View>
                 <Text style={styles.guideStepDesc}>
@@ -2083,7 +2067,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#a1a1aa',
-    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
     marginBottom: 8,
     paddingLeft: 4,
   },
@@ -2215,14 +2200,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   statusBadgeGreen: {
-    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    backgroundColor: '#062d22',
     borderWidth: 1,
-    borderColor: 'rgba(52, 211, 153, 0.3)',
+    borderColor: '#065f46',
   },
   statusBadgeAmber: {
-    backgroundColor: 'rgba(245, 158, 11, 0.12)',
+    backgroundColor: '#2e1d05',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
+    borderColor: '#78350f',
   },
   statusBadgeGray: {
     backgroundColor: '#27272a',
@@ -2234,10 +2219,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   statusBadgeTextGreen: {
-    color: '#34d399',
+    color: '#6ee7b7',
   },
   statusBadgeTextAmber: {
-    color: '#fbbf24',
+    color: '#fde68a',
   },
   statusBadgeTextGray: {
     color: '#a1a1aa',
@@ -2379,10 +2364,10 @@ const styles = StyleSheet.create({
   paperSizeSpec: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   paperSizeSpecActive: {
-    color: '#fecdd3',
+    color: '#ffffff',
   },
   cacheBadge: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
@@ -2401,18 +2386,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    backgroundColor: '#062d22',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(52, 211, 153, 0.3)',
+    borderColor: '#065f46',
     flexShrink: 0,
   },
   pingBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#34d399',
+    color: '#6ee7b7',
   },
   divider: {
     height: 1,
@@ -2439,22 +2424,24 @@ const styles = StyleSheet.create({
     marginTop: 14,
     backgroundColor: '#e11d48',
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
     paddingVertical: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#e11d48',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 6,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
       },
       android: {
-        elevation: 4,
+        elevation: 2,
       },
       web: {
-        boxShadow: '0 4px 12px rgba(225, 29, 72, 0.35)',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
       },
     }),
   },
@@ -2753,11 +2740,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
+    borderWidth: 1,
     marginLeft: 'auto',
+  },
+  statusPillGreen: {
+    backgroundColor: '#062d22',
+    borderColor: '#065f46',
+  },
+  statusPillAmber: {
+    backgroundColor: '#2e1d05',
+    borderColor: '#78350f',
+  },
+  statusPillSky: {
+    backgroundColor: '#082f49',
+    borderColor: '#0369a1',
   },
   statusPillText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+  },
+  statusPillTextGreen: {
+    color: '#6ee7b7',
+  },
+  statusPillTextAmber: {
+    color: '#fde68a',
+  },
+  statusPillTextSky: {
+    color: '#7dd3fc',
   },
   logoPickerContainer: {
     flexDirection: 'row',
