@@ -3468,7 +3468,7 @@ const styles = StyleSheet.create({
   checkoutCustomerSub: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   checkoutCustomerMetaRow: {
     flexDirection: 'row',
@@ -3568,7 +3568,7 @@ const styles = StyleSheet.create({
   checkoutItemsTotalQty: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   checkoutItemsScrollLandscape: {
     flex: 1,
@@ -3593,7 +3593,7 @@ const styles = StyleSheet.create({
   checkoutItemPriceMini: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
+    color: '#a1a1aa',
     marginTop: 2,
   },
   checkoutItemSubtotalMini: {
