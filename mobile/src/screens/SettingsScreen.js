@@ -1530,9 +1530,13 @@ export default function SettingsScreen({ isLandscape = false }) {
               onPress={async () => {
                 if (!printerService.isWebBluetoothSupported()) {
                   if (Platform.OS === 'web') {
-                    window.alert('Web Bluetooth API tidak didukung pada peramban ini. Silakan gunakan Google Chrome di laptop atau HP Android.');
+                    window.alert('Web Bluetooth memerlukan peramban Google Chrome atau Microsoft Edge dengan fitur Bluetooth aktif.');
                   } else {
-                    Alert.alert('Perlu Google Chrome', 'Pemindaian Bluetooth via browser memerlukan Google Chrome.');
+                    Alert.alert(
+                      'Koneksi Bluetooth Smartphone',
+                      'Saat ini aplikasi dibuka melalui wadah uji coba Expo Go di HP Anda. Akses perangkat keras Bluetooth printer fisik (seperti Panda PRJ-58D atau RPP02N) akan otomatis aktif penuh saat aplikasi di-build menjadi file APK resmi toko Anda.\n\nUntuk latihan dan uji cetak saat ini, silakan pilih model printer di daftar bawah agar format kertas struk (58mm/80mm) disesuaikan.',
+                      [{ text: 'Paham & Lanjutkan', style: 'default' }]
+                    );
                   }
                   return;
                 }
@@ -1566,7 +1570,11 @@ export default function SettingsScreen({ isLandscape = false }) {
                 <Bluetooth size={16} color="#ffffff" style={{ marginRight: 8 }} />
               )}
               <Text style={styles.scanBluetoothBtnText}>
-                {isScanningBluetooth ? 'Memindai Bluetooth...' : 'Pindai Printer Bluetooth Nyata'}
+                {isScanningBluetooth
+                  ? 'Memindai Bluetooth...'
+                  : Platform.OS === 'web'
+                  ? 'Pindai Printer Bluetooth (Web Bluetooth)'
+                  : 'Hubungkan Printer Bluetooth HP'}
               </Text>
             </TouchableOpacity>
 
