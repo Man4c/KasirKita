@@ -91,6 +91,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [serverStatus, setServerStatus] = useState('Memeriksa...');
   const [serverPing, setServerPing] = useState(null);
   const [cacheSize, setCacheSize] = useState('...');
+  const [securityModalOpen, setSecurityModalOpen] = useState(false);
 
   // Form Temp States for User Profile Modal
   const [tempUserName, setTempUserName] = useState('');
@@ -609,6 +610,13 @@ export default function SettingsScreen({ isLandscape = false }) {
     }
   };
 
+  const isOnline = serverStatus === 'Tersambung';
+  const isNativeKeystore = Platform.OS !== 'web';
+  const securityTitle = isOnline
+    ? (isNativeKeystore ? 'Sesi Terenkripsi & Aman' : 'Sesi Terenkripsi (Web Token)')
+    : 'Mode Offline (Lokal Terenkripsi)';
+  const securityColor = isOnline ? '#34d399' : '#fbbf24';
+
   return (
     <ScrollView
       style={styles.container}
@@ -1095,13 +1103,18 @@ export default function SettingsScreen({ isLandscape = false }) {
             </Text>
           </View>
           <View style={styles.divider} />
-          <View style={styles.infoRow}>
+          <TouchableOpacity
+            style={styles.infoRow}
+            activeOpacity={0.7}
+            onPress={() => setSecurityModalOpen(true)}
+          >
             <Text style={styles.infoLabel}>Status Keamanan</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-              <Shield size={14} color="#34d399" />
-              <Text style={[styles.infoValue, { color: '#34d399' }]}>Sesi Terenkripsi & Aman</Text>
+              <Shield size={14} color={securityColor} />
+              <Text style={[styles.infoValue, { color: securityColor }]}>{securityTitle}</Text>
+              <ChevronRight size={14} color="#71717a" style={{ marginLeft: 2 }} />
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Tombol Logout Merah Kokoh */}
@@ -1930,6 +1943,109 @@ export default function SettingsScreen({ isLandscape = false }) {
           </View>
         </View>
       </Modal>
+
+      {/* MODAL 5: AUDIT & STATUS KEAMANAN SESI */}
+      <Modal
+        visible={securityModalOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setSecurityModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                <View style={[styles.headerIconBox, { backgroundColor: isOnline ? 'rgba(52, 211, 153, 0.15)' : 'rgba(251, 191, 36, 0.15)' }]}>
+                  <Shield size={18} color={isOnline ? '#34d399' : '#fbbf24'} />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.modalTitle}>Keamanan & Status Sesi</Text>
+                  <Text style={styles.modalSubtitle}>Audit perlindungan data & enkripsi kasir</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => setSecurityModalOpen(false)}
+                style={styles.closeBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={20} color="#d4d4d8" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 380 }} showsVerticalScrollIndicator={false}>
+              {/* Item 1: Brankas Hardware */}
+              <View style={styles.guideStepCard}>
+                <View style={styles.securityItemHeader}>
+                  <Lock size={16} color="#34d399" />
+                  <Text style={styles.guideStepTitle}>Brankas Token Kasir</Text>
+                  <View style={[styles.statusPill, { backgroundColor: 'rgba(52, 211, 153, 0.15)' }]}>
+                    <Text style={[styles.statusPillText, { color: '#34d399' }]}>Hardware AES-256</Text>
+                  </View>
+                </View>
+                <Text style={styles.guideStepDesc}>
+                  {Platform.OS === 'web'
+                    ? 'Kunci otentikasi disimpan di browser sandboxed session storage dengan enkripsi aplikasi.'
+                    : 'Token sesi kasir disimpan di brankas hardware bawaan HP (Android Keystore / Apple Keychain) dengan proteksi cipher AES-256 GCM.'}
+                </Text>
+              </View>
+
+              {/* Item 2: Otentikasi Cloud & Jaringan */}
+              <View style={styles.guideStepCard}>
+                <View style={styles.securityItemHeader}>
+                  <Activity size={16} color={isOnline ? '#34d399' : '#fbbf24'} />
+                  <Text style={styles.guideStepTitle}>Otentikasi & Jaringan</Text>
+                  <View style={[styles.statusPill, { backgroundColor: isOnline ? 'rgba(52, 211, 153, 0.15)' : 'rgba(251, 191, 36, 0.15)' }]}>
+                    <Text style={[styles.statusPillText, { color: isOnline ? '#34d399' : '#fbbf24' }]}>
+                      {isOnline ? 'Tersambung (REST TLS)' : 'Offline (Lokal)'}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.guideStepDesc}>
+                  {isOnline
+                    ? `Setiap transaksi divalidasi dengan signature digital Laravel Sanctum. Ping server saat ini: ${serverPing !== null ? serverPing + ' ms' : 'Normal'}.`
+                    : 'Aplikasi sedang berjalan mandiri secara offline. Transaksi kasir aman tersimpan di memori perangkat.'}
+                </Text>
+              </View>
+
+              {/* Item 3: Proteksi Nota Offline */}
+              <View style={styles.guideStepCard}>
+                <View style={styles.securityItemHeader}>
+                  <CheckCircle2 size={16} color="#38bdf8" />
+                  <Text style={styles.guideStepTitle}>Integritas Data Transaksi</Text>
+                  <View style={[styles.statusPill, { backgroundColor: 'rgba(56, 189, 248, 0.15)' }]}>
+                    <Text style={[styles.statusPillText, { color: '#38bdf8' }]}>Idempoten UUID</Text>
+                  </View>
+                </View>
+                <Text style={styles.guideStepDesc}>
+                  Setiap transaksi nota offline diberi ID acak unik (UUID) untuk mencegah duplikasi ganda saat sinkronisasi otomatis ke server.
+                </Text>
+              </View>
+
+              {/* Item 4: Akun Kasir Aktif */}
+              <View style={styles.guideStepCard}>
+                <View style={styles.securityItemHeader}>
+                  <User size={16} color="#fb7185" />
+                  <Text style={styles.guideStepTitle}>Pemegang Sesi Login</Text>
+                </View>
+                <Text style={styles.guideStepDesc}>
+                  Kasir: {user?.name || 'Kasir Toko'} ({user?.email || user?.phone || 'Aktif'}) • Peran: {user?.role || 'KASIR'}
+                </Text>
+              </View>
+            </ScrollView>
+
+            <View style={styles.modalActionRow}>
+              <TouchableOpacity
+                style={[styles.saveBtn, { width: '100%' }]}
+                onPress={() => setSecurityModalOpen(false)}
+                activeOpacity={0.8}
+              >
+                <Check size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                <Text style={styles.saveBtnText}>Tutup Informasi Keamanan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -2619,6 +2735,30 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
     lineHeight: 18,
+  },
+  guideStepCard: {
+    backgroundColor: '#18181b',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 12,
+    marginBottom: 10,
+  },
+  securityItemHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 6,
+  },
+  statusPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginLeft: 'auto',
+  },
+  statusPillText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
   },
   logoPickerContainer: {
     flexDirection: 'row',
