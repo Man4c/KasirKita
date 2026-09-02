@@ -612,9 +612,7 @@ export default function SettingsScreen({ isLandscape = false }) {
 
   const isOnline = serverStatus === 'Tersambung';
   const isNativeKeystore = Platform.OS !== 'web';
-  const securityTitle = isOnline
-    ? (isNativeKeystore ? 'Sesi Terenkripsi & Aman' : 'Sesi Terenkripsi (Web Token)')
-    : 'Mode Offline (Lokal Terenkripsi)';
+  const securityTitle = isOnline ? 'Terenkripsi & Aman' : 'Mode Offline (Aman)';
   const securityColor = isOnline ? '#34d399' : '#fbbf24';
 
   return (
@@ -1034,12 +1032,7 @@ export default function SettingsScreen({ isLandscape = false }) {
               <Trash2 size={18} color="#fb7185" />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Text style={styles.menuTitle}>Bersihkan Cache Penyimpanan</Text>
-                <View style={styles.cacheBadge}>
-                  <Text style={styles.cacheBadgeText}>{cacheSize}</Text>
-                </View>
-              </View>
+              <Text style={styles.menuTitle}>Bersihkan Cache Penyimpanan</Text>
               <Text style={styles.menuSubtitle}>Segarkan data & memori katalog offline</Text>
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
@@ -1108,11 +1101,17 @@ export default function SettingsScreen({ isLandscape = false }) {
             activeOpacity={0.7}
             onPress={() => setSecurityModalOpen(true)}
           >
-            <Text style={styles.infoLabel}>Status Keamanan</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-              <Shield size={14} color={securityColor} />
-              <Text style={[styles.infoValue, { color: securityColor }]}>{securityTitle}</Text>
-              <ChevronRight size={14} color="#71717a" style={{ marginLeft: 2 }} />
+            <Text style={[styles.infoLabel, { flexShrink: 0 }]}>Status Keamanan</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 1, justifyContent: 'flex-end' }}>
+              <Shield size={14} color={securityColor} style={{ flexShrink: 0 }} />
+              <Text
+                style={[styles.infoValue, { color: securityColor }]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {securityTitle}
+              </Text>
+              <ChevronRight size={14} color="#71717a" style={{ flexShrink: 0, marginLeft: 2 }} />
             </View>
           </TouchableOpacity>
         </View>
