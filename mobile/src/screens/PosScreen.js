@@ -1779,23 +1779,25 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
             <ScrollView style={{ maxHeight: 380 }} showsVerticalScrollIndicator={false}>
               {/* Option: Tanpa Pajak */}
               <TouchableOpacity
-                style={[styles.customerOptionItem, selectedTaxId === '' && styles.customerOptionItemActive]}
+                style={[styles.taxOptionCard, selectedTaxId === '' && styles.taxOptionCardActive]}
                 onPress={() => {
                   setSelectedTaxId('');
                   setTaxModalOpen(false);
                 }}
+                activeOpacity={0.7}
               >
                 <View style={styles.customerOptionInfo}>
                   <Text style={styles.customerOptionName}>Tanpa Pajak (0%)</Text>
                   <Text style={styles.customerOptionSub}>Tidak mengenakan pajak pada transaksi ini</Text>
                 </View>
                 {selectedTaxId === '' ? (
-                  <View style={styles.promoOptionActionBtnActive}>
-                    <Text style={styles.promoOptionActionBtnTextActive}>Aktif</Text>
+                  <View style={[styles.taxOptionBadge, styles.taxOptionBadgeActive]}>
+                    <Check size={12} color="#ffffff" />
+                    <Text style={styles.taxOptionBadgeTextActive}>Aktif</Text>
                   </View>
                 ) : (
-                  <View style={styles.promoOptionActionBtn}>
-                    <Text style={styles.promoOptionActionBtnText}>Pilih</Text>
+                  <View style={[styles.taxOptionBadge, styles.taxOptionBadgeInactive]}>
+                    <Text style={styles.taxOptionBadgeTextInactive}>Pilih</Text>
                   </View>
                 )}
               </TouchableOpacity>
@@ -1807,11 +1809,12 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 return (
                   <TouchableOpacity
                     key={tax.id}
-                    style={[styles.customerOptionItem, isSelected && styles.customerOptionItemActive]}
+                    style={[styles.taxOptionCard, isSelected && styles.taxOptionCardActive]}
                     onPress={() => {
                       setSelectedTaxId(tax.id);
                       setTaxModalOpen(false);
                     }}
+                    activeOpacity={0.7}
                   >
                     <View style={styles.customerOptionInfo}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -1826,12 +1829,13 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                     </View>
 
                     {isSelected ? (
-                      <View style={styles.promoOptionActionBtnActive}>
-                        <Text style={styles.promoOptionActionBtnTextActive}>Aktif</Text>
+                      <View style={[styles.taxOptionBadge, styles.taxOptionBadgeActive]}>
+                        <Check size={12} color="#ffffff" />
+                        <Text style={styles.taxOptionBadgeTextActive}>Aktif</Text>
                       </View>
                     ) : (
-                      <View style={styles.promoOptionActionBtn}>
-                        <Text style={styles.promoOptionActionBtnText}>Pilih</Text>
+                      <View style={[styles.taxOptionBadge, styles.taxOptionBadgeInactive]}>
+                        <Text style={styles.taxOptionBadgeTextInactive}>Pilih</Text>
                       </View>
                     )}
                   </TouchableOpacity>
@@ -2877,6 +2881,48 @@ const styles = StyleSheet.create({
   },
   promoOptionActionBtnTextActive: {
     color: '#ffffff',
+  },
+  taxOptionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 14,
+    marginBottom: 8,
+    backgroundColor: '#27272a',
+    borderWidth: 1.5,
+    borderColor: '#3f3f46',
+  },
+  taxOptionCardActive: {
+    borderColor: '#10b981',
+    backgroundColor: '#132820',
+  },
+  taxOptionBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    minWidth: 64,
+    justifyContent: 'center',
+  },
+  taxOptionBadgeInactive: {
+    backgroundColor: '#3f3f46',
+  },
+  taxOptionBadgeActive: {
+    backgroundColor: '#059669',
+  },
+  taxOptionBadgeTextInactive: {
+    color: '#d4d4d8',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  taxOptionBadgeTextActive: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_700Bold',
   },
   taxFeeControlSection: {
     backgroundColor: '#27272a',
