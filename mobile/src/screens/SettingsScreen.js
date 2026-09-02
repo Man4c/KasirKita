@@ -226,8 +226,7 @@ export default function SettingsScreen({ isLandscape = false }) {
     const text = encodeURIComponent('Halo Tim Bantuan KasirKita, saya butuh panduan terkait operasional kasir / printer.');
     const url = `https://wa.me/${phone}?text=${text}`;
     Linking.openURL(url).catch(() => {
-      if (Platform.OS === 'web') window.open(url, '_blank');
-      else Alert.alert('Bantuan CS', 'Silakan hubungi WhatsApp CS KasirKita di: +62 812-3456-7890');
+      showAlert('Bantuan CS', 'Silakan hubungi WhatsApp CS KasirKita di: +62 812-3456-7890');
     });
   };
 
