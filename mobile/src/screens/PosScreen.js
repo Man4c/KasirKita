@@ -170,6 +170,16 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
     );
   };
 
+  const removeFromCart = (productId) => {
+    setCart((prev) => prev.filter((item) => item.product.id !== productId));
+  };
+
+  useEffect(() => {
+    if (isCheckoutView && cart.length === 0) {
+      setIsCheckoutView(false);
+    }
+  }, [isCheckoutView, cart.length]);
+
   const subtotal = cart.reduce((sum, item) => sum + item.quantity * Number(item.product.price), 0);
   const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const netSubtotal = Math.max(0, subtotal - discount);
@@ -725,16 +735,32 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
       {/* Floating Bottom Cart Bar (Portrait Only) */}
       {!isLandscape && cart.length > 0 && (
         <View style={styles.floatingCart}>
-          <View>
-            <Text style={styles.cartBarCount}>{totalItemsCount} Item</Text>
-            <Text style={styles.cartBarTotal}>{formatRp(totalAmount)}</Text>
-          </View>
+          <TouchableOpacity
+            style={styles.floatingCartInfoBtn}
+            onPress={() => setCartModalOpen(true)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.floatingCartIconBox}>
+              <ShoppingCart size={16} color="#fb7185" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.cartBarCount}>{totalItemsCount} Item</Text>
+                <View style={styles.cartBarEditBadge}>
+                  <Text style={styles.cartBarEditBadgeText}>Edit</Text>
+                </View>
+              </View>
+              <Text style={styles.cartBarTotal}>{formatRp(totalAmount)}</Text>
+            </View>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.cartBarButton}
             onPress={() => {
               setPaidAmount(totalAmount.toString());
               setIsCheckoutView(true);
             }}
+            activeOpacity={0.8}
           >
             <Text style={styles.cartBarButtonText}>Bayar Kasir</Text>
             <ArrowRight size={16} color="#ffffff" />
@@ -1325,6 +1351,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 </View>
                 {cart.map((item) => {
                   const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
+                  const availableStock = parseFloat(item.product.stock) || 0;
                   return (
                     <View key={item.product.id} style={styles.checkoutItemRowMiniPortrait}>
                       <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
@@ -1332,12 +1359,42 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                           {item.product.name}
                         </Text>
                         <Text style={styles.checkoutItemPriceMini}>
-                          {item.quantity} {itemUnit} x {formatRp(item.product.price)}
+                          {item.quantity} {itemUnit} x {formatRp(item.product.price)} = <Text style={{ color: '#fb7185', fontWeight: 'bold' }}>{formatRp(item.quantity * Number(item.product.price))}</Text>
                         </Text>
                       </View>
-                      <Text style={styles.checkoutItemSubtotalMini}>
-                        {formatRp(item.quantity * Number(item.product.price))}
-                      </Text>
+
+                      {/* Stepper Controls & Delete (Portrait Checkout) */}
+                      <View style={styles.checkoutItemStepperRow}>
+                        <TouchableOpacity
+                          style={styles.checkoutItemStepBtn}
+                          onPress={() => updateQuantity(item.product.id, -1)}
+                          activeOpacity={0.7}
+                        >
+                          <Minus size={11} color="#ffffff" />
+                        </TouchableOpacity>
+
+                        <Text style={styles.checkoutItemQtyText}>{item.quantity}</Text>
+
+                        <TouchableOpacity
+                          style={[
+                            styles.checkoutItemStepBtn,
+                            item.quantity >= availableStock && { opacity: 0.35 },
+                          ]}
+                          onPress={() => updateQuantity(item.product.id, 1)}
+                          activeOpacity={0.7}
+                        >
+                          <Plus size={11} color="#ffffff" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.checkoutItemDeleteBtn}
+                          onPress={() => removeFromCart(item.product.id)}
+                          activeOpacity={0.7}
+                          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                        >
+                          <Trash2 size={13} color="#fb7185" />
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   );
                 })}
@@ -1572,6 +1629,153 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
           )}
         </View>
       )}
+
+      {/* Interactive Cart Bottom Sheet (Portrait Only) */}
+      <Modal
+        visible={cartModalOpen && !isLandscape}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setCartModalOpen(false)}
+      >
+        <View style={styles.cartSheetOverlay}>
+          <TouchableOpacity
+            style={styles.cartSheetBackdrop}
+            activeOpacity={1}
+            onPress={() => setCartModalOpen(false)}
+          />
+          <View style={styles.cartSheetContent}>
+            {/* Header */}
+            <View style={styles.cartSheetHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                <View style={styles.cartSheetHeaderIcon}>
+                  <ShoppingCart size={16} color="#fb7185" />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.cartSheetTitle}>Keranjang Pesanan</Text>
+                  <Text style={styles.cartSheetSubtitle}>{cart.length} jenis • {totalItemsCount} total item</Text>
+                </View>
+              </View>
+
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                {cart.length > 0 && (
+                  <TouchableOpacity
+                    style={styles.cartSheetClearBtn}
+                    onPress={() => {
+                      setCart([]);
+                      setCartModalOpen(false);
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Trash2 size={13} color="#fb7185" />
+                    <Text style={styles.cartSheetClearText}>Kosongkan</Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  style={styles.modalCloseBtn}
+                  onPress={() => setCartModalOpen(false)}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <X size={20} color="#d4d4d8" />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Cart Items List */}
+            {cart.length === 0 ? (
+              <View style={styles.cartSheetEmptyBox}>
+                <ShoppingCart size={38} color="#3f3f46" />
+                <Text style={styles.cartSheetEmptyTitle}>Keranjang Kosong</Text>
+                <Text style={styles.cartSheetEmptySub}>Pilih produk dari katalog untuk memulai transaksi.</Text>
+              </View>
+            ) : (
+              <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
+                {cart.map((item) => {
+                  const itemUnit = item.product.base_unit?.symbol || item.product.baseUnit?.symbol || 'pcs';
+                  const itemPrice = Number(item.product.price);
+                  const itemSubtotal = item.quantity * itemPrice;
+                  const availableStock = parseFloat(item.product.stock) || 0;
+
+                  return (
+                    <View key={item.product.id} style={styles.cartSheetItemRow}>
+                      {/* Item Info (Left) */}
+                      <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
+                        <Text style={styles.cartSheetItemName} numberOfLines={1} ellipsizeMode="tail">
+                          {item.product.name}
+                        </Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                          <Text style={styles.cartSheetItemPrice}>{formatRp(itemPrice)}/{itemUnit}</Text>
+                          <Text style={styles.cartSheetItemDot}>•</Text>
+                          <Text style={styles.cartSheetItemSubtotal}>{formatRp(itemSubtotal)}</Text>
+                        </View>
+                      </View>
+
+                      {/* Stepper Controls & Delete (Right) */}
+                      <View style={styles.cartSheetStepperRow}>
+                        <TouchableOpacity
+                          style={styles.cartSheetStepBtn}
+                          onPress={() => updateQuantity(item.product.id, -1)}
+                          activeOpacity={0.7}
+                        >
+                          <Minus size={13} color="#ffffff" />
+                        </TouchableOpacity>
+
+                        <Text style={styles.cartSheetQtyText}>{item.quantity}</Text>
+
+                        <TouchableOpacity
+                          style={[
+                            styles.cartSheetStepBtn,
+                            item.quantity >= availableStock && { opacity: 0.35 },
+                          ]}
+                          onPress={() => updateQuantity(item.product.id, 1)}
+                          activeOpacity={0.7}
+                        >
+                          <Plus size={13} color="#ffffff" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.cartSheetDeleteBtn}
+                          onPress={() => removeFromCart(item.product.id)}
+                          activeOpacity={0.7}
+                          hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+                        >
+                          <Trash2 size={15} color="#fb7185" />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            )}
+
+            {/* Footer Summary & Pay Button */}
+            {cart.length > 0 && (
+              <View style={styles.cartSheetFooter}>
+                <View style={styles.cartSheetTotalRow}>
+                  <View>
+                    <Text style={styles.cartSheetTotalLabel}>Total Pesanan</Text>
+                    <Text style={styles.cartSheetTotalQty}>{totalItemsCount} pcs barang</Text>
+                  </View>
+                  <Text style={styles.cartSheetTotalVal}>{formatRp(totalAmount)}</Text>
+                </View>
+
+                <TouchableOpacity
+                  style={styles.cartSheetPayBtn}
+                  onPress={() => {
+                    setCartModalOpen(false);
+                    setPaidAmount(totalAmount.toString());
+                    setIsCheckoutView(true);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.cartSheetPayBtnText}>Lanjut Pembayaran ({formatRp(totalAmount)})</Text>
+                  <ArrowRight size={16} color="#ffffff" />
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
+
       <Modal
         visible={customerModalOpen}
         animationType={isLandscape ? 'fade' : 'slide'}
@@ -2114,10 +2318,11 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderWidth: 1,
     borderRadius: 18,
-    padding: 16,
+    padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 10,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -2133,14 +2338,42 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  floatingCartInfoBtn: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  floatingCartIconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
   cartBarCount: {
     color: '#d4d4d8',
     fontSize: 12,
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  cartBarEditBadge: {
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 6,
+  },
+  cartBarEditBadgeText: {
+    color: '#fb7185',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
   },
   cartBarTotal: {
     color: '#fb7185',
-    fontSize: 17,
+    fontSize: 16,
     fontFamily: 'Poppins_700Bold',
   },
   cartBarButton: {
@@ -2149,11 +2382,191 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingHorizontal: 18,
+    paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
+    flexShrink: 0,
   },
   cartBarButtonText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
+  },
+  cartSheetOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    justifyContent: 'flex-end',
+  },
+  cartSheetBackdrop: {
+    flex: 1,
+  },
+  cartSheetContent: {
+    backgroundColor: '#18181b',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    padding: 20,
+    maxHeight: '85%',
+  },
+  cartSheetHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+    marginBottom: 10,
+  },
+  cartSheetHeaderIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cartSheetTitle: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontFamily: 'Poppins_700Bold',
+  },
+  cartSheetSubtitle: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+  },
+  cartSheetClearBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.3)',
+  },
+  cartSheetClearText: {
+    color: '#fb7185',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  cartSheetEmptyBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 36,
+    gap: 8,
+  },
+  cartSheetEmptyTitle: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  cartSheetEmptySub: {
+    color: '#71717a',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    textAlign: 'center',
+  },
+  cartSheetItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+  },
+  cartSheetItemName: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  cartSheetItemPrice: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+  },
+  cartSheetItemDot: {
+    color: '#52525b',
+    fontSize: 12,
+  },
+  cartSheetItemSubtotal: {
+    color: '#34d399',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  cartSheetStepperRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexShrink: 0,
+  },
+  cartSheetStepBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  cartSheetQtyText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
+    minWidth: 24,
+    textAlign: 'center',
+  },
+  cartSheetDeleteBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.25)',
+    marginLeft: 4,
+  },
+  cartSheetFooter: {
+    marginTop: 14,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    gap: 12,
+  },
+  cartSheetTotalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  cartSheetTotalLabel: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+  },
+  cartSheetTotalQty: {
+    color: '#71717a',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+  },
+  cartSheetTotalVal: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontFamily: 'Poppins_700Bold',
+  },
+  cartSheetPayBtn: {
+    backgroundColor: '#e11d48',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 13,
+    borderRadius: 14,
+  },
+  cartSheetPayBtnText: {
     color: '#ffffff',
     fontSize: 14,
     fontFamily: 'Poppins_700Bold',
@@ -4159,6 +4572,40 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
+  },
+  checkoutItemStepperRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexShrink: 0,
+  },
+  checkoutItemStepBtn: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    backgroundColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  checkoutItemQtyText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_700Bold',
+    minWidth: 18,
+    textAlign: 'center',
+  },
+  checkoutItemDeleteBtn: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.25)',
+    marginLeft: 2,
   },
   checkoutSectionLabelPortrait: {
     fontSize: 13,
