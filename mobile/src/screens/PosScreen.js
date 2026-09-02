@@ -448,15 +448,6 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
         const cached = await offlineStorage.getCachedCatalog();
         if (cached.products) setProducts(cached.products);
-
-        if (Platform.OS === 'web') {
-          window.alert('⚡ Transaksi Tunai disimpan dalam Mode Offline. Struk berhasil dibuat dan akan otomatis disinkronkan saat online.');
-        } else {
-          Alert.alert(
-            '⚡ Mode Offline Aktif',
-            'Transaksi tunai berhasil disimpan di memori HP. Struk siap dicetak dan nota otomatis terkirim ke server saat internet kembali.'
-          );
-        }
         return;
       }
 
@@ -534,15 +525,6 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
           const cached = await offlineStorage.getCachedCatalog();
           if (cached.products) setProducts(cached.products);
-
-          if (Platform.OS === 'web') {
-            window.alert('⚡ Koneksi ke server terputus. Transaksi disimpan aman di memori HP (Mode Offline).');
-          } else {
-            Alert.alert(
-              '⚡ Koneksi Terputus - Mode Offline',
-              'Transaksi berhasil disimpan di memori HP. Struk siap dicetak dan nota otomatis terkirim ke server saat internet kembali.'
-            );
-          }
           return;
         }
 
@@ -566,38 +548,6 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
 
   return (
     <View style={[styles.container, isLandscape && styles.landscapeRoot]}>
-      {/* Offline Status & Sync Alert Banner */}
-      {(!isOnline || pendingOfflineCount > 0) && (
-        <View style={[styles.offlineBanner, !isOnline ? styles.offlineBannerWarning : styles.offlineBannerInfo]}>
-          <View style={styles.offlineBannerLeft}>
-            <WifiOff size={14} color={!isOnline ? '#f59e0b' : '#38bdf8'} style={{ marginRight: 6 }} />
-            <Text style={styles.offlineBannerText} numberOfLines={1}>
-              {!isOnline
-                ? `Mode Offline • ${pendingOfflineCount} nota tersimpan di HP`
-                : `${pendingOfflineCount} nota offline menunggu sinkronisasi`}
-            </Text>
-          </View>
-
-          {isOnline && pendingOfflineCount > 0 && (
-            <TouchableOpacity
-              style={styles.offlineSyncBtn}
-              onPress={handleManualSync}
-              disabled={isSyncing}
-              activeOpacity={0.8}
-            >
-              {isSyncing ? (
-                <ActivityIndicator size="small" color="#ffffff" />
-              ) : (
-                <>
-                  <RefreshCw size={12} color="#ffffff" style={{ marginRight: 4 }} />
-                  <Text style={styles.offlineSyncBtnText}>Sinkronkan</Text>
-                </>
-              )}
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
-
       {!isCheckoutView ? (
         <>
           {/* LEFT COLUMN: Catalog & Products */}
