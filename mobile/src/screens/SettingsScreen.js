@@ -685,8 +685,8 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
             <View style={styles.paperSizeRow}>
               {[
-                { id: '58mm', title: '58 mm', desc: 'Mini Portable • 32 Kolom' },
-                { id: '80mm', title: '80 mm', desc: 'Desktop POS • 48 Kolom' },
+                { id: '58mm', title: '58 mm', desc: 'Mini Portable', spec: 'Format 32 Kolom' },
+                { id: '80mm', title: '80 mm', desc: 'Desktop POS', spec: 'Format 48 Kolom' },
               ].map((opt) => {
                 const isActive = paperSize === opt.id;
                 return (
@@ -704,14 +704,19 @@ export default function SettingsScreen({ isLandscape = false }) {
                       <Text style={[styles.paperSizeTitle, isActive && styles.paperSizeTitleActive]}>
                         {opt.title}
                       </Text>
-                      {isActive && (
+                      {isActive ? (
                         <View style={styles.paperSizeCheckCircle}>
                           <Check size={11} color="#ffffff" />
                         </View>
+                      ) : (
+                        <View style={styles.paperSizeEmptyCircle} />
                       )}
                     </View>
-                    <Text style={[styles.paperSizeDesc, isActive && styles.paperSizeDescActive]} numberOfLines={1}>
+                    <Text style={[styles.paperSizeDesc, isActive && styles.paperSizeDescActive]}>
                       {opt.desc}
+                    </Text>
+                    <Text style={[styles.paperSizeSpec, isActive && styles.paperSizeSpecActive]}>
+                      {opt.spec}
                     </Text>
                   </TouchableOpacity>
                 );
@@ -2089,7 +2094,7 @@ const styles = StyleSheet.create({
   },
   paperSizeBtn: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 12,
     borderRadius: 12,
     backgroundColor: '#18181b',
@@ -2105,10 +2110,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   paperSizeTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Poppins_700Bold',
     color: '#e4e4e7',
   },
@@ -2123,12 +2128,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  paperSizeEmptyCircle: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1.5,
+    borderColor: '#3f3f46',
+  },
   paperSizeDesc: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#d4d4d8',
+    marginBottom: 1,
+  },
+  paperSizeDescActive: {
+    color: '#ffffff',
+  },
+  paperSizeSpec: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     color: '#71717a',
   },
-  paperSizeDescActive: {
+  paperSizeSpecActive: {
     color: '#fecdd3',
   },
   pingBadge: {
