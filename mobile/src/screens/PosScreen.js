@@ -362,26 +362,49 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
           !isLandscape && styles.portraitToolbar,
           compact && styles.landscapeToolbarCompact,
         ]}>
-          {/* Search Box */}
-          <View style={[
-            styles.landscapeSearchBox,
-            !isLandscape && styles.portraitSearchBox,
-            compact && styles.landscapeSearchBoxCompact,
-          ]}>
-            <Search size={14} color="#a1a1aa" style={{ marginRight: 6 }} />
-            <TextInput
-              style={[styles.landscapeSearchInput, compact && styles.landscapeSearchInputCompact]}
-              placeholder="Cari produk..."
-              placeholderTextColor="#71717a"
-              value={search}
-              onChangeText={setSearch}
-            />
-            {search.length > 0 && (
-              <TouchableOpacity onPress={() => setSearch('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                <X size={14} color="#a1a1aa" />
-              </TouchableOpacity>
-            )}
-          </View>
+          {/* Search Box / Pill */}
+          {!isLandscape ? (
+            <View style={[
+              styles.portraitSearchPill,
+              search.length > 0 && styles.portraitSearchPillActive,
+            ]}>
+              <Search size={13} color={search ? '#fb7185' : '#a1a1aa'} style={{ marginRight: 5 }} />
+              <TextInput
+                style={[
+                  styles.portraitSearchPillInput,
+                  { width: search ? Math.min(100, Math.max(34, search.length * 9)) : 32 },
+                ]}
+                placeholder="Cari"
+                placeholderTextColor="#a1a1aa"
+                value={search}
+                onChangeText={setSearch}
+              />
+              {search.length > 0 && (
+                <TouchableOpacity onPress={() => setSearch('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} style={{ marginLeft: 4 }}>
+                  <X size={13} color="#a1a1aa" />
+                </TouchableOpacity>
+              )}
+            </View>
+          ) : (
+            <View style={[
+              styles.landscapeSearchBox,
+              compact && styles.landscapeSearchBoxCompact,
+            ]}>
+              <Search size={14} color="#a1a1aa" style={{ marginRight: 6 }} />
+              <TextInput
+                style={[styles.landscapeSearchInput, compact && styles.landscapeSearchInputCompact]}
+                placeholder="Cari produk..."
+                placeholderTextColor="#71717a"
+                value={search}
+                onChangeText={setSearch}
+              />
+              {search.length > 0 && (
+                <TouchableOpacity onPress={() => setSearch('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                  <X size={14} color="#a1a1aa" />
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
 
           {/* Separator Divider */}
           <View style={styles.toolbarDivider} />
@@ -3017,9 +3040,27 @@ const styles = StyleSheet.create({
     width: 175,
     flexShrink: 0,
   },
-  portraitSearchBox: {
-    width: 142,
-    paddingHorizontal: 10,
+  portraitSearchPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#18181b',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    paddingHorizontal: 12,
+    height: 34,
+    flexShrink: 0,
+  },
+  portraitSearchPillActive: {
+    borderColor: '#fb7185',
+    backgroundColor: '#241217',
+  },
+  portraitSearchPillInput: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    padding: 0,
+    height: '100%',
   },
   landscapeSearchBoxCompact: {
     width: 140,
@@ -3052,9 +3093,12 @@ const styles = StyleSheet.create({
   },
   catChipCompact: {
     paddingHorizontal: 12,
-    paddingVertical: 5,
-    marginRight: 4,
-    borderRadius: 12,
+    paddingVertical: 6,
+    marginRight: 6,
+    borderRadius: 20,
+    height: 34,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   catChipTextCompact: {
     fontSize: 12,
