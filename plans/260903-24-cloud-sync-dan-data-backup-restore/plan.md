@@ -27,7 +27,14 @@ Fitur ini menggabungkan dua strategi komplementer:
 
 ## Arsitektur & Spesifikasi Solusi
 
-### 1. Solusi 1: Cloud Sync Preferensi Toko (Free-Tier Ready)
+### 1. Solusi 1: Cloud Sync Preferensi Toko (Free-Tier Ready: Supabase + Render)
+- **Infrastruktur Cloud Rp 0 (Free-Tier):**
+  - **Database (Supabase)**: Database cloud PostgreSQL gratis (500 MB kapasitas, native connection pgsql).
+  - **Backend (Render.com)**: Web Service container Laravel gratis dengan koneksi otomatis ke GitHub.
+  - **Keep-Alive Ping Strategy (Pencegahan Cold-Start Render)**:
+    - Paket gratis Render memiliki idle timeout 15 menit (masuk mode sleep).
+    - Setup webhook cron gratis (via `cron-job.org` atau `UptimeRobot`) yang memanggil `GET /api/v1/health` setiap 10 menit selama jam buka toko, menjaga container tetap melek tanpa cold-start.
+    - Dilindungi oleh arsitektur *Offline-First* KasirKita: jika server sedang wake-up, kasir tetap bisa checkout & cetak struk tanpa delay.
 - **Backend API (`backend/app/Models/StoreSetting.php` & `SettingsController.php`):**
   - Menambahkan kolom `preferences` berformat `JSONB` pada tabel `store_settings`.
   - Menyimpan status: `show_barcode_scanner`, `sound_beep`, `show_customer_picker`, `show_voucher_feature`, `show_tax_feature`, `auto_print`, `print_two_copies`.
