@@ -6,6 +6,7 @@ import {
   TextInput,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import {
@@ -177,7 +178,21 @@ export default function PosBarcodeScannerView({
 
       {/* Camera Viewport Area */}
       <View style={styles.cameraViewport}>
-        {!permission ? (
+        {Platform.OS === 'web' ? (
+          <View style={styles.centerFeedback}>
+            <Barcode size={44} color="#fb7185" style={{ marginBottom: 12 }} />
+            <Text style={styles.permissionTitle}>Mode Scanner Barcode</Text>
+            <Text style={styles.permissionSub}>
+              Pemindaian kamera fisik aktif penuh di perangkat ponsel Android/iOS (Expo Go / APK). Di browser web desktop, Anda dapat menggunakan tombol "Manual" di atas atau scanner barcode USB / Bluetooth.
+            </Text>
+            <TouchableOpacity
+              style={styles.permissionBtn}
+              onPress={() => setShowManualInput(true)}
+            >
+              <Text style={styles.permissionBtnText}>Input Kode Barcode</Text>
+            </TouchableOpacity>
+          </View>
+        ) : !permission ? (
           <View style={styles.centerFeedback}>
             <ActivityIndicator size="large" color="#e11d48" />
             <Text style={styles.permissionText}>Menyiapkan kamera...</Text>
