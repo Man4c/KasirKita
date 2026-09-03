@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Visualisasi Grafik Tren Omzet 7 Hari Interaktif di Dashboard Mobile (`SalesTrendChart.js`, `DashboardScreen.js`, `offlineStorage.js`)**:
+  - Menambahkan komponen baru `mobile/src/components/dashboard/SalesTrendChart.js` yang menampilkan grafik batang vertikal harian 7 hari terakhir.
+  - **Fitur Grafik**:
+    - Header memuat judul grafis dengan ikon kalender mawar dan kalkulasi total omzet 7 hari terakhir (`Total 7 Hari: RpX`).
+    - Bar batang vertikal proporsional dengan aksen warna Rose/Red, rounded corner atas, dan penanda status hari ini.
+    - **Tap-to-Inspect Interaktif**: Saat batang tanggal disentuh, muncul baris inspektur yang merincikan tanggal, jumlah transaksi sukses, nominal omzet harian yang presisi, dan indikator angka ringkas di atas batang (`1.2jt` / `45k`).
+  - **Dukungan Offline-First Caching**:
+    - Data tren harian dari endpoint backend `GET /api/v1/finance/trends` disimpan ke cache lokal via `cacheDashboardTrends()` di `offlineStorage.js`.
+    - Grafik tetap dapat ditampilkan langsung saat kasir sedang offline atau tanpa koneksi internet.
+  - Lolos uji linter desain (`detect.mjs` $\rightarrow$ 0 error) dan lolos verifikasi build bundle Expo Web (`npx expo export --platform web`).
 - **Refaktorisasi Modular, Offline-First, & Error Handling Layar Dashboard Mobile (`DashboardScreen.js`, `DashboardMetricsGrid.js`, `DashboardDetailModal.js`, `offlineStorage.js`, `format.js`)**:
   - Mengubah `DashboardScreen.js` dari monolitik (670 baris) menjadi **arsitektur modular** (~230 baris), mengikuti pola arsitektur `PosScreen` dan `SettingsScreen`.
   - Memisahkan komponen UI ke dalam folder baru `mobile/src/components/dashboard/`:
