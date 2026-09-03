@@ -20,13 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Normalisasi Kartu Metrik & Penamaan Layar Dashboard Mobile (`DashboardScreen.js`, `App.js`)**:
+- **Tata Letak Grid 2 Kolom (2x2) & Normalisasi Layar Dashboard Mobile (`DashboardScreen.js`, `App.js`)**:
   - Mengubah teks navigasi bawah (bottom navigation) dan judul layar dari *"Laporan Toko"* menjadi **"Dashboard"**.
-  - Melakukan normalisasi tata letak kartu metrik (`Omzet Penjualan`, `Laba Kotor`, `Estimasi Laba Bersih`, `Valuasi Aset Stok Barang`):
-    - Ikon berada dalam wadah pill persegi halus (`iconBox` ber-opacity 12% sesuai tema warna metrik).
-    - Tipografi angka metrik seragam (`text-22`, `Poppins_700Bold`, `#ffffff`) tanpa warna teks kontras yang acak.
-    - Struktur kartu 3 zona seragam: Header (Ikon + Label Kategori), Body (Nominal Rupiah Utama), dan Footer (Detail/Status dengan garis pemisah tipis).
-    - Penerapan standar *Defensive UI Craft* dan lolos uji linter/design detector (`detect.mjs`).
+  - Mengadopsi tata letak **Grid 2 Kolom** ($2 \times 2$) yang modern, ringkas, dan proporsional untuk 4 kartu metrik utama (`Omzet Penjualan`, `Laba Kotor`, `Laba Bersih`, `Valuasi Stok`).
+  - Merapikan label dan subketerangan agar pas dan simetris di layar HP tanpa teks terpotong atau tumpang tindih (`min-w-0`, `adjustsFontSizeToFit`, `numberOfLines={1}`).
+  - Seluruh 4 kartu metrik serta tombol "Perbarui Data" kini muat dalam 1 layar tanpa perlu scroll.
+  - Lolos uji linter/design detector (`detect.mjs`) dan lolos build bundle Expo Web (`npx expo export --platform web`).
 - **Perbaikan Sinkronisasi Toggle Struk ke Backend Cloud (`SettingsScreen.js`, `StoreSetting.php`)**:
   - Memperbaiki bug di mana toggle *"Tampilkan Logo Toko"* dan *"Nomor WhatsApp Toko"* mati sendiri saat aplikasi dimuat ulang.
   - Saat switch digeser oleh pengguna, `persistSettings` kini langsung memperbarui database backend (`PUT /api/v1/settings/store`) dan local cache sekaligus, sehingga saat aplikasi dibuka kembali atau disinkronkan dari cloud, status toggle tetap **ON** dan tidak ter-reset ke `false`.
