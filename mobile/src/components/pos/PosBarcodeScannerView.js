@@ -115,56 +115,54 @@ export default function PosBarcodeScannerView({
 
   return (
     <View style={[styles.container, isLandscape && styles.containerLandscape]}>
-      {/* Top Controls Bar */}
-      <View style={[styles.topBar, compact && styles.topBarCompact]}>
-        <View style={styles.topBarLeft}>
-          <View style={styles.liveIndicator}>
-            <View style={styles.liveDot} />
-            <Text style={styles.liveText}>SCANNER AKTIF</Text>
+      {/* Top Controls Bar (PORTRAIT ONLY - in Landscape, camera extends fully to top) */}
+      {!isLandscape && (
+        <View style={[styles.topBar, compact && styles.topBarCompact]}>
+          <View style={styles.topBarLeft}>
+            <View style={styles.liveIndicator}>
+              <View style={styles.liveDot} />
+              <Text style={styles.liveText}>SCANNER AKTIF</Text>
+            </View>
+          </View>
+
+          <View style={styles.topBarRight}>
+            <TouchableOpacity
+              style={[styles.ctrlBtn, torch && styles.ctrlBtnActive]}
+              onPress={() => setTorch(!torch)}
+              activeOpacity={0.7}
+            >
+              {torch ? <Zap size={15} color="#fbbf24" /> : <ZapOff size={15} color="#a1a1aa" />}
+              <Text style={[styles.ctrlBtnText, torch && { color: '#fbbf24' }]}>
+                {torch ? 'Senter Nyala' : 'Senter'}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.ctrlBtn, showManualInput && styles.ctrlBtnActive]}
+              onPress={() => setShowManualInput(!showManualInput)}
+              activeOpacity={0.7}
+            >
+              <Keyboard size={15} color={showManualInput ? '#fb7185' : '#a1a1aa'} />
+              <Text style={[styles.ctrlBtnText, showManualInput && { color: '#fb7185' }]}>
+                Ketik barcode manual
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.okBtn}
+              onPress={onClose}
+              activeOpacity={0.8}
+            >
+              <Check size={15} color="#ffffff" style={{ marginRight: 4 }} />
+              <Text style={styles.okBtnText}>OK</Text>
+            </TouchableOpacity>
           </View>
         </View>
-
-        {/* Action Controls: Flash, Manual Barcode, and OK */}
-        <View style={styles.topBarRight}>
-          {/* Torch / Flash Toggle */}
-          <TouchableOpacity
-            style={[styles.ctrlBtn, torch && styles.ctrlBtnActive]}
-            onPress={() => setTorch(!torch)}
-            activeOpacity={0.7}
-          >
-            {torch ? <Zap size={15} color="#fbbf24" /> : <ZapOff size={15} color="#a1a1aa" />}
-            <Text style={[styles.ctrlBtnText, torch && { color: '#fbbf24' }]}>
-              {torch ? 'Senter Nyala' : 'Senter'}
-            </Text>
-          </TouchableOpacity>
-
-          {/* Manual Barcode Input Trigger */}
-          <TouchableOpacity
-            style={[styles.ctrlBtn, showManualInput && styles.ctrlBtnActive]}
-            onPress={() => setShowManualInput(!showManualInput)}
-            activeOpacity={0.7}
-          >
-            <Keyboard size={15} color={showManualInput ? '#fb7185' : '#a1a1aa'} />
-            <Text style={[styles.ctrlBtnText, showManualInput && { color: '#fb7185' }]}>
-              Manual
-            </Text>
-          </TouchableOpacity>
-
-          {/* Selesai / OK Button */}
-          <TouchableOpacity
-            style={styles.okBtn}
-            onPress={onClose}
-            activeOpacity={0.8}
-          >
-            <Check size={15} color="#ffffff" style={{ marginRight: 4 }} />
-            <Text style={styles.okBtnText}>OK</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      )}
 
       {/* Manual Barcode Input Row */}
       {showManualInput && (
-        <View style={styles.manualInputRow}>
+        <View style={[styles.manualInputRow, isLandscape && styles.manualInputRowLandscape]}>
           <Barcode size={16} color="#fb7185" style={{ marginRight: 8 }} />
           <TextInput
             style={styles.manualTextInput}
@@ -193,7 +191,7 @@ export default function PosBarcodeScannerView({
             <Barcode size={44} color="#fb7185" style={{ marginBottom: 12 }} />
             <Text style={styles.permissionTitle}>Mode Scanner Barcode</Text>
             <Text style={styles.permissionSub}>
-              Pemindaian kamera fisik aktif penuh di perangkat ponsel Android/iOS (Expo Go / APK). Di browser web desktop, Anda dapat menggunakan tombol "Manual" di atas atau scanner barcode USB / Bluetooth.
+              Pemindaian kamera fisik aktif penuh di perangkat ponsel Android/iOS (Expo Go / APK). Di browser web desktop, Anda dapat menggunakan tombol "Ketik barcode manual" di bawah atau scanner barcode USB / Bluetooth.
             </Text>
             <TouchableOpacity
               style={styles.permissionBtn}
@@ -262,6 +260,7 @@ export default function PosBarcodeScannerView({
           <View
             style={[
               styles.feedbackBanner,
+              isLandscape && styles.feedbackBannerLandscape,
               scannedFeedback.success
                 ? styles.feedbackBannerSuccess
                 : styles.feedbackBannerError,
@@ -286,6 +285,45 @@ export default function PosBarcodeScannerView({
                 Kode: {scannedFeedback.code}
               </Text>
             </View>
+          </View>
+        )}
+
+        {/* Landscape Bottom Center Controls Overlay */}
+        {isLandscape && (
+          <View style={[styles.landscapeBottomBar, compact && styles.landscapeBottomBarCompact]}>
+            {/* Torch / Flash Toggle */}
+            <TouchableOpacity
+              style={[styles.bottomCtrlBtn, torch && styles.bottomCtrlBtnActive]}
+              onPress={() => setTorch(!torch)}
+              activeOpacity={0.7}
+            >
+              {torch ? <Zap size={14} color="#fbbf24" /> : <ZapOff size={14} color="#a1a1aa" />}
+              <Text style={[styles.bottomCtrlBtnText, torch && { color: '#fbbf24' }]}>
+                {torch ? 'Senter Nyala' : 'Senter'}
+              </Text>
+            </TouchableOpacity>
+
+            {/* Manual Barcode Input Trigger */}
+            <TouchableOpacity
+              style={[styles.bottomCtrlBtn, showManualInput && styles.bottomCtrlBtnActive]}
+              onPress={() => setShowManualInput(!showManualInput)}
+              activeOpacity={0.7}
+            >
+              <Keyboard size={14} color={showManualInput ? '#fb7185' : '#a1a1aa'} />
+              <Text style={[styles.bottomCtrlBtnText, showManualInput && { color: '#fb7185' }]}>
+                Ketik barcode manual
+              </Text>
+            </TouchableOpacity>
+
+            {/* Selesai / OK Button */}
+            <TouchableOpacity
+              style={styles.bottomOkBtn}
+              onPress={onClose}
+              activeOpacity={0.8}
+            >
+              <Check size={14} color="#ffffff" style={{ marginRight: 4 }} />
+              <Text style={styles.bottomOkBtnText}>OK</Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -551,6 +589,79 @@ const styles = StyleSheet.create({
   feedbackBannerError: {
     backgroundColor: 'rgba(76, 5, 25, 0.95)',
     borderColor: '#e11d48',
+  },
+  feedbackBannerLandscape: {
+    bottom: 58,
+  },
+  landscapeBottomBar: {
+    position: 'absolute',
+    bottom: 12,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    zIndex: 20,
+  },
+  landscapeBottomBarCompact: {
+    bottom: 8,
+    gap: 6,
+  },
+  bottomCtrlBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(24, 24, 27, 0.88)',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 9999,
+    borderWidth: 1,
+    borderColor: 'rgba(63, 63, 70, 0.8)',
+    gap: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.35,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  bottomCtrlBtnActive: {
+    backgroundColor: 'rgba(38, 20, 26, 0.95)',
+    borderColor: '#e11d48',
+  },
+  bottomCtrlBtnText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+  },
+  bottomOkBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e11d48',
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 9999,
+    shadowColor: '#e11d48',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  bottomOkBtnText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_700Bold',
+  },
+  manualInputRowLandscape: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    right: 10,
+    zIndex: 25,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    backgroundColor: 'rgba(24, 24, 27, 0.95)',
   },
   feedbackTitle: {
     fontSize: 12,
