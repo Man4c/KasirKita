@@ -23,7 +23,7 @@ import PosCartModal from '../components/pos/PosCartModal';
 import CustomerPickerModal from '../components/pos/CustomerPickerModal';
 import PromoVoucherModal from '../components/pos/PromoVoucherModal';
 import TaxFeeModal from '../components/pos/TaxFeeModal';
-import PosReceiptModal from '../components/pos/PosReceiptModal';
+import PaymentSuccessModal from '../components/pos/PaymentSuccessModal';
 import ProductGrid from '../components/pos/ProductGrid';
 import LandscapeRegisterPanel from '../components/pos/LandscapeRegisterPanel';
 import PosCheckoutView from '../components/pos/PosCheckoutView';
@@ -774,12 +774,11 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         formatRp={formatRp}
       />
 
-      <PosReceiptModal
+      <PaymentSuccessModal
         visible={receiptModalOpen}
         isLandscape={isLandscape}
-        onClose={() => setReceiptModalOpen(false)}
+        onClose={() => dispatch({ type: CHECKOUT_ACTION_TYPES.NEW_TRANSACTION })}
         completedTx={completedTx}
-        onNewTransaction={() => dispatch({ type: CHECKOUT_ACTION_TYPES.NEW_TRANSACTION })}
         formatRp={formatRp}
       />
 
