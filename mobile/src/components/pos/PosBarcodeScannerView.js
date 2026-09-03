@@ -34,6 +34,9 @@ export default function PosBarcodeScannerView({
   const [isScanningActive, setIsScanningActive] = useState(false);
   const scanCooldownRef = useRef(false);
   const scanLaserAnim = useRef(new Animated.Value(0)).current;
+  // Double-confirmation: require same barcode detected 2x consecutively
+  const pendingCodeRef = useRef(null);
+  const pendingTimerRef = useRef(null);
 
   // Animate scan laser line up and down continuously
   useEffect(() => {
@@ -55,11 +58,11 @@ export default function PosBarcodeScannerView({
     return () => loop.stop();
   }, [scanLaserAnim]);
 
-  // Warm-up delay 1.5s after camera mounts to prevent false triggers from ambient patterns
+  // Warm-up delay 2s after camera mounts to prevent false triggers from ambient patterns
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsScanningActive(true);
-    }, 1200);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -80,13 +83,29 @@ export default function PosBarcodeScannerView({
     // Filter out accidental noise / false positive scans (less than 4 alphanumeric characters)
     if (cleanCode.length < 4) return;
 
-    scanCooldownRef.current = true;
-    processBarcode(cleanCode);
+    // Double-confirmation: same barcode must be detected 2x within 1.5s window
+    if (pendingCodeRef.current === cleanCode) {
+      // Confirmed! Same code detected twice — process it
+      clearTimeout(pendingTimerRef.current);
+      pendingCodeRef.current = null;
+      pendingTimerRef.current = null;
 
-    // Debounce scan interval to prevent rapid duplicate triggers
-    setTimeout(() => {
-      scanCooldownRef.current = false;
-    }, 1500);
+      scanCooldownRef.current = true;
+      processBarcode(cleanCode);
+
+      // Debounce scan interval to prevent rapid duplicate triggers
+      setTimeout(() => {
+        scanCooldownRef.current = false;
+      }, 2000);
+    } else {
+      // First detection — store as pending and wait for confirmation
+      pendingCodeRef.current = cleanCode;
+      clearTimeout(pendingTimerRef.current);
+      pendingTimerRef.current = setTimeout(() => {
+        // No second detection within 1.5s — discard (was a fleeting ambient barcode)
+        pendingCodeRef.current = null;
+      }, 1500);
+    }
   };
 
   const processBarcode = (code) => {
