@@ -359,10 +359,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#27272a',
   },
   landscapeRegisterHeader: {
-    paddingVertical: 8,
+    height: 48,
+    maxHeight: 48,
+    paddingVertical: 0,
   },
   landscapeRegisterHeaderCompact: {
-    paddingVertical: 4,
+    height: 40,
+    maxHeight: 40,
+    paddingVertical: 0,
     paddingHorizontal: 8,
   },
   registerTitle: {
