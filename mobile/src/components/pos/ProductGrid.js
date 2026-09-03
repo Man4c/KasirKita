@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { Search, X } from 'lucide-react-native';
+import { Search, X, PackageSearch, RotateCcw } from 'lucide-react-native';
 
 export default function ProductGrid({
   isLandscape,
@@ -25,6 +25,8 @@ export default function ProductGrid({
   onAddToCart,
   formatRp,
 }) {
+  const selectedCatObj = categories.find((c) => c.id === selectedCat);
+
   return (
     <View style={[styles.catalogCol, isLandscape && styles.landscapeCatalogCol]}>
       {/* Catalog Toolbar */}
@@ -148,9 +150,46 @@ export default function ProductGrid({
           contentContainerStyle={[
             styles.gridContent,
             { paddingBottom: cart.length > 0 ? 170 : 100 },
+            products.length === 0 && { flexGrow: 1 },
             isLandscape && styles.gridContentLandscape,
             compact && styles.gridContentCompactLandscape,
           ]}
+          ListEmptyComponent={
+            <View style={[styles.emptyProductsContainer, compact && styles.emptyProductsContainerCompact]}>
+              <View style={styles.emptyIconCircle}>
+                <PackageSearch size={compact ? 28 : 36} color="#71717a" />
+              </View>
+              <Text style={[styles.emptyProductsTitle, compact && { fontSize: 13 }]}>
+                {search.trim() ? 'Produk Tidak Ditemukan' : 'Belum Ada Produk'}
+              </Text>
+              <Text style={styles.emptyProductsSub}>
+                {search.trim()
+                  ? `Tidak ada produk yang cocok dengan pencarian "${search}".`
+                  : selectedCat !== 'ALL'
+                  ? `Belum ada produk di kategori ${selectedCatObj?.name || 'ini'}.`
+                  : 'Belum ada produk aktif yang tersedia di katalog kasir.'}
+              </Text>
+              {(search.trim() || selectedCat !== 'ALL') && (
+                <TouchableOpacity
+                  style={styles.emptyResetBtn}
+                  onPress={() => {
+                    if (search.trim()) onSearchChange('');
+                    if (selectedCat !== 'ALL') onSelectCat('ALL');
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <RotateCcw size={12} color="#fb7185" style={{ marginRight: 6 }} />
+                  <Text style={styles.emptyResetBtnText}>
+                    {search.trim() && selectedCat !== 'ALL'
+                      ? 'Reset Filter & Pencarian'
+                      : search.trim()
+                      ? 'Hapus Pencarian'
+                      : 'Tampilkan Semua Kategori'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          }
           renderItem={({ item }) => {
             const inCart = cart.find((i) => i.product.id === item.id);
             const stockNum = Number(item.stock || 0);
@@ -455,5 +494,58 @@ const styles = StyleSheet.create({
   cardStockLow: {
     color: '#f59e0b',
     fontFamily: 'Poppins_600SemiBold',
+  },
+  emptyProductsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+    minHeight: 260,
+  },
+  emptyProductsContainerCompact: {
+    padding: 16,
+    minHeight: 200,
+  },
+  emptyIconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#18181b',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#27272a',
+  },
+  emptyProductsTitle: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontFamily: 'Poppins_600SemiBold',
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  emptyProductsSub: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    textAlign: 'center',
+    maxWidth: 280,
+    lineHeight: 18,
+    marginBottom: 16,
+  },
+  emptyResetBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(225, 29, 72, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.3)',
+  },
+  emptyResetBtnText: {
+    color: '#fb7185',
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
   },
 });
