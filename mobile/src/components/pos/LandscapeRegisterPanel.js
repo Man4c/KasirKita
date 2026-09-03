@@ -25,6 +25,8 @@ export default function LandscapeRegisterPanel({
   totalItemsCount,
   selectedCustomer,
   showCustomerPicker = true,
+  showVoucherFeature = true,
+  showTaxFeature = true,
   onOpenCustomerModal,
   cart,
   onClearCart,
@@ -159,14 +161,14 @@ export default function LandscapeRegisterPanel({
       {/* Register Footer */}
       <View style={[styles.registerFooter, compact && styles.registerFooterCompact]}>
         {/* Quick Fee & Promo Pills */}
-        {((availablePromos.length > 0 || appliedPromo) ||
+        {((showVoucherFeature && (availablePromos.length > 0 || appliedPromo)) ||
           takeawayFees.length > 0 ||
-          availableTaxes.length > 0) && (
+          (showTaxFeature && availableTaxes.length > 0)) && (
           <View
             style={[styles.regQuickOptionsRow, compact && styles.regQuickOptionsRowCompact]}
           >
             {/* Promo button */}
-            {(availablePromos.length > 0 || appliedPromo) && (
+            {showVoucherFeature && (availablePromos.length > 0 || appliedPromo) && (
               <TouchableOpacity
                 style={[
                   styles.regQuickPill,
@@ -217,7 +219,7 @@ export default function LandscapeRegisterPanel({
             )}
 
             {/* Tax status chip */}
-            {availableTaxes.length > 0 && (
+            {showTaxFeature && availableTaxes.length > 0 && (
               <TouchableOpacity
                 style={[
                   styles.regQuickPill,
@@ -297,9 +299,9 @@ export default function LandscapeRegisterPanel({
             styles.regPayRow,
             compact && styles.regPayRowCompact,
             !hasBillAdjustments &&
-              !((availablePromos.length > 0 || appliedPromo) ||
+              !((showVoucherFeature && (availablePromos.length > 0 || appliedPromo)) ||
                 takeawayFees.length > 0 ||
-                availableTaxes.length > 0) && { borderTopWidth: 0, paddingTop: 0 },
+                (showTaxFeature && availableTaxes.length > 0)) && { borderTopWidth: 0, paddingTop: 0 },
           ]}
         >
           <View>

@@ -62,8 +62,10 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
     receiptModalOpen,
   } = checkoutState;
 
-  // User Preference: show/hide customer picker in checkout
+  // User Preference: show/hide customer picker, voucher, and tax in checkout
   const [showCustomerPicker, setShowCustomerPicker] = useState(true);
+  const [showVoucherFeature, setShowVoucherFeature] = useState(true);
+  const [showTaxFeature, setShowTaxFeature] = useState(true);
 
   useEffect(() => {
     if (onCheckoutStateChange) {
@@ -104,10 +106,18 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
     fetchData();
     syncManager.init();
 
-    // Load showCustomerPicker preference from persisted settings
+    // Load checkout feature preferences from persisted settings
     storage.getSettings().then((saved) => {
-      if (saved && typeof saved.showCustomerPicker === 'boolean') {
-        setShowCustomerPicker(saved.showCustomerPicker);
+      if (saved) {
+        if (typeof saved.showCustomerPicker === 'boolean') {
+          setShowCustomerPicker(saved.showCustomerPicker);
+        }
+        if (typeof saved.showVoucherFeature === 'boolean') {
+          setShowVoucherFeature(saved.showVoucherFeature);
+        }
+        if (typeof saved.showTaxFeature === 'boolean') {
+          setShowTaxFeature(saved.showTaxFeature);
+        }
       }
     });
 
@@ -252,17 +262,18 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   }, [cart]);
 
   const activeTax = useMemo(() => {
+    if (!showTaxFeature) return null;
     return taxesAndFees.find((i) => i.id === selectedTaxId && i.is_tax);
-  }, [taxesAndFees, selectedTaxId]);
+  }, [taxesAndFees, selectedTaxId, showTaxFeature]);
 
   const taxAmount = useMemo(() => {
-    if (!activeTax) return 0;
+    if (!showTaxFeature || !activeTax) return 0;
     const taxableBase = Math.max(0, subtotal - discount);
     if (activeTax.type === 'PERCENTAGE') {
       return Math.round((taxableBase * parseFloat(activeTax.value)) / 100);
     }
     return Math.round(parseFloat(activeTax.value));
-  }, [activeTax, subtotal, discount]);
+  }, [activeTax, subtotal, discount, showTaxFeature]);
 
   const takeawayFees = useMemo(() => {
     return taxesAndFees.filter((i) => !i.is_tax && i.apply_to === 'TAKEAWAY');
@@ -566,6 +577,8 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               totalItemsCount={totalItemsCount}
               selectedCustomer={selectedCustomer}
               showCustomerPicker={showCustomerPicker}
+              showVoucherFeature={showVoucherFeature}
+              showTaxFeature={showTaxFeature}
               onOpenCustomerModal={() => setCustomerModalOpen(true)}
               cart={cart}
               onClearCart={() => setCart([])}
@@ -642,6 +655,8 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
           totalAmount={totalAmount}
           selectedCustomer={selectedCustomer}
           showCustomerPicker={showCustomerPicker}
+          showVoucherFeature={showVoucherFeature}
+          showTaxFeature={showTaxFeature}
           onOpenCustomerModal={() => setCustomerModalOpen(true)}
           onClearCustomer={() => setSelectedCustomer(null)}
           hasBillAdjustments={hasBillAdjustments}

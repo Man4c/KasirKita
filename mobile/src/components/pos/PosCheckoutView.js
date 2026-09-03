@@ -36,6 +36,8 @@ export default function PosCheckoutView({
   totalAmount,
   selectedCustomer,
   showCustomerPicker = true,
+  showVoucherFeature = true,
+  showTaxFeature = true,
   onOpenCustomerModal,
   onClearCustomer,
   hasBillAdjustments,
@@ -275,12 +277,12 @@ export default function PosCheckoutView({
             )}
 
             {/* 3. Promo, Takeaway & Tax Pills Bar */}
-            {((availablePromos.length > 0 || appliedPromo) ||
+            {((showVoucherFeature && (availablePromos.length > 0 || appliedPromo)) ||
               takeawayFees.length > 0 ||
-              availableTaxes.length > 0) && (
+              (showTaxFeature && availableTaxes.length > 0)) && (
               <View style={styles.regQuickOptionsRow}>
                 {/* Promo button */}
-                {(availablePromos.length > 0 || appliedPromo) && (
+                {showVoucherFeature && (availablePromos.length > 0 || appliedPromo) && (
                   <TouchableOpacity
                     style={[
                       styles.regQuickPill,
@@ -326,7 +328,7 @@ export default function PosCheckoutView({
                 )}
 
                 {/* Tax status chip */}
-                {availableTaxes.length > 0 && (
+                {showTaxFeature && availableTaxes.length > 0 && (
                   <TouchableOpacity
                     style={[
                       styles.regQuickPill,
@@ -909,64 +911,68 @@ export default function PosCheckoutView({
           )}
 
           {/* 3. Voucher & Adjustments Section */}
+          {(showVoucherFeature || takeawayFees.length > 0 || (showTaxFeature && availableTaxes.length > 0)) && (
           <View style={styles.checkoutVoucherSectionPortrait}>
-            {appliedPromo ? (
-              <View style={styles.appliedPromoBadgePortrait}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <TicketPercent size={18} color="#34d399" />
-                  <View>
-                    <Text style={styles.appliedPromoCodeText}>{appliedPromo.discount_code}</Text>
-                    <Text style={styles.appliedPromoSub}>
-                      {appliedPromo.discount_type === 'PERCENTAGE'
-                        ? `Diskon ${appliedPromo.discount_value}% (-${formatRp(discount)})`
-                        : `Potongan -${formatRp(discount)}`}
-                    </Text>
+            {showVoucherFeature && (
+              appliedPromo ? (
+                <View style={styles.appliedPromoBadgePortrait}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <TicketPercent size={18} color="#34d399" />
+                    <View>
+                      <Text style={styles.appliedPromoCodeText}>{appliedPromo.discount_code}</Text>
+                      <Text style={styles.appliedPromoSub}>
+                        {appliedPromo.discount_type === 'PERCENTAGE'
+                          ? `Diskon ${appliedPromo.discount_value}% (-${formatRp(discount)})`
+                          : `Potongan -${formatRp(discount)}`}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <TouchableOpacity
-                  style={styles.removePromoBtn}
-                  onPress={onRemovePromo}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                >
-                  <X size={16} color="#fb7185" />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View style={styles.voucherInputRowPortrait}>
-                <TextInput
-                  style={styles.voucherTextInputPortrait}
-                  placeholder="Kode voucher promo..."
-                  placeholderTextColor="#71717a"
-                  value={voucherInput}
-                  onChangeText={onChangeVoucherInput}
-                  autoCapitalize="characters"
-                />
-                <TouchableOpacity
-                  style={[
-                    styles.applyVoucherBtnPortrait,
-                    !voucherInput.trim() && { opacity: 0.5 },
-                  ]}
-                  onPress={() => onApplyVoucher(voucherInput)}
-                  disabled={!voucherInput.trim() || voucherLoading}
-                >
-                  {voucherLoading ? (
-                    <ActivityIndicator size="small" color="#ffffff" />
-                  ) : (
-                    <Text style={styles.applyVoucherBtnTextPortrait}>Gunakan</Text>
-                  )}
-                </TouchableOpacity>
-                {availablePromos.length > 0 && (
                   <TouchableOpacity
-                    style={styles.browseVoucherBtnPortrait}
-                    onPress={onOpenPromoModal}
+                    style={styles.removePromoBtn}
+                    onPress={onRemovePromo}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                   >
-                    <Sparkles size={15} color="#fb7185" />
+                    <X size={16} color="#fb7185" />
                   </TouchableOpacity>
-                )}
-              </View>
+                </View>
+              ) : (
+                <View style={styles.voucherInputRowPortrait}>
+                  <TextInput
+                    style={styles.voucherTextInputPortrait}
+                    placeholder="Kode voucher promo..."
+                    placeholderTextColor="#71717a"
+                    value={voucherInput}
+                    onChangeText={onChangeVoucherInput}
+                    autoCapitalize="characters"
+                  />
+                  <TouchableOpacity
+                    style={[
+                      styles.applyVoucherBtnPortrait,
+                      !voucherInput.trim() && { opacity: 0.5 },
+                    ]}
+                    onPress={() => onApplyVoucher(voucherInput)}
+                    disabled={!voucherInput.trim() || voucherLoading}
+                  >
+                    {voucherLoading ? (
+                      <ActivityIndicator size="small" color="#ffffff" />
+                    ) : (
+                      <Text style={styles.applyVoucherBtnTextPortrait}>Gunakan</Text>
+                    )}
+                  </TouchableOpacity>
+                  {availablePromos.length > 0 && (
+                    <TouchableOpacity
+                      style={styles.browseVoucherBtnPortrait}
+                      onPress={onOpenPromoModal}
+                    >
+                      <Sparkles size={15} color="#fb7185" />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              )
             )}
 
             {/* Quick Chips: Takeaway & Tax */}
+            {(takeawayFees.length > 0 || (showTaxFeature && availableTaxes.length > 0)) && (
             <View style={styles.checkoutQuickChipsRowPortrait}>
               {takeawayFees.length > 0 && (
                 <TouchableOpacity
@@ -988,7 +994,7 @@ export default function PosCheckoutView({
                 </TouchableOpacity>
               )}
 
-              {availableTaxes.length > 0 && (
+              {showTaxFeature && availableTaxes.length > 0 && (
                 <TouchableOpacity
                   style={[
                     styles.checkoutQuickChip,
@@ -1025,7 +1031,9 @@ export default function PosCheckoutView({
                 </TouchableOpacity>
               )}
             </View>
+            )}
           </View>
+          )}
 
           {/* 4. Financial Adjustments Breakdown */}
           {hasBillAdjustments && (

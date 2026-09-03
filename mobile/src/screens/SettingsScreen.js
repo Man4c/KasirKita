@@ -76,6 +76,8 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [showPhoneOnReceipt, setShowPhoneOnReceipt] = useState(true);
   const [soundBeep, setSoundBeep] = useState(true);
   const [showCustomerPicker, setShowCustomerPicker] = useState(true);
+  const [showVoucherFeature, setShowVoucherFeature] = useState(true);
+  const [showTaxFeature, setShowTaxFeature] = useState(true);
   const [orientationPref, setOrientationPref] = useState('AUTO');
 
   // Modals & Async State
@@ -130,6 +132,8 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (typeof saved.showPhoneOnReceipt === 'boolean') setShowPhoneOnReceipt(saved.showPhoneOnReceipt);
         if (typeof saved.soundBeep === 'boolean') setSoundBeep(saved.soundBeep);
         if (typeof saved.showCustomerPicker === 'boolean') setShowCustomerPicker(saved.showCustomerPicker);
+        if (typeof saved.showVoucherFeature === 'boolean') setShowVoucherFeature(saved.showVoucherFeature);
+        if (typeof saved.showTaxFeature === 'boolean') setShowTaxFeature(saved.showTaxFeature);
         if (saved.orientationPref) {
           setOrientationPref(saved.orientationPref);
           orientationService.applyPreference(saved.orientationPref);
@@ -194,6 +198,8 @@ export default function SettingsScreen({ isLandscape = false }) {
         showPhoneOnReceipt,
         soundBeep,
         showCustomerPicker,
+        showVoucherFeature,
+        showTaxFeature,
         orientationPref,
         ...overrides,
       };
@@ -660,6 +666,44 @@ export default function SettingsScreen({ isLandscape = false }) {
               }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={showCustomerPicker ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
+            />
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.switchRow}>
+            <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
+              <Text style={styles.switchTitle}>Fitur Voucher & Promo Diskon</Text>
+              <Text style={styles.switchSubtitle}>Tampilkan tombol dan opsi voucher promo diskon pada layar kasir & checkout</Text>
+            </View>
+            <Switch
+              value={showVoucherFeature}
+              onValueChange={(val) => {
+                setShowVoucherFeature(val);
+                persistSettings({ showVoucherFeature: val });
+              }}
+              trackColor={{ false: '#27272a', true: '#e11d48' }}
+              thumbColor={showVoucherFeature ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
+            />
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.switchRow}>
+            <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
+              <Text style={styles.switchTitle}>Fitur Pajak di Kasir</Text>
+              <Text style={styles.switchSubtitle}>Tampilkan opsi pilihan tarif pajak (PPN/PB1) pada kasir & checkout. Jika dimatikan, transaksi tanpa perhitungan pajak</Text>
+            </View>
+            <Switch
+              value={showTaxFeature}
+              onValueChange={(val) => {
+                setShowTaxFeature(val);
+                persistSettings({ showTaxFeature: val });
+              }}
+              trackColor={{ false: '#27272a', true: '#e11d48' }}
+              thumbColor={showTaxFeature ? '#ffffff' : '#a1a1aa'}
               style={{ flexShrink: 0 }}
             />
           </View>
