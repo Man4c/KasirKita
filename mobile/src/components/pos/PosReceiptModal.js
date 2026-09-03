@@ -68,7 +68,7 @@ export default function PosReceiptModal({
                   showAlert('Sukses', 'Struk berhasil dicetak ke printer Bluetooth.');
                 } else {
                   if (Platform.OS === 'web') {
-                    window.print();
+                    await printerService.printWebReceiptHtml(completedTx);
                   } else {
                     showAlert('Simulasi Cetak', 'Perintah cetak ESC/POS disiapkan (Mode Simulasi). Hubungkan printer Bluetooth fisik di menu Pengaturan jika sudah ada perangkat.');
                   }

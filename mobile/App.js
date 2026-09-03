@@ -68,36 +68,6 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
       *, *::before, *::after {
         transition-property: opacity, transform, background-color, border-color, color, box-shadow !important;
       }
-
-      /* Clean Receipt Print Stylesheet: prints pure receipt paper without modal shells/buttons */
-      @media print {
-        @page {
-          margin: 0;
-          size: 80mm auto;
-        }
-        body * {
-          visibility: hidden !important;
-        }
-        #printable-receipt-paper, #printable-receipt-paper * {
-          visibility: visible !important;
-        }
-        #printable-receipt-paper {
-          position: fixed !important;
-          left: 50% !important;
-          top: 0 !important;
-          transform: translateX(-50%) !important;
-          width: 76mm !important;
-          max-width: 100% !important;
-          margin: 0 !important;
-          padding: 8mm 6mm !important;
-          background: #ffffff !important;
-          color: #000000 !important;
-          border: none !important;
-          box-shadow: none !important;
-          opacity: 1 !important;
-          z-index: 999999 !important;
-        }
-      }
     `;
     document.head.appendChild(styleEl);
   }
