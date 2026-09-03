@@ -28,8 +28,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - **No. Nota**: Menampilkan nomor nota pembayaran (contoh: `INV-210826-002`) dalam warna abu-abu bersih `#a1a1aa`.
     - **Ukuran Kompak & Adaptif Layar HP**:
       - Memperkecil dimensi kartu (`maxWidth: 310px`, padding ringkas) dan lingkaran ikon agar tidak memakan seluruh layar HP (termasuk saat orientasi landscape maupun layar tinggi terbatas).
-    - **Animasi Ikon Centang Responsif & Cepat**:
-      - Menghilangkan jeda delay sehingga ikon centang meletup (*spring bounce*) seketika saat modal terbuka tanpa menunggu lama.
+    - **Animasi Centang Garis Menggambar Progresif (*Progressive Stroke Drawing*)**:
+      - Menggunakan vektor SVG presisi tinggi dengan interpolasi `strokeDashoffset` (panjang path 36 unit).
+      - Garis centang putih tidak lagi meletup utuh sekaligus, melainkan digambar secara mengalir dari cabang kiri pendek ke bawah, lalu melesat naik ke kanan atas layaknya goresan pena (*hand-drawn checkmark*).
+    - **Posisi Centang Presisi Tengah (*Perfect Center Alignment*)**:
+      - Vektor SVG dikalibrasikan tepat di koordinat pusat lingkaran `viewBox="0 0 24 24"` dengan titik temu siku di (9.5, 17.5), menjamin posisi centang seimbang dan presisi di tengah bulatan hijau.
     - **Layer Hijau Samar Diperbesar (*Enlarged Glowing Halo*)**:
       - Memperbesar diameter lapisan lingkaran hijau transparan luar (`iconHalo` dari 72px $\rightarrow$ 86px) dengan opacity yang lebih hidup (`0.18`) sehingga efek pendar hijau di belakang centang terlihat lebih anggun dan proporsional.
     - **Dua Tombol Aksi Ergonomis (Harmoni Emerald Green)**:
