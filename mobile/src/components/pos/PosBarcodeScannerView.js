@@ -220,23 +220,25 @@ export default function PosBarcodeScannerView({
             </TouchableOpacity>
           </View>
         ) : (
-          <CameraView
-            style={StyleSheet.absoluteFill}
-            facing="back"
-            enableTorch={torch}
-            barcodeScannerSettings={{
-              barcodeTypes: [
-                'ean13',
-                'ean8',
-                'upc_a',
-                'upc_e',
-                'code128',
-                'qr',
-              ],
-            }}
-            onBarcodeScanned={isScanningActive ? handleBarcodeScanned : undefined}
-          >
-            {/* Viewfinder Target Overlay Mask (Fully covers the camera surface) */}
+          <>
+            <CameraView
+              style={StyleSheet.absoluteFill}
+              facing="back"
+              enableTorch={torch}
+              barcodeScannerSettings={{
+                barcodeTypes: [
+                  'ean13',
+                  'ean8',
+                  'upc_a',
+                  'upc_e',
+                  'code128',
+                  'qr',
+                ],
+              }}
+              onBarcodeScanned={isScanningActive ? handleBarcodeScanned : undefined}
+            />
+
+            {/* Viewfinder Target Overlay Mask (Placed on top of camera with absolute positioning) */}
             <View style={[StyleSheet.absoluteFill, styles.overlayMask]}>
               <View style={styles.targetFrame}>
                 {/* 4 Corner Accents */}
@@ -250,7 +252,7 @@ export default function PosBarcodeScannerView({
               </View>
               <Text style={styles.targetInstruction}>Arahkan barcode produk ke kotak tengah</Text>
             </View>
-          </CameraView>
+          </>
         )}
 
         {/* Realtime Scan Result Toast / Feedback */}
