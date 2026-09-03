@@ -20,6 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Fitur Toggle Scanner Barcode di Pengaturan & Integrasi Kasir POS (`SettingsScreen.js`, `PosScreen.js`)**:
+  - **Toggle Pengaturan**: Menambahkan opsi Switch `"Fitur Scan Barcode"` pada bagian Preferensi Kasir (`SettingsScreen.js`) dengan penyimpanan persisten di storage lokal.
+  - **Dinamis di POS (Landscape & Portrait)**: 
+    - Saat toggle aktif (`true`), tombol scanner muncul di header keranjang (landscape) dan di samping pencarian katalog (portrait).
+    - Saat toggle dinonaktifkan (`false`), tombol scanner disembunyikan sepenuhnya dari layar kasir dan mode scanner tidak dapat terbuka, memberikan ruang belanja yang bersih bagi toko yang tidak memerlukan scan barcode kamera.
+  - **Penyempurnaan Tampilan Barcode Scanner (`PosBarcodeScannerView.js`)**:
+    - Animasi garis laser scan merah yang bergerak naik-turun halus (60fps native driver).
+    - Mode ketik manual terintegrasi inline di floating bottom bar landscape.
+    - Double-confirmation scanner untuk mengeliminasi false positive scan dari tekstur lingkungan.
+    - Format teks profesional: *"Barcode tidak dikenali - Kode [xxxx] belum terdaftar di katalog produk."*
+
 - **Refaktorisasi & Modularisasi Layar Pengaturan Mobile (`SettingsScreen.js`) - Plan #23 SELESAI (100%)**:
   - Berhasil memecah file monolitik `SettingsScreen.js` dari **~2.940 baris** menjadi **~1.430 baris** (berkurang lebih dari 1.500 baris kode / 51% lebih ringkas) dengan mengekstrak 7 sub-komponen modal modular di `mobile/src/components/settings/`:
     1. `UserProfileModal.js`: Modal form edit profil nama dan telepon kasir beserta validasi mandiri.
