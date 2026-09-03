@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
-  Switch,
   Image,
   ActivityIndicator,
 } from 'react-native';
@@ -34,8 +33,6 @@ export default function StoreIdentityModal({
   const [tempStorePhone, setTempStorePhone] = useState('');
   const [tempReceiptFooter, setTempReceiptFooter] = useState('');
   const [tempStoreLogo, setTempStoreLogo] = useState(null);
-  const [tempShowLogoOnReceipt, setTempShowLogoOnReceipt] = useState(true);
-  const [tempShowPhoneOnReceipt, setTempShowPhoneOnReceipt] = useState(true);
   const [savingStore, setSavingStore] = useState(false);
 
   useEffect(() => {
@@ -45,8 +42,6 @@ export default function StoreIdentityModal({
       setTempStorePhone(storeSettings.storePhone || '');
       setTempReceiptFooter(storeSettings.receiptFooter || '');
       setTempStoreLogo(storeSettings.storeLogo || null);
-      setTempShowLogoOnReceipt(typeof storeSettings.showLogoOnReceipt === 'boolean' ? storeSettings.showLogoOnReceipt : true);
-      setTempShowPhoneOnReceipt(typeof storeSettings.showPhoneOnReceipt === 'boolean' ? storeSettings.showPhoneOnReceipt : true);
     }
   }, [visible, storeSettings]);
 
@@ -93,8 +88,6 @@ export default function StoreIdentityModal({
       storePhone: newPhone,
       receiptFooter: newFooter,
       storeLogo: tempStoreLogo,
-      showLogoOnReceipt: tempShowLogoOnReceipt,
-      showPhoneOnReceipt: tempShowPhoneOnReceipt,
     };
 
     setSavingStore(true);
@@ -106,8 +99,6 @@ export default function StoreIdentityModal({
           phone: newPhone,
           logo: tempStoreLogo,
           receipt_footer: newFooter,
-          show_logo_on_receipt: tempShowLogoOnReceipt,
-          show_phone_on_receipt: tempShowPhoneOnReceipt,
         });
       }
 
@@ -246,35 +237,6 @@ export default function StoreIdentityModal({
                 placeholder="Contoh: Terima kasih atas kunjungan Anda..."
                 placeholderTextColor="#71717a"
                 multiline
-              />
-            </View>
-
-            <View style={styles.divider} />
-
-            {/* Co-located Receipt Toggles */}
-            <View style={styles.switchRow}>
-              <View style={{ flex: 1, minWidth: 0, paddingRight: 10 }}>
-                <Text style={styles.switchTitle}>Tampilkan Logo Toko di Struk</Text>
-                <Text style={styles.switchSubtitle}>Cetak lambang ikon toko di baris teratas nota</Text>
-              </View>
-              <Switch
-                value={tempShowLogoOnReceipt}
-                onValueChange={setTempShowLogoOnReceipt}
-                trackColor={{ false: '#27272a', true: '#e11d48' }}
-                thumbColor={tempShowLogoOnReceipt ? '#fb7185' : '#71717a'}
-              />
-            </View>
-
-            <View style={styles.switchRow}>
-              <View style={{ flex: 1, minWidth: 0, paddingRight: 10 }}>
-                <Text style={styles.switchTitle}>Tampilkan No. WhatsApp di Struk</Text>
-                <Text style={styles.switchSubtitle}>Cetak kontak WhatsApp toko untuk pesanan antar</Text>
-              </View>
-              <Switch
-                value={tempShowPhoneOnReceipt}
-                onValueChange={setTempShowPhoneOnReceipt}
-                trackColor={{ false: '#27272a', true: '#e11d48' }}
-                thumbColor={tempShowPhoneOnReceipt ? '#fb7185' : '#71717a'}
               />
             </View>
           </ScrollView>

@@ -978,8 +978,6 @@ export default function SettingsScreen({ isLandscape = false }) {
           storePhone,
           receiptFooter,
           storeLogo,
-          showLogoOnReceipt,
-          showPhoneOnReceipt,
         }}
         isOwner={user?.role === 'owner'}
         onSaveSuccess={async (updated) => {
@@ -988,8 +986,6 @@ export default function SettingsScreen({ isLandscape = false }) {
           setStorePhone(updated.storePhone);
           setReceiptFooter(updated.receiptFooter);
           setStoreLogo(updated.storeLogo);
-          setShowLogoOnReceipt(updated.showLogoOnReceipt);
-          setShowPhoneOnReceipt(updated.showPhoneOnReceipt);
 
           await persistSettings({
             storeName: updated.storeName,
@@ -997,8 +993,6 @@ export default function SettingsScreen({ isLandscape = false }) {
             storePhone: updated.storePhone,
             receiptFooter: updated.receiptFooter,
             storeLogo: updated.storeLogo,
-            showLogoOnReceipt: updated.showLogoOnReceipt,
-            showPhoneOnReceipt: updated.showPhoneOnReceipt,
           });
         }}
       />
