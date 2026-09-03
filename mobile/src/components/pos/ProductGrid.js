@@ -150,7 +150,16 @@ export default function ProductGrid({
           style={{ flex: 1 }}
           contentContainerStyle={[
             styles.gridContent,
-            { paddingBottom: products.length === 0 ? 0 : (cart.length > 0 ? 170 : 100) },
+            {
+              paddingBottom:
+                products.length === 0
+                  ? 0
+                  : isLandscape
+                  ? 12
+                  : cart.length > 0
+                  ? 170
+                  : 100,
+            },
             products.length === 0 && { flexGrow: 1, justifyContent: 'center' },
             isLandscape && styles.gridContentLandscape,
             compact && styles.gridContentCompactLandscape,
