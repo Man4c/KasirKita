@@ -69,7 +69,7 @@ export default function DashboardScreen({ isLandscape = false }) {
         <View style={styles.cardHeader}>
           <View style={styles.cardHeaderLeft}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(244, 63, 94, 0.12)' }]}>
-              <CircleDollarSign size={18} color="#fb7185" />
+              <CircleDollarSign size={16} color="#fb7185" />
             </View>
             <Text style={styles.cardLabel} numberOfLines={1}>Total Omzet Penjualan</Text>
           </View>
@@ -89,7 +89,7 @@ export default function DashboardScreen({ isLandscape = false }) {
         <View style={styles.cardHeader}>
           <View style={styles.cardHeaderLeft}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(52, 211, 153, 0.12)' }]}>
-              <TrendingUp size={18} color="#34d399" />
+              <TrendingUp size={16} color="#34d399" />
             </View>
             <Text style={styles.cardLabel} numberOfLines={1}>Laba Kotor (Gross Profit)</Text>
           </View>
@@ -109,7 +109,7 @@ export default function DashboardScreen({ isLandscape = false }) {
         <View style={styles.cardHeader}>
           <View style={styles.cardHeaderLeft}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(56, 189, 248, 0.12)' }]}>
-              <Wallet size={18} color="#38bdf8" />
+              <Wallet size={16} color="#38bdf8" />
             </View>
             <Text style={styles.cardLabel} numberOfLines={1}>Estimasi Laba Bersih</Text>
           </View>
@@ -129,7 +129,7 @@ export default function DashboardScreen({ isLandscape = false }) {
         <View style={styles.cardHeader}>
           <View style={styles.cardHeaderLeft}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(167, 139, 250, 0.12)' }]}>
-              <Boxes size={18} color="#a78bfa" />
+              <Boxes size={16} color="#a78bfa" />
             </View>
             <Text style={styles.cardLabel} numberOfLines={1}>Valuasi Aset Stok Barang</Text>
           </View>
@@ -141,7 +141,7 @@ export default function DashboardScreen({ isLandscape = false }) {
           <View style={styles.stockStatusRow}>
             {inv.low_stock_products_count > 0 ? (
               <>
-                <AlertTriangle size={14} color="#fbbf24" style={{ flexShrink: 0 }} />
+                <AlertTriangle size={13} color="#fbbf24" style={{ flexShrink: 0 }} />
                 <Text style={[styles.cardSub, { color: '#fbbf24' }]}>
                   {inv.low_stock_products_count} produk stok menipis!
                 </Text>
@@ -194,21 +194,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#18181b',
     borderColor: '#27272a',
     borderWidth: 1,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginBottom: 10,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.15,
+        shadowRadius: 3,
       },
       android: {
-        elevation: 2,
+        elevation: 1,
       },
       web: {
-        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
       },
     }),
   },
@@ -216,44 +217,44 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 6,
   },
   cardHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
     minWidth: 0,
-    gap: 10,
+    gap: 8,
   },
   iconBox: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   cardLabel: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#d4d4d8',
     flex: 1,
   },
   cardValue: {
-    fontSize: 22,
+    fontSize: 18,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
     letterSpacing: -0.2,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   cardFooter: {
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    paddingTop: 10,
+    paddingTop: 8,
   },
   cardSub: {
     fontSize: 12,
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
   },
   stockStatusRow: {
@@ -281,13 +282,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 14,
-    borderRadius: 14,
-    marginTop: 4,
+    paddingVertical: 11,
+    borderRadius: 12,
+    marginTop: 2,
   },
   refreshBtnText: {
     color: '#f4f4f5',
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
 });
