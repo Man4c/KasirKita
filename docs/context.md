@@ -36,6 +36,8 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - Dilengkapi animasi denyut napas halus berulang (*gentle breathing pulse loop*: scale 0.98 $\leftrightarrow$ 1.08) yang membuat layer hijau di belakangnya terasa hidup, dinamis, dan memancarkan kepastian transaksi sukses secara organik.
     - **Posisi Centang Presisi Tengah (*Perfect Center Alignment*)**:
       - Vektor SVG dikalibrasikan tepat di koordinat pusat lingkaran `viewBox="0 0 24 24"` dengan titik temu siku di (9.5, 17.5), menjamin posisi centang seimbang dan presisi di tengah bulatan hijau.
+    - **Pembersihan Warning Konsol Web (`useNativeDriver` Compatible)**:
+      - Menyesuaikan `useNativeDriver: Platform.OS !== 'web'` sehingga saat dijalankan di browser (React Native Web) animasi berjalan mulus tanpa memunculkan warning missing `RCTAnimation` di developer console.
     - **Dua Tombol Aksi Ergonomis (Harmoni Emerald Green)**:
       - **[Cetak Struk]**: Tombol gelap netral (`#27272a` dengan border `#3f3f46` dan ikon printer putih `#e4e4e7`) yang tidak mencolok agar fokus utama tetap pada penyelesaian transaksi.
       - **[Selesai]**: Tombol hijau emerald solid (`#16a34a`) yang harmonis dengan ikon centang sukses dan nominal tagihan di atasnya.
