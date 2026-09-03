@@ -21,8 +21,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 ## Progress Terbaru
 
 - **Perbaikan Kontras Aksesibilitas WCAG AA Dashboard (`SalesTrendChart.js`, `RecentTransactionsSection.js`)**:
-  - Memperbaiki isu *low contrast text* (3.7:1) pada label tanggal grafik tren omzet: mengganti warna teks dari `#71717a` menjadi `#a1a1aa` (rasio kontras 6.3:1 di atas latar `#18181b`, melampaui syarat minimum WCAG AA 4.5:1).
-  - Melakukan audit menyeluruh dan standarisasi ukuran font teks pendukung (*The Readability Floor Rule* minimal `12px` / `text-xs`) pada komponen `SalesTrendChart.js` dan `RecentTransactionsSection.js` (nama pelanggan, jam transaksi, badge status, teks kosong).
+  - Memperbaiki isu *low contrast text* pada label tanggal aktif grafik tren omzet: mengganti latar transparan kemerahan menjadi warna tegas `#e11d48` dengan teks putih murni `#ffffff` (rasio kontras 5.2:1, melampaui standar WCAG AA 4.5:1).
+  - Memperbaiki isu *low contrast text* pada badge metode pembayaran transaksi:
+    - **Tunai**: teks `#6ee7b7` di atas latar `#064e3b` dengan border `#047857` (rasio kontras 7.8:1).
+    - **QRIS**: teks `#7dd3fc` di atas latar `#0c4a6e` dengan border `#0284c7` (rasio kontras 6.9:1).
+    - **Transfer**: teks `#c4b5fd` di atas latar `#3b0764` dengan border `#7c3aed` (rasio kontras 6.4:1).
+  - Melakukan audit menyeluruh dan standarisasi ukuran font teks pendukung (*The Readability Floor Rule* minimal `12px` / `text-xs`) pada kedua komponen.
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 warning/defect) dan lolos build Expo Web.
 - **Penataan Urutan Navigasi Tab Bottom Bar & Default Landing Screen (`App.js`)**:
   - Mengubah urutan navigasi tab bawah mobile menjadi:
