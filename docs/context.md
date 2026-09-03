@@ -20,6 +20,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Kontras Aksesibilitas WCAG AA Dashboard (`SalesTrendChart.js`, `RecentTransactionsSection.js`)**:
+  - Memperbaiki isu *low contrast text* (3.7:1) pada label tanggal grafik tren omzet: mengganti warna teks dari `#71717a` menjadi `#a1a1aa` (rasio kontras 6.3:1 di atas latar `#18181b`, melampaui syarat minimum WCAG AA 4.5:1).
+  - Melakukan audit menyeluruh dan standarisasi ukuran font teks pendukung (*The Readability Floor Rule* minimal `12px` / `text-xs`) pada komponen `SalesTrendChart.js` dan `RecentTransactionsSection.js` (nama pelanggan, jam transaksi, badge status, teks kosong).
+  - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 warning/defect) dan lolos build Expo Web.
 - **Penataan Urutan Navigasi Tab Bottom Bar & Default Landing Screen (`App.js`)**:
   - Mengubah urutan navigasi tab bawah mobile menjadi:
     1. **Dashboard** (tab pertama aktif saat login dan setiap kali aplikasi dibuka)
