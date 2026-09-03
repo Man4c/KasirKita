@@ -11,13 +11,37 @@ export default function RecentTransactionsSection({
   const getPaymentBadge = (method) => {
     switch (method?.toUpperCase()) {
       case 'CASH':
-        return { label: 'Tunai', icon: <Banknote size={11} color="#34d399" />, color: '#34d399', bg: 'rgba(52, 211, 153, 0.12)' };
+        return {
+          label: 'Tunai',
+          icon: <Banknote size={11} color="#6ee7b7" />,
+          color: '#6ee7b7',
+          bg: '#064e3b',
+          border: '#047857',
+        };
       case 'QRIS':
-        return { label: 'QRIS', icon: <QrCode size={11} color="#38bdf8" />, color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.12)' };
+        return {
+          label: 'QRIS',
+          icon: <QrCode size={11} color="#7dd3fc" />,
+          color: '#7dd3fc',
+          bg: '#0c4a6e',
+          border: '#0284c7',
+        };
       case 'TRANSFER':
-        return { label: 'Transfer', icon: <CreditCard size={11} color="#a78bfa" />, color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.12)' };
+        return {
+          label: 'Transfer',
+          icon: <CreditCard size={11} color="#c4b5fd" />,
+          color: '#c4b5fd',
+          bg: '#3b0764',
+          border: '#7c3aed',
+        };
       default:
-        return { label: method || 'Lainnya', icon: null, color: '#a1a1aa', bg: 'rgba(161, 161, 170, 0.12)' };
+        return {
+          label: method || 'Lainnya',
+          icon: null,
+          color: '#e4e4e7',
+          bg: '#27272a',
+          border: '#3f3f46',
+        };
     }
   };
 
@@ -82,7 +106,16 @@ export default function RecentTransactionsSection({
                     <Text style={styles.txInvoice} numberOfLines={1}>
                       {invoice}
                     </Text>
-                    <View style={[styles.badgePill, { backgroundColor: badge.bg }]}>
+                    <View
+                      style={[
+                        styles.badgePill,
+                        {
+                          backgroundColor: badge.bg,
+                          borderColor: badge.border,
+                          borderWidth: 1,
+                        },
+                      ]}
+                    >
                       {badge.icon}
                       <Text style={[styles.badgeLabel, { color: badge.color }]}>
                         {badge.label}

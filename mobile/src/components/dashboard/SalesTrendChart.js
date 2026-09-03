@@ -308,20 +308,20 @@ const styles = StyleSheet.create({
   },
   dateBadge: {
     marginTop: 6,
-    paddingHorizontal: 4,
+    paddingHorizontal: 5,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: 6,
   },
   dateBadgeActive: {
-    backgroundColor: 'rgba(244, 63, 94, 0.15)',
+    backgroundColor: '#e11d48',
   },
   dateLabel: {
     fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'Poppins_500Medium',
     color: '#a1a1aa',
   },
   dateLabelActive: {
-    color: '#fb7185',
-    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+    fontFamily: 'Poppins_700Bold',
   },
 });
