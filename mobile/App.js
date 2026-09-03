@@ -84,6 +84,17 @@ function MainApp() {
   const [isCheckoutActive, setIsCheckoutActive] = useState(false);
   const insets = useSafeAreaInsets();
 
+  // Ensure initial tab opens to Dashboard upon loading user session
+  useEffect(() => {
+    if (user?.role === 'owner') {
+      setActiveTab('dashboard');
+      setPortraitTab('dashboard');
+    } else if (user) {
+      setActiveTab('pos');
+      setPortraitTab('pos');
+    }
+  }, [user?.id, user?.role]);
+
   // Apply saved orientation preference on app start
   useEffect(() => {
     storage.getSettings().then((saved) => {
