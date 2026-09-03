@@ -141,7 +141,8 @@ export default function PosBarcodeScannerView({
       setScannedFeedback({
         success: false,
         code,
-        message: `Produk barcode "${code}" tidak ditemukan di katalog.`,
+        message: 'Barcode tidak dikenali',
+        subtitle: `Kode ${code} belum terdaftar di katalog produk.`,
       });
     }
   };
@@ -337,7 +338,7 @@ export default function PosBarcodeScannerView({
                 {scannedFeedback.message}
               </Text>
               <Text style={styles.feedbackSub} numberOfLines={1}>
-                Kode: {scannedFeedback.code}
+                {scannedFeedback.subtitle || `Kode: ${scannedFeedback.code}`}
               </Text>
             </View>
           </View>
