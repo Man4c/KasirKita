@@ -17,25 +17,38 @@ export default function ReceiptView({
 
   useEffect(() => {
     if (!propStoreSettings) {
+      let isMounted = true;
+      // 1. Fast load from local storage first (instant render)
       storage.getSettings().then((saved) => {
-        if (saved) setLocalSettings(saved);
+        if (saved && isMounted) {
+          setLocalSettings((prev) => ({ ...saved, ...prev }));
+        }
       });
 
-      // Synchronize latest store identity from Cloud backend
+      // 2. Synchronize latest store identity from Cloud backend in background
       api.get('/settings/store').then((res) => {
-        if (res.data?.success && res.data?.data) {
+        if (res.data?.success && res.data?.data && isMounted) {
           const cloud = res.data.data;
-          setLocalSettings({
-            storeName: cloud.name,
-            storeAddress: cloud.address || '',
-            storePhone: cloud.phone || '',
-            storeLogo: cloud.logo,
-            receiptFooter: cloud.receipt_footer || '',
-            showLogoOnReceipt: cloud.show_logo_on_receipt,
-            showPhoneOnReceipt: cloud.show_phone_on_receipt,
-          });
+          setLocalSettings((prev) => ({
+            ...prev,
+            storeName: cloud.name || prev?.storeName,
+            storeAddress: cloud.address !== undefined ? cloud.address : prev?.storeAddress,
+            storePhone: cloud.phone !== undefined ? cloud.phone : prev?.storePhone,
+            storeLogo: cloud.logo !== undefined ? cloud.logo : prev?.storeLogo,
+            receiptFooter: cloud.receipt_footer !== undefined ? cloud.receipt_footer : prev?.receiptFooter,
+            showLogoOnReceipt: typeof cloud.show_logo_on_receipt === 'boolean' 
+              ? cloud.show_logo_on_receipt 
+              : (typeof prev?.showLogoOnReceipt === 'boolean' ? prev.showLogoOnReceipt : true),
+            showPhoneOnReceipt: typeof cloud.show_phone_on_receipt === 'boolean' 
+              ? cloud.show_phone_on_receipt 
+              : (typeof prev?.showPhoneOnReceipt === 'boolean' ? prev.showPhoneOnReceipt : true),
+          }));
         }
       }).catch(() => {});
+
+      return () => {
+        isMounted = false;
+      };
     }
   }, [propStoreSettings]);
 
