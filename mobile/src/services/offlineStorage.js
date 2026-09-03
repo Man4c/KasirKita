@@ -8,6 +8,8 @@ const KEYS = {
   TAXES_FEES: 'kasirkita_offline_taxes_fees',
   QUEUE: 'kasirkita_offline_transaction_queue',
   LAST_SYNC: 'kasirkita_offline_last_sync_timestamp',
+  DASHBOARD_SUMMARY: 'kasirkita_offline_dashboard_summary',
+  DASHBOARD_LAST_SYNC: 'kasirkita_offline_dashboard_last_sync',
 };
 
 export const offlineStorage = {
@@ -207,22 +209,41 @@ export const offlineStorage = {
   },
 
   /**
-   * Clear offline catalog cache safely (strictly preserving transaction queue).
+   * Cache dashboard financial summary for offline review.
    */
-  async clearCatalogCache() {
+  async cacheDashboardSummary(summary) {
     try {
-      await AsyncStorage.multiRemove([
-        KEYS.PRODUCTS,
-        KEYS.CATEGORIES,
-        KEYS.CUSTOMERS,
-        KEYS.PROMOS,
-        KEYS.TAXES_FEES,
-        KEYS.LAST_SYNC,
+      if (!summary) return false;
+      const now = new Date().toISOString();
+      await AsyncStorage.multiSet([
+        [KEYS.DASHBOARD_SUMMARY, JSON.stringify(summary)],
+        [KEYS.DASHBOARD_LAST_SYNC, now],
       ]);
       return true;
     } catch (err) {
-      console.warn('Gagal membersihkan cache katalog:', err.message);
+      console.warn('Gagal menyimpan cache dashboard:', err.message);
       return false;
+    }
+  },
+
+  /**
+   * Get cached dashboard financial summary.
+   */
+  async getCachedDashboardSummary() {
+    try {
+      const pairs = await AsyncStorage.multiGet([
+        KEYS.DASHBOARD_SUMMARY,
+        KEYS.DASHBOARD_LAST_SYNC,
+      ]);
+      const summaryStr = pairs[0]?.[1];
+      const lastSync = pairs[1]?.[1];
+      return {
+        summary: summaryStr ? JSON.parse(summaryStr) : null,
+        lastSync: lastSync || null,
+      };
+    } catch (err) {
+      console.warn('Gagal membaca cache dashboard:', err.message);
+      return { summary: null, lastSync: null };
     }
   },
 };
