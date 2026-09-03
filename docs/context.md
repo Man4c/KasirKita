@@ -20,12 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Tata Letak Grid 2 Kolom (2x2) & Normalisasi Layar Dashboard Mobile (`DashboardScreen.js`, `App.js`)**:
+- **Tata Letak Grid 2 Kolom (2x2) & Tooltip Interaktif Edukatif 4 Kartu Dashboard (`DashboardScreen.js`, `App.js`)**:
   - Mengubah teks navigasi bawah (bottom navigation) dan judul layar dari *"Laporan Toko"* menjadi **"Dashboard"**.
   - Mengadopsi tata letak **Grid 2 Kolom** ($2 \times 2$) yang modern, ringkas, dan proporsional untuk 4 kartu metrik utama (`Omzet Penjualan`, `Laba Kotor`, `Laba Bersih`, `Valuasi Stok`).
-  - Merapikan label dan subketerangan agar pas dan simetris di layar HP tanpa teks terpotong atau tumpang tindih (`min-w-0`, `adjustsFontSizeToFit`, `numberOfLines={1}`).
-  - Seluruh 4 kartu metrik serta tombol "Perbarui Data" kini muat dalam 1 layar tanpa perlu scroll.
-  - Lolos uji linter/design detector (`detect.mjs`) dan lolos build bundle Expo Web (`npx expo export --platform web`).
+  - Menyematkan **Tooltip Interaktif Edukatif** di setiap kartu via ikon bantuan `?` (`HelpCircle`):
+    1. *Omzet Penjualan*: Menampilkan uang masuk bruto, total struk nota, kuantitas item terjual, rata-rata belanja, dan total diskon.
+    2. *Laba Kotor*: Menampilkan omzet dikurangi total HPP modal kulak barang dan persentase margin laba kotor.
+    3. *Laba Bersih*: Menampilkan laba kotor dikurangi beban biaya operasional toko (sewa, listrik, gaji, dll).
+    4. *Valuasi Stok*: Menampilkan total modal uang mengendap di etalase, varian produk aktif, dan status peringatan stok restock.
+  - Lolos uji linter/design detector (`detect.mjs` 0 error) dan lolos build bundle Expo Web (`npx expo export --platform web`).
 - **Perbaikan Sinkronisasi Toggle Struk ke Backend Cloud (`SettingsScreen.js`, `StoreSetting.php`)**:
   - Memperbaiki bug di mana toggle *"Tampilkan Logo Toko"* dan *"Nomor WhatsApp Toko"* mati sendiri saat aplikasi dimuat ulang.
   - Saat switch digeser oleh pengguna, `persistSettings` kini langsung memperbarui database backend (`PUT /api/v1/settings/store`) dan local cache sekaligus, sehingga saat aplikasi dibuka kembali atau disinkronkan dari cloud, status toggle tetap **ON** dan tidak ter-reset ke `false`.
