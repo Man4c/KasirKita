@@ -26,7 +26,7 @@ import {
   AlertCircle,
 } from 'lucide-react-native';
 import api from '../services/api';
-import ReceiptView from '../components/ReceiptView';
+import PosReceiptModal from '../components/pos/PosReceiptModal';
 
 export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [transactions, setTransactions] = useState([]);
@@ -242,42 +242,18 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
         />
       )}
 
-      {/* Thermal Receipt Modal */}
-      <Modal
+      {/* Thermal Receipt Modal (Standardized with Print & Tutup buttons) */}
+      <PosReceiptModal
         visible={receiptModalOpen}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={() => setReceiptModalOpen(false)}
-      >
-        <View style={styles.receiptModalOverlay}>
-          <View style={styles.receiptSheet}>
-            {/* Close Button Header */}
-            <View style={styles.modalCloseRow}>
-              <Text style={styles.modalTitle}>Struk Transaksi</Text>
-              <TouchableOpacity
-                onPress={() => setReceiptModalOpen(false)}
-                style={styles.modalCloseBtn}
-              >
-                <X size={18} color="#71717a" />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <ReceiptView
-                transaction={selectedTx}
-                formatRp={formatRp}
-              />
-            </ScrollView>
-
-            <TouchableOpacity
-              style={styles.closeModalBtn}
-              onPress={() => setReceiptModalOpen(false)}
-            >
-              <Text style={styles.closeModalBtnText}>Tutup</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        isLandscape={isLandscape}
+        onClose={() => {
+          setReceiptModalOpen(false);
+          setSelectedTx(null);
+        }}
+        completedTx={selectedTx}
+        closeBtnText="Tutup"
+        formatRp={formatRp}
+      />
     </View>
   );
 }

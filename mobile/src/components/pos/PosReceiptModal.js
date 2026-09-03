@@ -19,8 +19,11 @@ export default function PosReceiptModal({
   onClose,
   completedTx,
   onNewTransaction,
+  closeBtnText = 'Tutup',
   formatRp,
 }) {
+  const handleSecondaryAction = onNewTransaction || onClose;
+
   return (
     <Modal
       visible={visible}
@@ -78,10 +81,10 @@ export default function PosReceiptModal({
 
             <TouchableOpacity
               style={[styles.newTxButton, { flex: 1, marginTop: 0 }]}
-              onPress={onNewTransaction}
+              onPress={handleSecondaryAction}
               activeOpacity={0.8}
             >
-              <Text style={styles.newTxButtonText}>Transaksi Baru</Text>
+              <Text style={styles.newTxButtonText}>{closeBtnText}</Text>
             </TouchableOpacity>
           </View>
         </View>
