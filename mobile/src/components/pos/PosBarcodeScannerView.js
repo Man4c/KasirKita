@@ -30,8 +30,16 @@ export default function PosBarcodeScannerView({
   const [showManualInput, setShowManualInput] = useState(false);
   const [manualCode, setManualCode] = useState('');
   const [scannedFeedback, setScannedFeedback] = useState(null);
-  const [isScanningActive, setIsScanningActive] = useState(true);
+  const [isScanningActive, setIsScanningActive] = useState(false);
   const scanCooldownRef = useRef(false);
+
+  // Warm-up delay 1.5s after camera mounts to prevent false triggers from ambient patterns
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsScanningActive(true);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Auto clear scan feedback after 2.5s
   useEffect(() => {
@@ -43,18 +51,20 @@ export default function PosBarcodeScannerView({
     }
   }, [scannedFeedback]);
 
-  const handleBarcodeScanned = ({ data }) => {
+  const handleBarcodeScanned = ({ data, type }) => {
     if (!isScanningActive || scanCooldownRef.current || !data) return;
 
-    scanCooldownRef.current = true;
     const cleanCode = String(data).trim();
+    // Filter out accidental noise / false positive scans (less than 4 alphanumeric characters)
+    if (cleanCode.length < 4) return;
 
+    scanCooldownRef.current = true;
     processBarcode(cleanCode);
 
     // Debounce scan interval to prevent rapid duplicate triggers
     setTimeout(() => {
       scanCooldownRef.current = false;
-    }, 1200);
+    }, 1500);
   };
 
   const processBarcode = (code) => {
@@ -219,19 +229,15 @@ export default function PosBarcodeScannerView({
               enableTorch={torch}
               barcodeScannerSettings={{
                 barcodeTypes: [
-                  'qr',
                   'ean13',
                   'ean8',
                   'upc_a',
                   'upc_e',
                   'code128',
-                  'code39',
-                  'code93',
-                  'itf14',
-                  'codabar',
+                  'qr',
                 ],
               }}
-              onBarcodeScanned={handleBarcodeScanned}
+              onBarcodeScanned={isScanningActive ? handleBarcodeScanned : undefined}
             />
 
             {/* Viewfinder Target Overlay */}
@@ -321,12 +327,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(225, 29, 72, 0.12)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: 'rgba(225, 29, 72, 0.3)',
-    gap: 6,
+    gap: 5,
   },
   liveDot: {
     width: 6,
@@ -350,7 +356,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#27272a',
     paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingVertical: 4,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#3f3f46',
@@ -369,8 +375,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#e11d48',
-    paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 8,
   },
   okBtnText: {
@@ -382,7 +388,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 6,
     backgroundColor: '#18181b',
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
@@ -392,7 +398,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderRadius: 8,
     paddingHorizontal: 10,
-    height: 34,
+    height: 32,
     color: '#ffffff',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
@@ -402,8 +408,8 @@ const styles = StyleSheet.create({
   },
   manualSubmitBtn: {
     backgroundColor: '#e11d48',
-    paddingHorizontal: 14,
-    height: 34,
+    paddingHorizontal: 12,
+    height: 32,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -527,23 +533,23 @@ const styles = StyleSheet.create({
   },
   feedbackBanner: {
     position: 'absolute',
-    bottom: 16,
-    left: 16,
-    right: 16,
+    bottom: 12,
+    left: 12,
+    right: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
     zIndex: 10,
   },
   feedbackBannerSuccess: {
-    backgroundColor: '#064e3b',
+    backgroundColor: 'rgba(6, 78, 59, 0.95)',
     borderColor: '#059669',
   },
   feedbackBannerError: {
-    backgroundColor: '#4c0519',
+    backgroundColor: 'rgba(76, 5, 25, 0.95)',
     borderColor: '#e11d48',
   },
   feedbackTitle: {

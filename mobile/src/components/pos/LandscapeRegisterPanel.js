@@ -74,20 +74,6 @@ export default function LandscapeRegisterPanel({
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          {/* Barcode Scanner Toggle Button */}
-          {onToggleScanMode && (
-            <TouchableOpacity
-              style={[
-                styles.regScanBtn,
-                isScanMode && styles.regScanBtnActive,
-              ]}
-              onPress={onToggleScanMode}
-              activeOpacity={0.7}
-            >
-              <ScanBarcode size={13} color={isScanMode ? '#ffffff' : '#fb7185'} />
-            </TouchableOpacity>
-          )}
-
           {/* Customer Chip */}
           {showCustomerPicker && (
             <TouchableOpacity
@@ -111,6 +97,20 @@ export default function LandscapeRegisterPanel({
           {cart.length > 0 && (
             <TouchableOpacity style={styles.regClearBtn} onPress={onClearCart}>
               <Trash2 size={13} color="#fb7185" />
+            </TouchableOpacity>
+          )}
+
+          {/* Barcode Scanner Toggle Button */}
+          {onToggleScanMode && (
+            <TouchableOpacity
+              style={[
+                styles.regScanBtn,
+                isScanMode && styles.regScanBtnActive,
+              ]}
+              onPress={onToggleScanMode}
+              activeOpacity={0.7}
+            >
+              <ScanBarcode size={13} color={isScanMode ? '#ffffff' : '#fb7185'} />
             </TouchableOpacity>
           )}
         </View>
