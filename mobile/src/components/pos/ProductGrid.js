@@ -147,10 +147,11 @@ export default function ProductGrid({
           data={products}
           keyExtractor={(item) => item.id}
           numColumns={2}
+          style={{ flex: 1 }}
           contentContainerStyle={[
             styles.gridContent,
-            { paddingBottom: cart.length > 0 ? 170 : 100 },
-            products.length === 0 && { flexGrow: 1 },
+            { paddingBottom: products.length === 0 ? 0 : (cart.length > 0 ? 170 : 100) },
+            products.length === 0 && { flexGrow: 1, justifyContent: 'center' },
             isLandscape && styles.gridContentLandscape,
             compact && styles.gridContentCompactLandscape,
           ]}
