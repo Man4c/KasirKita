@@ -14,9 +14,11 @@ import { offlineStorage } from '../services/offlineStorage';
 import { formatRp } from '../utils/format';
 import DashboardMetricsGrid from '../components/dashboard/DashboardMetricsGrid';
 import DashboardDetailModal from '../components/dashboard/DashboardDetailModal';
+import SalesTrendChart from '../components/dashboard/SalesTrendChart';
 
 export default function DashboardScreen({ isLandscape = false }) {
   const [summary, setSummary] = useState(null);
+  const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
@@ -36,12 +38,19 @@ export default function DashboardScreen({ isLandscape = false }) {
       setError(null);
 
       // 1. Read cached snapshot if available
-      const cached = await offlineStorage.getCachedDashboardSummary();
-      if (cached?.summary) {
-        setSummary(cached.summary);
-        if (cached.lastSync) {
-          setLastSyncTime(new Date(cached.lastSync));
+      const [cachedSummary, cachedTrends] = await Promise.all([
+        offlineStorage.getCachedDashboardSummary(),
+        offlineStorage.getCachedDashboardTrends(),
+      ]);
+
+      if (cachedSummary?.summary) {
+        setSummary(cachedSummary.summary);
+        if (cachedSummary.lastSync) {
+          setLastSyncTime(new Date(cachedSummary.lastSync));
         }
+      }
+      if (Array.isArray(cachedTrends) && cachedTrends.length > 0) {
+        setTrends(cachedTrends);
       }
 
       // 2. Fetch fresh data from backend
@@ -54,7 +63,7 @@ export default function DashboardScreen({ isLandscape = false }) {
   };
 
   /**
-   * Fetch latest financial data from backend.
+   * Fetch latest financial data and trends from backend.
    * @param {boolean} isManualRefresh
    */
   const fetchSummary = async (isManualRefresh = false) => {
@@ -62,27 +71,46 @@ export default function DashboardScreen({ isLandscape = false }) {
     setError(null);
 
     try {
-      const res = await api.get('/finance/dashboard');
-      if (res.data?.success) {
-        const freshData = res.data.data;
-        setSummary(freshData);
-        const now = new Date();
-        setLastSyncTime(now);
-        await offlineStorage.cacheDashboardSummary(freshData);
+      const [resSummary, resTrends] = await Promise.allSettled([
+        api.get('/finance/dashboard'),
+        api.get('/finance/trends'),
+      ]);
+
+      let hasSuccess = false;
+
+      // Process dashboard summary
+      if (resSummary.status === 'fulfilled' && resSummary.value.data?.success) {
+        const freshSummary = resSummary.value.data.data;
+        setSummary(freshSummary);
+        await offlineStorage.cacheDashboardSummary(freshSummary);
+        hasSuccess = true;
+      }
+
+      // Process sales trends
+      if (resTrends.status === 'fulfilled' && resTrends.value.data?.success) {
+        const freshTrends = resTrends.value.data.data;
+        setTrends(freshTrends);
+        await offlineStorage.cacheDashboardTrends(freshTrends);
+        hasSuccess = true;
+      }
+
+      if (hasSuccess) {
+        setLastSyncTime(new Date());
       } else {
-        throw new Error(res.data?.message || 'Gagal memuat ringkasan toko');
+        const errVal = resSummary.status === 'rejected' ? resSummary.reason : resTrends.reason;
+        throw errVal || new Error('Gagal memuat ringkasan toko');
       }
     } catch (err) {
-      console.log('Error fetching dashboard summary:', err.message);
+      console.log('Error fetching dashboard data:', err?.message);
       const isNetworkErr =
-        err.message?.includes('Network') ||
-        err.code === 'ECONNABORTED' ||
-        !err.response;
+        err?.message?.includes('Network') ||
+        err?.code === 'ECONNABORTED' ||
+        !err?.response;
 
       setError(
         isNetworkErr
           ? 'Koneksi terputus atau server offline. Menampilkan data cache lokal.'
-          : (err.response?.data?.message || 'Gagal memperbarui data finansial toko.')
+          : (err?.response?.data?.message || 'Gagal memperbarui data finansial toko.')
       );
     } finally {
       if (isManualRefresh) setRefreshing(false);
@@ -156,6 +184,9 @@ export default function DashboardScreen({ isLandscape = false }) {
         formatRp={formatRp}
         onOpenModal={(type) => setActiveModal(type)}
       />
+
+      {/* 7-Day Sales Trend Interactive Chart */}
+      <SalesTrendChart trends={trends} formatRp={formatRp} />
 
       {/* Refresh Button with Dedicated Inline Spinner */}
       <TouchableOpacity

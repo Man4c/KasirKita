@@ -9,6 +9,7 @@ const KEYS = {
   QUEUE: 'kasirkita_offline_transaction_queue',
   LAST_SYNC: 'kasirkita_offline_last_sync_timestamp',
   DASHBOARD_SUMMARY: 'kasirkita_offline_dashboard_summary',
+  DASHBOARD_TRENDS: 'kasirkita_offline_dashboard_trends',
   DASHBOARD_LAST_SYNC: 'kasirkita_offline_dashboard_last_sync',
 };
 
@@ -244,6 +245,33 @@ export const offlineStorage = {
     } catch (err) {
       console.warn('Gagal membaca cache dashboard:', err.message);
       return { summary: null, lastSync: null };
+    }
+  },
+
+  /**
+   * Cache sales trends (7 days) for offline display.
+   */
+  async cacheDashboardTrends(trends) {
+    try {
+      if (!Array.isArray(trends)) return false;
+      await AsyncStorage.setItem(KEYS.DASHBOARD_TRENDS, JSON.stringify(trends));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache tren dashboard:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached sales trends.
+   */
+  async getCachedDashboardTrends() {
+    try {
+      const val = await AsyncStorage.getItem(KEYS.DASHBOARD_TRENDS);
+      return val ? JSON.parse(val) : [];
+    } catch (err) {
+      console.warn('Gagal membaca cache tren dashboard:', err.message);
+      return [];
     }
   },
 };
