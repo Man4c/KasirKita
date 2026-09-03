@@ -122,6 +122,7 @@ export default function PosCheckoutView({
                 styles.checkoutLeftScroll,
                 compact && styles.checkoutLeftScrollCompact,
               ]}
+              contentContainerStyle={styles.checkoutLeftScrollContent}
               showsVerticalScrollIndicator={true}
             >
               {/* Items List */}
@@ -130,14 +131,21 @@ export default function PosCheckoutView({
                   <Text style={styles.checkoutItemsTitle}>Daftar Pesanan ({cart.length})</Text>
                   <Text style={styles.checkoutItemsTotalQty}>{totalItemsCount} Total Qty</Text>
                 </View>
-                {cart.map((item) => {
+                {cart.map((item, idx) => {
                   const itemUnit =
                     item.product.unitSymbol ||
                     item.product.base_unit?.symbol ||
                     item.product.baseUnit?.symbol ||
                     'pcs';
+                  const isLastItem = idx === cart.length - 1;
                   return (
-                    <View key={item.product.id} style={styles.checkoutItemRowMini}>
+                    <View
+                      key={item.product.id}
+                      style={[
+                        styles.checkoutItemRowMini,
+                        isLastItem && { borderBottomWidth: 0 },
+                      ]}
+                    >
                       <View style={{ flex: 1, minWidth: 0, marginRight: 6 }}>
                         <Text style={styles.checkoutItemNameMini} numberOfLines={1}>
                           {item.product.name}
@@ -270,7 +278,7 @@ export default function PosCheckoutView({
             {((availablePromos.length > 0 || appliedPromo) ||
               takeawayFees.length > 0 ||
               availableTaxes.length > 0) && (
-              <View style={[styles.regQuickOptionsRow, { marginBottom: 6 }]}>
+              <View style={styles.regQuickOptionsRow}>
                 {/* Promo button */}
                 {(availablePromos.length > 0 || appliedPromo) && (
                   <TouchableOpacity
@@ -1549,10 +1557,18 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 0,
   },
+  checkoutLeftScrollContent: {
+    paddingBottom: 8,
+  },
   regQuickOptionsRow: {
     flexDirection: 'row',
     gap: 6,
     flexWrap: 'wrap',
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    paddingTop: 8,
+    marginTop: 6,
+    marginBottom: 6,
   },
   regQuickPill: {
     flexDirection: 'row',
