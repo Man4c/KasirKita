@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Platform,
+  Modal,
 } from 'react-native';
 import {
   CircleDollarSign,
@@ -16,12 +17,15 @@ import {
   AlertTriangle,
   CheckCircle2,
   RotateCw,
+  HelpCircle,
+  X,
 } from 'lucide-react-native';
 import api from '../services/api';
 
 export default function DashboardScreen({ isLandscape = false }) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showMarginInfo, setShowMarginInfo] = useState(false);
 
   useEffect(() => {
     fetchSummary();
@@ -98,9 +102,17 @@ export default function DashboardScreen({ isLandscape = false }) {
             <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.gross_profit)}</Text>
 
             <View style={styles.cardFooter}>
-              <Text style={styles.cardSub} numberOfLines={1}>
-                Margin: {profit.gross_profit_margin || 0}%
-              </Text>
+              <TouchableOpacity
+                style={styles.marginInfoTrigger}
+                onPress={() => setShowMarginInfo(true)}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              >
+                <Text style={styles.cardSub} numberOfLines={1}>
+                  Margin: {profit.gross_profit_margin || 0}%
+                </Text>
+                <HelpCircle size={12} color="#a1a1aa" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -163,6 +175,80 @@ export default function DashboardScreen({ isLandscape = false }) {
         <RotateCw size={14} color="#f4f4f5" />
         <Text style={styles.refreshBtnText}>Perbarui Data</Text>
       </TouchableOpacity>
+
+      {/* Margin Info Tooltip Modal */}
+      <Modal
+        visible={showMarginInfo}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowMarginInfo(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowMarginInfo(false)}
+        >
+          <View style={styles.modalSheet} onStartShouldSetResponder={() => true}>
+            <View style={styles.modalHeaderRow}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <TrendingUp size={18} color="#34d399" />
+                <Text style={styles.modalTitle}>Rincian Laba Kotor & Margin</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => setShowMarginInfo(false)}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <X size={18} color="#a1a1aa" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.modalDivider} />
+
+            <View style={styles.modalContent}>
+              <View style={styles.calcRow}>
+                <Text style={styles.calcLabel}>Omzet Penjualan</Text>
+                <Text style={styles.calcValue}>{formatRp(sales.total_revenue)}</Text>
+              </View>
+              <View style={styles.calcRow}>
+                <Text style={styles.calcLabel}>Total HPP (Modal Barang)</Text>
+                <Text style={[styles.calcValue, { color: '#fb7185' }]}>
+                  - {formatRp(profit.total_cogs)}
+                </Text>
+              </View>
+
+              <View style={styles.calcDivider} />
+
+              <View style={styles.calcRow}>
+                <Text style={styles.calcLabelBold}>Laba Kotor (Gross Profit)</Text>
+                <Text style={[styles.calcValueBold, { color: '#34d399' }]}>
+                  {formatRp(profit.gross_profit)}
+                </Text>
+              </View>
+
+              <View style={styles.calcRow}>
+                <Text style={styles.calcLabelBold}>Persentase Margin</Text>
+                <Text style={[styles.calcValueBold, { color: '#34d399' }]}>
+                  {profit.gross_profit_margin || 0}%
+                </Text>
+              </View>
+
+              <View style={styles.formulaBox}>
+                <Text style={styles.formulaText}>
+                  💡 <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>Arti Margin {profit.gross_profit_margin || 0}%:</Text> Dari setiap Rp100 penjualan, toko menghasilkan keuntungan kotor sebesar Rp{Math.round(profit.gross_profit_margin || 0)} sebelum dikurangi beban biaya operasional.
+                </Text>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={styles.modalCloseBtn}
+              onPress={() => setShowMarginInfo(false)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.modalCloseBtnText}>Mengerti</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </ScrollView>
   );
 }
@@ -294,6 +380,116 @@ const styles = StyleSheet.create({
   refreshBtnText: {
     color: '#f4f4f5',
     fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  marginInfoTrigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalSheet: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: '#18181b',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    padding: 18,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 6,
+      },
+      web: {
+        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+      },
+    }),
+  },
+  modalHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 12,
+  },
+  modalTitle: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  modalDivider: {
+    height: 1,
+    backgroundColor: '#27272a',
+    marginBottom: 14,
+  },
+  modalContent: {
+    gap: 10,
+    marginBottom: 16,
+  },
+  calcRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  calcLabel: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+  },
+  calcValue: {
+    color: '#f4f4f5',
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+  },
+  calcDivider: {
+    height: 1,
+    backgroundColor: '#27272a',
+    marginVertical: 4,
+  },
+  calcLabelBold: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  calcValueBold: {
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
+  },
+  formulaBox: {
+    backgroundColor: '#27272a',
+    borderRadius: 10,
+    padding: 12,
+    marginTop: 6,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  formulaText: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    lineHeight: 18,
+  },
+  modalCloseBtn: {
+    backgroundColor: '#e11d48',
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalCloseBtnText: {
+    color: '#ffffff',
+    fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
   },
 });
