@@ -78,6 +78,7 @@ export default function SettingsScreen({ isLandscape = false }) {
   const [showCustomerPicker, setShowCustomerPicker] = useState(true);
   const [showVoucherFeature, setShowVoucherFeature] = useState(true);
   const [showTaxFeature, setShowTaxFeature] = useState(true);
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(true);
   const [orientationPref, setOrientationPref] = useState('AUTO');
 
   // Modals & Async State
@@ -134,6 +135,7 @@ export default function SettingsScreen({ isLandscape = false }) {
         if (typeof saved.showCustomerPicker === 'boolean') setShowCustomerPicker(saved.showCustomerPicker);
         if (typeof saved.showVoucherFeature === 'boolean') setShowVoucherFeature(saved.showVoucherFeature);
         if (typeof saved.showTaxFeature === 'boolean') setShowTaxFeature(saved.showTaxFeature);
+        if (typeof saved.showBarcodeScanner === 'boolean') setShowBarcodeScanner(saved.showBarcodeScanner);
         if (saved.orientationPref) {
           setOrientationPref(saved.orientationPref);
           orientationService.applyPreference(saved.orientationPref);
@@ -200,6 +202,7 @@ export default function SettingsScreen({ isLandscape = false }) {
         showCustomerPicker,
         showVoucherFeature,
         showTaxFeature,
+        showBarcodeScanner,
         orientationPref,
         ...overrides,
       };
@@ -704,6 +707,25 @@ export default function SettingsScreen({ isLandscape = false }) {
               }}
               trackColor={{ false: '#27272a', true: '#e11d48' }}
               thumbColor={showTaxFeature ? '#ffffff' : '#a1a1aa'}
+              style={{ flexShrink: 0 }}
+            />
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.switchRow}>
+            <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
+              <Text style={styles.switchTitle}>Fitur Scan Barcode</Text>
+              <Text style={styles.switchSubtitle}>Tampilkan tombol scan barcode pada layar kasir. Jika dimatikan, ikon scanner tidak akan muncul di halaman kasir</Text>
+            </View>
+            <Switch
+              value={showBarcodeScanner}
+              onValueChange={(val) => {
+                setShowBarcodeScanner(val);
+                persistSettings({ showBarcodeScanner: val });
+              }}
+              trackColor={{ false: '#27272a', true: '#e11d48' }}
+              thumbColor={showBarcodeScanner ? '#ffffff' : '#a1a1aa'}
               style={{ flexShrink: 0 }}
             />
           </View>

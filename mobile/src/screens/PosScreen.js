@@ -64,10 +64,11 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
     receiptModalOpen,
   } = checkoutState;
 
-  // User Preference: show/hide customer picker, voucher, and tax in checkout
+  // User Preference: show/hide customer picker, voucher, tax, and barcode scanner in checkout
   const [showCustomerPicker, setShowCustomerPicker] = useState(true);
   const [showVoucherFeature, setShowVoucherFeature] = useState(true);
   const [showTaxFeature, setShowTaxFeature] = useState(true);
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(true);
 
   // Barcode Scanner Mode State
   const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
@@ -122,6 +123,9 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         }
         if (typeof saved.showTaxFeature === 'boolean') {
           setShowTaxFeature(saved.showTaxFeature);
+        }
+        if (typeof saved.showBarcodeScanner === 'boolean') {
+          setShowBarcodeScanner(saved.showBarcodeScanner);
         }
       }
     });
@@ -560,7 +564,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
       {!isCheckoutView ? (
         <>
           {/* LEFT COLUMN: Catalog & Products Component OR Barcode Scanner View */}
-          {isLandscape && isBarcodeScannerOpen ? (
+          {isLandscape && isBarcodeScannerOpen && showBarcodeScanner ? (
             <PosBarcodeScannerView
               isLandscape={isLandscape}
               compact={compact}
@@ -582,7 +586,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               cart={cart}
               onAddToCart={addToCart}
               formatRp={formatRp}
-              onOpenBarcodeScanner={() => setIsBarcodeScannerOpen(true)}
+              onOpenBarcodeScanner={showBarcodeScanner ? () => setIsBarcodeScannerOpen(true) : undefined}
             />
           )}
 
@@ -597,7 +601,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               showTaxFeature={showTaxFeature}
               onOpenCustomerModal={() => setCustomerModalOpen(true)}
               isScanMode={isBarcodeScannerOpen}
-              onToggleScanMode={() => setIsBarcodeScannerOpen(!isBarcodeScannerOpen)}
+              onToggleScanMode={showBarcodeScanner ? () => setIsBarcodeScannerOpen(!isBarcodeScannerOpen) : undefined}
               cart={cart}
               onClearCart={() => setCart([])}
               onUpdateQuantity={updateQuantity}
@@ -777,7 +781,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
       {/* Portrait Barcode Scanner Modal */}
       {!isLandscape && (
         <Modal
-          visible={isBarcodeScannerOpen}
+          visible={isBarcodeScannerOpen && showBarcodeScanner}
           animationType="slide"
           transparent={false}
           onRequestClose={() => setIsBarcodeScannerOpen(false)}
