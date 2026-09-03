@@ -64,90 +64,96 @@ export default function DashboardScreen({ isLandscape = false }) {
         <Text style={styles.headerSubtitle}>Ringkasan performa penjualan dan keuangan hari ini</Text>
       </View>
 
-      {/* 2-Column Grid Container */}
-      <View style={styles.grid}>
-        {/* Card 1: Omzet Penjualan */}
-        <View style={styles.gridCard}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(244, 63, 94, 0.12)' }]}>
-              <CircleDollarSign size={16} color="#fb7185" />
+      {/* 2-Column Grid Rows */}
+      <View style={styles.gridContainer}>
+        {/* Row 1: Omzet & Laba Kotor */}
+        <View style={styles.gridRow}>
+          {/* Card 1: Omzet Penjualan */}
+          <View style={styles.gridCard}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconBox, { backgroundColor: 'rgba(244, 63, 94, 0.12)' }]}>
+                <CircleDollarSign size={15} color="#fb7185" />
+              </View>
+              <Text style={styles.cardLabel} numberOfLines={1}>Omzet</Text>
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Omzet Penjualan</Text>
+
+            <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(sales.total_revenue)}</Text>
+
+            <View style={styles.cardFooter}>
+              <Text style={styles.cardSub} numberOfLines={1}>
+                {sales.total_transactions || 0} trx • {sales.total_items_sold || 0} item
+              </Text>
+            </View>
           </View>
 
-          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(sales.total_revenue)}</Text>
+          {/* Card 2: Laba Kotor */}
+          <View style={styles.gridCard}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconBox, { backgroundColor: 'rgba(52, 211, 153, 0.12)' }]}>
+                <TrendingUp size={15} color="#34d399" />
+              </View>
+              <Text style={styles.cardLabel} numberOfLines={1}>Laba Kotor</Text>
+            </View>
 
-          <View style={styles.cardFooter}>
-            <Text style={styles.cardSub} numberOfLines={1}>
-              {sales.total_transactions || 0} trx • {sales.total_items_sold || 0} item
-            </Text>
+            <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.gross_profit)}</Text>
+
+            <View style={styles.cardFooter}>
+              <Text style={styles.cardSub} numberOfLines={1}>
+                Margin: {profit.gross_profit_margin || 0}%
+              </Text>
+            </View>
           </View>
         </View>
 
-        {/* Card 2: Laba Kotor */}
-        <View style={styles.gridCard}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(52, 211, 153, 0.12)' }]}>
-              <TrendingUp size={16} color="#34d399" />
+        {/* Row 2: Laba Bersih & Valuasi Stok */}
+        <View style={styles.gridRow}>
+          {/* Card 3: Estimasi Laba Bersih */}
+          <View style={styles.gridCard}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconBox, { backgroundColor: 'rgba(56, 189, 248, 0.12)' }]}>
+                <Wallet size={15} color="#38bdf8" />
+              </View>
+              <Text style={styles.cardLabel} numberOfLines={1}>Laba Bersih</Text>
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Laba Kotor</Text>
-          </View>
 
-          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.gross_profit)}</Text>
+            <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.net_profit)}</Text>
 
-          <View style={styles.cardFooter}>
-            <Text style={styles.cardSub} numberOfLines={1}>
-              Margin: {profit.gross_profit_margin || 0}%
-            </Text>
-          </View>
-        </View>
-
-        {/* Card 3: Estimasi Laba Bersih */}
-        <View style={styles.gridCard}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(56, 189, 248, 0.12)' }]}>
-              <Wallet size={16} color="#38bdf8" />
+            <View style={styles.cardFooter}>
+              <Text style={styles.cardSub} numberOfLines={1}>
+                Beban: {formatRp(profit.operational_expenses)}
+              </Text>
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Laba Bersih</Text>
           </View>
 
-          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.net_profit)}</Text>
-
-          <View style={styles.cardFooter}>
-            <Text style={styles.cardSub} numberOfLines={1}>
-              Beban: {formatRp(profit.operational_expenses)}
-            </Text>
-          </View>
-        </View>
-
-        {/* Card 4: Valuasi Aset Stok Barang */}
-        <View style={styles.gridCard}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(167, 139, 250, 0.12)' }]}>
-              <Boxes size={16} color="#a78bfa" />
+          {/* Card 4: Valuasi Aset Stok Barang */}
+          <View style={styles.gridCard}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconBox, { backgroundColor: 'rgba(167, 139, 250, 0.12)' }]}>
+                <Boxes size={15} color="#a78bfa" />
+              </View>
+              <Text style={styles.cardLabel} numberOfLines={1}>Valuasi Stok</Text>
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Valuasi Stok</Text>
-          </View>
 
-          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(inv.total_stock_valuation)}</Text>
+            <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(inv.total_stock_valuation)}</Text>
 
-          <View style={styles.cardFooter}>
-            <View style={styles.stockStatusRow}>
-              {inv.low_stock_products_count > 0 ? (
-                <>
-                  <AlertTriangle size={12} color="#fbbf24" style={{ flexShrink: 0 }} />
-                  <Text style={[styles.cardSub, { color: '#fbbf24' }]} numberOfLines={1}>
-                    {inv.low_stock_products_count} stok menipis
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 size={12} color="#34d399" style={{ flexShrink: 0 }} />
-                  <Text style={[styles.cardSub, { color: '#34d399' }]} numberOfLines={1}>
-                    Stok aman
-                  </Text>
-                </>
-              )}
+            <View style={styles.cardFooter}>
+              <View style={styles.stockStatusRow}>
+                {inv.low_stock_products_count > 0 ? (
+                  <>
+                    <AlertTriangle size={12} color="#fbbf24" style={{ flexShrink: 0 }} />
+                    <Text style={[styles.cardSub, { color: '#fbbf24' }]} numberOfLines={1}>
+                      {inv.low_stock_products_count} menipis
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 size={12} color="#34d399" style={{ flexShrink: 0 }} />
+                    <Text style={[styles.cardSub, { color: '#34d399' }]} numberOfLines={1}>
+                      Aman
+                    </Text>
+                  </>
+                )}
+              </View>
             </View>
           </View>
         </View>
@@ -185,14 +191,16 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     marginTop: 2,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
+  gridContainer: {
     marginBottom: 10,
+    gap: 10,
+  },
+  gridRow: {
+    flexDirection: 'row',
+    gap: 10,
   },
   gridCard: {
-    width: '48.5%',
+    flex: 1,
     backgroundColor: '#18181b',
     borderColor: '#27272a',
     borderWidth: 1,
