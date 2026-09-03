@@ -26,9 +26,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - **Judul**: *"Pembayaran Berhasil!"* teks tebal kontras tinggi.
     - **Nominal Transaksi**: Angka nominal total tagihan (misal: `Rp 72.150`) berwarna hijau cerah emerald dengan tipografi menonjol.
     - **No. Nota**: Menampilkan nomor nota pembayaran (contoh: `INV-210826-002`) dalam warna abu-abu bersih `#a1a1aa`.
-    - **Dua Tombol Aksi Ergonomis**:
-      - **[Cetak Struk]**: Tombol *outlined/subtle cyan* (`#0284c7`) untuk mencetak struk fisik via printer Bluetooth thermal atau browser web print.
-      - **[Selesai]**: Tombol *solid primary blue* (`#0284c7`) untuk menutup transaksi dan langsung memulai transaksi kasir baru secara instan.
+    - **Dua Tombol Aksi Ergonomis (Harmoni Emerald Green)**:
+      - **[Cetak Struk]**: Tombol gelap netral (`#27272a` dengan border `#3f3f46` dan ikon printer putih `#e4e4e7`) yang tidak mencolok agar fokus utama tetap pada penyelesaian transaksi.
+      - **[Selesai]**: Tombol hijau emerald solid (`#16a34a`) yang harmonis dengan ikon centang sukses dan nominal tagihan di atasnya.
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 warning/defect) dan lolos verifikasi build bundle Expo Web (`npx expo export --platform web`).
 - **Perbaikan Kontras Aksesibilitas WCAG AA Dashboard (`SalesTrendChart.js`, `RecentTransactionsSection.js`)**:
   - Memperbaiki isu *low contrast text* pada label tanggal aktif grafik tren omzet: mengganti latar transparan kemerahan menjadi warna tegas `#e11d48` dengan teks putih murni `#ffffff` (rasio kontras 5.2:1, melampaui standar WCAG AA 4.5:1).
