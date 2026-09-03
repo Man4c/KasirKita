@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Isolasi Cetak Bersih Murni Kertas Struk (@media print Web & PDF)**:
+  - Mengimplementasikan stylesheet `@media print` khusus di `App.js` dan menambahkan penanda `nativeID="printable-receipt-paper"` pada `ReceiptView.js`.
+  - Saat dialog cetak browser atau Save as PDF dibuka:
+    - Seluruh bingkai modal dialog (`receiptModalOverlay`, `receiptSheet`), bilah header (*"Struk Transaksi"* & tombol silang `X`), serta tombol aksi bawah (`[Cetak Struk]` & `[Tutup]`) disembunyikan secara otomatis (`visibility: hidden`).
+    - Hanya lembaran kertas struk putih murni (`#printable-receipt-paper`) yang ditampilkan di halaman cetak/PDF dengan perataan tengah presisi, margin rapi, tanpa bingkai gelap atau bayangan modal.
+  - Menambahkan wadah struk tersembunyi (*off-screen receipt*) di `PaymentSuccessModal.js` sehingga aksi *Cetak Struk* dari popup sukses kasir juga menghasilkan cetak lembaran struk nota bersih ke browser.
+  - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Standardisasi Modal Struk Transaksi Riwayat & Dashboard (`PosReceiptModal.js`, `TransactionHistoryScreen.js`)**:
   - Menyeragamkan modal tampilan struk transaksi antara layar **Dashboard** dan layar **Riwayat Transaksi** menggunakan komponen modular `PosReceiptModal`.
   - Mengganti teks tombol *"Transaksi Baru"* menjadi **"Tutup"** (default prop `closeBtnText="Tutup"`), sehingga kontekstual dan tepat saat digunakan untuk meninjau riwayat transaksi lama.
