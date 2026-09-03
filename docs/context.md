@@ -20,12 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Isolasi Cetak Bersih Murni Kertas Struk (@media print Web & PDF)**:
-  - Mengimplementasikan stylesheet `@media print` khusus di `App.js` dan menambahkan penanda `nativeID="printable-receipt-paper"` pada `ReceiptView.js`.
-  - Saat dialog cetak browser atau Save as PDF dibuka:
-    - Seluruh bingkai modal dialog (`receiptModalOverlay`, `receiptSheet`), bilah header (*"Struk Transaksi"* & tombol silang `X`), serta tombol aksi bawah (`[Cetak Struk]` & `[Tutup]`) disembunyikan secara otomatis (`visibility: hidden`).
-    - Hanya lembaran kertas struk putih murni (`#printable-receipt-paper`) yang ditampilkan di halaman cetak/PDF dengan perataan tengah presisi, margin rapi, tanpa bingkai gelap atau bayangan modal.
-  - Menambahkan wadah struk tersembunyi (*off-screen receipt*) di `PaymentSuccessModal.js` sehingga aksi *Cetak Struk* dari popup sukses kasir juga menghasilkan cetak lembaran struk nota bersih ke browser.
+- **Cetak Struk Web Murni Bersih via Dedicated Iframe (`printerService.printWebReceiptHtml`)**:
+  - Menyelesaikan kendala halaman cetak putih kosong di browser dengan beralih ke pendekatan standar industri POS: menggunakan **dedicated hidden iframe** yang langsung merender dokumen HTML struk nota kasir murni.
+  - Saat kasir menekan tombol **`[Cetak Struk]`** di browser/PC:
+    - Dokumen HTML struk instan dibuat dengan layout kasir thermal presisi (lebar 76mm/80mm, nama toko, alamat, no. nota, rincian item, subtotal, diskon, pajak, total tebal, dan ucapan terima kasih).
+    - Tidak menyertakan header modal dialog *"Struk Transaksi"*, tombol silang `(X)`, tombol `[Cetak Struk]`, maupun tombol `[Tutup]`.
+    - Tidak bergantung pada CSS `visibility: hidden` modal React Native yang sebelumnya memicu preview putih kosong di Chrome.
+  - Terintegrasi langsung di **`PosReceiptModal.js`** (layar Riwayat & Dashboard) dan **`PaymentSuccessModal.js`** (dialog sukses kasir).
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Standardisasi Modal Struk Transaksi Riwayat & Dashboard (`PosReceiptModal.js`, `TransactionHistoryScreen.js`)**:
   - Menyeragamkan modal tampilan struk transaksi antara layar **Dashboard** dan layar **Riwayat Transaksi** menggunakan komponen modular `PosReceiptModal`.
