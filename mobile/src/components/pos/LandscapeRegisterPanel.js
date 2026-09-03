@@ -18,6 +18,7 @@ import {
   Percent,
   ChevronDown,
   ArrowRight,
+  ScanBarcode,
 } from 'lucide-react-native';
 
 export default function LandscapeRegisterPanel({
@@ -28,6 +29,8 @@ export default function LandscapeRegisterPanel({
   showVoucherFeature = true,
   showTaxFeature = true,
   onOpenCustomerModal,
+  isScanMode = false,
+  onToggleScanMode,
   cart,
   onClearCart,
   onUpdateQuantity,
@@ -71,6 +74,20 @@ export default function LandscapeRegisterPanel({
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          {/* Barcode Scanner Toggle Button */}
+          {onToggleScanMode && (
+            <TouchableOpacity
+              style={[
+                styles.regScanBtn,
+                isScanMode && styles.regScanBtnActive,
+              ]}
+              onPress={onToggleScanMode}
+              activeOpacity={0.7}
+            >
+              <ScanBarcode size={13} color={isScanMode ? '#ffffff' : '#fb7185'} />
+            </TouchableOpacity>
+          )}
+
           {/* Customer Chip */}
           {showCustomerPicker && (
             <TouchableOpacity
@@ -407,6 +424,17 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+  },
+  regScanBtn: {
+    padding: 6,
+    borderRadius: 8,
+    backgroundColor: 'rgba(225, 29, 72, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.25)',
+  },
+  regScanBtnActive: {
+    backgroundColor: '#e11d48',
+    borderColor: '#e11d48',
   },
   regClearBtn: {
     padding: 6,

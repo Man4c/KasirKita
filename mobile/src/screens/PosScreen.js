@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Modal,
   Platform,
   useWindowDimensions,
 } from 'react-native';
@@ -26,6 +27,7 @@ import PosReceiptModal from '../components/pos/PosReceiptModal';
 import ProductGrid from '../components/pos/ProductGrid';
 import LandscapeRegisterPanel from '../components/pos/LandscapeRegisterPanel';
 import PosCheckoutView from '../components/pos/PosCheckoutView';
+import PosBarcodeScannerView from '../components/pos/PosBarcodeScannerView';
 
 export default function PosScreen({ isLandscape = false, isCompactLandscape = false, onCheckoutStateChange }) {
   const { width, height } = useWindowDimensions();
@@ -66,6 +68,9 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   const [showCustomerPicker, setShowCustomerPicker] = useState(true);
   const [showVoucherFeature, setShowVoucherFeature] = useState(true);
   const [showTaxFeature, setShowTaxFeature] = useState(true);
+
+  // Barcode Scanner Mode State
+  const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
 
   useEffect(() => {
     if (onCheckoutStateChange) {
@@ -554,21 +559,32 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
     <View style={[styles.container, isLandscape && styles.landscapeRoot]}>
       {!isCheckoutView ? (
         <>
-          {/* LEFT COLUMN: Catalog & Products Component */}
-          <ProductGrid
-            isLandscape={isLandscape}
-            compact={compact}
-            search={search}
-            onSearchChange={setSearch}
-            categories={categories}
-            selectedCat={selectedCat}
-            onSelectCat={setSelectedCat}
-            products={filteredProducts}
-            loading={loading}
-            cart={cart}
-            onAddToCart={addToCart}
-            formatRp={formatRp}
-          />
+          {/* LEFT COLUMN: Catalog & Products Component OR Barcode Scanner View */}
+          {isLandscape && isBarcodeScannerOpen ? (
+            <PosBarcodeScannerView
+              isLandscape={isLandscape}
+              compact={compact}
+              products={products}
+              onScanProduct={addToCart}
+              onClose={() => setIsBarcodeScannerOpen(false)}
+            />
+          ) : (
+            <ProductGrid
+              isLandscape={isLandscape}
+              compact={compact}
+              search={search}
+              onSearchChange={setSearch}
+              categories={categories}
+              selectedCat={selectedCat}
+              onSelectCat={setSelectedCat}
+              products={filteredProducts}
+              loading={loading}
+              cart={cart}
+              onAddToCart={addToCart}
+              formatRp={formatRp}
+              onOpenBarcodeScanner={() => setIsBarcodeScannerOpen(true)}
+            />
+          )}
 
           {/* RIGHT COLUMN (LANDSCAPE ONLY): Persistent Cashier Register Panel */}
           {isLandscape && (
@@ -580,6 +596,8 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               showVoucherFeature={showVoucherFeature}
               showTaxFeature={showTaxFeature}
               onOpenCustomerModal={() => setCustomerModalOpen(true)}
+              isScanMode={isBarcodeScannerOpen}
+              onToggleScanMode={() => setIsBarcodeScannerOpen(!isBarcodeScannerOpen)}
               cart={cart}
               onClearCart={() => setCart([])}
               onUpdateQuantity={updateQuantity}
@@ -755,6 +773,26 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         onNewTransaction={() => dispatch({ type: CHECKOUT_ACTION_TYPES.NEW_TRANSACTION })}
         formatRp={formatRp}
       />
+
+      {/* Portrait Barcode Scanner Modal */}
+      {!isLandscape && (
+        <Modal
+          visible={isBarcodeScannerOpen}
+          animationType="slide"
+          transparent={false}
+          onRequestClose={() => setIsBarcodeScannerOpen(false)}
+        >
+          <View style={{ flex: 1, backgroundColor: '#09090b' }}>
+            <PosBarcodeScannerView
+              isLandscape={false}
+              compact={compact}
+              products={products}
+              onScanProduct={addToCart}
+              onClose={() => setIsBarcodeScannerOpen(false)}
+            />
+          </View>
+        </Modal>
+      )}
     </View>
   );
 }

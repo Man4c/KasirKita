@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { Search, X, PackageSearch, RotateCcw } from 'lucide-react-native';
+import { Search, X, PackageSearch, RotateCcw, ScanBarcode } from 'lucide-react-native';
 
 export default function ProductGrid({
   isLandscape,
@@ -24,6 +24,7 @@ export default function ProductGrid({
   cart,
   onAddToCart,
   formatRp,
+  onOpenBarcodeScanner,
 }) {
   const selectedCatObj = categories.find((c) => c.id === selectedCat);
 
@@ -39,30 +40,42 @@ export default function ProductGrid({
       >
         {/* Search Box */}
         {!isLandscape ? (
-          <View
-            style={[
-              styles.portraitSearchPill,
-              search.length > 0 && styles.portraitSearchPillActive,
-            ]}
-          >
-            <Search size={13} color={search ? '#fb7185' : '#a1a1aa'} style={{ marginRight: 5 }} />
-            <TextInput
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <View
               style={[
-                styles.portraitSearchPillInput,
-                { width: search ? Math.min(100, Math.max(34, search.length * 9)) : 32 },
+                styles.portraitSearchPill,
+                search.length > 0 && styles.portraitSearchPillActive,
               ]}
-              placeholder="Cari"
-              placeholderTextColor="#a1a1aa"
-              value={search}
-              onChangeText={onSearchChange}
-            />
-            {search.length > 0 && (
+            >
+              <Search size={13} color={search ? '#fb7185' : '#a1a1aa'} style={{ marginRight: 5 }} />
+              <TextInput
+                style={[
+                  styles.portraitSearchPillInput,
+                  { width: search ? Math.min(100, Math.max(34, search.length * 9)) : 32 },
+                ]}
+                placeholder="Cari"
+                placeholderTextColor="#a1a1aa"
+                value={search}
+                onChangeText={onSearchChange}
+              />
+              {search.length > 0 && (
+                <TouchableOpacity
+                  onPress={() => onSearchChange('')}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  style={{ marginLeft: 4 }}
+                >
+                  <X size={13} color="#a1a1aa" />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {onOpenBarcodeScanner && (
               <TouchableOpacity
-                onPress={() => onSearchChange('')}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                style={{ marginLeft: 4 }}
+                style={styles.portraitScanBtn}
+                onPress={onOpenBarcodeScanner}
+                activeOpacity={0.7}
               >
-                <X size={13} color="#a1a1aa" />
+                <ScanBarcode size={13} color="#fb7185" />
               </TouchableOpacity>
             )}
           </View>
@@ -325,6 +338,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     paddingVertical: 0,
     paddingHorizontal: 0,
+  },
+  portraitScanBtn: {
+    height: 28,
+    width: 28,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
   },
   landscapeSearchBox: {
     flexDirection: 'row',
