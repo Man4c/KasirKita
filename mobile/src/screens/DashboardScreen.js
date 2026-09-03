@@ -25,7 +25,7 @@ import api from '../services/api';
 export default function DashboardScreen({ isLandscape = false }) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showMarginInfo, setShowMarginInfo] = useState(false);
+  const [activeModal, setActiveModal] = useState(null); // 'omzet' | 'gross_profit' | 'net_profit' | 'inventory' | null
 
   useEffect(() => {
     fetchSummary();
@@ -84,9 +84,17 @@ export default function DashboardScreen({ isLandscape = false }) {
             <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(sales.total_revenue)}</Text>
 
             <View style={styles.cardFooter}>
-              <Text style={styles.cardSub} numberOfLines={1}>
-                {sales.total_transactions || 0} trx • {sales.total_items_sold || 0} item
-              </Text>
+              <TouchableOpacity
+                style={styles.cardSubTrigger}
+                onPress={() => setActiveModal('omzet')}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              >
+                <Text style={styles.cardSub} numberOfLines={1}>
+                  {sales.total_transactions || 0} trx • {sales.total_items_sold || 0} item
+                </Text>
+                <HelpCircle size={12} color="#a1a1aa" />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -103,8 +111,8 @@ export default function DashboardScreen({ isLandscape = false }) {
 
             <View style={styles.cardFooter}>
               <TouchableOpacity
-                style={styles.marginInfoTrigger}
-                onPress={() => setShowMarginInfo(true)}
+                style={styles.cardSubTrigger}
+                onPress={() => setActiveModal('gross_profit')}
                 activeOpacity={0.7}
                 hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
               >
@@ -131,9 +139,17 @@ export default function DashboardScreen({ isLandscape = false }) {
             <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.net_profit)}</Text>
 
             <View style={styles.cardFooter}>
-              <Text style={styles.cardSub} numberOfLines={1}>
-                Beban: {formatRp(profit.operational_expenses)}
-              </Text>
+              <TouchableOpacity
+                style={styles.cardSubTrigger}
+                onPress={() => setActiveModal('net_profit')}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              >
+                <Text style={styles.cardSub} numberOfLines={1}>
+                  Beban: {formatRp(profit.operational_expenses)}
+                </Text>
+                <HelpCircle size={12} color="#a1a1aa" />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -149,23 +165,31 @@ export default function DashboardScreen({ isLandscape = false }) {
             <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(inv.total_stock_valuation)}</Text>
 
             <View style={styles.cardFooter}>
-              <View style={styles.stockStatusRow}>
-                {inv.low_stock_products_count > 0 ? (
-                  <>
-                    <AlertTriangle size={12} color="#fbbf24" style={{ flexShrink: 0 }} />
-                    <Text style={[styles.cardSub, { color: '#fbbf24' }]} numberOfLines={1}>
-                      {inv.low_stock_products_count} menipis
-                    </Text>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 size={12} color="#34d399" style={{ flexShrink: 0 }} />
-                    <Text style={[styles.cardSub, { color: '#34d399' }]} numberOfLines={1}>
-                      Aman
-                    </Text>
-                  </>
-                )}
-              </View>
+              <TouchableOpacity
+                style={styles.cardSubTrigger}
+                onPress={() => setActiveModal('inventory')}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              >
+                <View style={styles.stockStatusRow}>
+                  {inv.low_stock_products_count > 0 ? (
+                    <>
+                      <AlertTriangle size={12} color="#fbbf24" style={{ flexShrink: 0 }} />
+                      <Text style={[styles.cardSub, { color: '#fbbf24' }]} numberOfLines={1}>
+                        {inv.low_stock_products_count} menipis
+                      </Text>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 size={12} color="#34d399" style={{ flexShrink: 0 }} />
+                      <Text style={[styles.cardSub, { color: '#34d399' }]} numberOfLines={1}>
+                        Aman
+                      </Text>
+                    </>
+                  )}
+                </View>
+                <HelpCircle size={12} color="#a1a1aa" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -176,75 +200,224 @@ export default function DashboardScreen({ isLandscape = false }) {
         <Text style={styles.refreshBtnText}>Perbarui Data</Text>
       </TouchableOpacity>
 
-      {/* Margin Info Tooltip Modal */}
+      {/* Dynamic Detail Tooltip Modal */}
       <Modal
-        visible={showMarginInfo}
+        visible={!!activeModal}
         transparent={true}
         animationType="fade"
-        onRequestClose={() => setShowMarginInfo(false)}
+        onRequestClose={() => setActiveModal(null)}
       >
         <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
-          onPress={() => setShowMarginInfo(false)}
+          onPress={() => setActiveModal(null)}
         >
           <View style={styles.modalSheet} onStartShouldSetResponder={() => true}>
-            <View style={styles.modalHeaderRow}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                <TrendingUp size={18} color="#34d399" />
-                <Text style={styles.modalTitle}>Rincian Laba Kotor & Margin</Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => setShowMarginInfo(false)}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <X size={18} color="#a1a1aa" />
-              </TouchableOpacity>
-            </View>
+            {/* Modal: Omzet Penjualan */}
+            {activeModal === 'omzet' && (
+              <>
+                <View style={styles.modalHeaderRow}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <CircleDollarSign size={18} color="#fb7185" />
+                    <Text style={styles.modalTitle}>Rincian Omzet Penjualan</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setActiveModal(null)}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  >
+                    <X size={18} color="#a1a1aa" />
+                  </TouchableOpacity>
+                </View>
 
-            <View style={styles.modalDivider} />
+                <View style={styles.modalDivider} />
 
-            <View style={styles.modalContent}>
-              <View style={styles.calcRow}>
-                <Text style={styles.calcLabel}>Omzet Penjualan</Text>
-                <Text style={styles.calcValue}>{formatRp(sales.total_revenue)}</Text>
-              </View>
-              <View style={styles.calcRow}>
-                <Text style={styles.calcLabel}>Total HPP (Modal Barang)</Text>
-                <Text style={[styles.calcValue, { color: '#fb7185' }]}>
-                  - {formatRp(profit.total_cogs)}
-                </Text>
-              </View>
+                <View style={styles.modalContent}>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Total Uang Masuk Penjualan</Text>
+                    <Text style={styles.calcValue}>{formatRp(sales.total_revenue)}</Text>
+                  </View>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Total Transaksi Sukses</Text>
+                    <Text style={styles.calcValue}>{sales.total_transactions || 0} struk / nota</Text>
+                  </View>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Total Kuantitas Barang Terjual</Text>
+                    <Text style={styles.calcValue}>{sales.total_items_sold || 0} pcs / item</Text>
+                  </View>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Rata-rata Belanja per Pelanggan</Text>
+                    <Text style={styles.calcValue}>{formatRp(sales.average_transaction_value)}</Text>
+                  </View>
+                  {Number(sales.total_discount || 0) > 0 && (
+                    <View style={styles.calcRow}>
+                      <Text style={styles.calcLabel}>Total Potongan Diskon Diberikan</Text>
+                      <Text style={[styles.calcValue, { color: '#fb7185' }]}>
+                        - {formatRp(sales.total_discount)}
+                      </Text>
+                    </View>
+                  )}
 
-              <View style={styles.calcDivider} />
+                  <View style={styles.formulaBox}>
+                    <Text style={styles.formulaText}>
+                      💡 <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>Arti Omzet:</Text> Seluruh nilai bruto uang penjualan yang diterima kasir pada periode ini sebelum dikurangi modal barang kulakan dan biaya operasional toko.
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
 
-              <View style={styles.calcRow}>
-                <Text style={styles.calcLabelBold}>Laba Kotor (Gross Profit)</Text>
-                <Text style={[styles.calcValueBold, { color: '#34d399' }]}>
-                  {formatRp(profit.gross_profit)}
-                </Text>
-              </View>
+            {/* Modal: Laba Kotor & Margin */}
+            {activeModal === 'gross_profit' && (
+              <>
+                <View style={styles.modalHeaderRow}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <TrendingUp size={18} color="#34d399" />
+                    <Text style={styles.modalTitle}>Rincian Laba Kotor & Margin</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setActiveModal(null)}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  >
+                    <X size={18} color="#a1a1aa" />
+                  </TouchableOpacity>
+                </View>
 
-              <View style={styles.calcRow}>
-                <Text style={styles.calcLabelBold}>Persentase Margin</Text>
-                <Text style={[styles.calcValueBold, { color: '#34d399' }]}>
-                  {profit.gross_profit_margin || 0}%
-                </Text>
-              </View>
+                <View style={styles.modalDivider} />
 
-              <View style={styles.formulaBox}>
-                <Text style={styles.formulaText}>
-                  💡 <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>Arti Margin {profit.gross_profit_margin || 0}%:</Text> Dari setiap Rp100 penjualan, toko menghasilkan keuntungan kotor sebesar Rp{Math.round(profit.gross_profit_margin || 0)} sebelum dikurangi beban biaya operasional.
-                </Text>
-              </View>
-            </View>
+                <View style={styles.modalContent}>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Omzet Penjualan</Text>
+                    <Text style={styles.calcValue}>{formatRp(sales.total_revenue)}</Text>
+                  </View>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Total HPP (Modal Barang)</Text>
+                    <Text style={[styles.calcValue, { color: '#fb7185' }]}>
+                      - {formatRp(profit.total_cogs)}
+                    </Text>
+                  </View>
+
+                  <View style={styles.calcDivider} />
+
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabelBold}>Laba Kotor (Gross Profit)</Text>
+                    <Text style={[styles.calcValueBold, { color: '#34d399' }]}>
+                      {formatRp(profit.gross_profit)}
+                    </Text>
+                  </View>
+
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabelBold}>Persentase Margin</Text>
+                    <Text style={[styles.calcValueBold, { color: '#34d399' }]}>
+                      {profit.gross_profit_margin || 0}%
+                    </Text>
+                  </View>
+
+                  <View style={styles.formulaBox}>
+                    <Text style={styles.formulaText}>
+                      💡 <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>Arti Margin {profit.gross_profit_margin || 0}%:</Text> Dari setiap Rp100 penjualan, toko menghasilkan keuntungan kotor sebesar Rp{Math.round(profit.gross_profit_margin || 0)} sebelum dikurangi beban biaya operasional.
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
+
+            {/* Modal: Laba Bersih */}
+            {activeModal === 'net_profit' && (
+              <>
+                <View style={styles.modalHeaderRow}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Wallet size={18} color="#38bdf8" />
+                    <Text style={styles.modalTitle}>Rincian Estimasi Laba Bersih</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setActiveModal(null)}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  >
+                    <X size={18} color="#a1a1aa" />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.modalDivider} />
+
+                <View style={styles.modalContent}>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Laba Kotor (Omzet - HPP)</Text>
+                    <Text style={[styles.calcValue, { color: '#34d399' }]}>{formatRp(profit.gross_profit)}</Text>
+                  </View>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Beban Biaya Operasional</Text>
+                    <Text style={[styles.calcValue, { color: '#fb7185' }]}>
+                      - {formatRp(profit.operational_expenses)}
+                    </Text>
+                  </View>
+
+                  <View style={styles.calcDivider} />
+
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabelBold}>Estimasi Laba Bersih</Text>
+                    <Text style={[styles.calcValueBold, { color: '#38bdf8' }]}>
+                      {formatRp(profit.net_profit)}
+                    </Text>
+                  </View>
+
+                  <View style={styles.formulaBox}>
+                    <Text style={styles.formulaText}>
+                      💡 <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>Arti Laba Bersih:</Text> Keuntungan riil toko yang siap dinikmati pemilik setelah seluruh biaya modal barang dan pengeluaran operasional (sewa, listrik, gaji, plastik) terlunasi.
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
+
+            {/* Modal: Valuasi Stok */}
+            {activeModal === 'inventory' && (
+              <>
+                <View style={styles.modalHeaderRow}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Boxes size={18} color="#a78bfa" />
+                    <Text style={styles.modalTitle}>Rincian Aset Stok Toko</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setActiveModal(null)}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  >
+                    <X size={18} color="#a1a1aa" />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.modalDivider} />
+
+                <View style={styles.modalContent}>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Total Nilai Uang Mengendap (Aset)</Text>
+                    <Text style={[styles.calcValueBold, { color: '#a78bfa' }]}>{formatRp(inv.total_stock_valuation)}</Text>
+                  </View>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Total Jenis Produk Aktif</Text>
+                    <Text style={styles.calcValue}>{inv.total_active_products || 0} varian</Text>
+                  </View>
+                  <View style={styles.calcRow}>
+                    <Text style={styles.calcLabel}>Status Peringatan Stok</Text>
+                    <Text style={[styles.calcValue, { color: inv.low_stock_products_count > 0 ? '#fbbf24' : '#34d399' }]}>
+                      {inv.low_stock_products_count > 0 ? `${inv.low_stock_products_count} produk perlu restock` : 'Semua stok aman'}
+                    </Text>
+                  </View>
+
+                  <View style={styles.formulaBox}>
+                    <Text style={styles.formulaText}>
+                      💡 <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>Arti Valuasi Stok:</Text> Total uang modal toko yang saat ini berwujud barang di etalase/gudang, dihitung berdasarkan rumus: (Stok Tersedia × Harga Pokok Rata-rata).
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
 
             <TouchableOpacity
               style={styles.modalCloseBtn}
-              onPress={() => setShowMarginInfo(false)}
+              onPress={() => setActiveModal(null)}
               activeOpacity={0.8}
             >
-              <Text style={styles.modalCloseBtnText}>Mengerti</Text>
+              <Text style={styles.modalCloseBtnText}>Tutup</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -382,10 +555,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
-  marginInfoTrigger: {
+  cardSubTrigger: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'space-between',
+    width: '100%',
   },
   modalOverlay: {
     flex: 1,
