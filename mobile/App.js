@@ -230,7 +230,7 @@ function MainApp() {
                 />
               </View>
               <Text style={[styles.navText, activeTab === 'dashboard' && styles.navTextActive]} numberOfLines={1}>
-                Laporan Toko
+                Dashboard
               </Text>
             </TouchableOpacity>
           )}
