@@ -64,102 +64,97 @@ export default function DashboardScreen({ isLandscape = false }) {
         <Text style={styles.headerSubtitle}>Ringkasan performa penjualan dan keuangan hari ini</Text>
       </View>
 
-      {/* Card 1: Omzet Penjualan */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <View style={styles.cardHeaderLeft}>
+      {/* 2-Column Grid Container */}
+      <View style={styles.grid}>
+        {/* Card 1: Omzet Penjualan */}
+        <View style={styles.gridCard}>
+          <View style={styles.cardHeader}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(244, 63, 94, 0.12)' }]}>
               <CircleDollarSign size={16} color="#fb7185" />
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Total Omzet Penjualan</Text>
+            <Text style={styles.cardLabel} numberOfLines={1}>Omzet Penjualan</Text>
+          </View>
+
+          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(sales.total_revenue)}</Text>
+
+          <View style={styles.cardFooter}>
+            <Text style={styles.cardSub} numberOfLines={1}>
+              {sales.total_transactions || 0} trx • {sales.total_items_sold || 0} item
+            </Text>
           </View>
         </View>
 
-        <Text style={styles.cardValue}>{formatRp(sales.total_revenue)}</Text>
-
-        <View style={styles.cardFooter}>
-          <Text style={styles.cardSub}>
-            {sales.total_transactions || 0} transaksi • {sales.total_items_sold || 0} item terjual
-          </Text>
-        </View>
-      </View>
-
-      {/* Card 2: Laba Kotor */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <View style={styles.cardHeaderLeft}>
+        {/* Card 2: Laba Kotor */}
+        <View style={styles.gridCard}>
+          <View style={styles.cardHeader}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(52, 211, 153, 0.12)' }]}>
               <TrendingUp size={16} color="#34d399" />
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Laba Kotor (Gross Profit)</Text>
+            <Text style={styles.cardLabel} numberOfLines={1}>Laba Kotor</Text>
+          </View>
+
+          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.gross_profit)}</Text>
+
+          <View style={styles.cardFooter}>
+            <Text style={styles.cardSub} numberOfLines={1}>
+              Margin: {profit.gross_profit_margin || 0}%
+            </Text>
           </View>
         </View>
 
-        <Text style={styles.cardValue}>{formatRp(profit.gross_profit)}</Text>
-
-        <View style={styles.cardFooter}>
-          <Text style={styles.cardSub}>
-            Margin: {profit.gross_profit_margin || 0}% • HPP: {formatRp(profit.total_cogs)}
-          </Text>
-        </View>
-      </View>
-
-      {/* Card 3: Estimasi Laba Bersih */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <View style={styles.cardHeaderLeft}>
+        {/* Card 3: Estimasi Laba Bersih */}
+        <View style={styles.gridCard}>
+          <View style={styles.cardHeader}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(56, 189, 248, 0.12)' }]}>
               <Wallet size={16} color="#38bdf8" />
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Estimasi Laba Bersih</Text>
+            <Text style={styles.cardLabel} numberOfLines={1}>Laba Bersih</Text>
+          </View>
+
+          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(profit.net_profit)}</Text>
+
+          <View style={styles.cardFooter}>
+            <Text style={styles.cardSub} numberOfLines={1}>
+              Beban: {formatRp(profit.operational_expenses)}
+            </Text>
           </View>
         </View>
 
-        <Text style={styles.cardValue}>{formatRp(profit.net_profit)}</Text>
-
-        <View style={styles.cardFooter}>
-          <Text style={styles.cardSub}>
-            Beban Operasional: {formatRp(profit.operational_expenses)}
-          </Text>
-        </View>
-      </View>
-
-      {/* Card 4: Valuasi Aset Stok Barang */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <View style={styles.cardHeaderLeft}>
+        {/* Card 4: Valuasi Aset Stok Barang */}
+        <View style={styles.gridCard}>
+          <View style={styles.cardHeader}>
             <View style={[styles.iconBox, { backgroundColor: 'rgba(167, 139, 250, 0.12)' }]}>
               <Boxes size={16} color="#a78bfa" />
             </View>
-            <Text style={styles.cardLabel} numberOfLines={1}>Valuasi Aset Stok Barang</Text>
+            <Text style={styles.cardLabel} numberOfLines={1}>Valuasi Stok</Text>
           </View>
-        </View>
 
-        <Text style={styles.cardValue}>{formatRp(inv.total_stock_valuation)}</Text>
+          <Text style={styles.cardValue} numberOfLines={1} adjustsFontSizeToFit>{formatRp(inv.total_stock_valuation)}</Text>
 
-        <View style={styles.cardFooter}>
-          <View style={styles.stockStatusRow}>
-            {inv.low_stock_products_count > 0 ? (
-              <>
-                <AlertTriangle size={13} color="#fbbf24" style={{ flexShrink: 0 }} />
-                <Text style={[styles.cardSub, { color: '#fbbf24' }]}>
-                  {inv.low_stock_products_count} produk stok menipis!
-                </Text>
-              </>
-            ) : (
-              <>
-                <CheckCircle2 size={14} color="#34d399" style={{ flexShrink: 0 }} />
-                <Text style={[styles.cardSub, { color: '#34d399' }]}>
-                  Semua stok produk aman ({inv.total_active_products || 0} aktif)
-                </Text>
-              </>
-            )}
+          <View style={styles.cardFooter}>
+            <View style={styles.stockStatusRow}>
+              {inv.low_stock_products_count > 0 ? (
+                <>
+                  <AlertTriangle size={12} color="#fbbf24" style={{ flexShrink: 0 }} />
+                  <Text style={[styles.cardSub, { color: '#fbbf24' }]} numberOfLines={1}>
+                    {inv.low_stock_products_count} stok menipis
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 size={12} color="#34d399" style={{ flexShrink: 0 }} />
+                  <Text style={[styles.cardSub, { color: '#34d399' }]} numberOfLines={1}>
+                    Stok aman
+                  </Text>
+                </>
+              )}
+            </View>
           </View>
         </View>
       </View>
 
       <TouchableOpacity style={styles.refreshBtn} onPress={fetchSummary} activeOpacity={0.8}>
-        <RotateCw size={15} color="#f4f4f5" />
+        <RotateCw size={14} color="#f4f4f5" />
         <Text style={styles.refreshBtnText}>Perbarui Data</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -176,7 +171,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   header: {
-    marginBottom: 16,
+    marginBottom: 14,
   },
   headerTitle: {
     fontSize: 22,
@@ -190,14 +185,20 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     marginTop: 2,
   },
-  card: {
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 10,
+  },
+  gridCard: {
+    width: '48.5%',
     backgroundColor: '#18181b',
     borderColor: '#27272a',
     borderWidth: 1,
     borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    marginBottom: 10,
+    padding: 12,
+    justifyContent: 'space-between',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -216,19 +217,12 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 6,
-  },
-  cardHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    minWidth: 0,
     gap: 8,
+    marginBottom: 8,
   },
   iconBox: {
-    width: 28,
-    height: 28,
+    width: 26,
+    height: 26,
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
@@ -239,28 +233,31 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     color: '#d4d4d8',
     flex: 1,
+    minWidth: 0,
   },
   cardValue: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
     letterSpacing: -0.2,
-    marginBottom: 6,
+    marginBottom: 8,
   },
   cardFooter: {
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    paddingTop: 8,
+    paddingTop: 6,
   },
   cardSub: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    flexShrink: 1,
   },
   stockStatusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
+    minWidth: 0,
   },
   centerBox: {
     flex: 1,
@@ -282,7 +279,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 11,
+    paddingVertical: 10,
     borderRadius: 12,
     marginTop: 2,
   },
