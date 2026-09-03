@@ -15,10 +15,15 @@ import { formatRp } from '../utils/format';
 import DashboardMetricsGrid from '../components/dashboard/DashboardMetricsGrid';
 import DashboardDetailModal from '../components/dashboard/DashboardDetailModal';
 import SalesTrendChart from '../components/dashboard/SalesTrendChart';
+import RecentTransactionsSection from '../components/dashboard/RecentTransactionsSection';
+import PosReceiptModal from '../components/pos/PosReceiptModal';
 
-export default function DashboardScreen({ isLandscape = false }) {
+export default function DashboardScreen({ isLandscape = false, navigation }) {
   const [summary, setSummary] = useState(null);
   const [trends, setTrends] = useState([]);
+  const [recentTransactions, setRecentTransactions] = useState([]);
+  const [selectedTx, setSelectedTx] = useState(null);
+  const [receiptModalOpen, setReceiptModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
@@ -38,9 +43,10 @@ export default function DashboardScreen({ isLandscape = false }) {
       setError(null);
 
       // 1. Read cached snapshot if available
-      const [cachedSummary, cachedTrends] = await Promise.all([
+      const [cachedSummary, cachedTrends, cachedTx] = await Promise.all([
         offlineStorage.getCachedDashboardSummary(),
         offlineStorage.getCachedDashboardTrends(),
+        offlineStorage.getCachedDashboardRecentTx(),
       ]);
 
       if (cachedSummary?.summary) {
@@ -51,6 +57,9 @@ export default function DashboardScreen({ isLandscape = false }) {
       }
       if (Array.isArray(cachedTrends) && cachedTrends.length > 0) {
         setTrends(cachedTrends);
+      }
+      if (Array.isArray(cachedTx) && cachedTx.length > 0) {
+        setRecentTransactions(cachedTx);
       }
 
       // 2. Fetch fresh data from backend
@@ -63,7 +72,7 @@ export default function DashboardScreen({ isLandscape = false }) {
   };
 
   /**
-   * Fetch latest financial data and trends from backend.
+   * Fetch latest financial data, trends, and recent transactions from backend.
    * @param {boolean} isManualRefresh
    */
   const fetchSummary = async (isManualRefresh = false) => {
@@ -71,9 +80,10 @@ export default function DashboardScreen({ isLandscape = false }) {
     setError(null);
 
     try {
-      const [resSummary, resTrends] = await Promise.allSettled([
+      const [resSummary, resTrends, resTx] = await Promise.allSettled([
         api.get('/finance/dashboard'),
         api.get('/finance/trends'),
+        api.get('/pos/transactions?per_page=10'),
       ]);
 
       let hasSuccess = false;
@@ -92,6 +102,16 @@ export default function DashboardScreen({ isLandscape = false }) {
         setTrends(freshTrends);
         await offlineStorage.cacheDashboardTrends(freshTrends);
         hasSuccess = true;
+      }
+
+      // Process recent transactions
+      if (resTx.status === 'fulfilled' && resTx.value.data?.success) {
+        const txList = resTx.value.data.data?.data || resTx.value.data.data || [];
+        if (Array.isArray(txList)) {
+          setRecentTransactions(txList);
+          await offlineStorage.cacheDashboardRecentTx(txList);
+          hasSuccess = true;
+        }
       }
 
       if (hasSuccess) {
@@ -185,10 +205,7 @@ export default function DashboardScreen({ isLandscape = false }) {
         onOpenModal={(type) => setActiveModal(type)}
       />
 
-      {/* 7-Day Sales Trend Interactive Chart */}
-      <SalesTrendChart trends={trends} formatRp={formatRp} />
-
-      {/* Refresh Button with Dedicated Inline Spinner */}
+      {/* Refresh Button with Dedicated Inline Spinner (Placed before Tren Omzet) */}
       <TouchableOpacity
         style={[styles.refreshBtn, refreshing && styles.refreshBtnDisabled]}
         onPress={() => fetchSummary(true)}
@@ -205,6 +222,20 @@ export default function DashboardScreen({ isLandscape = false }) {
         </Text>
       </TouchableOpacity>
 
+      {/* 7-Day Sales Trend Interactive Chart */}
+      <SalesTrendChart trends={trends} formatRp={formatRp} />
+
+      {/* 10 Recent Transactions Section */}
+      <RecentTransactionsSection
+        transactions={recentTransactions}
+        formatRp={formatRp}
+        onSelectTx={(tx) => {
+          setSelectedTx(tx);
+          setReceiptModalOpen(true);
+        }}
+        onViewAll={() => navigation?.navigate && navigation.navigate('Riwayat')}
+      />
+
       {/* Modular Detail Tooltip Modal */}
       <DashboardDetailModal
         activeModal={activeModal}
@@ -212,6 +243,22 @@ export default function DashboardScreen({ isLandscape = false }) {
         sales={sales}
         profit={profit}
         inv={inv}
+        formatRp={formatRp}
+      />
+
+      {/* Struk Transaksi Modal */}
+      <PosReceiptModal
+        visible={receiptModalOpen}
+        isLandscape={isLandscape}
+        onClose={() => {
+          setReceiptModalOpen(false);
+          setSelectedTx(null);
+        }}
+        completedTx={selectedTx}
+        onNewTransaction={() => {
+          setReceiptModalOpen(false);
+          setSelectedTx(null);
+        }}
         formatRp={formatRp}
       />
     </ScrollView>
@@ -321,7 +368,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 10,
     borderRadius: 12,
-    marginTop: 2,
+    marginBottom: 10,
   },
   refreshBtnDisabled: {
     opacity: 0.7,
