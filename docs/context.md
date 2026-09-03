@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Fitur Bunyi Beep Scanner Barcode & Integrasi Pengaturan Kasir (`soundService.js`, `PosBarcodeScannerView.js`, `PosScreen.js`)**:
+  - **Audio Synthesizer & Player Multiplatform (`mobile/src/services/soundService.js`)**:
+    - **Nada Sukses (High-Pitch)**: Frekuensi ~2000Hz selama 100ms dengan envelope fade-out halus layaknya scanner barcode kasir Honeywell/Datalogic.
+    - **Nada Gagal / Tidak Ditemukan**: Frekuensi rendah ~600Hz selama 180ms sebagai audio warning.
+    - **Dual Engine**: Menggunakan Web Audio API Synthesizer di platform Web, dan native `expo-audio` di perangkat Android/iOS (Expo Go & APK fisik).
+  - **Tersambung ke Toggle Pengaturan**: Opsi *"Bunyi Beep Scanner"* di Pengaturan secara langsung mengontrol audio feedback di layar kasir POS. Jika toggle dimatikan (OFF), pemindaian berlangsung senyap (silent mode).
 - **Fitur Toggle Scanner Barcode di Pengaturan & Integrasi Kasir POS (`SettingsScreen.js`, `PosScreen.js`)**:
   - **Toggle Pengaturan**: Menambahkan opsi Switch `"Fitur Scan Barcode"` pada bagian Preferensi Kasir (`SettingsScreen.js`) dengan penyimpanan persisten di storage lokal.
   - **Dinamis di POS (Landscape & Portrait)**: 
