@@ -74,17 +74,17 @@ export default function PaymentSuccessModal({
 
           {/* Action Buttons: Cetak Struk & Selesai */}
           <View style={styles.actionRow}>
-            {/* Cetak Struk: Outlined Button */}
+            {/* Cetak Struk: Dark Neutral Outlined Button */}
             <TouchableOpacity
               style={styles.printBtn}
               onPress={handlePrint}
               activeOpacity={0.7}
             >
-              <Printer size={16} color="#38bdf8" />
+              <Printer size={16} color="#e4e4e7" />
               <Text style={styles.printBtnText}>Cetak Struk</Text>
             </TouchableOpacity>
 
-            {/* Selesai: Solid Teal/Cyan Blue Button */}
+            {/* Selesai: Solid Emerald Green Button */}
             <TouchableOpacity
               style={styles.doneBtn}
               onPress={onClose}
@@ -203,16 +203,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    borderWidth: 1.5,
-    borderColor: '#0284c7',
-    backgroundColor: 'rgba(2, 132, 199, 0.08)',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    backgroundColor: '#27272a',
     borderRadius: 14,
     paddingVertical: 12,
   },
   printBtnText: {
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#38bdf8',
+    color: '#f4f4f5',
     whiteSpace: 'nowrap',
   },
   doneBtn: {
@@ -220,12 +220,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0284c7',
+    backgroundColor: '#16a34a',
     borderRadius: 14,
     paddingVertical: 12,
     ...Platform.select({
       ios: {
-        shadowColor: '#0284c7',
+        shadowColor: '#16a34a',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
         elevation: 3,
       },
       web: {
-        boxShadow: '0 2px 8px rgba(2, 132, 199, 0.35)',
+        boxShadow: '0 2px 8px rgba(22, 163, 74, 0.35)',
       },
     }),
   },
