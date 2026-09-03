@@ -20,6 +20,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Sinkronisasi Toggle Struk ke Backend Cloud (`SettingsScreen.js`, `StoreSetting.php`)**:
+  - Memperbaiki bug di mana toggle *"Tampilkan Logo Toko"* dan *"Nomor WhatsApp Toko"* mati sendiri saat aplikasi dimuat ulang.
+  - Saat switch digeser oleh pengguna, `persistSettings` kini langsung memperbarui database backend (`PUT /api/v1/settings/store`) dan local cache sekaligus, sehingga saat aplikasi dibuka kembali atau disinkronkan dari cloud, status toggle tetap **ON** dan tidak ter-reset ke `false`.
 - **Pembersihan Toggle Struk Duplikat di Layar Pengaturan (`StoreIdentityModal.js`, `SettingsScreen.js`)**:
   - Menghapus toggle switch *"Tampilkan Logo Toko di Struk"* dan *"Tampilkan No. WhatsApp di Struk"* dari dalam modal Identitas Toko (`StoreIdentityModal.js`).
   - Mempertahankan toggle switch tersebut secara eksklusif dan terpusat di seksi utama **`PREFERENSI STRUK & KASIR`** pada `SettingsScreen.js` agar tidak terjadi duplikasi kontrol UI dan lebih mudah diakses oleh pengguna.
