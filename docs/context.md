@@ -20,15 +20,22 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Tata Letak Grid 2 Kolom (2x2) & Tooltip Interaktif Edukatif 4 Kartu Dashboard (`DashboardScreen.js`, `App.js`)**:
-  - Mengubah teks navigasi bawah (bottom navigation) dan judul layar dari *"Laporan Toko"* menjadi **"Dashboard"**.
-  - Mengadopsi tata letak **Grid 2 Kolom** ($2 \times 2$) yang modern, ringkas, dan proporsional untuk 4 kartu metrik utama (`Omzet Penjualan`, `Laba Kotor`, `Laba Bersih`, `Valuasi Stok`).
-  - Menyematkan **Tooltip Interaktif Edukatif** di setiap kartu via ikon bantuan `?` (`HelpCircle`):
-    1. *Omzet Penjualan*: Menampilkan uang masuk bruto, total struk nota, kuantitas item terjual, rata-rata belanja, dan total diskon.
-    2. *Laba Kotor*: Menampilkan omzet dikurangi total HPP modal kulak barang dan persentase margin laba kotor.
-    3. *Laba Bersih*: Menampilkan laba kotor dikurangi beban biaya operasional toko (sewa, listrik, gaji, dll).
-    4. *Valuasi Stok*: Menampilkan total modal uang mengendap di etalase, varian produk aktif, dan status peringatan stok restock.
-  - Lolos uji linter/design detector (`detect.mjs` 0 error) dan lolos build bundle Expo Web (`npx expo export --platform web`).
+- **Refaktorisasi Modular, Offline-First, & Error Handling Layar Dashboard Mobile (`DashboardScreen.js`, `DashboardMetricsGrid.js`, `DashboardDetailModal.js`, `offlineStorage.js`, `format.js`)**:
+  - Mengubah `DashboardScreen.js` dari monolitik (670 baris) menjadi **arsitektur modular** (~230 baris), mengikuti pola arsitektur `PosScreen` dan `SettingsScreen`.
+  - Memisahkan komponen UI ke dalam folder baru `mobile/src/components/dashboard/`:
+    - `DashboardMetricsGrid.js`: Mengatur layout grid $2 \times 2$ kartu metrik dan trigger modal dengan kepatuhan *Defensive UI Craft*.
+    - `DashboardDetailModal.js`: Menggabungkan 4 modal tooltip yang sebelumnya duplikatif menjadi 1 komponen dinamis berbasis konfigurasi skema.
+  - **Strategi Offline-First Caching**:
+    - Menambahkan `cacheDashboardSummary()` dan `getCachedDashboardSummary()` di `offlineStorage.js`.
+    - Saat Dashboard dibuka, aplikasi membaca cache lokal secara instan, lalu menyinkronkan data terbaru dari server di latar belakang.
+    - Dilengkapi badge waktu sinkronisasi: *"Sinkron: 16:45"*.
+  - **Penanganan Error & Tombol Coba Lagi**:
+    - Jika koneksi terputus atau server offline, aplikasi menampilkan banner peringatan ramah pengguna dengan tombol *"Coba Lagi"*, tanpa silent-fail menjadi angka Rp0.
+  - **Pemisahan State Loading & Refreshing**:
+    - Tombol *"Perbarui Data"* kini memiliki spinner inline sendiri (`refreshing`). Layar tidak lagi berkedip/hilang saat menekan tombol refresh.
+  - **Utility Universal Format Rupiah (`mobile/src/utils/format.js`)**:
+    - Mengekstrak fungsi `formatRp` menjadi helper bersama terstandarisasi.
+  - Lolos uji linter desain (`detect.mjs` $\rightarrow$ 0 error) dan lolos build bundle Expo Web (`npx expo export --platform web`).
 - **Perbaikan Sinkronisasi Toggle Struk ke Backend Cloud (`SettingsScreen.js`, `StoreSetting.php`)**:
   - Memperbaiki bug di mana toggle *"Tampilkan Logo Toko"* dan *"Nomor WhatsApp Toko"* mati sendiri saat aplikasi dimuat ulang.
   - Saat switch digeser oleh pengguna, `persistSettings` kini langsung memperbarui database backend (`PUT /api/v1/settings/store`) dan local cache sekaligus, sehingga saat aplikasi dibuka kembali atau disinkronkan dari cloud, status toggle tetap **ON** dan tidak ter-reset ke `false`.
