@@ -78,8 +78,8 @@ function MainApp() {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
 
-  const [activeTab, setActiveTab] = useState('pos');
-  const [portraitTab, setPortraitTab] = useState('pos');
+  const [activeTab, setActiveTab] = useState(user?.role === 'owner' ? 'dashboard' : 'pos');
+  const [portraitTab, setPortraitTab] = useState(user?.role === 'owner' ? 'dashboard' : 'pos');
   const prevIsLandscapeRef = useRef(isLandscape);
   const [isCheckoutActive, setIsCheckoutActive] = useState(false);
   const insets = useSafeAreaInsets();
@@ -182,7 +182,10 @@ function MainApp() {
             onCheckoutStateChange={setIsCheckoutActive}
           />
         ) : activeTab === 'dashboard' && user?.role === 'owner' ? (
-          <DashboardScreen isLandscape={false} />
+          <DashboardScreen
+            isLandscape={false}
+            navigation={{ navigate: handleTabChange }}
+          />
         ) : activeTab === 'history' ? (
           <TransactionHistoryScreen isLandscape={false} />
         ) : activeTab === 'settings' ? (
@@ -199,24 +202,7 @@ function MainApp() {
       {/* Bottom Navigation Bar (Hidden in Landscape to give full height to Kasir Terminal) */}
       {!isLandscape && (
         <View style={[styles.bottomNavBar, { paddingBottom: Math.max(insets.bottom, 12) }]}>
-          {/* 1. Kasir POS */}
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.7}
-            onPress={() => handleTabChange('pos')}
-          >
-            <View style={[styles.navIconPill, activeTab === 'pos' && styles.navIconPillActive]}>
-              <ShoppingCart
-                size={20}
-                color={activeTab === 'pos' ? '#fb7185' : '#71717a'}
-              />
-            </View>
-            <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]} numberOfLines={1}>
-              Kasir POS
-            </Text>
-          </TouchableOpacity>
-
-          {/* 2. Laporan Toko (Owner Only) */}
+          {/* 1. Dashboard (Owner Only) */}
           {user?.role === 'owner' && (
             <TouchableOpacity
               style={styles.navItem}
@@ -234,6 +220,23 @@ function MainApp() {
               </Text>
             </TouchableOpacity>
           )}
+
+          {/* 2. Kasir POS */}
+          <TouchableOpacity
+            style={styles.navItem}
+            activeOpacity={0.7}
+            onPress={() => handleTabChange('pos')}
+          >
+            <View style={[styles.navIconPill, activeTab === 'pos' && styles.navIconPillActive]}>
+              <ShoppingCart
+                size={20}
+                color={activeTab === 'pos' ? '#fb7185' : '#71717a'}
+              />
+            </View>
+            <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]} numberOfLines={1}>
+              Kasir POS
+            </Text>
+          </TouchableOpacity>
 
           {/* 3. Riwayat Transaksi */}
           <TouchableOpacity
