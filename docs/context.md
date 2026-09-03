@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penataan Urutan Navigasi Tab Bottom Bar (`App.js`)**:
+  - Mengubah urutan navigasi tab bawah mobile menjadi:
+    1. **Dashboard** (tab pertama aktif saat login sebagai owner)
+    2. **Kasir POS**
+    3. **Riwayat**
+    4. **Pengaturan**
+  - Layar orkestrator terhubung mulus dengan helper navigasi internal, memastikan tombol pintas (seperti tombol *"Riwayat"* di seksi transaksi dashboard) berpindah tab secara tepat.
 - **Penambahan 10 Transaksi Penjualan Terakhir & Reposisi Tombol Perbarui Data (`RecentTransactionsSection.js`, `DashboardScreen.js`, `offlineStorage.js`)**:
   - Mereposisi tombol *"Perbarui Data"* tepat di bawah grid $2 \times 2$ kartu metrik dan **sebelum** grafik tren omzet agar aksi sinkronisasi metrik utama lebih ergonomis dan langsung terjangkau.
   - Menambahkan komponen baru `mobile/src/components/dashboard/RecentTransactionsSection.js`:
