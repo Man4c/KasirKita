@@ -26,6 +26,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - **Judul**: *"Pembayaran Berhasil!"* teks tebal kontras tinggi.
     - **Nominal Transaksi**: Angka nominal total tagihan (misal: `Rp 72.150`) berwarna hijau cerah emerald dengan tipografi menonjol.
     - **No. Nota**: Menampilkan nomor nota pembayaran (contoh: `INV-210826-002`) dalam warna abu-abu bersih `#a1a1aa`.
+    - **Ukuran Kompak & Adaptif Layar HP**:
+      - Memperkecil dimensi kartu (`maxWidth: 310px`, padding ringkas) dan lingkaran ikon agar tidak memakan seluruh layar HP (termasuk saat orientasi landscape maupun layar tinggi terbatas).
+    - **Animasi Ikon Centang (Spring Pop & Bounce)**:
+      - Kartu modal muncul dengan transisi halus fade & scale.
+      - Lingkaran centang hijau meletup (*pop*) dinamis dengan fisika pegas (*spring physics*), diikuti pantulan halus centang putih yang memuaskan dan memberikan kepastian sukses transaksi (*delightful feedback*).
     - **Dua Tombol Aksi Ergonomis (Harmoni Emerald Green)**:
       - **[Cetak Struk]**: Tombol gelap netral (`#27272a` dengan border `#3f3f46` dan ikon printer putih `#e4e4e7`) yang tidak mencolok agar fokus utama tetap pada penyelesaian transaksi.
       - **[Selesai]**: Tombol hijau emerald solid (`#16a34a`) yang harmonis dengan ikon centang sukses dan nominal tagihan di atasnya.
