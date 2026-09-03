@@ -20,6 +20,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perencanaan Plan #24: Cloud Sync Preferensi Toko & Cadangkan/Pulihkan Data Lokal (`plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md`)**:
+  - Menyusun arsitektur dan tahapan rencana kanban untuk 2 solusi multi-device tanpa hosting berbayar:
+    1. *Solusi 1 (Cloud Free-Tier)*: Penyimpanan kolom JSONB preferensi di server backend & database gratis (Supabase/Neon + Render/Railway) agar toggle di HP 1 otomatis menyinkronkan HP 2.
+    2. *Solusi 3 (Berkas Cadangan JSON)*: Jaring pengaman darurat offline untuk mengekspor dan memulihkan seluruh katalog, transaksi, dan setting via file sharing (WhatsApp/Google Drive).
 - **Fitur Bunyi Beep Scanner Barcode & Integrasi Pengaturan Kasir (`soundService.js`, `PosBarcodeScannerView.js`, `PosScreen.js`)**:
   - **Audio Synthesizer & Player Multiplatform (`mobile/src/services/soundService.js`)**:
     - **Nada Sukses (High-Pitch)**: Frekuensi ~2000Hz selama 100ms dengan envelope fade-out halus layaknya scanner barcode kasir Honeywell/Datalogic.
