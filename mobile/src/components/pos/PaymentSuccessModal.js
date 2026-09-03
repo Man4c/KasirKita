@@ -26,8 +26,9 @@ export default function PaymentSuccessModal({
   const { height } = useWindowDimensions();
   const isShortScreen = height < 500 || (isLandscape && height < 440);
 
-  // Animation values: halo pop, card scale, and stroke drawing (0 to 1)
+  // Animation values: halo pop, card scale, stroke drawing (0 to 1), and halo breathing pulse
   const haloScaleAnim = useRef(new Animated.Value(0.3)).current;
+  const haloPulseAnim = useRef(new Animated.Value(1)).current;
   const drawAnim = useRef(new Animated.Value(0)).current;
   const cardScaleAnim = useRef(new Animated.Value(0.94)).current;
   const cardOpacityAnim = useRef(new Animated.Value(0)).current;
@@ -40,40 +41,64 @@ export default function PaymentSuccessModal({
   });
 
   useEffect(() => {
+    let pulseLoop = null;
+
     if (visible) {
       haloScaleAnim.setValue(0.3);
+      haloPulseAnim.setValue(1);
       drawAnim.setValue(0);
       cardScaleAnim.setValue(0.94);
       cardOpacityAnim.setValue(0);
 
-      // 1. Card entry & circle halo pop (snappy spring)
+      // 1. Card entry & circle halo initial pop (smooth spring)
       Animated.parallel([
         Animated.timing(cardOpacityAnim, {
           toValue: 1,
-          duration: 120,
+          duration: 150,
           useNativeDriver: true,
         }),
         Animated.spring(cardScaleAnim, {
           toValue: 1,
-          tension: 100,
+          tension: 80,
           friction: 8,
           useNativeDriver: true,
         }),
         Animated.spring(haloScaleAnim, {
           toValue: 1,
-          tension: 100,
-          friction: 7,
+          tension: 70,
+          friction: 6,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]).start(() => {
+        // Continuous gentle breathing pulse for halo layer so it feels alive
+        pulseLoop = Animated.loop(
+          Animated.sequence([
+            Animated.timing(haloPulseAnim, {
+              toValue: 1.08,
+              duration: 1400,
+              useNativeDriver: true,
+            }),
+            Animated.timing(haloPulseAnim, {
+              toValue: 0.98,
+              duration: 1400,
+              useNativeDriver: true,
+            }),
+          ])
+        );
+        pulseLoop.start();
+      });
 
-      // 2. Stroke drawing animation from left to right (smooth line draw)
+      // 2. Stroke drawing animation from left to right (smooth, unhurried 650ms draw)
       Animated.timing(drawAnim, {
         toValue: 1,
-        duration: 350,
+        duration: 650,
         useNativeDriver: false,
       }).start();
     }
+
+    return () => {
+      if (pulseLoop) pulseLoop.stop();
+    };
   }, [visible]);
 
   if (!completedTx) return null;
@@ -122,17 +147,31 @@ export default function PaymentSuccessModal({
             },
           ]}
         >
-          {/* Green Circle with Animated Pop & Stroke Draw Checkmark */}
-          <Animated.View
-            style={[
-              styles.iconHalo,
-              isShortScreen && styles.iconHaloCompact,
-              {
-                transform: [{ scale: haloScaleAnim }],
-              },
-            ]}
-          >
-            <View style={[styles.iconCircle, isShortScreen && styles.iconCircleCompact]}>
+          {/* Green Circle with Breathing Halo & Stroke Draw Checkmark */}
+          <View style={styles.iconContainer}>
+            {/* Pulsing Living Green Halo */}
+            <Animated.View
+              style={[
+                styles.iconHalo,
+                isShortScreen && styles.iconHaloCompact,
+                {
+                  transform: [
+                    { scale: Animated.multiply(haloScaleAnim, haloPulseAnim) },
+                  ],
+                },
+              ]}
+            />
+
+            {/* Solid Emerald Circle */}
+            <Animated.View
+              style={[
+                styles.iconCircle,
+                isShortScreen && styles.iconCircleCompact,
+                {
+                  transform: [{ scale: haloScaleAnim }],
+                },
+              ]}
+            >
               <Svg
                 width={svgSize}
                 height={svgSize}
@@ -149,8 +188,8 @@ export default function PaymentSuccessModal({
                   strokeDashoffset={strokeDashoffset}
                 />
               </Svg>
-            </View>
-          </Animated.View>
+            </Animated.View>
+          </View>
 
           {/* Title */}
           <Text style={[styles.title, isShortScreen && styles.titleCompact]}>
@@ -245,20 +284,24 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingHorizontal: 16,
   },
-  iconHalo: {
-    width: 86,
-    height: 86,
-    borderRadius: 43,
-    backgroundColor: 'rgba(34, 197, 94, 0.18)',
+  iconContainer: {
+    width: 96,
+    height: 96,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
   },
+  iconHalo: {
+    position: 'absolute',
+    width: 92,
+    height: 92,
+    borderRadius: 46,
+    backgroundColor: 'rgba(34, 197, 94, 0.2)',
+  },
   iconHaloCompact: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    marginBottom: 8,
+    width: 76,
+    height: 76,
+    borderRadius: 38,
   },
   iconCircle: {
     width: 52,
