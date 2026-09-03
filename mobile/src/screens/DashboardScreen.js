@@ -6,6 +6,7 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {
   CircleDollarSign,
