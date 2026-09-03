@@ -20,6 +20,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Standardisasi Modal Struk Transaksi Riwayat & Dashboard (`PosReceiptModal.js`, `TransactionHistoryScreen.js`)**:
+  - Menyeragamkan modal tampilan struk transaksi antara layar **Dashboard** dan layar **Riwayat Transaksi** menggunakan komponen modular `PosReceiptModal`.
+  - Mengganti teks tombol *"Transaksi Baru"* menjadi **"Tutup"** (default prop `closeBtnText="Tutup"`), sehingga kontekstual dan tepat saat digunakan untuk meninjau riwayat transaksi lama.
+  - Membawa tombol **`[Cetak Struk]`** (dengan integrasi penuh ke printer thermal Bluetooth ESC/POS dan browser web print) ke layar Riwayat, memungkinkan kasir mencetak ulang struk lama kapan saja secara instan.
+  - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Layar Modal "Pembayaran Berhasil!" Pasca-Checkout Kasir POS (`PaymentSuccessModal.js`, `PosScreen.js`)**:
   - Menggantikan tampilan struk kertas penuh yang sebelumnya langsung muncul otomatis setelah konfirmasi pembayaran dengan modal dialog ringkas dan elegan sesuai referensi pengguna:
     - **Ikon Status**: Centang putih tebal di dalam lingkaran hijau bernuansa sukses (`#22c55e`) dengan efek glowing halo.
