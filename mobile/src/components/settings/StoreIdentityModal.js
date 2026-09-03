@@ -151,7 +151,7 @@ export default function StoreIdentityModal({
           <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
             {/* Form Input: Logo Toko */}
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Logo Toko untuk Struk</Text>
+              <Text style={styles.formLabel}>Logo Usaha / Toko (Struk & Dashboard)</Text>
               <View style={styles.logoPickerContainer}>
                 {tempStoreLogo ? (
                   <View style={styles.logoPreviewWrapper}>
@@ -179,12 +179,12 @@ export default function StoreIdentityModal({
                   >
                     <Upload size={14} color="#ffffff" style={{ marginRight: 6 }} />
                     <Text style={styles.uploadLogoBtnText}>
-                      {tempStoreLogo ? 'Ganti Logo dari Galeri' : 'Pilih Logo dari Galeri'}
+                      {tempStoreLogo ? 'Ganti Logo Toko' : 'Pilih Logo Toko'}
                     </Text>
                   </TouchableOpacity>
 
                   <Text style={styles.logoHelpText}>
-                    Format persegi 1:1 (PNG/JPG transparan)
+                    Format persegi 1:1 (PNG/JPG transparan) untuk logo nota dan dashboard
                   </Text>
                 </View>
               </View>

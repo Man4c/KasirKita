@@ -99,9 +99,13 @@ export default function AppLayout() {
       >
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-6 h-16 border-b border-zinc-800/80">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700/80 overflow-hidden shrink-0">
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-zinc-800/80 border border-zinc-700/80 overflow-hidden shrink-0 shadow-inner">
             {storeInfo?.logo ? (
-              <img src={storeInfo.logo} alt={storeInfo.name} className="w-full h-full object-contain p-1" />
+              <img 
+                src={storeInfo.logo} 
+                alt={storeInfo.name} 
+                className="w-full h-full object-cover object-center" 
+              />
             ) : (
               <Store className="w-5 h-5 text-rose-500" />
             )}
