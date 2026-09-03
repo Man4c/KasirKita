@@ -24,46 +24,41 @@ export default function PaymentSuccessModal({
   const isShortScreen = height < 500 || (isLandscape && height < 440);
 
   // Animation values for checkmark pop & bounce
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const checkAnim = useRef(new Animated.Value(0)).current;
-  const cardScaleAnim = useRef(new Animated.Value(0.92)).current;
+  const scaleAnim = useRef(new Animated.Value(0.2)).current;
+  const checkAnim = useRef(new Animated.Value(0.3)).current;
+  const cardScaleAnim = useRef(new Animated.Value(0.94)).current;
   const cardOpacityAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (visible) {
-      scaleAnim.setValue(0);
-      checkAnim.setValue(0);
-      cardScaleAnim.setValue(0.92);
+      scaleAnim.setValue(0.2);
+      checkAnim.setValue(0.3);
+      cardScaleAnim.setValue(0.94);
       cardOpacityAnim.setValue(0);
 
-      // 1. Card entry animation (smooth fade & slight scale)
+      // Card entry & icon animations trigger immediately without delay
       Animated.parallel([
         Animated.timing(cardOpacityAnim, {
           toValue: 1,
-          duration: 180,
+          duration: 120,
           useNativeDriver: true,
         }),
         Animated.spring(cardScaleAnim, {
           toValue: 1,
-          tension: 80,
+          tension: 100,
           friction: 8,
           useNativeDriver: true,
         }),
-      ]).start();
-
-      // 2. Icon pop with spring physics
-      Animated.sequence([
-        Animated.delay(60),
         Animated.spring(scaleAnim, {
           toValue: 1,
-          friction: 4,
-          tension: 70,
+          tension: 90,
+          friction: 6,
           useNativeDriver: true,
         }),
         Animated.spring(checkAnim, {
           toValue: 1,
-          friction: 5,
-          tension: 80,
+          tension: 110,
+          friction: 6,
           useNativeDriver: true,
         }),
       ]).start();
@@ -233,18 +228,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   iconHalo: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: 'rgba(34, 197, 94, 0.15)',
+    width: 86,
+    height: 86,
+    borderRadius: 43,
+    backgroundColor: 'rgba(34, 197, 94, 0.18)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
   },
   iconHaloCompact: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
     marginBottom: 8,
   },
   iconCircle: {
