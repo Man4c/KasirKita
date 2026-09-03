@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     color: '#a1a1aa',
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
   totalValue: {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   },
   inspectorCount: {
     color: '#a1a1aa',
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
   inspectorAmount: {
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emptyText: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
@@ -316,9 +316,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(244, 63, 94, 0.15)',
   },
   dateLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   dateLabelActive: {
     color: '#fb7185',

@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emptyText: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   badgeLabel: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
   txSubRow: {
@@ -252,16 +252,16 @@ const styles = StyleSheet.create({
   },
   customerText: {
     color: '#a1a1aa',
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
   timeDot: {
-    color: '#52525b',
-    fontSize: 10,
+    color: '#71717a',
+    fontSize: 12,
   },
   timeText: {
-    color: '#71717a',
-    fontSize: 11,
+    color: '#a1a1aa',
+    fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     flexShrink: 0,
   },
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   },
   txStatusSuccess: {
     color: '#34d399',
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: 'Poppins_500Medium',
   },
 });
