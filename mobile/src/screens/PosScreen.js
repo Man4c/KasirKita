@@ -69,6 +69,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
   const [showVoucherFeature, setShowVoucherFeature] = useState(true);
   const [showTaxFeature, setShowTaxFeature] = useState(true);
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(true);
+  const [soundBeep, setSoundBeep] = useState(true);
 
   // Barcode Scanner Mode State
   const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
@@ -126,6 +127,9 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
         }
         if (typeof saved.showBarcodeScanner === 'boolean') {
           setShowBarcodeScanner(saved.showBarcodeScanner);
+        }
+        if (typeof saved.soundBeep === 'boolean') {
+          setSoundBeep(saved.soundBeep);
         }
       }
     });
@@ -569,6 +573,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               isLandscape={isLandscape}
               compact={compact}
               products={products}
+              soundBeep={soundBeep}
               onScanProduct={addToCart}
               onClose={() => setIsBarcodeScannerOpen(false)}
             />
@@ -791,6 +796,7 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               isLandscape={false}
               compact={compact}
               products={products}
+              soundBeep={soundBeep}
               onScanProduct={addToCart}
               onClose={() => setIsBarcodeScannerOpen(false)}
             />

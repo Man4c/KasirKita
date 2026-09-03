@@ -8,6 +8,7 @@
     "axios": "^1.20.0",
     "barcode-detector": "^3.2.2",
     "expo": "~57.0.19",
+    "expo-audio": "~57.0.4",
     "expo-camera": "~57.0.4",
     "expo-dev-client": "~57.0.18",
     "expo-font": "^57.0.2",

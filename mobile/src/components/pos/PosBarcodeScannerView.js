@@ -18,6 +18,7 @@ import {
   Barcode,
   AlertCircle,
 } from 'lucide-react-native';
+import { soundService } from '../../services/soundService';
 
 export default function PosBarcodeScannerView({
   isLandscape = false,
@@ -25,6 +26,7 @@ export default function PosBarcodeScannerView({
   onScanProduct,
   onClose,
   products = [],
+  soundBeep = true,
 }) {
   const [permission, requestPermission] = useCameraPermissions();
   const [torch, setTorch] = useState(false);
@@ -121,6 +123,7 @@ export default function PosBarcodeScannerView({
     if (found) {
       const stockNum = parseFloat(found.stock) || 0;
       if (stockNum <= 0) {
+        soundService.playScanError(soundBeep);
         setScannedFeedback({
           success: false,
           code,
@@ -128,6 +131,7 @@ export default function PosBarcodeScannerView({
           message: `Stok produk "${found.name}" habis!`,
         });
       } else {
+        soundService.playScanSuccess(soundBeep);
         onScanProduct(found);
         setScannedFeedback({
           success: true,
@@ -138,6 +142,7 @@ export default function PosBarcodeScannerView({
         });
       }
     } else {
+      soundService.playScanError(soundBeep);
       setScannedFeedback({
         success: false,
         code,
