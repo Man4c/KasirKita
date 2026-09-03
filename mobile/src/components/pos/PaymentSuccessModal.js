@@ -40,6 +40,10 @@ export default function PaymentSuccessModal({
     outputRange: [CHECK_PATH_LENGTH, 0],
   });
 
+  // React Native Web doesn't support native animated driver (RCTAnimation).
+  // Only enable on Android & iOS to prevent console warnings on Web.
+  const hasNativeDriver = Platform.OS !== 'web';
+
   useEffect(() => {
     let pulseLoop = null;
 
@@ -55,19 +59,19 @@ export default function PaymentSuccessModal({
         Animated.timing(cardOpacityAnim, {
           toValue: 1,
           duration: 150,
-          useNativeDriver: true,
+          useNativeDriver: hasNativeDriver,
         }),
         Animated.spring(cardScaleAnim, {
           toValue: 1,
           tension: 80,
           friction: 8,
-          useNativeDriver: true,
+          useNativeDriver: hasNativeDriver,
         }),
         Animated.spring(haloScaleAnim, {
           toValue: 1,
           tension: 70,
           friction: 6,
-          useNativeDriver: true,
+          useNativeDriver: hasNativeDriver,
         }),
       ]).start(() => {
         // Continuous gentle breathing pulse for halo layer so it feels alive
@@ -76,12 +80,12 @@ export default function PaymentSuccessModal({
             Animated.timing(haloPulseAnim, {
               toValue: 1.08,
               duration: 1400,
-              useNativeDriver: true,
+              useNativeDriver: hasNativeDriver,
             }),
             Animated.timing(haloPulseAnim, {
               toValue: 0.98,
               duration: 1400,
-              useNativeDriver: true,
+              useNativeDriver: hasNativeDriver,
             }),
           ])
         );
