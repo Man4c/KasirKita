@@ -28,13 +28,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - **No. Nota**: Menampilkan nomor nota pembayaran (contoh: `INV-210826-002`) dalam warna abu-abu bersih `#a1a1aa`.
     - **Ukuran Kompak & Adaptif Layar HP**:
       - Memperkecil dimensi kartu (`maxWidth: 310px`, padding ringkas) dan lingkaran ikon agar tidak memakan seluruh layar HP (termasuk saat orientasi landscape maupun layar tinggi terbatas).
-    - **Animasi Centang Garis Menggambar Progresif (*Progressive Stroke Drawing*)**:
-      - Menggunakan vektor SVG presisi tinggi dengan interpolasi `strokeDashoffset` (panjang path 36 unit).
-      - Garis centang putih tidak lagi meletup utuh sekaligus, melainkan digambar secara mengalir dari cabang kiri pendek ke bawah, lalu melesat naik ke kanan atas layaknya goresan pena (*hand-drawn checkmark*).
+    - **Animasi Centang Garis Mengalir Santai (*Smooth Progressive Stroke Drawing*)**:
+      - Menggunakan vektor SVG presisi tinggi dengan interpolasi `strokeDashoffset` (panjang path 36 unit) dan durasi diperhalus menjadi 650ms.
+      - Garis centang putih digambar secara mengalir dari kiri ke kanan dengan kecepatan yang pas, tidak terburu-buru, dan terlihat sangat sinematik.
+    - **Layer Hijau Pendar Bernyawa (*Living Breathing Halo Pulse*)**:
+      - Lingkaran pendar hijau transparan luar diperbesar hingga 92px (`rgba(34, 197, 94, 0.2)`).
+      - Dilengkapi animasi denyut napas halus berulang (*gentle breathing pulse loop*: scale 0.98 $\leftrightarrow$ 1.08) yang membuat layer hijau di belakangnya terasa hidup, dinamis, dan memancarkan kepastian transaksi sukses secara organik.
     - **Posisi Centang Presisi Tengah (*Perfect Center Alignment*)**:
       - Vektor SVG dikalibrasikan tepat di koordinat pusat lingkaran `viewBox="0 0 24 24"` dengan titik temu siku di (9.5, 17.5), menjamin posisi centang seimbang dan presisi di tengah bulatan hijau.
-    - **Layer Hijau Samar Diperbesar (*Enlarged Glowing Halo*)**:
-      - Memperbesar diameter lapisan lingkaran hijau transparan luar (`iconHalo` dari 72px $\rightarrow$ 86px) dengan opacity yang lebih hidup (`0.18`) sehingga efek pendar hijau di belakang centang terlihat lebih anggun dan proporsional.
     - **Dua Tombol Aksi Ergonomis (Harmoni Emerald Green)**:
       - **[Cetak Struk]**: Tombol gelap netral (`#27272a` dengan border `#3f3f46` dan ikon printer putih `#e4e4e7`) yang tidak mencolok agar fokus utama tetap pada penyelesaian transaksi.
       - **[Selesai]**: Tombol hijau emerald solid (`#16a34a`) yang harmonis dengan ikon centang sukses dan nominal tagihan di atasnya.
