@@ -9,9 +9,12 @@ import {
   Animated,
   useWindowDimensions,
 } from 'react-native';
-import { Check, Printer } from 'lucide-react-native';
+import Svg, { Path } from 'react-native-svg';
+import { Printer } from 'lucide-react-native';
 import { printerService } from '../../services/printerService';
 import { showAlert } from '../../utils/alert';
+
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 export default function PaymentSuccessModal({
   visible,
@@ -23,20 +26,27 @@ export default function PaymentSuccessModal({
   const { height } = useWindowDimensions();
   const isShortScreen = height < 500 || (isLandscape && height < 440);
 
-  // Animation values for checkmark pop & bounce
-  const scaleAnim = useRef(new Animated.Value(0.2)).current;
-  const checkAnim = useRef(new Animated.Value(0.3)).current;
+  // Animation values: halo pop, card scale, and stroke drawing (0 to 1)
+  const haloScaleAnim = useRef(new Animated.Value(0.3)).current;
+  const drawAnim = useRef(new Animated.Value(0)).current;
   const cardScaleAnim = useRef(new Animated.Value(0.94)).current;
   const cardOpacityAnim = useRef(new Animated.Value(0)).current;
 
+  // Checkmark path length is ~36 units
+  const CHECK_PATH_LENGTH = 36;
+  const strokeDashoffset = drawAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [CHECK_PATH_LENGTH, 0],
+  });
+
   useEffect(() => {
     if (visible) {
-      scaleAnim.setValue(0.2);
-      checkAnim.setValue(0.3);
+      haloScaleAnim.setValue(0.3);
+      drawAnim.setValue(0);
       cardScaleAnim.setValue(0.94);
       cardOpacityAnim.setValue(0);
 
-      // Card entry & icon animations trigger immediately without delay
+      // 1. Card entry & circle halo pop (snappy spring)
       Animated.parallel([
         Animated.timing(cardOpacityAnim, {
           toValue: 1,
@@ -49,19 +59,20 @@ export default function PaymentSuccessModal({
           friction: 8,
           useNativeDriver: true,
         }),
-        Animated.spring(scaleAnim, {
+        Animated.spring(haloScaleAnim, {
           toValue: 1,
-          tension: 90,
-          friction: 6,
-          useNativeDriver: true,
-        }),
-        Animated.spring(checkAnim, {
-          toValue: 1,
-          tension: 110,
-          friction: 6,
+          tension: 100,
+          friction: 7,
           useNativeDriver: true,
         }),
       ]).start();
+
+      // 2. Stroke drawing animation from left to right (smooth line draw)
+      Animated.timing(drawAnim, {
+        toValue: 1,
+        duration: 350,
+        useNativeDriver: false,
+      }).start();
     }
   }, [visible]);
 
@@ -90,6 +101,8 @@ export default function PaymentSuccessModal({
     }
   };
 
+  const svgSize = isShortScreen ? 26 : 32;
+
   return (
     <Modal
       visible={visible}
@@ -109,28 +122,33 @@ export default function PaymentSuccessModal({
             },
           ]}
         >
-          {/* Green Circle with Animated Pop & Checkmark */}
+          {/* Green Circle with Animated Pop & Stroke Draw Checkmark */}
           <Animated.View
             style={[
               styles.iconHalo,
               isShortScreen && styles.iconHaloCompact,
               {
-                transform: [{ scale: scaleAnim }],
+                transform: [{ scale: haloScaleAnim }],
               },
             ]}
           >
             <View style={[styles.iconCircle, isShortScreen && styles.iconCircleCompact]}>
-              <Animated.View
-                style={{
-                  transform: [{ scale: checkAnim }],
-                }}
+              <Svg
+                width={svgSize}
+                height={svgSize}
+                viewBox="0 0 24 24"
+                fill="none"
               >
-                <Check
-                  size={isShortScreen ? 24 : 30}
-                  color="#ffffff"
-                  strokeWidth={3.5}
+                <AnimatedPath
+                  d="M4.5 12.5L9.5 17.5L19.5 6.5"
+                  stroke="#ffffff"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray={CHECK_PATH_LENGTH}
+                  strokeDashoffset={strokeDashoffset}
                 />
-              </Animated.View>
+              </Svg>
             </View>
           </Animated.View>
 
