@@ -14,8 +14,6 @@ import { Printer } from 'lucide-react-native';
 import { printerService } from '../../services/printerService';
 import { showAlert } from '../../utils/alert';
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
-
 export default function PaymentSuccessModal({
   visible,
   isLandscape = false,
@@ -35,10 +33,7 @@ export default function PaymentSuccessModal({
 
   // Checkmark path length is ~36 units
   const CHECK_PATH_LENGTH = 36;
-  const strokeDashoffset = drawAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [CHECK_PATH_LENGTH, 0],
-  });
+  const [currentOffset, setCurrentOffset] = React.useState(CHECK_PATH_LENGTH);
 
   // React Native Web doesn't support native animated driver (RCTAnimation).
   // Only enable on Android & iOS to prevent console warnings on Web.
@@ -51,8 +46,14 @@ export default function PaymentSuccessModal({
       haloScaleAnim.setValue(0.3);
       haloPulseAnim.setValue(1);
       drawAnim.setValue(0);
+      setCurrentOffset(CHECK_PATH_LENGTH);
       cardScaleAnim.setValue(0.94);
       cardOpacityAnim.setValue(0);
+
+      // Listen to draw animation progress and update strokeDashoffset smoothly
+      const listenerId = drawAnim.addListener(({ value }) => {
+        setCurrentOffset(CHECK_PATH_LENGTH * (1 - value));
+      });
 
       // 1. Card entry & circle halo initial pop (smooth spring)
       Animated.parallel([
@@ -98,11 +99,12 @@ export default function PaymentSuccessModal({
         duration: 650,
         useNativeDriver: false,
       }).start();
-    }
 
-    return () => {
-      if (pulseLoop) pulseLoop.stop();
-    };
+      return () => {
+        drawAnim.removeListener(listenerId);
+        if (pulseLoop) pulseLoop.stop();
+      };
+    }
   }, [visible]);
 
   if (!completedTx) return null;
@@ -182,14 +184,14 @@ export default function PaymentSuccessModal({
                 viewBox="0 0 24 24"
                 fill="none"
               >
-                <AnimatedPath
+                <Path
                   d="M4.5 12.5L9.5 17.5L19.5 6.5"
                   stroke="#ffffff"
                   strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeDasharray={CHECK_PATH_LENGTH}
-                  strokeDashoffset={strokeDashoffset}
+                  strokeDashoffset={currentOffset}
                 />
               </Svg>
             </Animated.View>
