@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penambahan 10 Transaksi Penjualan Terakhir & Reposisi Tombol Perbarui Data (`RecentTransactionsSection.js`, `DashboardScreen.js`, `offlineStorage.js`)**:
+  - Mereposisi tombol *"Perbarui Data"* tepat di bawah grid $2 \times 2$ kartu metrik dan **sebelum** grafik tren omzet agar aksi sinkronisasi metrik utama lebih ergonomis dan langsung terjangkau.
+  - Menambahkan komponen baru `mobile/src/components/dashboard/RecentTransactionsSection.js`:
+    - Menampilkan daftar 10 transaksi kasir terakhir lengkap dengan nomor invoice, badge metode bayar (Tunai/QRIS/Transfer), nama pelanggan, jam transaksi, dan status sukses.
+    - Setiap item transaksi interaktif: saat disentuh, membuka modal struk detail pembayaran (`PosReceiptModal.js` + `ReceiptView.js`) dengan opsi cetak printer thermal / Bluetooth.
+    - Tombol pintas header *"Riwayat"* untuk melompat langsung ke layar Riwayat Transaksi lengkap.
+  - **Dukungan Offline-First Caching**:
+    - Riwayat transaksi terbaru dicache via `cacheDashboardRecentTx()` di `offlineStorage.js` sehingga daftar transaksi tetap tampil instan saat offline.
+  - Lolos uji linter desain (`detect.mjs` $\rightarrow$ 0 error) dan lolos verifikasi build bundle Expo Web (`npx expo export --platform web`).
 - **Visualisasi Grafik Tren Omzet 7 Hari Interaktif di Dashboard Mobile (`SalesTrendChart.js`, `DashboardScreen.js`, `offlineStorage.js`)**:
   - Menambahkan komponen baru `mobile/src/components/dashboard/SalesTrendChart.js` yang menampilkan grafik batang vertikal harian 7 hari terakhir.
   - **Fitur Grafik**:
