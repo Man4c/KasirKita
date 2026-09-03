@@ -20,6 +20,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pembersihan Toggle Struk Duplikat di Layar Pengaturan (`StoreIdentityModal.js`, `SettingsScreen.js`)**:
+  - Menghapus toggle switch *"Tampilkan Logo Toko di Struk"* dan *"Tampilkan No. WhatsApp di Struk"* dari dalam modal Identitas Toko (`StoreIdentityModal.js`).
+  - Mempertahankan toggle switch tersebut secara eksklusif dan terpusat di seksi utama **`PREFERENSI STRUK & KASIR`** pada `SettingsScreen.js` agar tidak terjadi duplikasi kontrol UI dan lebih mudah diakses oleh pengguna.
 - **Perencanaan Plan #24: Cloud Sync Preferensi Toko & Cadangkan/Pulihkan Data Lokal (`plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md`)**:
   - Menyusun arsitektur dan tahapan rencana kanban untuk 2 solusi multi-device tanpa hosting berbayar:
     1. *Solusi 1 (Cloud Free-Tier)*: Penyimpanan kolom JSONB preferensi di server backend & database gratis (Supabase/Neon + Render/Railway) agar toggle di HP 1 otomatis menyinkronkan HP 2.
