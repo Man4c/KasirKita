@@ -207,6 +207,21 @@ export default function SettingsScreen({ isLandscape = false }) {
         ...overrides,
       };
       await storage.setSettings(current);
+
+      // If receipt display toggle is changed and user is owner, sync to backend cloud
+      if (user?.role === 'owner' && (overrides.showLogoOnReceipt !== undefined || overrides.showPhoneOnReceipt !== undefined)) {
+        api.put('/settings/store', {
+          name: current.storeName,
+          address: current.storeAddress,
+          phone: current.storePhone,
+          logo: current.storeLogo,
+          receipt_footer: current.receiptFooter,
+          show_logo_on_receipt: current.showLogoOnReceipt,
+          show_phone_on_receipt: current.showPhoneOnReceipt,
+        }).catch((err) => {
+          console.log('[SettingsScreen] Note: Cloud sync for receipt toggle skipped:', err.message);
+        });
+      }
     } catch (err) {
       console.log('Error saving settings:', err.message);
     }
