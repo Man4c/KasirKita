@@ -220,26 +220,24 @@ export default function PosBarcodeScannerView({
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={StyleSheet.absoluteFill}>
-            <CameraView
-              style={StyleSheet.absoluteFill}
-              facing="back"
-              enableTorch={torch}
-              barcodeScannerSettings={{
-                barcodeTypes: [
-                  'ean13',
-                  'ean8',
-                  'upc_a',
-                  'upc_e',
-                  'code128',
-                  'qr',
-                ],
-              }}
-              onBarcodeScanned={isScanningActive ? handleBarcodeScanned : undefined}
-            />
-
-            {/* Viewfinder Target Overlay */}
-            <View style={styles.overlayMask}>
+          <CameraView
+            style={StyleSheet.absoluteFill}
+            facing="back"
+            enableTorch={torch}
+            barcodeScannerSettings={{
+              barcodeTypes: [
+                'ean13',
+                'ean8',
+                'upc_a',
+                'upc_e',
+                'code128',
+                'qr',
+              ],
+            }}
+            onBarcodeScanned={isScanningActive ? handleBarcodeScanned : undefined}
+          >
+            {/* Viewfinder Target Overlay Mask (Fully covers the camera surface) */}
+            <View style={[StyleSheet.absoluteFill, styles.overlayMask]}>
               <View style={styles.targetFrame}>
                 {/* 4 Corner Accents */}
                 <View style={[styles.corner, styles.cornerTL]} />
@@ -252,7 +250,7 @@ export default function PosBarcodeScannerView({
               </View>
               <Text style={styles.targetInstruction}>Arahkan barcode produk ke kotak tengah</Text>
             </View>
-          </View>
+          </CameraView>
         )}
 
         {/* Realtime Scan Result Toast / Feedback */}
@@ -503,6 +501,8 @@ const styles = StyleSheet.create({
   },
   overlayMask: {
     ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.45)',
