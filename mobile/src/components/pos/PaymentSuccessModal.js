@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Printer } from 'lucide-react-native';
+import ReceiptView from '../ReceiptView';
 import { printerService } from '../../services/printerService';
 import { showAlert } from '../../utils/alert';
 
@@ -241,6 +242,13 @@ export default function PaymentSuccessModal({
             </TouchableOpacity>
           </View>
         </Animated.View>
+
+        {/* Dedicated Receipt Container for Web Print (Only rendered for clean printout) */}
+        {Platform.OS === 'web' && (
+          <View style={styles.webPrintReceiptContainer}>
+            <ReceiptView transaction={completedTx} formatRp={formatRp} />
+          </View>
+        )}
       </View>
     </Modal>
   );
@@ -430,5 +438,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
     whiteSpace: 'nowrap',
+  },
+  webPrintReceiptContainer: {
+    position: 'absolute',
+    left: -9999,
+    top: -9999,
+    width: 380,
+    opacity: 0,
   },
 });

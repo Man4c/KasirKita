@@ -95,7 +95,7 @@ export default function ReceiptView({
   const changeAmount = Number(tx.change_amount || 0);
 
   return (
-    <View style={styles.paper}>
+    <View nativeID="printable-receipt-paper" style={styles.paper}>
       {/* Salinan Label jika ada */}
       {copyLabel ? (
         <View style={styles.copyLabelBanner}>
