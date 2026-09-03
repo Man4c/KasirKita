@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Platform,
+  Animated,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import {
@@ -32,6 +33,27 @@ export default function PosBarcodeScannerView({
   const [scannedFeedback, setScannedFeedback] = useState(null);
   const [isScanningActive, setIsScanningActive] = useState(false);
   const scanCooldownRef = useRef(false);
+  const scanLaserAnim = useRef(new Animated.Value(0)).current;
+
+  // Animate scan laser line up and down continuously
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scanLaserAnim, {
+          toValue: 1,
+          duration: 1800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scanLaserAnim, {
+          toValue: 0,
+          duration: 1800,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [scanLaserAnim]);
 
   // Warm-up delay 1.5s after camera mounts to prevent false triggers from ambient patterns
   useEffect(() => {
@@ -160,9 +182,9 @@ export default function PosBarcodeScannerView({
         </View>
       )}
 
-      {/* Manual Barcode Input Row */}
-      {showManualInput && (
-        <View style={[styles.manualInputRow, isLandscape && styles.manualInputRowLandscape]}>
+      {/* Manual Barcode Input Row (PORTRAIT ONLY - Landscape uses inline input in bottom bar) */}
+      {showManualInput && !isLandscape && (
+        <View style={styles.manualInputRow}>
           <Barcode size={16} color="#fb7185" style={{ marginRight: 8 }} />
           <TextInput
             style={styles.manualTextInput}
@@ -247,8 +269,22 @@ export default function PosBarcodeScannerView({
                 <View style={[styles.corner, styles.cornerBL]} />
                 <View style={[styles.corner, styles.cornerBR]} />
 
-                {/* Laser scanline indicator */}
-                <View style={styles.scanLaser} />
+                {/* Laser scanline indicator (animated) */}
+                <Animated.View
+                  style={[
+                    styles.scanLaser,
+                    {
+                      transform: [
+                        {
+                          translateY: scanLaserAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [-70, 70],
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                />
               </View>
               <Text style={styles.targetInstruction}>Arahkan barcode produk ke kotak tengah</Text>
             </View>
@@ -291,39 +327,75 @@ export default function PosBarcodeScannerView({
         {/* Landscape Bottom Center Controls Overlay */}
         {isLandscape && (
           <View style={[styles.landscapeBottomBar, compact && styles.landscapeBottomBarCompact]}>
-            {/* Torch / Flash Toggle */}
-            <TouchableOpacity
-              style={[styles.bottomCtrlBtn, torch && styles.bottomCtrlBtnActive]}
-              onPress={() => setTorch(!torch)}
-              activeOpacity={0.7}
-            >
-              {torch ? <Zap size={14} color="#fbbf24" /> : <ZapOff size={14} color="#a1a1aa" />}
-              <Text style={[styles.bottomCtrlBtnText, torch && { color: '#fbbf24' }]}>
-                {torch ? 'Senter Nyala' : 'Senter'}
-              </Text>
-            </TouchableOpacity>
+            {showManualInput ? (
+              /* Inline Manual Barcode Input Mode */
+              <>
+                <View style={styles.bottomInlineInput}>
+                  <Barcode size={14} color="#fb7185" style={{ marginRight: 6 }} />
+                  <TextInput
+                    style={styles.bottomInlineTextInput}
+                    placeholder="Ketik kode barcode / SKU..."
+                    placeholderTextColor="#71717a"
+                    value={manualCode}
+                    onChangeText={setManualCode}
+                    autoFocus={true}
+                    onSubmitEditing={handleManualSubmit}
+                    returnKeyType="done"
+                  />
+                  <TouchableOpacity
+                    style={[styles.bottomInlineSubmitBtn, !manualCode.trim() && { opacity: 0.5 }]}
+                    onPress={handleManualSubmit}
+                    disabled={!manualCode.trim()}
+                  >
+                    <Text style={styles.bottomInlineSubmitText}>Cari</Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  style={styles.bottomCtrlBtn}
+                  onPress={() => { setShowManualInput(false); setManualCode(''); }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.bottomCtrlBtnText}>✕</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              /* Normal Controls Mode */
+              <>
+                {/* Torch / Flash Toggle */}
+                <TouchableOpacity
+                  style={[styles.bottomCtrlBtn, torch && styles.bottomCtrlBtnActive]}
+                  onPress={() => setTorch(!torch)}
+                  activeOpacity={0.7}
+                >
+                  {torch ? <Zap size={14} color="#fbbf24" /> : <ZapOff size={14} color="#a1a1aa" />}
+                  <Text style={[styles.bottomCtrlBtnText, torch && { color: '#fbbf24' }]}>
+                    {torch ? 'Senter Nyala' : 'Senter'}
+                  </Text>
+                </TouchableOpacity>
 
-            {/* Manual Barcode Input Trigger */}
-            <TouchableOpacity
-              style={[styles.bottomCtrlBtn, showManualInput && styles.bottomCtrlBtnActive]}
-              onPress={() => setShowManualInput(!showManualInput)}
-              activeOpacity={0.7}
-            >
-              <Keyboard size={14} color={showManualInput ? '#fb7185' : '#a1a1aa'} />
-              <Text style={[styles.bottomCtrlBtnText, showManualInput && { color: '#fb7185' }]}>
-                Ketik barcode manual
-              </Text>
-            </TouchableOpacity>
+                {/* Manual Barcode Input Trigger */}
+                <TouchableOpacity
+                  style={styles.bottomCtrlBtn}
+                  onPress={() => setShowManualInput(true)}
+                  activeOpacity={0.7}
+                >
+                  <Keyboard size={14} color="#a1a1aa" />
+                  <Text style={styles.bottomCtrlBtnText}>
+                    Ketik barcode manual
+                  </Text>
+                </TouchableOpacity>
 
-            {/* Selesai / OK Button */}
-            <TouchableOpacity
-              style={styles.bottomOkBtn}
-              onPress={onClose}
-              activeOpacity={0.8}
-            >
-              <Check size={14} color="#ffffff" style={{ marginRight: 4 }} />
-              <Text style={styles.bottomOkBtnText}>OK</Text>
-            </TouchableOpacity>
+                {/* Selesai / OK Button */}
+                <TouchableOpacity
+                  style={styles.bottomOkBtn}
+                  onPress={onClose}
+                  activeOpacity={0.8}
+                >
+                  <Check size={14} color="#ffffff" style={{ marginRight: 4 }} />
+                  <Text style={styles.bottomOkBtnText}>OK</Text>
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         )}
       </View>
@@ -654,16 +726,43 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_700Bold',
   },
-  manualInputRowLandscape: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    right: 10,
-    zIndex: 25,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#3f3f46',
+  bottomInlineInput: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'rgba(24, 24, 27, 0.95)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 9999,
+    borderWidth: 1,
+    borderColor: 'rgba(63, 63, 70, 0.8)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.35,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  bottomInlineTextInput: {
+    flex: 1,
+    height: 28,
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    paddingHorizontal: 6,
+    paddingVertical: 0,
+  },
+  bottomInlineSubmitBtn: {
+    backgroundColor: '#e11d48',
+    paddingHorizontal: 12,
+    height: 28,
+    borderRadius: 9999,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bottomInlineSubmitText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
   },
   feedbackTitle: {
     fontSize: 12,
