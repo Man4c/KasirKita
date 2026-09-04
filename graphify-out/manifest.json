@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788528076.110921,
-    "ast_hash": "b44b8d2adde49158294069eb0ea324e4",
+    "mtime": 1788531731.7850091,
+    "ast_hash": "741cfe311b3c4d83953a5130132ada01",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2385,8 +2385,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/CategoryManagementScreen.js": {
-    "mtime": 1788526261.779776,
-    "ast_hash": "64e1c2a579d80a24bb69965097f4c4cb",
+    "mtime": 1788531624.224923,
+    "ast_hash": "ea77cb1254ba9dbc3e7fa75f9c8aff7b",
     "semantic_hash": ""
   },
   "mobile/src/services/unitService.js": {
@@ -2405,8 +2405,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/UnitManagementScreen.js": {
-    "mtime": 1788526276.8884363,
-    "ast_hash": "867e2607196f5c561f00f851ca9b9677",
+    "mtime": 1788531629.9688694,
+    "ast_hash": "61a3018772b7ac9295eae3783eeaf348",
     "semantic_hash": ""
   },
   "mobile/src/components/promo/PromoCardItem.js": {
@@ -2420,8 +2420,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/PromoManagementScreen.js": {
-    "mtime": 1788524592.760574,
-    "ast_hash": "619c18c802129cab5f3a49ac02ddf748",
+    "mtime": 1788531648.043544,
+    "ast_hash": "eaace8de3d0f354b59b2e4235a3e7a42",
     "semantic_hash": ""
   },
   "mobile/src/services/discountService.js": {

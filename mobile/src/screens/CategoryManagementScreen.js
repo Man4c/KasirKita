@@ -334,8 +334,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
     marginBottom: 12,
-    paddingVertical: 4,
   },
   topBarLeft: {
     flexDirection: 'row',

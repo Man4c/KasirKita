@@ -198,13 +198,12 @@ export default function PromoManagementScreen({ navigation }) {
             <ChevronLeft size={20} color="#f4f4f5" />
           </TouchableOpacity>
           <View style={styles.titleContainer}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <TicketPercent size={18} color="#fb7185" />
-              <Text style={styles.headerTitle} numberOfLines={1}>
-                Master Promosi
-              </Text>
-            </View>
-            <Text style={styles.headerSubtitle}>Kelola voucher diskon & kupon kasir</Text>
+            <Text style={styles.headerTitle} numberOfLines={1}>
+              Master Promosi
+            </Text>
+            <Text style={styles.headerSubtitle} numberOfLines={1}>
+              {totalPromos} voucher promo terdaftar
+            </Text>
           </View>
         </View>
 
@@ -215,9 +214,9 @@ export default function PromoManagementScreen({ navigation }) {
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
           {refreshing ? (
-            <ActivityIndicator size="small" color="#fb7185" />
+            <ActivityIndicator size="small" color="#e11d48" />
           ) : (
-            <RotateCw size={18} color="#f4f4f5" />
+            <RotateCw size={16} color="#e4e4e7" />
           )}
         </TouchableOpacity>
       </View>
@@ -408,9 +407,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 12,
-    backgroundColor: '#18181b',
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
@@ -424,8 +421,10 @@ const styles = StyleSheet.create({
   backBtn: {
     width: 36,
     height: 36,
-    borderRadius: 18,
-    backgroundColor: '#27272a',
+    borderRadius: 9,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -448,8 +447,10 @@ const styles = StyleSheet.create({
   refreshBtn: {
     width: 36,
     height: 36,
-    borderRadius: 18,
-    backgroundColor: '#27272a',
+    borderRadius: 9,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,

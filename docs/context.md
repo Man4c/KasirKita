@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Harmonisasi Header & Pembatas Garis Bawah pada Seluruh Screen Master Data (`CategoryManagementScreen.js`, `UnitManagementScreen.js`, `PromoManagementScreen.js`)**:
+  - Menyelaraskan tata letak dan estetika visual header bar seluruh modul master data agar identik dengan Master Produk:
+    1. *Pembatas Garis Bawah (`topBar`)*: Menambahkan `borderBottomWidth: 1, borderBottomColor: '#27272a', paddingVertical: 12, marginBottom: 12` pada `CategoryManagementScreen.js` dan `UnitManagementScreen.js` sehingga transisi antara header bar dan kartu metrik/konten memiliki garis batas pemisah yang tegas dan rapi.
+    2. *Standardisasi Header Master Promosi (`PromoManagementScreen.js`)*:
+       - Menghilangkan latar belakang bar abu-abu `#18181b` pada header, menjadikannya transparan di atas background `#09090b` dengan garis pemisah bawah (`borderBottomWidth: 1, borderBottomColor: '#27272a', paddingVertical: 12`).
+       - Menyelaraskan bentuk tombol Back dan Refresh dari sebelumnya bulat (`borderRadius: 18, backgroundColor: '#27272a'`) menjadi tombol persegi rounded modern (`borderRadius: 9, backgroundColor: '#18181b', borderWidth: 1, borderColor: '#27272a'`) yang seragam di semua layar master.
+       - Menghilangkan ikon `TicketPercent` di sebelah judul teks untuk tampilan bersih minimalis, serta mengubah teks subjudul menjadi format dinamis `{totalPromos} voucher promo terdaftar` (selaras dengan `{totalCategories} kategori terdaftar`, `{totalUnits} satuan barang terdaftar`, dan `{pagination.total} produk terdaftar`).
+       - Memperbarui ukuran dan warna ikon tombol refresh ke `size={16} color="#e4e4e7"` dan loading indicator `#e11d48`.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Responsivitas & Overflow Tombol Footer pada Modal Promo (`PromoFormModal.js`)**:
   - Menyelesaikan masalah tombol footer meluap ke luar kartu modal (*"Simpan Perubahan"* terpotong di kanan dan tombol *"Hapus"* terdorong ke kiri) serta teks subtitle dan placeholder yang terpotong:
     1. *Penyebab Root Cause*: Tiga tombol aksi (`[Hapus]`, `[Batal]`, `[Simpan Perubahan]`) dipaksakan sejajar dalam satu baris `modalFooter`, membutuhkan lebar ~341px yang melampaui lebar dalam kartu modal (~288px pada layar HP). Akibatnya tombol terdorong ke luar layar modal.
