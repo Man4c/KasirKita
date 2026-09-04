@@ -222,6 +222,9 @@ export default function PosScreen({
 
   // Cart Operations
   const addToCart = (product) => {
+    // If product was resolved via scanner fallback, ensure it exists in products list
+    setProducts((prev) => (prev.some((p) => p.id === product.id) ? prev : [product, ...prev]));
+
     const existing = cart.find((i) => i.product.id === product.id);
     const currentQty = existing ? existing.quantity : 0;
     const availableStock = parseFloat(product.stock) || 0;

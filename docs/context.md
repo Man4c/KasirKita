@@ -20,6 +20,18 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Resolusi Barcode Scanner Kasir POS (`PosBarcodeScannerView.js`, `PosScreen.js`)**:
+  - **Penyebab Masalah**: Saat kasir memindai barcode produk fisik (misal: barcode produk kemasan `8992931025202`), aplikasi memunculkan pesan `"Barcode tidak dikenali - Kode 8992931025202 belum terdaftar di katalog produk"`, padahal saat dicari via pencarian manual atau scanner di Master Produk, produk tersebut berhasil ditemukan.
+  - **Akar Masalah**:
+    1. Di `PosBarcodeScannerView.js`, logika pencocokan produk awalnya hanya memeriksa `(p.sku && p.sku.toLowerCase() === code.toLowerCase()) || String(p.id) === code`.
+    2. Model produk backend menggunakan kolom database **`sku_barcode`** (bukan `sku`). Akibatnya, properti `p.sku` bernilai `undefined` sehingga kode barcode kemasan tidak pernah cocok.
+    3. Selain itu, barcode untuk satuan konversi (`p.conversions[].sku_barcode`) belum tercakup dalam logika pencarian kamera scanner POS.
+  - **Solusi & Penyempurnaan**:
+    1. Memperbarui fungsi `processBarcode(code)` di `PosBarcodeScannerView.js` agar mencocokkan `p.sku_barcode` (diutamakan), `p.sku` (fallback), `String(p.id)`, dan barcode multi-satuan `p.conversions[].sku_barcode`.
+    2. Menambahkan 3-Tier Fallback Resilience: jika produk belum ada di array memori POS, scanner otomatis mencari ke cache lokal (`offlineStorage.getCachedCatalog()`), lalu mencari ke endpoint backend API (`/products?search=...`). Jika ditemukan via fallback, produk otomatis dimasukkan ke cache lokal dan ditambahkan ke daftar produk aktif di `PosScreen.js`.
+    3. Memperbarui `addToCart` di `PosScreen.js` agar produk hasil resolusi fallback scanner otomatis didaftarkan ke state `products`.
+  - Lolos uji linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web.
+
 - **Eksekusi Plan #25 Fase 6: Integrasi Navigasi Hub Menu Dashboard & Hak Akses Role Owner (`App.js`, `DashboardScreen.js`, `DashboardActionHub.js`)**:
   - Mengintegrasikan layar Master Produk ke sistem navigasi aplikasi:
     1. *Akses Khusus Hub Menu*: Memastikan Bottom Navigation Bar tetap bersih hanya dengan 4 tab utama (Dashboard, Kasir POS, Riwayat, Pengaturan) sesuai permintaan, dan menjadikan kartu **Produk** di Hub Menu Dashboard sebagai pintu masuk utama ke layar `ProductManagementScreen`.

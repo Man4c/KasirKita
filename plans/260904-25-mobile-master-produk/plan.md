@@ -104,4 +104,4 @@ mobile/src/
 | 4 | Mobile: Pembuatan Modal Form Tambah/Edit Produk (`ProductFormModal.js`) dengan Validasi & Integrasi Kamera Barcode | completed |
 | 5 | Mobile: Pembuatan Modal Penyesuaian Stok Cepat (`QuickStockAdjustModal.js`) | completed |
 | 6 | Mobile: Integrasi Navigasi Hub Menu Dashboard, Hak Akses Role Owner/Kasir di `App.js`, dan Auto-Refresh Katalog POS | completed |
-| 7 | Pengujian Komprehensif: Uji CRUD, Uji Kamera Barcode, Uji Offline Fallback, Verifikasi Linter Impeccable, & Build Expo | pending |
+| 7 | Pengujian Komprehensif: Uji CRUD, Uji Kamera Barcode POS (pencocokan `sku_barcode`, konversi UoM, fallback cache/API), Uji Offline Fallback, Verifikasi Linter Impeccable, & Build Expo | completed |

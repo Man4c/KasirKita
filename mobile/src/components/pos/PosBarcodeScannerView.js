@@ -19,6 +19,8 @@ import {
   AlertCircle,
 } from 'lucide-react-native';
 import { soundService } from '../../services/soundService';
+import api from '../../services/api';
+import { offlineStorage } from '../../services/offlineStorage';
 
 export default function PosBarcodeScannerView({
   isLandscape = false,
@@ -110,15 +112,59 @@ export default function PosBarcodeScannerView({
     }
   };
 
-  const processBarcode = (code) => {
+  const processBarcode = async (rawCode) => {
+    const code = rawCode ? String(rawCode).trim() : '';
     if (!code) return;
 
-    // Look for product by SKU / barcode or ID
-    const found = products.find(
-      (p) =>
-        (p.sku && p.sku.toLowerCase() === code.toLowerCase()) ||
-        String(p.id) === code
-    );
+    const normalizedCode = code.toLowerCase();
+
+    const matchProduct = (p) => {
+      if (!p) return false;
+      const matchSkuBarcode =
+        p.sku_barcode && String(p.sku_barcode).trim().toLowerCase() === normalizedCode;
+      const matchSku =
+        p.sku && String(p.sku).trim().toLowerCase() === normalizedCode;
+      const matchId = String(p.id).trim() === code;
+      const matchConversions =
+        Array.isArray(p.conversions) &&
+        p.conversions.some(
+          (c) =>
+            c.sku_barcode &&
+            String(c.sku_barcode).trim().toLowerCase() === normalizedCode
+        );
+      return matchSkuBarcode || matchSku || matchId || matchConversions;
+    };
+
+    // 1. Search in-memory products passed from PosScreen
+    let found = products.find(matchProduct);
+
+    // 2. Offline storage fallback (in case product was added/updated in local cache)
+    if (!found) {
+      try {
+        const cached = await offlineStorage.getCachedCatalog();
+        if (cached && Array.isArray(cached.products)) {
+          found = cached.products.find(matchProduct);
+        }
+      } catch (_) {}
+    }
+
+    // 3. Online API fallback (in case product was added on web or exceeds initial page)
+    if (!found) {
+      try {
+        const res = await api.get(`/products?search=${encodeURIComponent(code)}&per_page=5`);
+        if (res.data?.success && Array.isArray(res.data.data?.data)) {
+          const apiProducts = res.data.data.data.map((p) => ({
+            ...p,
+            unitSymbol: p.base_unit?.symbol || p.baseUnit?.symbol || 'pcs',
+          }));
+          found = apiProducts.find(matchProduct);
+          if (found) {
+            // Also cache it locally for future offline scans
+            await offlineStorage.upsertCachedProduct(found);
+          }
+        }
+      } catch (_) {}
+    }
 
     if (found) {
       const stockNum = parseFloat(found.stock) || 0;
