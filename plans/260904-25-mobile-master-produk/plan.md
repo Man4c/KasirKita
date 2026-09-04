@@ -103,5 +103,5 @@ mobile/src/
 | 3 | Mobile: Pembuatan Layar Utama Master Produk (`ProductManagementScreen.js`) & Komponen Kartu (`ProductCardItem.js`) | completed |
 | 4 | Mobile: Pembuatan Modal Form Tambah/Edit Produk (`ProductFormModal.js`) dengan Validasi & Integrasi Kamera Barcode | completed |
 | 5 | Mobile: Pembuatan Modal Penyesuaian Stok Cepat (`QuickStockAdjustModal.js`) | completed |
-| 6 | Mobile: Integrasi Navigasi Bottom Bar, Hak Akses Role Owner/Kasir di `App.js`, dan Auto-Refresh Katalog POS | pending |
+| 6 | Mobile: Integrasi Navigasi Hub Menu Dashboard, Hak Akses Role Owner/Kasir di `App.js`, dan Auto-Refresh Katalog POS | completed |
 | 7 | Pengujian Komprehensif: Uji CRUD, Uji Kamera Barcode, Uji Offline Fallback, Verifikasi Linter Impeccable, & Build Expo | pending |

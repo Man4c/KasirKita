@@ -28,6 +28,7 @@ import PosScreen from './src/screens/PosScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import TransactionHistoryScreen from './src/screens/TransactionHistoryScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import ProductManagementScreen from './src/screens/ProductManagementScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
 
@@ -201,6 +202,13 @@ function MainApp() {
           <DashboardScreen
             isLandscape={false}
             navigation={{ navigate: handleTabChange }}
+          />
+        ) : activeTab === 'product_management' && user?.role === 'owner' ? (
+          <ProductManagementScreen
+            navigation={{
+              goBack: () => handleTabChange('dashboard'),
+              navigate: handleTabChange,
+            }}
           />
         ) : activeTab === 'history' ? (
           <TransactionHistoryScreen isLandscape={false} />

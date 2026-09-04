@@ -228,6 +228,11 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
         navigation={navigation}
         sales={sales}
         inv={inv}
+        onOpenMasterProduct={() => {
+          if (navigation?.navigate) {
+            navigation.navigate('product_management');
+          }
+        }}
       />
 
       {/* 7-Day Sales Trend Interactive Chart */}

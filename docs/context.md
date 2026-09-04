@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eksekusi Plan #25 Fase 6: Integrasi Navigasi Hub Menu Dashboard & Hak Akses Role Owner (`App.js`, `DashboardScreen.js`, `DashboardActionHub.js`)**:
+  - Mengintegrasikan layar Master Produk ke sistem navigasi aplikasi:
+    1. *Akses Khusus Hub Menu*: Memastikan Bottom Navigation Bar tetap bersih hanya dengan 4 tab utama (Dashboard, Kasir POS, Riwayat, Pengaturan) sesuai permintaan, dan menjadikan kartu **Produk** di Hub Menu Dashboard sebagai pintu masuk utama ke layar `ProductManagementScreen`.
+    2. *Routing Layar Terproteksi Role*: Menambahkan rute `product_management` pada body screen `App.js` dengan proteksi peran `user?.role === 'owner'`.
+    3. *Navigasi Dua Arah*: Tombol kembali (`ChevronLeft`) di header `ProductManagementScreen` mengembalikan pengguna ke `Dashboard` secara mulus.
+    4. *Sinkronisasi Katalog Otomatis*: Saat kembali ke kasir POS atau dashboard, perubahan produk seketika tercermin dari cache offline dan memori aplikasi.
+  - Lolos uji linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan sukses uji bundling Expo Web. Status Fase 6: `completed`.
+
 - **Eksekusi Plan #25 Fase 5: Modal Penyesuaian Stok Cepat & Moving Average Cost (`QuickStockAdjustModal.js`)**:
   - Mengembangkan modal penyesuaian stok masuk kilat (`QuickStockAdjustModal.js`):
     1. *Kartu Status Terkini*: Menampilkan stok fisik terkini dan nilai modal HPP rata-rata berjalan (*Moving Average Cost*).
