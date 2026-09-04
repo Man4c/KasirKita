@@ -174,7 +174,7 @@ export default function CategoryManagementScreen({ navigation }) {
                 <ChevronLeft size={20} color='#f4f4f5' />
               </TouchableOpacity>
             )}
-            <View>
+            <View style={styles.screenTitleContainer}>
               <Text style={styles.screenTitle} numberOfLines={1}>
                 Master Kategori
               </Text>
@@ -184,26 +184,14 @@ export default function CategoryManagementScreen({ navigation }) {
             </View>
           </View>
 
-          <View style={styles.headerActionGroup}>
-            <TouchableOpacity
-              style={styles.headerIconBtn}
-              onPress={handleRefresh}
-              disabled={refreshing}
-            >
-              <RotateCw size={16} color='#e4e4e7' />
-            </TouchableOpacity>
-
-            {isOwner && (
-              <TouchableOpacity
-                style={styles.createBtnHeader}
-                activeOpacity={0.8}
-                onPress={handleOpenCreateCategory}
-              >
-                <Plus size={16} color='#ffffff' />
-                <Text style={styles.createBtnHeaderText}>Kategori</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          <TouchableOpacity
+            style={styles.headerIconBtn}
+            onPress={handleRefresh}
+            disabled={refreshing}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <RotateCw size={16} color='#e4e4e7' />
+          </TouchableOpacity>
         </View>
 
         {/* Offline Banner */}
@@ -367,6 +355,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
+  screenTitleContainer: {
+    flex: 1,
+    minWidth: 0,
+  },
   screenTitle: {
     fontSize: 22,
     fontFamily: 'Poppins_700Bold',
@@ -378,12 +370,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
   },
-  headerActionGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    flexShrink: 0,
-  },
   headerIconBtn: {
     width: 36,
     height: 36,
@@ -394,21 +380,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-  },
-  createBtnHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    backgroundColor: '#e11d48',
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 9,
-    flexShrink: 0,
-  },
-  createBtnHeaderText: {
-    fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#ffffff',
   },
   offlineBanner: {
     flexDirection: 'row',

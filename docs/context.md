@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pembersihan Redundant Action Button pada Header Master Kategori & Satuan (`CategoryManagementScreen.js`, `UnitManagementScreen.js`)**:
+  - Menghilangkan tombol create ganda `+ Kategori` dan `+ Satuan` di pojok kanan atas (*header top bar*), karena aksi tambah data sudah tersedia melalui Floating Action Button (FAB) `+` di kanan bawah layar:
+    1. *Pelegaan Ruang Header*: Judul layar (`screenTitle` dan `screenSubtitle`) kini memiliki ruang penuh dengan `screenTitleContainer: { flex: 1, minWidth: 0 }`, sehingga teks "Master Kategori" dan "Master Satuan" tidak lagi terhimpit/terpotong menjadi ellipsis.
+    2. *Pembersihan Aksi Navigasi*: Header top bar kini bersih dan fokus dengan tombol back di kiri dan tombol refresh data (`RotateCw`) di kanan, menghilangkan redundansi tombol aksi ganda.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web.
+
 - **Resolusi Defect Text Overflow & Wrapping pada Header Modal Form (`CategoryFormModal.js`, `UnitFormModal.js`, `ProductFormModal.js`)**:
   - Menyelesaikan masalah pemotongan teks subtitle header modal (seperti *"Kelompokkan produk agar kasir mudah me[ncari barang]"*) akibat ketiadaan pembatas flexbox:
     1. *Penyebab Root Cause*: Kontainer teks di samping ikon header modal sebelumnya tidak memiliki properti flex bounded (`flex: 1`, `minWidth: 0`), sehingga kalkulasi lebar teks di React Native Web melebihi lebar kartu modal dan terpotong oleh `overflow: 'hidden'`. Tombol close juga belum berstatus `flexShrink: 0`.
