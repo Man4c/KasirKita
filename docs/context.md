@@ -21,10 +21,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 ## Progress Terbaru
 
 - **Penyegaran Tampilan Tombol Scan Barcode Kasir POS (`ProductGrid.js`, `LandscapeRegisterPanel.js`)**:
-  - Memperbesar ukuran ikon barcode scanner dari `size={13}` menjadi `size={15}` agar lebih jelas terlihat dan mudah ditekan.
-  - Mengubah warna ikon barcode scanner menjadi **putih solid (`#ffffff`)**.
-  - Menyesuaikan lapisan latar belakang (*layer*) tombol menjadi warna **Rose Brand (`#e11d48`)** dengan border kontras (`#f43f5e`), memberikan nuansa segar, tegas, dan harmonis dengan palet utama KasirKita POS.
-  - Diterapkan secara seragam di layar kasir mode Portrait (`ProductGrid.js`) maupun register panel Landscape (`LandscapeRegisterPanel.js`).
+  - Memperbesar ukuran ikon barcode scanner menjadi **`size={20}`** warna **putih solid (`#ffffff`)** persis sesuai permintaan.
+  - Mengunci ukuran kotak layer/wadah tombol tetap ringkas dan presisi pada dimensi **`width: 28, height: 28`** (dengan perataan tengah `justifyContent: 'center', alignItems: 'center'`), sehingga layer tidak melebar dan tetap sejajar rapi dengan elemen sekitarnya (seperti tombol pencarian dan tombol clear cart).
+  - Mengatur warna latar belakang tombol menjadi **Rose Brand (`#e11d48`)** dengan border kontras (`#f43f5e`).
+  - Diterapkan secara seragam di layar kasir mode Portrait (`ProductGrid.js`) maupun panel register Landscape (`LandscapeRegisterPanel.js`).
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Cetak Struk Web Murni Bersih via Dedicated Iframe (`printerService.printWebReceiptHtml`)**:
   - Menyelesaikan kendala halaman cetak putih kosong di browser dengan beralih ke pendekatan standar industri POS: menggunakan **dedicated hidden iframe** yang langsung merender dokumen HTML struk nota kasir murni.
