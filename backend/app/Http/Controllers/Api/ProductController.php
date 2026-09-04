@@ -33,11 +33,12 @@ class ProductController extends Controller
 
         // Search by name or barcode (matches base or conversion barcode)
         if ($search = $request->query('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'ilike', "%{$search}%")
-                  ->orWhere('sku_barcode', 'ilike', "%{$search}%")
-                  ->orWhereHas('conversions', function ($cq) use ($search) {
-                      $cq->where('sku_barcode', 'ilike', "%{$search}%");
+            $operator = DB::getDriverName() === 'pgsql' ? 'ilike' : 'like';
+            $query->where(function ($q) use ($search, $operator) {
+                $q->where('name', $operator, "%{$search}%")
+                  ->orWhere('sku_barcode', $operator, "%{$search}%")
+                  ->orWhereHas('conversions', function ($cq) use ($search, $operator) {
+                      $cq->where('sku_barcode', $operator, "%{$search}%");
                   });
             });
         }

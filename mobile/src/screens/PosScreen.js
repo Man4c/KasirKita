@@ -420,10 +420,21 @@ export default function PosScreen({
 
   // Filtered Products & Customers
   const filteredProducts = useMemo(() => {
+    const s = search.toLowerCase().trim();
     return products.filter((p) => {
       const matchCat = selectedCat === 'ALL' || p.category_id === selectedCat;
-      const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) || (p.sku && p.sku.toLowerCase().includes(search.toLowerCase()));
-      return matchCat && matchSearch;
+      if (!matchCat) return false;
+      if (!s) return true;
+
+      const matchName = p.name && p.name.toLowerCase().includes(s);
+      const matchBarcode =
+        (p.sku_barcode && p.sku_barcode.toLowerCase().includes(s)) ||
+        (p.sku && p.sku.toLowerCase().includes(s));
+      const matchConversions =
+        Array.isArray(p.conversions) &&
+        p.conversions.some((c) => c.sku_barcode && c.sku_barcode.toLowerCase().includes(s));
+
+      return matchName || matchBarcode || matchConversions;
     });
   }, [products, selectedCat, search]);
 
