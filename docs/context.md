@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eksekusi Plan #25 Fase 3: Layar Utama Master Produk & Komponen Kartu Modular (`ProductManagementScreen.js`, `ProductCardItem.js`)**:
+  - Mengembangkan tampilan antarmuka katalog produk mobile lengkap dengan prinsip *Defensive UI* dan *Impeccable Dark Mode*:
+    1. *Komponen Kartu Produk (`ProductCardItem.js`)*: Menampilkan inisial/ikon produk dengan border status stok (Aman hijau, Menipis amber, Habis merah), nama produk, badge kategori, barcode/SKU, harga jual tebal kontras, dan modal/HPP rata-rata terproteksi toggle sensor mata `[ 👁️ ]` khusus role Owner.
+    2. *Layar Manajemen Produk (`ProductManagementScreen.js`)*: Toolbar pencarian instan debounced (400ms), tombol pemicu scan barcode kemasan fisik, horizontal category chip selector, filter status stok (`Semua`, `⚠️ Menipis`, `🛑 Habis`, `Non-Aktif`), infinite scrolling paginasi (20 item per batch), pull-to-refresh, dan banner indikator mode offline.
+    3. *Kepatuhan Standar UI*: Lolos uji linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dengan font minimum 12px (*The Readability Floor Rule*), dan sukses uji bundling Expo Web. Status Fase 3: `completed`.
+
 - **Eksekusi Plan #25 Fase 2: Pembuatan Modul Layanan API Produk & Sinkronisasi Cache Offline (`productService.js`, `offlineStorage.js`)**:
   - Mengembangkan service wrapper terpusat `mobile/src/services/productService.js`:
     1. *Operasi CRUD Produk*: `getProducts` (dengan filter terpaginasi), `getProduct`, `createProduct`, `updateProduct`, `deleteProduct` (soft-deletes), `restockProduct` (moving average cost), dan `getStockMovements`.
