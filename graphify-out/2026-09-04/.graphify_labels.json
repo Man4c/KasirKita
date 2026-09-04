@@ -321,6 +321,7 @@
   "319": "applyEditing",
   "320": "Adaptation Strategies",
   "321": "expo-audio",
+  "322": "BORDER_SAFE_TAGS",
   "323": "expo-font",
   "324": "normalizeGitHubEvent",
   "325": "expo-image-picker",
@@ -334,5 +335,6 @@
   "333": "react-native-web",
   "334": "2026_09_04_000001_add_trgm_and_indexes_to_transactions.php",
   "335": "barcode-detector",
+  "336": "expo-camera",
   "339": "expo"
 }

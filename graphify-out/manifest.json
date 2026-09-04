@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788511919.5312843,
-    "ast_hash": "7703afa2d13fd32df9db1c7e7f7dc400",
+    "mtime": 1788512666.731752,
+    "ast_hash": "09e358e5fd843cca221eb8da21625388",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2320,8 +2320,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/product/ProductBarcodeScannerModal.js": {
-    "mtime": 1788510244.9780245,
-    "ast_hash": "7ee63d61f8a33c0968f84d9a313c070a",
+    "mtime": 1788512572.036567,
+    "ast_hash": "837b50765b164dd491ad20e429b6634f",
     "semantic_hash": ""
   },
   "mobile/src/components/product/ProductCardItem.js": {
@@ -2340,8 +2340,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/ProductManagementScreen.js": {
-    "mtime": 1788510478.1130672,
-    "ast_hash": "5fb55fc879cbd97dfec2acb788cf1c88",
+    "mtime": 1788512612.527326,
+    "ast_hash": "ded7ecff911d05e56f3d26b4d7dfb466",
     "semantic_hash": ""
   },
   "mobile/src/services/productService.js": {
