@@ -125,19 +125,23 @@ export default function UnitFormModal({
               <View style={styles.iconCircle}>
                 <Scale size={20} color='#f43f5e' />
               </View>
-              <View>
-                <Text style={styles.modalTitle}>
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.modalTitle} numberOfLines={1}>
                   {isEditMode ? 'Edit Data Satuan' : 'Tambah Satuan Baru'}
                 </Text>
-                <Text style={styles.modalSubtitle}>
+                <Text style={styles.modalSubtitle} numberOfLines={2}>
                   {isEditMode
                     ? 'Perbarui nama atau simbol satuan barang'
                     : 'Atur unit satuan penjualan produk (UoM)'}
                 </Text>
               </View>
             </View>
-            <TouchableOpacity onPress={onClose} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-              <X size={20} color='#a1a1aa' />
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={onClose}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <X size={18} color='#a1a1aa' />
             </TouchableOpacity>
           </View>
 
@@ -293,6 +297,11 @@ const styles = StyleSheet.create({
     gap: 12,
     flex: 1,
     minWidth: 0,
+    marginRight: 8,
+  },
+  headerTextContainer: {
+    flex: 1,
+    minWidth: 0,
   },
   iconCircle: {
     width: 38,
@@ -314,6 +323,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    lineHeight: 16,
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
   scrollBody: {
     padding: 16,

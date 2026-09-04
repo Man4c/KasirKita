@@ -192,11 +192,11 @@ export default function ProductFormModal({
               <View style={styles.headerIconBox}>
                 <Package size={18} color="#fb7185" />
               </View>
-              <View>
+              <View style={styles.headerTextContainer}>
                 <Text style={styles.headerTitle} numberOfLines={1}>
                   {isEdit ? 'Edit Data Produk' : 'Tambah Produk Baru'}
                 </Text>
-                <Text style={styles.headerSubtitle} numberOfLines={1}>
+                <Text style={styles.headerSubtitle} numberOfLines={2}>
                   {isEdit ? 'Perbarui informasi katalog & harga' : 'Lengkapi informasi produk & stok awal'}
                 </Text>
               </View>
@@ -448,6 +448,11 @@ const styles = StyleSheet.create({
     gap: 10,
     flex: 1,
     minWidth: 0,
+    marginRight: 8,
+  },
+  headerTextContainer: {
+    flex: 1,
+    minWidth: 0,
   },
   headerIconBox: {
     width: 36,
@@ -470,6 +475,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    lineHeight: 16,
   },
   closeBtn: {
     width: 32,
@@ -478,6 +484,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   scrollBody: {
     paddingHorizontal: 16,

@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Defect Text Overflow & Wrapping pada Header Modal Form (`CategoryFormModal.js`, `UnitFormModal.js`, `ProductFormModal.js`)**:
+  - Menyelesaikan masalah pemotongan teks subtitle header modal (seperti *"Kelompokkan produk agar kasir mudah me[ncari barang]"*) akibat ketiadaan pembatas flexbox:
+    1. *Penyebab Root Cause*: Kontainer teks di samping ikon header modal sebelumnya tidak memiliki properti flex bounded (`flex: 1`, `minWidth: 0`), sehingga kalkulasi lebar teks di React Native Web melebihi lebar kartu modal dan terpotong oleh `overflow: 'hidden'`. Tombol close juga belum berstatus `flexShrink: 0`.
+    2. *Implementasi Standar Defensive UI Craft*:
+       - Membungkus title & subtitle dengan `headerTextContainer: { flex: 1, minWidth: 0 }`.
+       - Menetapkan batas baris `numberOfLines={1}` pada judul dan `numberOfLines={2}` pada subtitle dengan `lineHeight: 16` agar teks membungkus (wrap) secara elegan saat ruang modal menyempit.
+       - Menerapkan tombol aksi penutup `closeBtn` dengan ukuran pasti `32x32`, background netral `#27272a`, border `#3f3f46`, dan `flexShrink: 0` sesuai *Flexbox Pairing Rule*.
+    3. *Penerapan Konsisten*: Diaplikasikan ke seluruh modal form master data (`CategoryFormModal.js`, `UnitFormModal.js`, dan `ProductFormModal.js`).
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos bundle Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Anti-Patterns & Defect Impeccable pada Modal Form Produk (`ProductFormModal.js`)**:
   - Menyelesaikan 1 AI tell dan 3 quality issues yang terdeteksi pada audit browser Modal Produk:
     1. *Resolusi Flat Type Hierarchy*: Menaikkan ukuran `headerTitle` dari 15px ke **`18px`** (`Poppins_700Bold`, `letterSpacing: -0.3`), tombol submit/cancel 14px, input text 13px, dan label form/chips 12px, memberikan pemisahan hierarki visual yang jelas antara judul modal dan form fields.
