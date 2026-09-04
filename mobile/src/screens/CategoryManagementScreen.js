@@ -221,7 +221,7 @@ export default function CategoryManagementScreen({ navigation }) {
           <View style={styles.metricCard}>
             <View style={styles.metricHeader}>
               <Text style={styles.metricLabel}>Total Kategori</Text>
-              <FolderTree size={14} color='#38bdf8' />
+              <FolderTree size={14} color='#f43f5e' />
             </View>
             <Text style={styles.metricValue}>{totalCategories}</Text>
           </View>
@@ -238,11 +238,11 @@ export default function CategoryManagementScreen({ navigation }) {
         {/* Search Input Bar */}
         <View style={styles.searchRow}>
           <View style={styles.searchInputWrapper}>
-            <Search size={16} color='#71717a' style={{ flexShrink: 0 }} />
+            <Search size={16} color='#a1a1aa' style={{ flexShrink: 0 }} />
             <TextInput
               style={styles.searchInput}
               placeholder='Cari kategori, slug, deskripsi...'
-              placeholderTextColor='#71717a'
+              placeholderTextColor='#a1a1aa'
               value={search}
               onChangeText={handleSearchChange}
               autoCorrect={false}
@@ -264,7 +264,7 @@ export default function CategoryManagementScreen({ navigation }) {
         {/* List Content */}
         {loading && !refreshing ? (
           <View style={styles.centerContainer}>
-            <ActivityIndicator size='large' color='#38bdf8' />
+            <ActivityIndicator size='large' color='#e11d48' />
             <Text style={styles.loadingText}>Memuat master kategori...</Text>
           </View>
         ) : (
@@ -278,8 +278,8 @@ export default function CategoryManagementScreen({ navigation }) {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                tintColor='#38bdf8'
-                colors={['#38bdf8']}
+                tintColor='#e11d48'
+                colors={['#e11d48']}
               />
             }
             ListEmptyComponent={
@@ -368,8 +368,9 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   screenTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: 'Poppins_700Bold',
+    letterSpacing: -0.4,
     color: '#f4f4f5',
   },
   screenSubtitle: {
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#0284c7',
+    backgroundColor: '#e11d48',
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 9,
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   metricValue: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: 'Poppins_700Bold',
     color: '#f4f4f5',
   },
@@ -522,7 +523,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#0284c7',
+    backgroundColor: '#e11d48',
     paddingHorizontal: 16,
     paddingVertical: 9,
     borderRadius: 10,
@@ -540,10 +541,10 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#0284c7',
+    backgroundColor: '#e11d48',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#0284c7',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,

@@ -35,7 +35,7 @@ const CategoryCardItem = React.memo(function CategoryCardItem({
       <View style={styles.cardHeader}>
         <View style={styles.categoryIdentity}>
           <View style={[styles.iconBox, hasProducts ? styles.iconBoxActive : styles.iconBoxEmpty]}>
-            <FolderTree size={20} color={hasProducts ? '#38bdf8' : '#a1a1aa'} />
+            <FolderTree size={20} color={hasProducts ? '#f4f4f5' : '#a1a1aa'} />
           </View>
 
           <View style={styles.titleCol}>
@@ -54,7 +54,7 @@ const CategoryCardItem = React.memo(function CategoryCardItem({
 
         {/* Badge Jumlah Produk */}
         <View style={[styles.productCountBadge, hasProducts ? styles.countBadgeActive : styles.countBadgeEmpty]}>
-          <Package size={12} color={hasProducts ? '#38bdf8' : '#71717a'} style={{ flexShrink: 0 }} />
+          <Package size={12} color={hasProducts ? '#e4e4e7' : '#a1a1aa'} style={{ flexShrink: 0 }} />
           <Text style={[styles.productCountText, hasProducts ? styles.countTextActive : styles.countTextEmpty]}>
             {productsCount} Produk
           </Text>
@@ -73,7 +73,7 @@ const CategoryCardItem = React.memo(function CategoryCardItem({
         <View style={styles.statusIndicator}>
           {hasProducts ? (
             <View style={styles.statusPillActive}>
-              <CheckCircle2 size={12} color='#38bdf8' style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={12} color='#34d399' style={{ flexShrink: 0 }} />
               <Text style={styles.statusTextActive}>Terhubung Produk</Text>
             </View>
           ) : (
@@ -92,7 +92,7 @@ const CategoryCardItem = React.memo(function CategoryCardItem({
               onPress={() => onEdit(item)}
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
             >
-              <Edit3 size={14} color='#38bdf8' style={{ flexShrink: 0 }} />
+              <Edit3 size={14} color='#d4d4d8' style={{ flexShrink: 0 }} />
               <Text style={styles.editBtnText}>Edit</Text>
             </TouchableOpacity>
 
@@ -104,7 +104,7 @@ const CategoryCardItem = React.memo(function CategoryCardItem({
             >
               <Trash2
                 size={14}
-                color={hasProducts ? '#71717a' : '#f87171'}
+                color={hasProducts ? '#a1a1aa' : '#f87171'}
                 style={{ flexShrink: 0 }}
               />
               <Text style={[styles.deleteBtnText, hasProducts && styles.deleteBtnTextDisabled]}>
@@ -152,14 +152,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   iconBoxActive: {
-    backgroundColor: 'rgba(56, 189, 248, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.3)',
-  },
-  iconBoxEmpty: {
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
+  },
+  iconBoxEmpty: {
+    backgroundColor: '#202023',
+    borderWidth: 1,
+    borderColor: '#27272a',
   },
   titleCol: {
     flex: 1,
@@ -192,14 +192,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   countBadgeActive: {
-    backgroundColor: 'rgba(56, 189, 248, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.25)',
-  },
-  countBadgeEmpty: {
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
+  },
+  countBadgeEmpty: {
+    backgroundColor: '#202023',
+    borderWidth: 1,
+    borderColor: '#27272a',
   },
   productCountText: {
     fontSize: 12,
@@ -207,10 +207,10 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   countTextActive: {
-    color: '#38bdf8',
+    color: '#e4e4e7',
   },
   countTextEmpty: {
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   descriptionText: {
     fontSize: 12,
@@ -238,12 +238,12 @@ const styles = StyleSheet.create({
   statusPillActive: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 5,
   },
   statusTextActive: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#38bdf8',
+    color: '#34d399',
     flexShrink: 0,
   },
   statusPillEmpty: {
@@ -266,19 +266,19 @@ const styles = StyleSheet.create({
   editBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+    gap: 5,
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.3)',
+    borderColor: '#3f3f46',
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 6,
     borderRadius: 8,
     flexShrink: 0,
   },
   editBtnText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#38bdf8',
+    color: '#f4f4f5',
     flexShrink: 0,
   },
   deleteBtn: {
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(244, 63, 94, 0.3)',
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 6,
     borderRadius: 8,
     flexShrink: 0,
   },
@@ -304,6 +304,6 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   deleteBtnTextDisabled: {
-    color: '#71717a',
+    color: '#a1a1aa',
   },
 });

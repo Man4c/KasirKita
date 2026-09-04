@@ -123,7 +123,7 @@ export default function CategoryFormModal({
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
               <View style={styles.iconCircle}>
-                <FolderTree size={20} color='#38bdf8' />
+                <FolderTree size={20} color='#f43f5e' />
               </View>
               <View>
                 <Text style={styles.modalTitle}>
@@ -150,7 +150,7 @@ export default function CategoryFormModal({
               <TextInput
                 style={[styles.input, errors.name && styles.inputError]}
                 placeholder='Contoh: Makanan Berat, Minuman Dingin...'
-                placeholderTextColor='#71717a'
+                placeholderTextColor='#a1a1aa'
                 value={name}
                 onChangeText={handleNameChange}
               />
@@ -170,7 +170,7 @@ export default function CategoryFormModal({
                 <TextInput
                   style={styles.slugInput}
                   placeholder='makanan-berat'
-                  placeholderTextColor='#71717a'
+                  placeholderTextColor='#a1a1aa'
                   value={slug}
                   onChangeText={handleSlugChange}
                   autoCapitalize='none'
@@ -185,7 +185,7 @@ export default function CategoryFormModal({
               <TextInput
                 style={[styles.input, styles.textArea]}
                 placeholder='Catatan tambahan atau peruntukan kategori barang ini...'
-                placeholderTextColor='#71717a'
+                placeholderTextColor='#a1a1aa'
                 value={description}
                 onChangeText={setDescription}
                 multiline
@@ -263,9 +263,9 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 10,
-    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.3)',
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   subLabel: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   requiredMark: {
     color: '#f43f5e',
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   slugPrefix: {
     fontSize: 14,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#71717a',
+    color: '#a1a1aa',
     marginRight: 4,
     flexShrink: 0,
   },
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: '#0284c7',
+    backgroundColor: '#e11d48',
   },
   submitBtnText: {
     fontSize: 13,
