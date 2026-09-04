@@ -319,6 +319,7 @@
   "317": "checkRadialSpotlight",
   "318": "isGeneratedFile",
   "319": "applyEditing",
+  "320": "onAnnotDown",
   "321": "expo-audio",
   "322": "BORDER_SAFE_TAGS",
   "323": "expo-font",

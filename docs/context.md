@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pembuatan & Pendaftaran Dokumen Plan #26: Master Kategori di Mobile (`plans/260904-26-mobile-master-kategori/plan.md`)**:
+  - Menyusun rencana kerja modular lengkap 6 fase untuk manajemen Master Kategori di aplikasi Mobile (React Native):
+    1. *Fase 1*: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend (`/api/categories` CRUD + `products_count` protection).
+    2. *Fase 2*: Mobile API Service (`categoryService.js`) terintegrasi cache offline (`offlineStorage.js`).
+    3. *Fase 3*: Komponen Kartu (`CategoryCardItem.js`) & Layar Utama (`CategoryManagementScreen.js`) berstandar Defensive UI Impeccable (minimum 12px, flexbox pairing).
+    4. *Fase 4*: Modal Formulir Tambah/Edit Kategori (`CategoryFormModal.js`) dengan auto-generate slug & validasi.
+    5. *Fase 5*: Integrasi Navigasi Hub Menu Dashboard (`DashboardActionHub.js`), proteksi role Owner di `App.js`, dan sinkronisasi reaktif ke filter kasir POS & Master Produk.
+    6. *Fase 6*: Pengujian Komprehensif, uji proteksi penghapusan kategori bertaut produk, verifikasi linter `detect.mjs` (0 defect), dan Expo Web bundling.
+
+
 - **Penataan Rapi & Presisi Header Scanner Barcode Mode Portrait (`PosBarcodeScannerView.js`)**:
   - **Penyebab Masalah**: Di mode Portrait, teks tombol *"Ketik barcode manual"* terlalu panjang sehingga terpotong (*"Ketik barcode man..."*) dan tombol aksi penting *"OK"* terdorong sepenuhnya keluar dari batas layar kanan HP (360px).
   - **Solusi & Penyempurnaan**:
