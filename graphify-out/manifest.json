@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788526306.7951627,
-    "ast_hash": "86b3fb89f7cdae11b77ef4a07f58c8cb",
+    "mtime": 1788526677.2602034,
+    "ast_hash": "5915e85a0e856286c0457c0e7cc9e134",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2340,8 +2340,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/ProductManagementScreen.js": {
-    "mtime": 1788523907.4664996,
-    "ast_hash": "3ef3f96fe337b65451a1ceaed3412905",
+    "mtime": 1788526658.6599967,
+    "ast_hash": "c9c05127b3819c89307463ef7f483ab3",
     "semantic_hash": ""
   },
   "mobile/src/services/productService.js": {

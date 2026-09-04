@@ -316,7 +316,6 @@
   "314": "checkElementRadialSpotlightDOM",
   "315": "Operate mode depth (and Read notes)",
   "316": "Cloud Sync Preferences & Local Data Backup-Restore",
-  "317": "UserFactory",
   "318": "isGeneratedFile",
   "319": "applyEditing",
   "320": "onAnnotDown",
@@ -338,8 +337,6 @@
   "336": "expo-camera",
   "337": "checkElementGptBorderShadowDOM",
   "338": "Impeccable Documenter",
-  "339": "expo-audio",
   "340": "expo",
-  "341": "source-lock.mjs",
-  "342": "barcode-detector"
+  "341": "source-lock.mjs"
 }
