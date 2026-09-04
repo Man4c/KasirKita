@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eksekusi Plan #25 Fase 2: Pembuatan Modul Layanan API Produk & Sinkronisasi Cache Offline (`productService.js`, `offlineStorage.js`)**:
+  - Mengembangkan service wrapper terpusat `mobile/src/services/productService.js`:
+    1. *Operasi CRUD Produk*: `getProducts` (dengan filter terpaginasi), `getProduct`, `createProduct`, `updateProduct`, `deleteProduct` (soft-deletes), `restockProduct` (moving average cost), dan `getStockMovements`.
+    2. *Metadata Master*: `getCategories` dan `getUnits` terintegrasi.
+    3. *Sinkronisasi Cache Offline Otomatis*: Setiap kali produk dibuat, diperbarui, atau direstock, `offlineStorage.upsertCachedProduct` atau `removeCachedProduct` langsung dipanggil secara atomik agar katalog lokal di memori POS kasir dan storage disk tetap sinkron tanpa perlu koneksi internet ulang.
+    4. *Offline Fallback Guard*: Menangani `Network Error` dengan menyajikan data katalog dari `AsyncStorage` lengkap dengan pencarian lokal client-side.
+  - Menambahkan metode `upsertCachedProduct`, `removeCachedProduct`, `cacheUnits`, dan `getCachedUnits` ke `offlineStorage.js`.
+  - Lolos uji bundling Expo Web (`Web Bundled index.js 2304 modules`). Status Fase 2: `completed`.
+
 - **Eksekusi Plan #25 Fase 1: Spesifikasi UX/UI & Kontrak Endpoint API Master Produk Mobile (`docs/spesifikasi-master-produk-mobile.md`, `plans/260904-25-mobile-master-produk/plan.md`)**:
   - Menyelesaikan spesifikasi teknis dan perancangan wireframe antarmuka modul Master Produk Mobile:
     1. *Kontrak API Backend*: Memetakan endpoint RESTful Laravel terproteksi Sanctum & RBAC Role Owner (`GET/POST/PUT/DELETE /api/products`, `POST /api/products/{id}/restock`, `GET /api/categories`, `GET /api/units`) beserta struktur payload request, pagination query, dan format response JSON.

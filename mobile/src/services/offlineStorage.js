@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const KEYS = {
   PRODUCTS: 'kasirkita_offline_products',
   CATEGORIES: 'kasirkita_offline_categories',
+  UNITS: 'kasirkita_offline_units',
   CUSTOMERS: 'kasirkita_offline_customers',
   PROMOS: 'kasirkita_offline_promos',
   TAXES_FEES: 'kasirkita_offline_taxes_fees',
@@ -91,6 +92,77 @@ export const offlineStorage = {
       await AsyncStorage.setItem(KEYS.PRODUCTS, JSON.stringify(products));
     } catch (err) {
       console.warn('Gagal memotong stok lokal offline:', err.message);
+    }
+  },
+
+  /**
+   * Insert or update a single product in local cache.
+   * Useful when owner creates/edits a product or rests stock.
+   */
+  async upsertCachedProduct(product) {
+    if (!product || !product.id) return false;
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.PRODUCTS);
+      let products = raw ? JSON.parse(raw) : [];
+
+      const index = products.findIndex((p) => p.id === product.id);
+      if (index >= 0) {
+        // Merge existing attributes with updated product
+        products[index] = { ...products[index], ...product };
+      } else {
+        // Prepend new product to top of list
+        products.unshift(product);
+      }
+
+      await AsyncStorage.setItem(KEYS.PRODUCTS, JSON.stringify(products));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache produk lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single product from local cache (SoftDeletes).
+   */
+  async removeCachedProduct(productId) {
+    if (!productId) return false;
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.PRODUCTS);
+      if (!raw) return false;
+      let products = JSON.parse(raw);
+      products = products.filter((p) => p.id !== productId);
+      await AsyncStorage.setItem(KEYS.PRODUCTS, JSON.stringify(products));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus produk dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Cache units list locally for unit picker.
+   */
+  async cacheUnits(units) {
+    if (!Array.isArray(units)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.UNITS, JSON.stringify(units));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache satuan:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached units list.
+   */
+  async getCachedUnits() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.UNITS);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
     }
   },
 
