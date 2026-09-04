@@ -364,6 +364,9 @@ export const offlineStorage = {
       const capped = merged.slice(0, maxCap);
       const now = new Date().toISOString();
 
+      // Berikan yield ke event loop agar antrean input/scroll kasir diproses terlebih dahulu
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       await AsyncStorage.multiSet([
         [KEYS.HISTORY_CACHE, JSON.stringify(capped)],
         [KEYS.HISTORY_LAST_SYNC, now],
@@ -446,6 +449,8 @@ export const offlineStorage = {
         const paginated = res.data.data;
         const list = paginated?.data || (Array.isArray(paginated) ? paginated : []);
         if (list.length > 0) {
+          // Berikan jeda yield ke event loop agar animasi dan interaksi layar kasir tidak terganggu
+          await new Promise((resolve) => setTimeout(resolve, 50));
           await this.cacheRecentTransactions(list, { maxDays: 7, maxCap: 200 });
         }
         await this.recordHistoryPrefetchTimestamp();

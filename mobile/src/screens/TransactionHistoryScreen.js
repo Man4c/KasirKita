@@ -12,6 +12,8 @@ import {
   ScrollView,
   RefreshControl,
   Platform,
+  useWindowDimensions,
+  InteractionManager,
 } from 'react-native';
 import {
   Search,
@@ -231,8 +233,13 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
             offlineStorage.cacheRecentTransactions(list);
           }
 
-          // Jalankan background prefetch senyap (7 hari terakhir, max 200) tanpa memblokir UI
-          offlineStorage.prefetchHistoryForOffline(api);
+          // Jalankan background prefetch senyap (7 hari terakhir, max 200) secara non-blocking
+          // Gunakan InteractionManager + delay agar tidak bersaing dengan render FlatList dan scroll kasir
+          InteractionManager.runAfterInteractions(() => {
+            setTimeout(() => {
+              offlineStorage.prefetchHistoryForOffline(api);
+            }, 1200);
+          });
         } else {
           setTransactions((prev) => {
             const existingIds = new Set(prev.map((t) => t.id || t.offline_id));
