@@ -337,5 +337,6 @@
   "335": "barcode-detector",
   "336": "expo-camera",
   "337": "checkElementGptBorderShadowDOM",
-  "338": "checkElementRadialSpotlightDOM"
+  "338": "checkElementRadialSpotlightDOM",
+  "339": "expo"
 }

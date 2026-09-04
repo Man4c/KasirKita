@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pembuatan & Pendaftaran Dokumen Plan #27: Master Satuan Barang di Mobile (`plans/260904-27-mobile-master-satuan/plan.md`)**:
+  - Menyusun rencana kerja modular lengkap 6 fase untuk manajemen Master Satuan (UoM) di aplikasi Mobile (React Native):
+    1. *Fase 1*: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend (`/api/units` CRUD + `withCount(['products', 'conversions'])`).
+    2. *Fase 2*: Mobile API Service (`unitService.js`) terintegrasi validasi simbol unik dan fallback cache offline (`offlineStorage.js`).
+    3. *Fase 3*: Komponen Kartu (`UnitCardItem.js`) & Layar Utama (`UnitManagementScreen.js`) berstandar Defensive UI Impeccable (badge simbol kontras `#c084fc`, usage counters, flexbox pairing).
+    4. *Fase 4*: Modal Formulir Tambah/Edit Satuan (`UnitFormModal.js`) dengan chip preset satuan populer UMKM Indonesia (*pcs, box, btl, porsi, cup, kg, gr, ltr*) dan proteksi larangan hapus satuan berkait.
+    5. *Fase 5*: Integrasi Navigasi Hub Menu Dashboard (`DashboardActionHub.js`), proteksi role Owner di `App.js`, dan sinkronisasi reaktif ke selector satuan pada Master Produk & POS.
+    6. *Fase 6*: Pengujian Komprehensif, uji proteksi integritas data penghapusan satuan berproduk/konversi, audit linter `detect.mjs` (0 defect), dan Expo Web bundling.
+
 - **Pembuatan & Pendaftaran Dokumen Plan #26: Master Kategori di Mobile (`plans/260904-26-mobile-master-kategori/plan.md`)**:
   - Menyusun rencana kerja modular lengkap 6 fase untuk manajemen Master Kategori di aplikasi Mobile (React Native):
     1. *Fase 1*: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend (`/api/categories` CRUD + `products_count` protection).
