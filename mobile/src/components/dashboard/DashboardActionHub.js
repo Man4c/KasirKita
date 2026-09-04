@@ -174,10 +174,10 @@ export default function DashboardActionHub({
               )}
 
               <View style={[styles.iconBox, { backgroundColor: item.bgColor }]}>
-                <IconComp size={20} color={item.color} />
+                <IconComp size={18} color={item.color} />
               </View>
 
-              <Text style={styles.cardTitle} numberOfLines={1}>
+              <Text style={styles.cardTitle} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.85}>
                 {item.name}
               </Text>
             </TouchableOpacity>
@@ -232,7 +232,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   gridCard: {
-    width: '23.2%',
+    // Exact 4-column math: (100% - (3 * 8px gap)) / 4 = calc((100% - 24px) / 4)
+    // On 360px viewport: 360 - 32px padding = 328px. (328 - 24) / 4 = 76px.
+    // 76 / 328 = 23.17%. With gap: 8, 22.8% guarantees it never wraps to 3 columns.
+    width: '22.8%',
     aspectRatio: 1,
     backgroundColor: '#18181b',
     borderWidth: 1,
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 6,
+    padding: 4,
     position: 'relative',
   },
   productCardActive: {
@@ -248,18 +251,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#141c19',
   },
   iconBox: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
+    width: 34,
+    height: 34,
+    borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   tileBadge: {
     position: 'absolute',
-    top: 4,
-    right: 4,
-    paddingHorizontal: 4,
+    top: 3,
+    right: 3,
+    paddingHorizontal: 3,
     paddingVertical: 1,
     borderRadius: 4,
     borderWidth: 1,
@@ -269,7 +272,7 @@ const styles = StyleSheet.create({
   tileBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    lineHeight: 14,
+    lineHeight: 13,
   },
   cardTitle: {
     fontSize: 12,
