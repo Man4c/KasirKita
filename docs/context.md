@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eksekusi Plan #25 Fase 4: Modal Form Tambah/Edit Produk & Integrasi Kamera Barcode (`ProductFormModal.js`, `ProductBarcodeScannerModal.js`)**:
+  - Mengimplementasikan formulir lengkap pembuatan dan pembaruan produk dengan validasi ketat & scanner kamera:
+    1. *Formulir Produk (`ProductFormModal.js`)*: Input nama produk (wajib), kategori picker chips, satuan unit picker chips (pcs, botol, box, porsi, cup, dll), input barcode terintegrasi kamera scanner, format rupiah otomatis untuk harga jual & modal HPP, input kuantitas stok awal & batas minimum stok alert, switch toggle visibilitas di kasir POS, dan tombol konfirmasi hapus produk (khusus edit).
+    2. *Kamera Scanner Modal (`ProductBarcodeScannerModal.js`)*: Memanfaatkan `CameraView` dari `expo-camera` untuk mendeteksi berbagai format barcode kemasan fisik (EAN-13, EAN-8, UPC, Code-128, QR Code) lengkap dengan garis laser animasi, toggle senter flash (`torch`), audio feedback beep, dan auto-fill instan ke form.
+    3. *Kepatuhan Standar UI*: 0 linting defect pada `detect.mjs`, seluruh font mematuhi *The Readability Floor Rule* ($\ge 12$px), dan lolos bundling Expo Web. Status Fase 4: `completed`.
+
 - **Eksekusi Plan #25 Fase 3: Layar Utama Master Produk & Komponen Kartu Modular (`ProductManagementScreen.js`, `ProductCardItem.js`)**:
   - Mengembangkan tampilan antarmuka katalog produk mobile lengkap dengan prinsip *Defensive UI* dan *Impeccable Dark Mode*:
     1. *Komponen Kartu Produk (`ProductCardItem.js`)*: Menampilkan inisial/ikon produk dengan border status stok (Aman hijau, Menipis amber, Habis merah), nama produk, badge kategori, barcode/SKU, harga jual tebal kontras, dan modal/HPP rata-rata terproteksi toggle sensor mata `[ 👁️ ]` khusus role Owner.

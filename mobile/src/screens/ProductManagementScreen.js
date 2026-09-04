@@ -26,13 +26,13 @@ import { productService } from '../services/productService';
 import { formatRp } from '../utils/format';
 import { useAuth } from '../context/AuthContext';
 import ProductCardItem from '../components/product/ProductCardItem';
+import ProductFormModal from '../components/product/ProductFormModal';
+import ProductBarcodeScannerModal from '../components/product/ProductBarcodeScannerModal';
 import { showAlert } from '../utils/alert';
 
 export default function ProductManagementScreen({
   navigation,
-  onOpenForm,
   onOpenRestock,
-  onOpenScanner,
 }) {
   const { user } = useAuth();
   const isOwner = user?.role === 'owner';
@@ -40,11 +40,17 @@ export default function ProductManagementScreen({
   // State
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [units, setUnits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [showCost, setShowCost] = useState(false);
+
+  // Modals
+  const [formModalVisible, setFormModalVisible] = useState(false);
+  const [selectedProductForEdit, setSelectedProductForEdit] = useState(null);
+  const [scannerModalVisible, setScannerModalVisible] = useState(false);
 
   // Filters & Pagination
   const [search, setSearch] = useState('');
@@ -68,21 +74,25 @@ export default function ProductManagementScreen({
     }, 400);
   };
 
-  // Load initial data (products + categories)
+  // Load initial data (products + categories + units)
   useEffect(() => {
-    loadCategories();
+    loadMetadata();
   }, []);
 
   useEffect(() => {
     loadProducts(1, true);
   }, [debouncedSearch, selectedCategory, stockFilter]);
 
-  const loadCategories = async () => {
+  const loadMetadata = async () => {
     try {
-      const cats = await productService.getCategories();
+      const [cats, uns] = await Promise.all([
+        productService.getCategories(),
+        productService.getUnits(),
+      ]);
       setCategories(cats);
+      setUnits(uns);
     } catch (err) {
-      console.log('Gagal memuat kategori:', err.message);
+      console.log('Gagal memuat metadata:', err.message);
     }
   };
 
@@ -102,7 +112,7 @@ export default function ProductManagementScreen({
       if (stockFilter === 'LOW') {
         params.low_stock = true;
       } else if (stockFilter === 'OUT') {
-        // Will be filtered in list or query
+        // Filtered locally below
       } else if (stockFilter === 'INACTIVE') {
         params.is_active = false;
       }
@@ -144,7 +154,7 @@ export default function ProductManagementScreen({
 
   const handleRefresh = () => {
     setRefreshing(true);
-    loadCategories();
+    loadMetadata();
     loadProducts(1, false);
   };
 
@@ -155,20 +165,16 @@ export default function ProductManagementScreen({
     }
   };
 
-  // Handlers
-  const handleEditProduct = useCallback(
-    (product) => {
-      if (onOpenForm) {
-        onOpenForm(product);
-      } else {
-        showAlert(
-          'Edit Produk (Fase 4)',
-          `Formulir edit untuk "${product.name}" akan dibuka pada fase pengerjaan berikutnya.`
-        );
-      }
-    },
-    [onOpenForm]
-  );
+  // Open Form Modal (Create / Edit)
+  const handleOpenCreateProduct = () => {
+    setSelectedProductForEdit(null);
+    setFormModalVisible(true);
+  };
+
+  const handleEditProduct = useCallback((product) => {
+    setSelectedProductForEdit(product);
+    setFormModalVisible(true);
+  }, []);
 
   const handleRestockProduct = useCallback(
     (product) => {
@@ -237,7 +243,7 @@ export default function ProductManagementScreen({
               <TouchableOpacity
                 style={styles.createBtnHeader}
                 activeOpacity={0.8}
-                onPress={() => onOpenForm ? onOpenForm(null) : showAlert('Tambah Produk (Fase 4)', 'Formulir tambah produk baru akan dibuka pada fase pengerjaan berikutnya.')}
+                onPress={handleOpenCreateProduct}
               >
                 <Plus size={16} color="#ffffff" />
                 <Text style={styles.createBtnHeaderText}>Produk</Text>
@@ -278,15 +284,13 @@ export default function ProductManagementScreen({
             )}
           </View>
 
-          {onOpenScanner && (
-            <TouchableOpacity
-              style={styles.barcodeScanBtn}
-              activeOpacity={0.7}
-              onPress={onOpenScanner}
-            >
-              <ScanBarcode size={18} color="#ffffff" />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={styles.barcodeScanBtn}
+            activeOpacity={0.7}
+            onPress={() => setScannerModalVisible(true)}
+          >
+            <ScanBarcode size={18} color="#ffffff" />
+          </TouchableOpacity>
         </View>
 
         {/* Horizontal Category Chips */}
@@ -372,7 +376,7 @@ export default function ProductManagementScreen({
             <Text style={styles.emptySubtitle}>
               {search || selectedCategory || stockFilter !== 'ALL'
                 ? 'Tidak ada produk yang cocok dengan kriteria filter Anda.'
-                : 'Belum ada produk di toko Anda. Tekan tombol "+ Tambah Produk" di bawah untuk memulai.'}
+                : 'Belum ada produk di toko Anda. Tekan tombol "+ Produk" di atas untuk memulai.'}
             </Text>
           </View>
         ) : (
@@ -403,6 +407,28 @@ export default function ProductManagementScreen({
           />
         )}
       </View>
+
+      {/* Product Form Modal (Tambah & Edit) */}
+      <ProductFormModal
+        visible={formModalVisible}
+        product={selectedProductForEdit}
+        categories={categories}
+        units={units}
+        onClose={() => setFormModalVisible(false)}
+        onSaved={() => {
+          loadProducts(1, false);
+        }}
+      />
+
+      {/* Barcode Scanner Modal for Quick Filter/Search */}
+      <ProductBarcodeScannerModal
+        visible={scannerModalVisible}
+        onClose={() => setScannerModalVisible(false)}
+        onScanBarcode={(code) => {
+          setSearch(code);
+          setDebouncedSearch(code);
+        }}
+      />
     </SafeAreaView>
   );
 }
