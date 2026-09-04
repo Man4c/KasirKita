@@ -20,6 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #27 Fase 2: Pembuatan Mobile API Service (`unitService.js`) & Sinkronisasi Cache Offline Satuan (`offlineStorage.js`)**:
+  - Mengembangkan service wrapper terintegrasi [`mobile/src/services/unitService.js`](file:///d:/Projects/KasirKita/mobile/src/services/unitService.js):
+    1. `getUnits(params)`: Mengambil daftar satuan barang, mendukung filter pencarian lokal/server, dan meng-cache data lokal secara otomatis.
+    2. `getUnit(id)`: Mengambil rincian data spesifik satuan.
+    3. `createUnit(payload)`: Membuat satuan baru dengan validasi simbol unik dan penambahan atomik ke cache offline lokal (`upsertCachedUnit`).
+    4. `updateUnit(id, payload)`: Menyunting nama, simbol, atau keterangan satuan serta memperbarui cache offline.
+    5. `deleteUnit(id)`: Menghapus satuan tidak terpakai, membersihkan dari cache lokal (`removeCachedUnit`), dan menangani pesan error jika satuan masih terhubung produk aktif (`products_count > 0 || conversions_count > 0`).
+    6. *Offline-First Fallback*: Saat offline, otomatis membaca data satuan dari `offlineStorage` dan menyaring kata kunci pencarian secara instan di memori.
+  - Memperkaya [`mobile/src/services/offlineStorage.js`](file:///d:/Projects/KasirKita/mobile/src/services/offlineStorage.js) dengan helper method: `upsertCachedUnit` dan `removeCachedUnit`.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`). Status Fase 2: `completed`.
+
 - **Penyelesaian Plan #27 Fase 1: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend Master Satuan (`plans/260904-27-mobile-master-satuan/plan.md`)**:
   - Memverifikasi endpoint backend REST API Laravel:
     1. `GET /api/units`: Mengembalikan seluruh satuan dengan penghitungan relasi `products_count` (base unit) dan `conversions_count` (multi-UoM).

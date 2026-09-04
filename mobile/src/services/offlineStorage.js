@@ -231,6 +231,44 @@ export const offlineStorage = {
   },
 
   /**
+   * Insert or update a single unit in local cache.
+   */
+  async upsertCachedUnit(unit) {
+    if (!unit || !unit.id) return false;
+    try {
+      const units = await this.getCachedUnits();
+      const index = units.findIndex((u) => u.id === unit.id);
+      if (index >= 0) {
+        units[index] = { ...units[index], ...unit };
+      } else {
+        units.push(unit);
+      }
+      units.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      await AsyncStorage.setItem(KEYS.UNITS, JSON.stringify(units));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache satuan lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single unit from local cache.
+   */
+  async removeCachedUnit(unitId) {
+    if (!unitId) return false;
+    try {
+      let units = await this.getCachedUnits();
+      units = units.filter((u) => String(u.id) !== String(unitId));
+      await AsyncStorage.setItem(KEYS.UNITS, JSON.stringify(units));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus satuan dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
    * Enqueue an offline transaction.
    * Assigns an offline ID, temporary offline invoice, and deducts local stock.
    */
