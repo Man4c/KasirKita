@@ -607,8 +607,13 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               showTaxFeature={showTaxFeature}
               onOpenCustomerModal={() => setCustomerModalOpen(true)}
               onSwitchToPortrait={async () => {
-                await storage.saveSettings({ orientationPref: 'AUTO' });
-                await orientationService.applyPreference('AUTO');
+                try {
+                  const current = (await storage.getSettings()) || {};
+                  await storage.setSettings({ ...current, orientationPref: 'AUTO' });
+                  await orientationService.applyPreference('PORTRAIT');
+                } catch (e) {
+                  console.warn('Gagal switch portrait:', e);
+                }
               }}
               isScanMode={isBarcodeScannerOpen}
               onToggleScanMode={showBarcodeScanner ? () => setIsBarcodeScannerOpen(!isBarcodeScannerOpen) : undefined}
