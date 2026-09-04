@@ -54,22 +54,24 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Mengatur warna latar belakang tombol menjadi **Rose Brand (`#e11d48`)** dengan border kontras (`#f43f5e`).
   - Diterapkan secara seragam di layar kasir mode Portrait (`ProductGrid.js`) maupun panel register Landscape (`LandscapeRegisterPanel.js`).
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
-- **Arsitektur Pencarian Server-Side & Optimalisasi Riwayat Transaksi (`PosController.php`, `TransactionHistoryScreen.js`, Migrasi DB `pg_trgm`)**:
+- **Arsitektur Offline-First & Pencarian Riwayat Transaksi (`TransactionHistoryScreen.js`, `offlineStorage.js`, `PosController.php`)**:
+  - **Dukungan Offline-First Penuh (Hybrid Cache & Queue Merge)**:
+    - Menyelesaikan batasan riwayat transaksi saat koneksi internet mati/offline:
+      - Menambahkan `cacheRecentTransactions(transactions)` dan `getCachedRecentTransactions()` pada [`offlineStorage.js`](file:///d:/Projects/KasirKita/mobile/src/services/offlineStorage.js) untuk menyimpan snapshot 100 nota riwayat terakhir secara lokal di HP.
+      - Mengintegrasikan antrean transaksi offline ([`offlineStorage.getOfflineQueue()`](file:///d:/Projects/KasirKita/mobile/src/services/offlineStorage.js)): nota yang dibuat saat kasir offline (`INV-OFF-...`) otomatis disisipkan di **urutan teratas** daftar riwayat lengkap dengan badge amber **`[ ⏳ Belum Sinkron ]`**.
+      - Saat offline total (*Network Error*), layar riwayat otomatis beralih ke *Offline Fallback Mode*, menampilkan banner status offline, serta tetap mengizinkan kasir mencari, memfilter, dan **mencetak ulang struk offline ke printer Bluetooth thermal** tanpa butuh internet.
+      - Saat online kembali, antrean offline otomatis disinkronkan oleh `syncManager` dan layar riwayat kembali beralih ke pencarian server-side database PostgreSQL.
   - **Pencarian Cerdas Server-Side & Filtering Database**:
     - Memindahkan logika pencarian riwayat transaksi dari client-side (yang sebelumnya hanya memfilter 20 data halaman pertama) ke server-side query di backend Laravel [`PosController.php`](file:///d:/Projects/KasirKita/backend/app/Http/Controllers/Api/PosController.php).
+    - Operator query dibuat driver-aware (`DB::getDriverName() === 'pgsql' ? 'ilike' : 'like'`), mendukung SQLite lokal dan PostgreSQL cloud tanpa error 500.
     - Query mencakup pencarian fleksibel berdasarkan `invoice_number`, `customer_name`, maupun nama kasir (`cashier.name`), dikombinasikan dengan filter metode pembayaran (`payment_method`).
-    - Dengan ini, kasir dapat mencari nota dari ribuan transaksi masa lalu tanpa harus scroll manual, dan data yang dimuat ke memori HP tetap ramping dan hemat kuota.
   - **Indeks PostgreSQL `pg_trgm` & B-Tree (`2026_09_04_000001_add_trgm_and_indexes_to_transactions.php`)**:
     - Menambahkan migrasi database untuk mengaktifkan extension `pg_trgm` di PostgreSQL.
     - Menerapkan **GIN Trigram Indexes** (`gin_trgm_ops`) pada kolom `invoice_number` dan `customer_name` agar pencarian wildcard substring `ILIKE '%...%'` berjalan instan menggunakan index scan alih-alih sequential table scan.
     - Menambahkan index B-Tree komposit pada `payment_method` dan `payment_status`.
-  - **Proteksi Race Condition & Debounce Pencarian**:
-    - Mengimplementasikan `debouncedSearch` (400ms) di [`TransactionHistoryScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/TransactionHistoryScreen.js) agar ketikan kasir tidak membanjiri server dengan HTTP request pada setiap ketukan huruf.
-    - Mengintegrasikan `AbortController` pada panggilan Axios: request lama yang masih berjalan di jaringan otomatis di-cancel ketika kasir mengetikkan karakter baru, mencegah hasil respon lama menimpa hasil pencarian yang lebih baru (*out-of-order race condition*).
-  - **Tuning Kinerja FlatList & Dynamic Empty State**:
-    - Menambahkan parameter tuning virtualisasi memori pada FlatList: `removeClippedSubviews={Platform.OS === 'android'}`, `maxToRenderPerBatch={10}`, `windowSize={7}`, dan `initialNumToRender={10}`.
-    - Menggunakan `keyExtractor` stabil berbasis `(item.id || item.uuid || item.invoice_number)`.
-    - Menyempurnakan pesan tampilan kosong (*Empty State*): secara dinamis membedakan kondisi saat toko memang belum memiliki transaksi sama sekali vs saat pencarian/filter tidak menemukan hasil yang cocok (*"Tidak Ada Transaksi Ditemukan"* + panduan mereset kata kunci atau filter).
+  - **Proteksi Race Condition, Debounce, & Memoization**:
+    - Mengimplementasikan `debouncedSearch` (400ms) dan `AbortController` pada Axios di [`TransactionHistoryScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/TransactionHistoryScreen.js).
+    - Memisahkan kartu transaksi ke dalam komponen `TransactionCard` ter-memoize (`React.memo`) dengan `useCallback`, dan menyetel batching props FlatList (`initialNumToRender={8}`, `maxToRenderPerBatch={8}`, `windowSize={5}`) sehingga menghilangkan warning render lag Android.
   - **Perbaikan Navigasi Tombol Riwayat Dashboard & Paginasi Riwayat (`DashboardScreen.js`, `App.js`, `TransactionHistoryScreen.js`)**:
     - **Perbaikan Navigasi Tab Riwayat**:
       - Memperbaiki tautan tombol *"Riwayat →"* di bagian 10 Transaksi Penjualan Terakhir Dashboard ([`DashboardScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/DashboardScreen.js)) yang sebelumnya memanggil `navigation.navigate('Riwayat')` sehingga salah diarahkan ke fallback Kasir POS. Sekarang memanggil `navigation.navigate('history')`, serta menambahkan normalisasi alias di `handleTabChange` ([`App.js`](file:///d:/Projects/KasirKita/mobile/App.js)), menjamin user langsung mendarat di tab Riwayat dengan ikon aktif menyala.

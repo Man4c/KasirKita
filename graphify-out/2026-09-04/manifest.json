@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788490091.1966329,
-    "ast_hash": "aebcfb99cfc74c9d0e5e70c155ea131a",
+    "mtime": 1788490899.4466069,
+    "ast_hash": "3d19d362f68a23ef4ff267eeb901a1c7",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1255,8 +1255,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/PosController.php": {
-    "mtime": 1788328875.4172554,
-    "ast_hash": "54798e0f401b5257835d3c3390181443",
+    "mtime": 1788490771.4221995,
+    "ast_hash": "41784891578a9b41c0f43cbcc03189d6",
     "semantic_hash": ""
   },
   "backend/app/Services/PosService.php": {
@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/TransactionHistoryScreen.js": {
-    "mtime": 1788490073.2842205,
-    "ast_hash": "cb52ea9beb01fbcb98c6d87904d27258",
+    "mtime": 1788490866.1870034,
+    "ast_hash": "b44138245a424c604795a3cfd8e3bd5b",
     "semantic_hash": ""
   },
   "plans/260902-19-mobile-dedicated-checkout-screen/plan.md": {
@@ -2302,6 +2302,11 @@
   "mobile/src/components/pos/PaymentSuccessModal.js": {
     "mtime": 1788436735.9328358,
     "ast_hash": "2e5662d0798b227980864ba09c1abff4",
+    "semantic_hash": ""
+  },
+  "backend/database/migrations/2026_09_04_000001_add_trgm_and_indexes_to_transactions.php": {
+    "mtime": 1788490758.554982,
+    "ast_hash": "ad83d8a10bdf4831d9d64badb9649524",
     "semantic_hash": ""
   }
 }

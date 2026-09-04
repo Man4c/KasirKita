@@ -12,6 +12,8 @@ const KEYS = {
   DASHBOARD_TRENDS: 'kasirkita_offline_dashboard_trends',
   DASHBOARD_RECENT_TX: 'kasirkita_offline_dashboard_recent_tx',
   DASHBOARD_LAST_SYNC: 'kasirkita_offline_dashboard_last_sync',
+  HISTORY_CACHE: 'kasirkita_offline_history_cache',
+  HISTORY_LAST_SYNC: 'kasirkita_offline_history_last_sync',
 };
 
 export const offlineStorage = {
@@ -300,6 +302,46 @@ export const offlineStorage = {
     } catch (err) {
       console.warn('Gagal membaca cache transaksi terbaru dashboard:', err.message);
       return [];
+    }
+  },
+
+  /**
+   * Cache transaction history list for offline fallback (up to 100 items).
+   */
+  async cacheRecentTransactions(transactions) {
+    try {
+      if (!Array.isArray(transactions)) return false;
+      const slice = transactions.slice(0, 100);
+      const now = new Date().toISOString();
+      await AsyncStorage.multiSet([
+        [KEYS.HISTORY_CACHE, JSON.stringify(slice)],
+        [KEYS.HISTORY_LAST_SYNC, now],
+      ]);
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache riwayat transaksi:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached transaction history list.
+   */
+  async getCachedRecentTransactions() {
+    try {
+      const pairs = await AsyncStorage.multiGet([
+        KEYS.HISTORY_CACHE,
+        KEYS.HISTORY_LAST_SYNC,
+      ]);
+      const dataStr = pairs[0]?.[1];
+      const lastSync = pairs[1]?.[1];
+      return {
+        transactions: dataStr ? JSON.parse(dataStr) : [],
+        lastSync: lastSync || null,
+      };
+    } catch (err) {
+      console.warn('Gagal membaca cache riwayat transaksi:', err.message);
+      return { transactions: [], lastSync: null };
     }
   },
 };

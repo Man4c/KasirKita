@@ -25,8 +25,11 @@ import {
   Printer,
   CheckCircle2,
   AlertCircle,
+  WifiOff,
+  Clock,
 } from 'lucide-react-native';
 import api from '../services/api';
+import { offlineStorage } from '../services/offlineStorage';
 import PosReceiptModal from '../components/pos/PosReceiptModal';
 
 const getMethodIcon = (method) => {
@@ -40,17 +43,37 @@ const getMethodIcon = (method) => {
   }
 };
 
+const filterOfflineItems = (items, searchTxt, methodFilter) => {
+  if (!Array.isArray(items)) return [];
+  const q = (searchTxt || '').toLowerCase().trim();
+  return items.filter((item) => {
+    const matchMethod =
+      !methodFilter || methodFilter === 'ALL' || item.payment_method === methodFilter;
+    if (!matchMethod) return false;
+    if (!q) return true;
+
+    const matchInvoice = item.invoice_number && item.invoice_number.toLowerCase().includes(q);
+    const matchCust = item.customer_name && item.customer_name.toLowerCase().includes(q);
+    const cashierName = item.cashier?.name || item.cashier_name || '';
+    const matchCashier = cashierName.toLowerCase().includes(q);
+
+    return matchInvoice || matchCust || matchCashier;
+  });
+};
+
 const TransactionCard = React.memo(function TransactionCard({ item, onPress, formatRp }) {
   const isCancelled = item.payment_status === 'CANCELLED';
+  const isOfflinePending = item.is_offline_pending;
+
   return (
     <TouchableOpacity
-      style={styles.txCard}
+      style={[styles.txCard, isOfflinePending && styles.txCardOfflinePending]}
       activeOpacity={0.7}
       onPress={() => onPress(item)}
     >
       <View style={styles.txCardHeader}>
         <View style={styles.invoiceBadgeRow}>
-          <Receipt size={14} color="#fb7185" />
+          <Receipt size={14} color={isOfflinePending ? '#f59e0b' : '#fb7185'} />
           <Text style={styles.invoiceNumber} numberOfLines={1}>
             {item.invoice_number}
           </Text>
@@ -58,16 +81,25 @@ const TransactionCard = React.memo(function TransactionCard({ item, onPress, for
         <View
           style={[
             styles.statusBadge,
-            isCancelled ? styles.statusBadgeCancelled : styles.statusBadgeSuccess,
+            isOfflinePending
+              ? styles.statusBadgeOffline
+              : isCancelled
+              ? styles.statusBadgeCancelled
+              : styles.statusBadgeSuccess,
           ]}
         >
+          {isOfflinePending && <Clock size={10} color="#f59e0b" style={{ marginRight: 3 }} />}
           <Text
             style={[
               styles.statusBadgeText,
-              isCancelled ? styles.statusTextCancelled : styles.statusTextSuccess,
+              isOfflinePending
+                ? styles.statusTextOffline
+                : isCancelled
+                ? styles.statusTextCancelled
+                : styles.statusTextSuccess,
             ]}
           >
-            {isCancelled ? 'Dibatalkan' : 'Selesai'}
+            {isOfflinePending ? 'Belum Sinkron' : isCancelled ? 'Dibatalkan' : 'Selesai'}
           </Text>
         </View>
       </View>
@@ -97,7 +129,7 @@ const TransactionCard = React.memo(function TransactionCard({ item, onPress, for
           {getMethodIcon(item.payment_method)}
           <Text style={styles.methodBadgeText}>{item.payment_method}</Text>
         </View>
-        <Text style={styles.totalAmountText}>{formatRp(item.total_amount)}</Text>
+        <Text style={styles.totalAmountText}>{formatRp(item.total_amount || item.paid_amount)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -112,6 +144,9 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [filterMethod, setFilterMethod] = useState('ALL'); // ALL, CASH, QRIS, TRANSFER
   const [selectedTx, setSelectedTx] = useState(null);
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
+
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
+  const [offlineQueueCount, setOfflineQueueCount] = useState(0);
 
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -155,6 +190,10 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
         setLoading(true);
       }
 
+      // Ambil antrean transaksi offline yang tersimpan di HP
+      const offlineQueue = await offlineStorage.getOfflineQueue();
+      setOfflineQueueCount(offlineQueue.length);
+
       const params = {
         page: pageNum,
         per_page: 20,
@@ -172,16 +211,26 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
       });
 
       if (res.data?.success) {
+        setIsOfflineMode(false);
         const paginated = res.data.data;
         const list = paginated?.data || (Array.isArray(paginated) ? paginated : []);
         const currentPage = paginated?.current_page || pageNum;
         const lastPage = paginated?.last_page || 1;
 
         if (pageNum === 1) {
-          setTransactions(list);
+          // Filter antrean offline lokal sesuai kata kunci & filter metode
+          const matchedQueue = filterOfflineItems(offlineQueue, activeSearch, activeMethod);
+          const queueIds = new Set(matchedQueue.map((q) => q.id || q.offline_id));
+          const uniqueServerList = list.filter((t) => !queueIds.has(t.id));
+
+          // Tempatkan antrean offline lokal di paling atas
+          setTransactions([...matchedQueue, ...uniqueServerList]);
+
+          // Perbarui snapshot cache riwayat lokal untuk offline fallback
+          offlineStorage.cacheRecentTransactions(list);
         } else {
           setTransactions((prev) => {
-            const existingIds = new Set(prev.map((t) => t.id));
+            const existingIds = new Set(prev.map((t) => t.id || t.offline_id));
             const newItems = list.filter((t) => !existingIds.has(t.id));
             return [...prev, ...newItems];
           });
@@ -193,7 +242,28 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
       if (axios.isCancel(err) || err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
         return; // Silently ignore request cancellation from faster typing
       }
-      console.log('Error fetching transactions:', err.message);
+      console.log('API error / Offline, fallback to local storage:', err.message);
+      setIsOfflineMode(true);
+
+      // Fallback Mode Offline: Baca antrean lokal + cache riwayat terakhir
+      const offlineQueue = await offlineStorage.getOfflineQueue();
+      setOfflineQueueCount(offlineQueue.length);
+
+      const { transactions: cachedList } = await offlineStorage.getCachedRecentTransactions();
+
+      const combined = [];
+      const seen = new Set();
+      for (const item of [...offlineQueue, ...cachedList]) {
+        const idKey = item.id || item.offline_id || item.invoice_number;
+        if (idKey && !seen.has(idKey)) {
+          seen.add(idKey);
+          combined.push(item);
+        }
+      }
+
+      const filteredOffline = filterOfflineItems(combined, activeSearch, activeMethod);
+      setTransactions(filteredOffline);
+      setHasMore(false);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -301,6 +371,23 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
           );
         })}
       </View>
+
+      {/* Offline / Sync Banner Indicator */}
+      {isOfflineMode ? (
+        <View style={styles.offlineBanner}>
+          <WifiOff size={14} color="#f59e0b" style={{ marginRight: 8, flexShrink: 0 }} />
+          <Text style={styles.offlineBannerText}>
+            Mode Offline: Menampilkan {transactions.length} nota tersimpan di HP.
+          </Text>
+        </View>
+      ) : offlineQueueCount > 0 ? (
+        <View style={styles.queueBanner}>
+          <Clock size={14} color="#38bdf8" style={{ marginRight: 8, flexShrink: 0 }} />
+          <Text style={styles.queueBannerText}>
+            {offlineQueueCount} transaksi offline di HP menunggu sinkronisasi otomatis.
+          </Text>
+        </View>
+      ) : null}
 
       {/* Transaction List */}
       {loading ? (
@@ -458,6 +545,42 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontFamily: 'Poppins_700Bold',
   },
+  offlineBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(245, 158, 11, 0.12)',
+    borderColor: '#b45309',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 16,
+    marginBottom: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  offlineBannerText: {
+    color: '#fde68a',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    flex: 1,
+  },
+  queueBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    borderColor: '#0284c7',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 16,
+    marginBottom: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  queueBannerText: {
+    color: '#bae6fd',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    flex: 1,
+  },
   listContent: {
     paddingHorizontal: 16,
     paddingBottom: 24,
@@ -469,6 +592,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 14,
     padding: 14,
+  },
+  txCardOfflinePending: {
+    borderColor: '#b45309',
+    backgroundColor: '#1a1612',
   },
   txCardHeader: {
     flexDirection: 'row',
@@ -499,6 +626,11 @@ const styles = StyleSheet.create({
   statusBadgeCancelled: {
     backgroundColor: 'rgba(244, 63, 94, 0.15)',
   },
+  statusBadgeOffline: {
+    backgroundColor: 'rgba(245, 158, 11, 0.18)',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   statusBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
@@ -508,6 +640,9 @@ const styles = StyleSheet.create({
   },
   statusTextCancelled: {
     color: '#fb7185',
+  },
+  statusTextOffline: {
+    color: '#f59e0b',
   },
   txMetaRow: {
     flexDirection: 'row',
