@@ -24,8 +24,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Menggantikan tombol *Pelanggan* yang sebelumnya berdesakan di header keranjang panel kanan mode landscape dengan tombol aksi **`[ 📱 Portrait ]`**.
   - Opsi pemilihan pelanggan tetap 100% lengkap dan elegan pada tampilan pembayaran kasir (*PosCheckoutView* di atas Total Tagihan) sesuai toggle pengaturan.
   - Saat tombol **`[ 📱 Portrait ]`** ditekan:
-    - Sistem secara otomatis mereset preferensi orientasi menjadi **`AUTO`** di storage lokal.
-    - Membuka kunci hardware orientation lock (`orientationService.applyPreference('AUTO')`), sehingga layar dapat kembali ke mode Portrait dan pengguna dapat kembali mengakses seluruh menu/screen aplikasi (Dashboard, Riwayat, Pengaturan) tanpa kendala.
+    - Memperbaiki pemanggilan storage ke metode yang benar (`storage.setSettings` bukan `saveSettings`).
+    - Mereset preferensi orientasi ke `AUTO` dan secara langsung memanggil `orientationService.applyPreference('PORTRAIT')` sehingga layar seketika dipaksa berputar tegak lurus ke mode Portrait.
+    - Pengguna dapat langsung mengakses seluruh menu/screen aplikasi (Dashboard, Riwayat, Pengaturan) tanpa kendala.
   - Tampilan header keranjang menjadi sangat lega, tidak tabrakan, dan proporsional.
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Penyegaran Tampilan Tombol Scan Barcode Kasir POS (`ProductGrid.js`, `LandscapeRegisterPanel.js`)**:
