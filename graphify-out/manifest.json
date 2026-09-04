@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788508692.9133604,
-    "ast_hash": "65e694e63912bf814f3bf05abfab742c",
+    "mtime": 1788511919.5312843,
+    "ast_hash": "7703afa2d13fd32df9db1c7e7f7dc400",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788490044.797454,
-    "ast_hash": "f3357a55bbed42b87fb088808da0e67e",
+    "mtime": 1788510736.1263776,
+    "ast_hash": "ec6bde7db9e9f03c680f03cbbc5f673e",
     "semantic_hash": ""
   },
   "mobile/app.json": {
@@ -1390,8 +1390,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {
-    "mtime": 1788507992.2586012,
-    "ast_hash": "67c68c2931415f69e08fa7f4ee2714ac",
+    "mtime": 1788510706.1750622,
+    "ast_hash": "0c3f8ac2272d6ec9469dfa19226c63ab",
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/PosScreen.js": {
-    "mtime": 1788504850.1178799,
-    "ast_hash": "054ec8f9d4ae5f81db7c8e1e7c7003cd",
+    "mtime": 1788511878.9128475,
+    "ast_hash": "9126fe6a04258fe26f5e5a768d682cd6",
     "semantic_hash": ""
   },
   "mobile/src/services/api.js": {
@@ -2130,8 +2130,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/offlineStorage.js": {
-    "mtime": 1788503910.824451,
-    "ast_hash": "e921f242c4ef9f12cd4ea7fd42f59ea2",
+    "mtime": 1788510033.9094234,
+    "ast_hash": "8c6975f8b49ad3646a25ce6815ab6755",
     "semantic_hash": ""
   },
   "mobile/src/services/syncManager.js": {
@@ -2260,8 +2260,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PosBarcodeScannerView.js": {
-    "mtime": 1788416606.5163212,
-    "ast_hash": "ec547a152b0a82b2355d7c41e8489b00",
+    "mtime": 1788511866.4806485,
+    "ast_hash": "878da8a45e5f459818894877ce083445",
     "semantic_hash": ""
   },
   "mobile/src/services/soundService.js": {
@@ -2310,13 +2310,48 @@
     "semantic_hash": ""
   },
   "plans/260904-25-mobile-master-produk/plan.md": {
-    "mtime": 1788507173.96695,
-    "ast_hash": "77ddd700c4c84f84e906954b7bd941fa",
+    "mtime": 1788511898.5001385,
+    "ast_hash": "2e23646c7062764609e5f46d9c6a4825",
     "semantic_hash": ""
   },
   "mobile/src/components/dashboard/DashboardActionHub.js": {
-    "mtime": 1788508668.9689662,
-    "ast_hash": "dabbbe8fad4d5a55aea596fe0b39d224",
+    "mtime": 1788509761.7623973,
+    "ast_hash": "502f92f0bc494c819a2e989a358f37fc",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/product/ProductBarcodeScannerModal.js": {
+    "mtime": 1788510244.9780245,
+    "ast_hash": "7ee63d61f8a33c0968f84d9a313c070a",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/product/ProductCardItem.js": {
+    "mtime": 1788510130.8592906,
+    "ast_hash": "38bfbbc0f6c41dfda95a6442998746b0",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/product/ProductFormModal.js": {
+    "mtime": 1788510261.034269,
+    "ast_hash": "74330f705c35fd37849eb060dd5cf1dd",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/product/QuickStockAdjustModal.js": {
+    "mtime": 1788510431.4324028,
+    "ast_hash": "bea34964304d44f242d76574baa60a8c",
+    "semantic_hash": ""
+  },
+  "mobile/src/screens/ProductManagementScreen.js": {
+    "mtime": 1788510478.1130672,
+    "ast_hash": "5fb55fc879cbd97dfec2acb788cf1c88",
+    "semantic_hash": ""
+  },
+  "mobile/src/services/productService.js": {
+    "mtime": 1788510413.3797681,
+    "ast_hash": "f142d12a8fc5ee738b2fef4c0ceaa3e4",
+    "semantic_hash": ""
+  },
+  "docs/spesifikasi-master-produk-mobile.md": {
+    "mtime": 1788509931.9107609,
+    "ast_hash": "0ee6fd2c2daf931637b0088d56643329",
     "semantic_hash": ""
   }
 }
