@@ -20,6 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #26 Fase 2: Pembuatan Mobile API Service (`categoryService.js`) & Sinkronisasi Cache Offline (`offlineStorage.js`)**:
+  - Mengembangkan service wrapper terintegrasi [`mobile/src/services/categoryService.js`](file:///d:/Projects/KasirKita/mobile/src/services/categoryService.js):
+    1. `getCategories(params)`: Mendukung pengambilan daftar kategori dengan filter pencarian dan pembaharuan cache lokal otomatis.
+    2. `getCategory(id)`: Mengambil detail spesifik kategori berserta daftar produk aktifnya.
+    3. `createCategory(payload)`: Membuat kategori baru dengan penanganan error validasi 422 dan penambahan instan ke cache offline lokal.
+    4. `updateCategory(id, payload)`: Menyunting data kategori dengan sinkronisasi atomik ke cache offline.
+    5. `deleteCategory(id)`: Menghapus kategori kosong dengan penghapusan otomatis dari cache lokal dan penanganan pesan error jika kategori masih berproduk.
+    6. *Offline-First Fallback*: Saat offline (`ECONNABORTED` / tidak ada internet), otomatis membaca cache dari `offlineStorage` dan menyaring kata kunci pencarian secara lokal.
+  - Memperkaya [`mobile/src/services/offlineStorage.js`](file:///d:/Projects/KasirKita/mobile/src/services/offlineStorage.js) dengan method pendukung: `cacheCategories`, `getCachedCategories`, `upsertCachedCategory`, dan `removeCachedCategory`.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`). Status Fase 2: `completed`.
+
 - **Penyelesaian Plan #26 Fase 1: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend Master Kategori (`plans/260904-26-mobile-master-kategori/plan.md`)**:
   - Memverifikasi endpoint backend REST API Laravel:
     1. `GET /api/categories`: Mengambil seluruh kategori dengan penghitungan otomatis `products_count`.

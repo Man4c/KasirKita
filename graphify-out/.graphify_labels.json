@@ -339,5 +339,6 @@
   "337": "checkElementGptBorderShadowDOM",
   "338": "extractFindingIgnoreValue",
   "339": "expo",
-  "340": "applyEditing"
+  "340": "applyEditing",
+  "341": "expo-audio"
 }

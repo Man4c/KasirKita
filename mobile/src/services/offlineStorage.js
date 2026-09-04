@@ -141,6 +141,70 @@ export const offlineStorage = {
   },
 
   /**
+   * Cache categories list locally.
+   */
+  async cacheCategories(categories) {
+    if (!Array.isArray(categories)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.CATEGORIES, JSON.stringify(categories));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache kategori:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached categories list.
+   */
+  async getCachedCategories() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.CATEGORIES);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  },
+
+  /**
+   * Insert or update a single category in local cache.
+   */
+  async upsertCachedCategory(category) {
+    if (!category || !category.id) return false;
+    try {
+      const categories = await this.getCachedCategories();
+      const index = categories.findIndex((c) => c.id === category.id);
+      if (index >= 0) {
+        categories[index] = { ...categories[index], ...category };
+      } else {
+        categories.push(category);
+      }
+      categories.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      await AsyncStorage.setItem(KEYS.CATEGORIES, JSON.stringify(categories));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache kategori lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single category from local cache.
+   */
+  async removeCachedCategory(categoryId) {
+    if (!categoryId) return false;
+    try {
+      let categories = await this.getCachedCategories();
+      categories = categories.filter((c) => String(c.id) !== String(categoryId));
+      await AsyncStorage.setItem(KEYS.CATEGORIES, JSON.stringify(categories));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus kategori dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
    * Cache units list locally for unit picker.
    */
   async cacheUnits(units) {
