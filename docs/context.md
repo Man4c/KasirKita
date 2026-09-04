@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perencanaan Plan #25: Layar Master Produk & Inventaris di Mobile (`plans/260904-25-mobile-master-produk/plan.md`)**:
+  - Menyusun rencana implementasi modul Master Produk langsung dari aplikasi HP bagi Owner dan Manajer:
+    1. *Product Management Screen*: Katalog master produk dengan pencarian, filter kategori, filter stok menipis/habis/non-aktif, dan indikator status stok.
+    2. *Product Form Modal*: Formulir tambah dan edit produk (nama, kategori, satuan, harga jual, harga modal HPP, batas minimum stok) dilengkapi tombol scan kamera barcode fisik kemasan.
+    3. *Quick Stock Adjust Modal*: Penyesuaian stok kilat (+ / -) untuk barang masuk dari supplier, barang rusak, atau opname cepat.
+    4. *Role-Based Access & Auto-Sync*: Hak akses khusus Owner/Manager, serta sinkronisasi otomatis ke memori kasir POS (`PosScreen.js`) dan cache offline tanpa perlu restart aplikasi.
+
 - **Penyempurnaan Integritas Nota Transaksi Offline & Sinkronisasi Server (`Transaction.php`, `PosService.php`, `PosController.php`, `PosScreen.js`, `syncManager.js`, `ReceiptView.js`, `escposGenerator.js`, `printerService.js`)**:
   - Menyelesaikan 4 anomali data transaksi offline-first:
     1. **Preservasi Nomor Nota Cetak**: Server kini mempertahankan nomor faktur asli (`INV-OFF-...`) yang dikirim client saat sync, alih-alih menimpanya dengan nomor acak baru. Query pencarian server di `PosController.php` juga diperluas untuk mencari `offline_id` dan `invoice_number`, sehingga nota fisik di tangan pelanggan dapat dicari dua arah dengan instan.
