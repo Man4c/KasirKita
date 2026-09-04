@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788523930.4715908,
-    "ast_hash": "ca085a870b879aeec43b26261a07c6b0",
+    "mtime": 1788524177.5901659,
+    "ast_hash": "a526b90931589d110951e08dab5211be",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2375,18 +2375,18 @@
     "semantic_hash": ""
   },
   "mobile/src/components/category/CategoryCardItem.js": {
-    "mtime": 1788520324.966797,
-    "ast_hash": "542ef57dcef4511f3e8e9bec8c9c88a0",
+    "mtime": 1788524105.6722434,
+    "ast_hash": "326bf5d849b65a115c3fb5a62a500876",
     "semantic_hash": ""
   },
   "mobile/src/components/category/CategoryFormModal.js": {
-    "mtime": 1788520380.6500194,
-    "ast_hash": "bb9230eae1ebdb40d7703e42094f7cf8",
+    "mtime": 1788524136.7696643,
+    "ast_hash": "9b79bd80d01b7e0b03fac24d56ea9cc6",
     "semantic_hash": ""
   },
   "mobile/src/screens/CategoryManagementScreen.js": {
-    "mtime": 1788520347.5863137,
-    "ast_hash": "430eb4dd3edf17f0db9ddbc82aecc373",
+    "mtime": 1788524121.8559937,
+    "ast_hash": "3a0f88a39d467af51fe9009acf0c42d0",
     "semantic_hash": ""
   },
   "mobile/src/services/unitService.js": {
