@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #28 Fase 1: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend Master Promosi & Voucher (`plans/260904-28-mobile-master-promosi/plan.md`)**:
+  - Memverifikasi endpoint backend REST API Laravel di `DiscountController.php`:
+    1. `GET /api/discounts`: Mengambil daftar diskon & kupon dengan filter pencarian (`search`), tipe (`PERCENTAGE`, `FIXED`, `MIN_SPEND`), status (`active`, `inactive`, `expired`), dan relasi `transactions_count`.
+    2. `POST /api/discounts` & `PUT /api/discounts/{id}`: Otorisasi Owner untuk membuat & menyunting kupon dengan validasi kode unik uppercase otomatis, nilai diskon, syarat minimal belanja, batas maksimal nominal potongan, periode aktif, dan batas kuota.
+    3. `DELETE /api/discounts/{id}`: Soft delete promo dari sistem.
+    4. `PATCH /api/discounts/{id}/toggle-status`: Saklar instan aktifkan / nonaktifkan promo tanpa membuka form modal.
+    5. `POST /api/discounts/check-voucher`: Validasi kupon kasir saat checkout POS (`subtotal`, masa berlaku, batas kuota, minimum order).
+  - Memverifikasi seluruh 8 feature tests backend di `tests/Feature/DiscountApiTest.php` (**8 passed, 34 assertions**).
+  - Merancang arsitektur defensive UI: `PromoManagementScreen.js` (header, metrik promo, tab chip status, list voucher), kartu `PromoCardItem.js` (gaya tiket kupon aksen Rose Brand `#fb7185`, toggle saklar instan, progress kuota), modal `PromoFormModal.js` (tipe diskon, batas potongan, periode aktif, kuota), dan integrasi offline cache di `discountService.js`. Status Fase 1: `completed`.
+
 - **Penyelesaian Penuh Plan #27: Master Satuan Barang di Mobile (Fase 1 s/d Fase 6 - Status: COMPLETED)**:
   - Mengembangkan modul manajemen Master Satuan Barang (*Unit of Measure / UoM*) lengkap di aplikasi Mobile (React Native) untuk Owner/Manager UMKM:
     1. *Layanan API & Cache Offline (`unitService.js`, `offlineStorage.js`)*: Mengelola CRUD satuan dengan sinkronisasi instan ke storage offline, pencarian lokal/server, serta penanganan error responsif (termasuk validasi simbol unik 422).

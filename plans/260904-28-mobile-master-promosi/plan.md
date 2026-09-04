@@ -102,7 +102,7 @@ mobile/src/
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/discounts` (CRUD, check-voucher, toggle-status, filter active/expired) dan perancangan tata letak defensive UI tiket kupon promosi | pending |
+| 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/discounts` (CRUD, check-voucher, toggle-status, filter active/expired) dan perancangan tata letak defensive UI tiket kupon promosi | completed |
 | 2 | **Mobile API Service (`discountService.js`)**: Pembuatan modul layanan API diskon & voucher terintegrasi penanganan error validasi 422 (kode duplikat/kuota habis) dan fallback cache lokal `offlineStorage` | pending |
 | 3 | **Komponen Kartu & Layar Utama (`PromoCardItem.js` & `PromoManagementScreen.js`)**: Pembuatan layar master promosi dengan pencarian real-time, filter status (Semua, Aktif, Non-Aktif, Kadaluarsa), kartu bergaya voucher dengan aksen Rose Brand (`#fb7185`), progress bar kuota, dan saklar toggle status instan | pending |
 | 4 | **Modal Formulir Tambah/Edit (`PromoFormModal.js`)**: Pembuatan form modal interaktif dengan selector skema promo (Persentase, Potongan Rp, Min. Belanja), auto-format kapital kode voucher, batas maksimal diskon, tanggal aktif, dan proteksi hapus | pending |
