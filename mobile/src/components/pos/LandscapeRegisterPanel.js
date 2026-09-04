@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ArrowRight,
   ScanBarcode,
+  Smartphone,
 } from 'lucide-react-native';
 
 export default function LandscapeRegisterPanel({
@@ -29,6 +30,7 @@ export default function LandscapeRegisterPanel({
   showVoucherFeature = true,
   showTaxFeature = true,
   onOpenCustomerModal,
+  onSwitchToPortrait,
   isScanMode = false,
   onToggleScanMode,
   cart,
@@ -74,21 +76,16 @@ export default function LandscapeRegisterPanel({
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          {/* Customer Chip */}
-          {showCustomerPicker && (
+          {/* Portrait Switch Button ("Portrait") */}
+          {onSwitchToPortrait && (
             <TouchableOpacity
-              style={styles.regCustomerBtn}
-              onPress={onOpenCustomerModal}
+              style={styles.regPortraitBtn}
+              onPress={onSwitchToPortrait}
+              activeOpacity={0.7}
             >
-              <Users size={12} color={selectedCustomer ? '#fb7185' : '#a1a1aa'} />
-              <Text
-                style={[
-                  styles.regCustomerBtnText,
-                  selectedCustomer && { color: '#fb7185', fontWeight: 'bold' },
-                ]}
-                numberOfLines={1}
-              >
-                {selectedCustomer ? selectedCustomer.name : 'Pelanggan'}
+              <Smartphone size={12} color="#fb7185" />
+              <Text style={styles.regPortraitBtnText} numberOfLines={1}>
+                Portrait
               </Text>
             </TouchableOpacity>
           )}
@@ -96,7 +93,7 @@ export default function LandscapeRegisterPanel({
           {/* Clear Cart Button */}
           {cart.length > 0 && (
             <TouchableOpacity style={styles.regClearBtn} onPress={onClearCart}>
-              <Trash2 size={13} color="#fb7185" />
+              <Trash2 size={17} color="#fb7185" />
             </TouchableOpacity>
           )}
 
@@ -110,7 +107,7 @@ export default function LandscapeRegisterPanel({
               onPress={onToggleScanMode}
               activeOpacity={0.7}
             >
-              <ScanBarcode size={20} color="#ffffff" />
+              <ScanBarcode size={17} color="#ffffff" />
             </TouchableOpacity>
           )}
         </View>
@@ -408,7 +405,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  regCustomerBtn: {
+  regPortraitBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
@@ -418,12 +415,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#3f3f46',
-    maxWidth: 110,
   },
-  regCustomerBtnText: {
-    color: '#a1a1aa',
+  regPortraitBtnText: {
+    color: '#fb7185',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    whiteSpace: 'nowrap',
   },
   regScanBtn: {
     width: 28,

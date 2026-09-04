@@ -17,6 +17,7 @@ import { storage } from '../services/storage';
 import { offlineStorage } from '../services/offlineStorage';
 import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
+import { orientationService } from '../services/orientationService';
 import { showAlert } from '../utils/alert';
 import { useCheckoutReducer, CHECKOUT_ACTION_TYPES } from '../hooks/useCheckoutState';
 import PosCartModal from '../components/pos/PosCartModal';
@@ -605,6 +606,10 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
               showVoucherFeature={showVoucherFeature}
               showTaxFeature={showTaxFeature}
               onOpenCustomerModal={() => setCustomerModalOpen(true)}
+              onSwitchToPortrait={async () => {
+                await storage.saveSettings({ orientationPref: 'AUTO' });
+                await orientationService.applyPreference('AUTO');
+              }}
               isScanMode={isBarcodeScannerOpen}
               onToggleScanMode={showBarcodeScanner ? () => setIsBarcodeScannerOpen(!isBarcodeScannerOpen) : undefined}
               cart={cart}
