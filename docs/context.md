@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Optimasi Ketahanan Layout Bar Filter Stok Master Produk (`ProductManagementScreen.js`)**:
+  - **Penyebab Masalah**: Setelah menambahkan ikon Lucide pada filter stok, tombol filter ke-4 (`Non-Aktif`) terdorong keluar layar (*tergeser*) di HP dengan lebar sempit (360px) karena total lebar 4 pil melebihi ruang kontainer 328px.
+  - **Solusi & Penyempurnaan**:
+    1. Mengembalikan teks bersih tanpa ikon berlebih pada `Semua` dan `Non-Aktif` (ikon `<AlertTriangle>` dan `<XCircle>` tetap khusus menggantikan emoticon `⚠️` dan `🛑` pada `Menipis` dan `Habis`).
+    2. Menerapkan `flex: 1` dengan `justifyContent: 'center'` pada `styles.stockFilterPill` sehingga ke-4 tombol filter membagi rata lebar baris (masing-masing 25%) secara presisi dan 100% sejajar dengan batas kartu produk di bawahnya.
+    3. Tampilan menjadi rapi, seimbang, dan tidak ada lagi elemen yang tergeser atau terpotong pada layar 360px.
+  - Lolos uji linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
+
 - **Migrasi `SafeAreaView` Modern & Penggantian Emoticon dengan Ikon Lucide di Master Produk (`ProductManagementScreen.js`, `ProductBarcodeScannerModal.js`)**:
   - **Penyelesaian Warning Deprecated `SafeAreaView`**:
     1. Mengganti import usang `SafeAreaView` dari package `react-native` dengan `SafeAreaView` standar resmi dari `react-native-safe-area-context` di [`ProductManagementScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/ProductManagementScreen.js) dan [`ProductBarcodeScannerModal.js`](file:///d:/Projects/KasirKita/mobile/src/components/product/ProductBarcodeScannerModal.js).

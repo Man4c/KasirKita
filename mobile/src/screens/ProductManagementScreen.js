@@ -23,8 +23,6 @@ import {
   ChevronLeft,
   AlertTriangle,
   XCircle,
-  EyeOff,
-  Layers,
 } from 'lucide-react-native';
 import { productService } from '../services/productService';
 import { formatRp } from '../utils/format';
@@ -336,10 +334,6 @@ export default function ProductManagementScreen({
             onPress={() => setStockFilter('ALL')}
             activeOpacity={0.7}
           >
-            <Layers
-              size={12}
-              color={stockFilter === 'ALL' ? '#f4f4f5' : '#71717a'}
-            />
             <Text style={[styles.stockFilterText, stockFilter === 'ALL' && styles.stockFilterTextActive]}>
               Semua
             </Text>
@@ -378,10 +372,6 @@ export default function ProductManagementScreen({
             onPress={() => setStockFilter('INACTIVE')}
             activeOpacity={0.7}
           >
-            <EyeOff
-              size={12}
-              color={stockFilter === 'INACTIVE' ? '#a1a1aa' : '#71717a'}
-            />
             <Text style={[styles.stockFilterText, stockFilter === 'INACTIVE' && styles.stockFilterTextActiveInactive]}>
               Non-Aktif
             </Text>
@@ -630,11 +620,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   stockFilterPill: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 4,
+    paddingVertical: 6,
     borderRadius: 6,
     backgroundColor: '#18181b',
     borderWidth: 1,
