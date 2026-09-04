@@ -243,6 +243,11 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
             navigation.navigate('unit_management');
           }
         }}
+        onOpenMasterPromo={() => {
+          if (navigation?.navigate) {
+            navigation.navigate('promo_management');
+          }
+        }}
       />
 
       {/* 7-Day Sales Trend Interactive Chart */}

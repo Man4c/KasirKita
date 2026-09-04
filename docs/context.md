@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #28 Fase 5: Integrasi Navigasi Hub Menu Dashboard & Sinkronisasi Kasir POS (`DashboardActionHub.js`, `DashboardScreen.js`, `App.js`)**:
+  - Menghubungkan modul Master Promosi & Voucher Diskon ke arsitektur navigasi mobile aplikasi:
+    1. *Peluncur Action Hub Dashboard (`DashboardActionHub.js`)*: Ubin **"Promosi"** (ikon tiket `TicketPercent`, aksen Rose Brand `#fb7185`) kini terhubung langsung ke callback `onOpenMasterPromo` menggantikan alert placeholder sebelumnya.
+    2. *Layar Dashboard (`DashboardScreen.js`)*: Menghandle aksi launcher `onOpenMasterPromo` dan meneruskannya via `navigation.navigate('promo_management')`.
+    3. *Rute Internal & Proteksi RBAC (`mobile/App.js`)*: Mendaftarkan route internal `promo_management` di bawah proteksi `user?.role === 'owner'`, dilengkapi navigasi `goBack` kembali ke Dashboard.
+    4. *Preservasi Bottom Navigation Bar*: Menjaga strictly 4 tab utama (Dashboard, Kasir POS, Riwayat, Pengaturan) tanpa menambah tab baru demi kebersihan layout mobile.
+    5. *Sinkronisasi Otomatis Kasir POS*: Pembaruan kupon dari Master Promo langsung tersinkronisasi ke katalog voucher POS (`availablePromos`) dan cache offline katalog (`offlineStorage.cacheCatalog` / `offlineStorage.cachePromos`).
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web (`npx expo export --platform web`). Status Fase 5: `completed`.
+
 - **Penyelesaian Plan #28 Fase 4: Modal Formulir Tambah & Edit Promosi (`PromoFormModal.js`)**:
   - Mengembangkan modal formulir interaktif [`mobile/src/components/promo/PromoFormModal.js`](file:///d:/Projects/KasirKita/mobile/src/components/promo/PromoFormModal.js) berstandar *Impeccable Defensive UI*:
     1. *Identitas & Kode Kupon*: Input otomatis huruf kapital dan pembersihan spasi (`toUpperCase().replace(/\s+/g, '')`), nama promosi publik, serta catatan deskripsi/syarat ketentuan.

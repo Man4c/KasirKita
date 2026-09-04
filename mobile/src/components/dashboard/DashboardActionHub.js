@@ -25,6 +25,7 @@ export default function DashboardActionHub({
   onOpenMasterProduct,
   onOpenMasterCategory,
   onOpenMasterUnit,
+  onOpenMasterPromo,
 }) {
   const lowStock = Number(inv?.low_stock_count || 0);
   const totalSku = Number(inv?.total_items || 0);
@@ -34,8 +35,8 @@ export default function DashboardActionHub({
       onOpenMasterProduct();
     } else {
       showAlert(
-        'Master Produk (Plan #25)',
-        'Layar Master Produk siap dikerjakan! Kelola katalog produk, edit harga & stok, serta scan barcode fisik kemasan langsung dari ponsel.'
+        'Master Produk',
+        'Kelola katalog barang, SKU barcode, varian, dan harga jual produk.'
       );
     }
   };
@@ -45,8 +46,8 @@ export default function DashboardActionHub({
       onOpenMasterCategory();
     } else {
       showAlert(
-        'Master Kategori (Plan #26)',
-        'Kelola pengelompokan produk, departemen barang, dan tata letak kategori di kasir POS.'
+        'Master Kategori',
+        'Kelola kelompok produk (Makanan, Minuman, Snack, Paket Hemat, dll).'
       );
     }
   };
@@ -58,6 +59,17 @@ export default function DashboardActionHub({
       showAlert(
         'Master Satuan (Plan #27)',
         'Atur unit satuan penjualan produk (Pcs, Box, Kg, Liter, Cup, Porsi, dll).'
+      );
+    }
+  };
+
+  const handleMasterPromo = () => {
+    if (onOpenMasterPromo) {
+      onOpenMasterPromo();
+    } else {
+      showAlert(
+        'Master Promosi',
+        'Atur diskon bertingkat, voucher promo kasir, dan harga spesial periode tertentu.'
       );
     }
   };
@@ -104,11 +116,7 @@ export default function DashboardActionHub({
       color: '#fb7185',
       bgColor: 'rgba(251, 113, 133, 0.16)',
       badge: null,
-      onPress: () =>
-        handleMasterAction(
-          'Master Promosi',
-          'Atur diskon bertingkat, voucher promo kasir, dan harga spesial periode tertentu.'
-        ),
+      onPress: handleMasterPromo,
     },
     {
       id: 'tax_fee',

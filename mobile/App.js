@@ -31,6 +31,7 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import ProductManagementScreen from './src/screens/ProductManagementScreen';
 import CategoryManagementScreen from './src/screens/CategoryManagementScreen';
 import UnitManagementScreen from './src/screens/UnitManagementScreen';
+import PromoManagementScreen from './src/screens/PromoManagementScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
 
@@ -221,6 +222,13 @@ function MainApp() {
           />
         ) : activeTab === 'unit_management' && user?.role === 'owner' ? (
           <UnitManagementScreen
+            navigation={{
+              goBack: () => handleTabChange('dashboard'),
+              navigate: handleTabChange,
+            }}
+          />
+        ) : activeTab === 'promo_management' && user?.role === 'owner' ? (
+          <PromoManagementScreen
             navigation={{
               goBack: () => handleTabChange('dashboard'),
               navigate: handleTabChange,
