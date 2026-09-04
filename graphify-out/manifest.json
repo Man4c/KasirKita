@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788532174.985679,
-    "ast_hash": "88a30e3ae6c1c3be844075db5671bfd8",
+    "mtime": 1788532512.8378134,
+    "ast_hash": "9b60b3fb81feba2ae2321c09f1f76760",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1390,8 +1390,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {
-    "mtime": 1788523222.9681308,
-    "ast_hash": "2ca30657ea758528beb1049a064fdd2a",
+    "mtime": 1788532304.0056043,
+    "ast_hash": "3f1ba381f304efae63bf712a2568a58b",
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/TransactionHistoryScreen.js": {
-    "mtime": 1788504076.4996839,
-    "ast_hash": "19a5d99c9856e861c0e94f9b03c9e94e",
+    "mtime": 1788532311.8078184,
+    "ast_hash": "d2e71dd3ee6143767e40052af1d3942d",
     "semantic_hash": ""
   },
   "plans/260902-19-mobile-dedicated-checkout-screen/plan.md": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788419264.311336,
-    "ast_hash": "c5c510b425c59efef4465cde79beba96",
+    "mtime": 1788532319.3526866,
+    "ast_hash": "9641f8b8f0bd702ec8b183365935b4e5",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {

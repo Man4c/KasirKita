@@ -341,5 +341,7 @@
   "339": "applyEditing",
   "340": "expo-audio",
   "341": "source-lock.mjs",
-  "343": "UserFactory"
+  "342": "bolder.md",
+  "343": "UserFactory",
+  "344": "barcode-detector"
 }

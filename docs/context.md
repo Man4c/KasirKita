@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penambahan Garis Pembatas Bawah Header pada Layar Dashboard, Riwayat Transaksi, & Pengaturan (`DashboardScreen.js`, `TransactionHistoryScreen.js`, `SettingsScreen.js`)**:
+  - Menyelaraskan seluruh screen utama aplikasi agar memiliki pembatas garis bawah (`borderBottomWidth: 1, borderBottomColor: '#27272a'`) yang konsisten dengan screen master kategori:
+    1. *Dashboard (`DashboardScreen.js`)*: Menambahkan `paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#27272a'` pada header bar (di dalam kontainer `padding: 16`), memisahkan judul dashboard & badge sinkronisasi secara rapi dari kartu metrik. Memperbaiki ukuran font badge sinkronisasi menjadi `12px` demi standar Readability Floor Rule.
+    2. *Riwayat Transaksi (`TransactionHistoryScreen.js`)*: Menyesuaikan styling header menjadi `marginHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#27272a', marginBottom: 4` sehingga garis pembatas bawah memiliki batas kiri dan kanan 16px yang sejajar sempurna dengan kotak pencarian dan kartu riwayat.
+    3. *Pengaturan (`SettingsScreen.js`)*: Menambahkan `paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#27272a', marginBottom: 20` pada header pengaturan, menghasilkan transisi visual yang seragam dan elegan ke seksi akun pengguna.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Penyelarasan Batas Header & Segmented Filter Status pada Layar Master Promosi (`PromoManagementScreen.js`)**:
   - Menyelesaikan masalah garis pembatas bawah header yang membentang penuh ke tepi layar dan filter status yang terpotong ke luar batas:
     1. *Penyelarasan Garis Pembatas Bawah (`topBar`)*: Mengadopsi arsitektur kontainer bertingkat `styles.root` (`#09090b`) dan `styles.container` (`flex: 1, paddingHorizontal: 16, paddingTop: 8`) seperti pada `ProductManagementScreen` dan `CategoryManagementScreen`. Dengan demikian, garis bawah `topBar` tidak lagi menempel penuh ke pinggir layar (*full bleed*), melainkan memiliki batas margin 16px di kiri dan kanan yang 100% presisi dan sejajar dengan seluruh modul master data.

@@ -1084,6 +1084,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
     marginBottom: 20,
   },
   headerTitle: {

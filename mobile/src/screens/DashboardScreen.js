@@ -303,6 +303,9 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   header: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
     marginBottom: 14,
   },
   headerRow: {
@@ -326,7 +329,7 @@ const styles = StyleSheet.create({
   },
   syncBadgeText: {
     color: '#a1a1aa',
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
   headerSubtitle: {
