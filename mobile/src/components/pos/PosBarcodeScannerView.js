@@ -214,7 +214,7 @@ export default function PosBarcodeScannerView({
           <View style={styles.topBarLeft}>
             <View style={styles.liveIndicator}>
               <View style={styles.liveDot} />
-              <Text style={styles.liveText}>SCANNER AKTIF</Text>
+              <Text style={styles.liveText}>SCANNER</Text>
             </View>
           </View>
 
@@ -224,9 +224,9 @@ export default function PosBarcodeScannerView({
               onPress={() => setTorch(!torch)}
               activeOpacity={0.7}
             >
-              {torch ? <Zap size={15} color="#fbbf24" /> : <ZapOff size={15} color="#a1a1aa" />}
+              {torch ? <Zap size={14} color="#fbbf24" /> : <ZapOff size={14} color="#a1a1aa" />}
               <Text style={[styles.ctrlBtnText, torch && { color: '#fbbf24' }]}>
-                {torch ? 'Senter Nyala' : 'Senter'}
+                Senter
               </Text>
             </TouchableOpacity>
 
@@ -235,9 +235,9 @@ export default function PosBarcodeScannerView({
               onPress={() => setShowManualInput(!showManualInput)}
               activeOpacity={0.7}
             >
-              <Keyboard size={15} color={showManualInput ? '#fb7185' : '#a1a1aa'} />
+              <Keyboard size={14} color={showManualInput ? '#fb7185' : '#a1a1aa'} />
               <Text style={[styles.ctrlBtnText, showManualInput && { color: '#fb7185' }]}>
-                Ketik barcode manual
+                Manual
               </Text>
             </TouchableOpacity>
 
@@ -246,8 +246,8 @@ export default function PosBarcodeScannerView({
               onPress={onClose}
               activeOpacity={0.8}
             >
-              <Check size={15} color="#ffffff" style={{ marginRight: 4 }} />
-              <Text style={styles.okBtnText}>OK</Text>
+              <Check size={14} color="#ffffff" />
+              <Text style={styles.okBtnText}>Selesai</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -485,31 +485,32 @@ const styles = StyleSheet.create({
     borderRightColor: '#27272a',
   },
   topBar: {
-    height: 48,
-    maxHeight: 48,
+    height: 50,
+    maxHeight: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     backgroundColor: '#18181b',
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
   topBarCompact: {
-    height: 40,
-    maxHeight: 40,
+    height: 42,
+    maxHeight: 42,
     paddingHorizontal: 8,
   },
   topBarLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexShrink: 0,
   },
   liveIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(225, 29, 72, 0.12)',
-    paddingHorizontal: 7,
-    paddingVertical: 3,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: 'rgba(225, 29, 72, 0.3)',
@@ -531,21 +532,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    flexShrink: 0,
   },
   ctrlBtn: {
+    height: 32,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#27272a',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 9,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#3f3f46',
     gap: 4,
   },
   ctrlBtnActive: {
-    backgroundColor: '#26141a',
-    borderColor: '#e11d48',
+    backgroundColor: 'rgba(225, 29, 72, 0.16)',
+    borderColor: '#fb7185',
   },
   ctrlBtnText: {
     color: '#d4d4d8',
@@ -553,17 +555,20 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
   okBtn: {
+    height: 32,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#e11d48',
     paddingHorizontal: 10,
-    paddingVertical: 4,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#f43f5e',
+    gap: 4,
   },
   okBtnText: {
     color: '#ffffff',
     fontSize: 12,
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins_600SemiBold',
   },
   manualInputRow: {
     flexDirection: 'row',

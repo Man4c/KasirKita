@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penataan Rapi & Presisi Header Scanner Barcode Mode Portrait (`PosBarcodeScannerView.js`)**:
+  - **Penyebab Masalah**: Di mode Portrait, teks tombol *"Ketik barcode manual"* terlalu panjang sehingga terpotong (*"Ketik barcode man..."*) dan tombol aksi penting *"OK"* terdorong sepenuhnya keluar dari batas layar kanan HP (360px).
+  - **Solusi & Penyempurnaan**:
+    1. Memperpendek label kontrol tombol menjadi ringkas dan jelas: *"Manual"* (menggantikan *"Ketik barcode manual"*) dan *"Senter"* tanpa label status panjang.
+    2. Menjadikan tombol selesai/tutup menjadi **`[ ✓ Selesai ]`** berwarna Rose Brand solid (`#e11d48`) dengan border kontras (`#f43f5e`), font 12px tebal, dan tinggi seragam **`height: 32`** dengan tombol lainnya.
+    3. Merampingkan badge indikator live status kiri menjadi **`[ • SCANNER ]`** yang kompak dan elegan.
+    4. Mengunci `height: 50` pada `topBar` dan menambahkan `flexShrink: 0` pada grup kontrol kanan sehingga seluruh tombol kini muat dengan lega, tidak ada teks yang terpotong, dan tombol selesai selalu terlihat 100% di layar 360px.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`).
+
 - **Penyelarasan Presisi Tinggi Wadah Tombol Scan Barcode & Pembesaran Ikon (`ProductFormModal.js`, `ProductManagementScreen.js`)**:
   - **Penyebab Masalah**: Wadah kotak merah tombol scan barcode di modal form tambah/edit produk tampak terlalu besar dan menonjol lebih tinggi dibandingkan kolom input di sampingnya (sebelumnya berukuran 44x44px sementara kolom input tidak memiliki tinggi eksplisit sehingga hanya ~38px).
   - **Solusi & Penyempurnaan**:
