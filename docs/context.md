@@ -20,11 +20,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Penambahan Garis Pembatas Bawah Header pada Layar Dashboard, Riwayat Transaksi, & Pengaturan (`DashboardScreen.js`, `TransactionHistoryScreen.js`, `SettingsScreen.js`)**:
-  - Menyelaraskan seluruh screen utama aplikasi agar memiliki pembatas garis bawah (`borderBottomWidth: 1, borderBottomColor: '#27272a'`) yang konsisten dengan screen master kategori:
-    1. *Dashboard (`DashboardScreen.js`)*: Menambahkan `paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#27272a'` pada header bar (di dalam kontainer `padding: 16`), memisahkan judul dashboard & badge sinkronisasi secara rapi dari kartu metrik. Memperbaiki ukuran font badge sinkronisasi menjadi `12px` demi standar Readability Floor Rule.
-    2. *Riwayat Transaksi (`TransactionHistoryScreen.js`)*: Menyesuaikan styling header menjadi `marginHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#27272a', marginBottom: 4` sehingga garis pembatas bawah memiliki batas kiri dan kanan 16px yang sejajar sempurna dengan kotak pencarian dan kartu riwayat.
-    3. *Pengaturan (`SettingsScreen.js`)*: Menambahkan `paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#27272a', marginBottom: 20` pada header pengaturan, menghasilkan transisi visual yang seragam dan elegan ke seksi akun pengguna.
+- **Normalisasi Spasi Atas Header pada Layar Dashboard, Riwayat Transaksi, & Pengaturan (`DashboardScreen.js`, `TransactionHistoryScreen.js`, `SettingsScreen.js`)**:
+  - Menyelaraskan seluruh screen utama aplikasi agar memiliki spasi atas (*top spacing*) yang seragam (tepat 12px) dan pembatas garis bawah yang konsisten:
+    1. *Normalisasi Spasi Atas Dashboard (`DashboardScreen.js`)*: Menghilangkan penumpukan padding atas ganda dengan mengatur `content: { paddingHorizontal: 16, paddingTop: 0, paddingBottom: 40 }`. Dengan `header: { paddingVertical: 12 }`, jarak atas judul "Dashboard" kini tepat 12px dari batas Safe Area, sejajar presisi dengan "Riwayat Transaksi" (12px).
+    2. *Normalisasi Spasi Atas Pengaturan (`SettingsScreen.js`)*: Mengatur `contentContainer: { paddingHorizontal: 16, paddingTop: 0, paddingBottom: 40 }` sehingga judul "Pengaturan" memiliki jarak atas tepat 12px, menghilangkan gap kosong berlebih yang sebelumnya mencapai 28px.
+    3. *Riwayat Transaksi (`TransactionHistoryScreen.js`)*: Menggunakan `marginHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#27272a', marginBottom: 4` yang menjadi acuan standar ketinggian header bar.
   - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
 
 - **Penyelarasan Batas Header & Segmented Filter Status pada Layar Master Promosi (`PromoManagementScreen.js`)**:

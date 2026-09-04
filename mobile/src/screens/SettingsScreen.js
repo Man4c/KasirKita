@@ -1076,7 +1076,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#09090b',
   },
   contentContainer: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 0,
+    paddingBottom: 40,
   },
   contentContainerLandscape: {
     maxWidth: 640,
