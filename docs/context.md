@@ -20,6 +20,19 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Transaksi Checkout Offline Mode Kasir Mobile POS (`PosScreen.js`, `offlineStorage.js`, `syncManager.js`)**:
+  - **Penyebab Masalah**: Saat menekan tombol *Selesaikan Pembayaran* di mode offline, muncul error promise `TypeError: undefined is not a function`. Hal ini terjadi karena `handleOfflineSuccess` di `PosScreen.js` memanggil `offlineStorage.queueTransaction(...)` yang metodenya belum didefinisikan pada objek `offlineStorage` (nama method aslinya adalah `enqueueOfflineTransaction`).
+  - **Solusi & Penyempurnaan**:
+    1. Menambahkan alias `queueTransaction(payload, userProfile)` di `offlineStorage.js` yang meneruskan pemanggilan ke `enqueueOfflineTransaction(payload, userProfile)` demi interoperabilitas dan backward compatibility.
+    2. Memperbarui `handleOfflineSuccess` di `PosScreen.js`:
+       - Mengambil data profil kasir yang aktif (`storage.getUser()`) untuk disematkan ke transaksi offline.
+       - Menggunakan reducer checkout atomic `dispatch({ type: CHECKOUT_ACTION_TYPES.RESET_CHECKOUT, payload: { completedTx: offlineTx, defaultTaxId, defaultFeeIds } })` agar cart, promo, voucher, dan state pembayaran ter-reset bersih dan seragam dengan transaksi online.
+       - Memotong stok produk lokal langsung di state memori POS (`setProducts(...)`) sehingga tampilan stok di kartu katalog POS seketika berkurang secara akurat tanpa perlu fetch server.
+       - Menjalankan auto-print struk ke printer Bluetooth jika opsi auto-print aktif di pengaturan.
+       - Melengkapi penanganan `try ... catch` dengan notifikasi alert yang ramah pengguna.
+    3. Menambahkan payload fields `cash_received`, `fee_amount`, dan `change_amount` di `PosScreen.js` dan sinkronisasi payload di `syncManager.js` agar lolos validasi `PosController.php` saat antrean transaksi offline dikirim ke server.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`) dan uji automated test backend (`php artisan test` $\rightarrow$ 69 passed, 301 assertions).
+
 - **Pemeliharaan Keranjang & Pelepasan Kunci Auto-Rotate saat Switch Portrait (`PosScreen.js`, `App.js`)**:
   - Menyelesaikan masalah layar terkunci mati di Portrait setelah menekan tombol `[ 📱 Portrait ]`.
   - Mengubah siklus orientasi tombol: memutar layar ke Portrait sesaat (`PORTRAIT_UP`), lalu dalam 600ms otomatis melepaskan kuncinya kembali ke `AUTO` (`ScreenOrientation.unlockAsync()`). Dengan ini, sensor gravitasi auto-rotate perangkat tetap aktif dan HP bisa langsung kembali berputar ke Landscape saat dimiringkan kembali oleh kasir.

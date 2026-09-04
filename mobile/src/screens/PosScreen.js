@@ -448,22 +448,46 @@ export default function PosScreen({
 
   // Consolidated Offline Fallback Handler
   const handleOfflineSuccess = async (payload, receiptItems) => {
-    const offlineTx = await offlineStorage.queueTransaction(payload, receiptItems);
-    setCompletedTx(offlineTx);
-    setPaidAmount('');
-    setCart([]);
-    setAppliedPromo(null);
-    setDiscount(0);
-    setReceiptModalOpen(true);
-    setIsCheckoutView(false);
-
-    // Auto-print receipt if enabled
     try {
-      const savedSettings = await storage.getSettings();
-      if (savedSettings?.autoPrint) {
-        await printerService.printReceipt(offlineTx);
+      const user = await storage.getUser();
+      const offlineTx = await offlineStorage.enqueueOfflineTransaction(payload, user);
+
+      const defTax = taxesAndFees.find((i) => i.is_tax && i.is_default);
+      const defFees = taxesAndFees.filter((i) => !i.is_tax && i.apply_to === 'MANUAL' && i.is_default).map((i) => i.id);
+
+      dispatch({
+        type: CHECKOUT_ACTION_TYPES.RESET_CHECKOUT,
+        payload: {
+          completedTx: offlineTx,
+          defaultTaxId: defTax ? defTax.id : '',
+          defaultFeeIds: defFees,
+        },
+      });
+
+      // Auto-print receipt if enabled
+      try {
+        const savedSettings = await storage.getSettings();
+        if (savedSettings?.autoPrint) {
+          await printerService.printReceipt(offlineTx);
+        }
+      } catch (e) {}
+
+      // Deduct local product stock in POS screen state
+      if (Array.isArray(payload.items)) {
+        setProducts((prev) => {
+          const qtyMap = new Map(payload.items.map((i) => [i.product_id, Number(i.quantity) || 1]));
+          return prev.map((p) => {
+            if (qtyMap.has(p.id)) {
+              return { ...p, stock: Math.max(0, (Number(p.stock) || 0) - qtyMap.get(p.id)) };
+            }
+            return p;
+          });
+        });
       }
-    } catch (e) {}
+    } catch (err) {
+      console.error('Gagal proses transaksi offline:', err);
+      showAlert('Gagal Offline', 'Terjadi kendala menampung transaksi offline: ' + (err.message || ''));
+    }
   };
 
   // Process Checkout
@@ -495,6 +519,7 @@ export default function PosScreen({
         payment_method: paymentMethod,
         total_amount: totalAmount,
         paid_amount: paymentMethod === 'CASH' ? paidNum : totalAmount,
+        cash_received: paymentMethod === 'CASH' ? paidNum : totalAmount,
         change_amount: paymentMethod === 'CASH' ? changeAmount : 0,
         customer_id: selectedCustomer ? selectedCustomer.id : null,
         customer_name: selectedCustomer ? selectedCustomer.name : 'Pelanggan Umum',
@@ -503,6 +528,7 @@ export default function PosScreen({
         discount_amount: discount,
         tax_id: selectedTaxId || null,
         tax_amount: taxAmount,
+        fee_amount: feeAmount,
         service_fee: feeAmount,
         fee_details: feeDetails,
         notes: isTakeaway ? 'BUNGKUS / TAKEAWAY' : null,

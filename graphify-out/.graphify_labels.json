@@ -318,6 +318,7 @@
   "316": "Cloud Sync Preferences & Local Data Backup-Restore",
   "317": "checkRadialSpotlight",
   "318": "isGeneratedFile",
+  "319": "checkHeroEyebrow",
   "320": "expo-audio",
   "321": "checkRadialSpotlight",
   "322": "onAnnotDown",
@@ -333,5 +334,6 @@
   "332": "react-native-svg",
   "333": "react-native-web",
   "334": "2026_09_04_000001_add_trgm_and_indexes_to_transactions.php",
+  "335": "barcode-detector",
   "337": "expo-camera"
 }

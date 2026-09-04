@@ -136,6 +136,13 @@ export const offlineStorage = {
   },
 
   /**
+   * Alias for enqueueOfflineTransaction for backward compatibility.
+   */
+  async queueTransaction(payload, userProfile) {
+    return this.enqueueOfflineTransaction(payload, userProfile);
+  },
+
+  /**
    * Get all pending offline transactions.
    */
   async getOfflineQueue() {
