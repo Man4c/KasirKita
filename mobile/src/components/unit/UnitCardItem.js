@@ -72,12 +72,12 @@ const UnitCardItem = React.memo(function UnitCardItem({
       {/* Rincian Pemakaian (Base vs Konversi) */}
       <View style={styles.breakdownRow}>
         <View style={styles.breakdownItem}>
-          <Text style={styles.breakdownLabel}>Satuan Dasar:</Text>
+          <Text style={styles.breakdownLabel}>Dasar:</Text>
           <Text style={styles.breakdownValue}>{productsCount} item</Text>
         </View>
         <View style={styles.breakdownDivider} />
         <View style={styles.breakdownItem}>
-          <Text style={styles.breakdownLabel}>Multi-Konversi:</Text>
+          <Text style={styles.breakdownLabel}>Konversi:</Text>
           <Text style={styles.breakdownValue}>{conversionsCount} varian</Text>
         </View>
       </View>
@@ -88,12 +88,16 @@ const UnitCardItem = React.memo(function UnitCardItem({
           {isInUse ? (
             <View style={styles.statusPillActive}>
               <CheckCircle2 size={12} color='#34d399' style={{ flexShrink: 0 }} />
-              <Text style={styles.statusTextActive}>Digunakan Produk</Text>
+              <Text style={styles.statusTextActive} numberOfLines={1}>
+                Digunakan
+              </Text>
             </View>
           ) : (
             <View style={styles.statusPillEmpty}>
               <AlertCircle size={12} color='#a1a1aa' style={{ flexShrink: 0 }} />
-              <Text style={styles.statusTextEmpty}>Belum Dipakai (Aman)</Text>
+              <Text style={styles.statusTextEmpty} numberOfLines={1}>
+                Belum Dipakai
+              </Text>
             </View>
           )}
         </View>
@@ -284,28 +288,35 @@ const styles = StyleSheet.create({
   statusIndicator: {
     flex: 1,
     minWidth: 0,
+    marginRight: 6,
   },
   statusPillActive: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
+    flex: 1,
+    minWidth: 0,
   },
   statusTextActive: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     color: '#34d399',
-    flexShrink: 0,
+    flex: 1,
+    minWidth: 0,
   },
   statusPillEmpty: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    flex: 1,
+    minWidth: 0,
   },
   statusTextEmpty: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
-    flexShrink: 0,
+    flex: 1,
+    minWidth: 0,
   },
   actionBtnGroup: {
     flexDirection: 'row',
@@ -316,12 +327,12 @@ const styles = StyleSheet.create({
   editBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    gap: 4,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
     borderRadius: 8,
     flexShrink: 0,
   },
@@ -338,8 +349,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(244, 63, 94, 0.1)',
     borderWidth: 1,
     borderColor: 'rgba(244, 63, 94, 0.3)',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
     borderRadius: 8,
     flexShrink: 0,
   },

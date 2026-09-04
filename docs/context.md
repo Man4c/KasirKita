@@ -20,6 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Collision Status Text vs Tombol Edit/Hapus pada Kartu Satuan & Kategori (`UnitCardItem.js`, `CategoryCardItem.js`)**:
+  - Menyelesaikan masalah teks status menabrak border tombol Edit (*"Belum Dipakai (Aman)"* menempel ke `[Edit]`) serta teks *breakdown* yang terpotong 2 baris:
+    1. *Penyebab Root Cause*: Teks status sebelumnya terlalu panjang (`"Belum Dipakai (Aman)"`, 21 karakter) dengan `flexShrink: 0`, ditambah padding tombol Edit/Hapus yang lebar, sehingga pada kartu berlebar ~300px ruang yang tersisa tidak cukup dan teks menabrak tombol Edit. Selain itu, label breakdown `"Multi-Konversi:"` (15 karakter) terlalu panjang sehingga kata `"varian"` patah ke baris kedua.
+    2. *Penyederhanaan Microcopy*:
+       - Mengubah status keterpakaian menjadi `"Belum Dipakai"` (13 karakter) dan `"Digunakan"`, memberikan ruang longgar lebih dari 35px.
+       - Menyederhanakan rincian breakdown menjadi `"Dasar:"` dan `"Konversi:"` sehingga nominal dan varian berada dalam 1 baris horizontal rapi tanpa patah (*wrap*).
+    3. *Penerapan Defensive Flexbox UI Craft*:
+       - Mengatur `statusIndicator` dengan `flex: 1, minWidth: 0, marginRight: 6`, serta `numberOfLines={1}` pada teks status.
+       - Menyesuaikan padding tombol Edit dan Hapus menjadi `paddingHorizontal: 8, paddingVertical: 5` dengan `gap: 4` agar lebih ringkas dan proporsional.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Standardisasi Floating Action Button (FAB) & Pembersihan Header Master Produk (`ProductManagementScreen.js`)**:
   - Menyelaraskan Master Produk dengan pola UI Master Kategori, Satuan, dan Promo:
     1. *Penghapusan Tombol Header*: Menghilangkan tombol `+ Produk` di kanan atas header, menyisakan ruang lega bagi `screenTitleContainer: { flex: 1, minWidth: 0 }` sehingga judul "Master Produk" tidak lagi terhimpit atau terpotong.
