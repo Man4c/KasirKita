@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import {
   StyleSheet,
   Text,
@@ -38,21 +39,65 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [selectedTx, setSelectedTx] = useState(null);
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
 
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
-    fetchTransactions(1);
-  }, []);
+  const abortControllerRef = useRef(null);
 
-  const fetchTransactions = async (pageNum = 1, isRefresh = false) => {
+  // Debounce search input (400ms)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 400);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [search]);
+
+  // Fetch from server whenever debouncedSearch or filterMethod changes
+  useEffect(() => {
+    setPage(1);
+    fetchTransactions(1, false, debouncedSearch, filterMethod);
+  }, [debouncedSearch, filterMethod]);
+
+  const fetchTransactions = async (
+    pageNum = 1,
+    isRefresh = false,
+    activeSearch = debouncedSearch,
+    activeMethod = filterMethod
+  ) => {
+    // 1. Cancel previous pending request to prevent race conditions
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
       if (pageNum === 1 && !isRefresh) {
         setLoading(true);
       }
-      const res = await api.get(`/pos/transactions?page=${pageNum}&per_page=20`);
-      if (res.data.success) {
+
+      const params = {
+        page: pageNum,
+        per_page: 20,
+      };
+      if (activeSearch && activeSearch.trim()) {
+        params.search = activeSearch.trim();
+      }
+      if (activeMethod && activeMethod !== 'ALL') {
+        params.payment_method = activeMethod;
+      }
+
+      const res = await api.get('/pos/transactions', {
+        params,
+        signal: controller.signal,
+      });
+
+      if (res.data?.success) {
         const paginated = res.data.data;
         const list = paginated?.data || (Array.isArray(paginated) ? paginated : []);
         const currentPage = paginated?.current_page || pageNum;
@@ -71,6 +116,9 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
         setHasMore(currentPage < lastPage);
       }
     } catch (err) {
+      if (axios.isCancel(err) || err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
+        return; // Silently ignore request cancellation from faster typing
+      }
       console.log('Error fetching transactions:', err.message);
     } finally {
       setLoading(false);
@@ -82,29 +130,15 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
   const handleLoadMore = () => {
     if (!loading && !loadingMore && hasMore) {
       setLoadingMore(true);
-      fetchTransactions(page + 1);
+      fetchTransactions(page + 1, false, debouncedSearch, filterMethod);
     }
   };
 
   const onRefresh = () => {
     setRefreshing(true);
     setPage(1);
-    fetchTransactions(1, true);
+    fetchTransactions(1, true, debouncedSearch, filterMethod);
   };
-
-  const formatRp = (num) => 'Rp' + Number(num || 0).toLocaleString('id-ID');
-
-  const filteredTransactions = transactions.filter((tx) => {
-    const q = search.toLowerCase();
-    const matchSearch =
-      (tx.invoice_number && tx.invoice_number.toLowerCase().includes(q)) ||
-      (tx.customer_name && tx.customer_name.toLowerCase().includes(q)) ||
-      (tx.cashier?.name && tx.cashier.name.toLowerCase().includes(q));
-
-    const matchMethod = filterMethod === 'ALL' || tx.payment_method === filterMethod;
-
-    return matchSearch && matchMethod;
-  });
 
   const getMethodIcon = (method) => {
     switch (method) {
@@ -259,23 +293,33 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
           <ActivityIndicator color="#e11d48" size="large" />
           <Text style={styles.loadingText}>Memuat riwayat transaksi...</Text>
         </View>
-      ) : filteredTransactions.length === 0 ? (
+      ) : transactions.length === 0 ? (
         <View style={styles.emptyBox}>
           <Receipt size={40} color="#3f3f46" style={{ marginBottom: 12 }} />
-          <Text style={styles.emptyTitle}>Belum Ada Transaksi</Text>
+          <Text style={styles.emptyTitle}>
+            {search || filterMethod !== 'ALL'
+              ? 'Tidak Ada Transaksi Ditemukan'
+              : 'Belum Ada Transaksi'}
+          </Text>
           <Text style={styles.emptySubtitle}>
-            Transaksi penjualan yang selesai akan muncul di sini.
+            {search || filterMethod !== 'ALL'
+              ? 'Coba ganti kata kunci pencarian atau reset filter metode pembayaran.'
+              : 'Transaksi penjualan yang selesai akan muncul di sini.'}
           </Text>
         </View>
       ) : (
         <FlatList
-          data={filteredTransactions}
-          keyExtractor={(item) => item.id.toString()}
+          data={transactions}
+          keyExtractor={(item) => (item.id || item.uuid || item.invoice_number).toString()}
           renderItem={renderTransactionItem}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.4}
+          removeClippedSubviews={Platform.OS === 'android'}
+          maxToRenderPerBatch={10}
+          windowSize={7}
+          initialNumToRender={10}
           ListFooterComponent={
             loadingMore ? (
               <View style={{ paddingVertical: 14, alignItems: 'center' }}>

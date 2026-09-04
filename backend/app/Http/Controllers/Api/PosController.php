@@ -62,11 +62,14 @@ class PosController extends Controller
     {
         $query = Transaction::with(['cashier:id,name,role', 'items']);
 
-        // Search by invoice or customer
+        // Search by invoice, customer, or cashier
         if ($search = $request->query('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('invoice_number', 'ilike', "%{$search}%")
-                  ->orWhere('customer_name', 'ilike', "%{$search}%");
+                  ->orWhere('customer_name', 'ilike', "%{$search}%")
+                  ->orWhereHas('cashier', function ($userQ) use ($search) {
+                      $userQ->where('name', 'ilike', "%{$search}%");
+                  });
             });
         }
 
