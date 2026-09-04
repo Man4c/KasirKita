@@ -1,5 +1,6 @@
 import { storage } from './storage';
 import { buildReceiptEscpos } from './escposGenerator';
+import api from './api';
 
 class PrinterService {
   constructor() {
@@ -28,6 +29,50 @@ class PrinterService {
     } catch (err) {
       console.warn('PrinterService init error:', err);
     }
+  }
+
+  /**
+   * Helper to retrieve complete store identity settings (with cloud fallback if logo missing)
+   */
+  async getStoreSettings(providedSettings) {
+    let settings = providedSettings;
+    if (!settings || Object.keys(settings).length === 0) {
+      try {
+        settings = (await storage.getSettings()) || {};
+      } catch (e) {
+        settings = {};
+      }
+    }
+
+    // If storeLogo or critical identity is missing from local storage, synchronize with cloud backend
+    if (!settings.storeLogo && !settings.logo) {
+      try {
+        const res = await api.get('/settings/store');
+        if (res.data?.success && res.data?.data) {
+          const cloud = res.data.data;
+          const merged = {
+            ...settings,
+            storeName: cloud.name || settings.storeName,
+            storeAddress: cloud.address !== undefined ? cloud.address : settings.storeAddress,
+            storePhone: cloud.phone !== undefined ? cloud.phone : settings.storePhone,
+            storeLogo: cloud.logo !== undefined ? cloud.logo : settings.storeLogo,
+            receiptFooter: cloud.receipt_footer !== undefined ? cloud.receipt_footer : settings.receiptFooter,
+            showLogoOnReceipt: typeof cloud.show_logo_on_receipt === 'boolean'
+              ? cloud.show_logo_on_receipt
+              : (typeof settings.showLogoOnReceipt === 'boolean' ? settings.showLogoOnReceipt : true),
+            showPhoneOnReceipt: typeof cloud.show_phone_on_receipt === 'boolean'
+              ? cloud.show_phone_on_receipt
+              : (typeof settings.showPhoneOnReceipt === 'boolean' ? settings.showPhoneOnReceipt : true),
+          };
+          await storage.setSettings(merged);
+          return merged;
+        }
+      } catch (e) {
+        // Fallback silently if offline or unauthenticated
+      }
+    }
+
+    return settings;
   }
 
   isWebBluetoothSupported() {
@@ -145,14 +190,7 @@ class PrinterService {
    * If simulation: logs ESC/POS and returns simulated status.
    */
   async printReceipt(transaction, storeSettings) {
-    let settings = storeSettings;
-    if (!settings || Object.keys(settings).length === 0) {
-      try {
-        settings = (await storage.getSettings()) || {};
-      } catch (e) {
-        settings = {};
-      }
-    }
+    const settings = await this.getStoreSettings(storeSettings);
     const shouldPrintTwo = typeof settings.printTwoCopies === 'boolean' ? settings.printTwoCopies : this.printTwoCopies;
     const copies = shouldPrintTwo ? ['SALINAN KASIR', 'SALINAN PELANGGAN'] : [null];
 
@@ -172,27 +210,23 @@ class PrinterService {
             } else {
               await this.writeCharacteristic.writeValue(chunk);
             }
-            await new Promise((r) => setTimeout(r, 30));
-          }
-
-          // Small delay between 2 copies so cutter/tear has time to complete
-          if (c < copies.length - 1) {
-            await new Promise((r) => setTimeout(r, 800));
+            // Small pause between chunks
+            await new Promise((r) => setTimeout(r, 40));
           }
         } catch (err) {
-          console.warn('Error writing to Bluetooth thermal printer:', err.message);
+          console.warn('Bluetooth print write error:', err);
+          throw new Error('Gagal mengirim data ke printer Bluetooth: ' + err.message);
         }
+      } else {
+        // 2. Simulation / Virtual mode
+        console.log(`[ESC/POS Sim] Generated ${bytes.length} bytes for copy: ${copyLabel || 'Original'}`);
       }
     }
 
-    const isBt = Boolean(this.writeCharacteristic && this.gattServer?.connected);
     return {
       success: true,
-      mode: isBt ? 'bluetooth' : 'simulation',
+      mode: this.writeCharacteristic ? 'bluetooth' : 'simulation',
       copies: copies.length,
-      message: shouldPrintTwo
-        ? `2 salinan struk berhasil dicetak (Kasir & Pelanggan)`
-        : `Struk berhasil dicetak ke ${this.deviceName}`,
     };
   }
 
@@ -237,23 +271,22 @@ class PrinterService {
   /**
    * Print clean HTML receipt in browser via dedicated iframe (no modal shell/buttons).
    */
-  async printWebReceiptHtml(transaction, storeSettings) {
+  async printWebReceiptHtml(transaction, storeSettings, copyLabel = null) {
     if (typeof window === 'undefined') return;
 
-    let settings = storeSettings;
-    if (!settings || Object.keys(settings).length === 0) {
-      try {
-        settings = (await storage.getSettings()) || {};
-      } catch (e) {
-        settings = {};
-      }
-    }
+    const settings = await this.getStoreSettings(storeSettings);
 
     const tx = transaction || {};
     const storeName = settings.storeName || settings.name || 'KasirKita Mart';
-    const storeAddress = settings.storeAddress || settings.address || 'Jl. Merdeka No. 12, Jakarta';
-    const storePhone = settings.storePhone || settings.phone || '0812-3456-7890';
-    const showPhone = typeof settings.showPhoneOnReceipt === 'boolean' ? settings.showPhoneOnReceipt : true;
+    const storeAddress = settings.storeAddress || settings.address || '';
+    const storePhone = settings.storePhone || settings.phone || '';
+    const storeLogo = settings.storeLogo || settings.logo || null;
+    const showLogo = typeof settings.showLogoOnReceipt === 'boolean'
+      ? settings.showLogoOnReceipt
+      : (typeof settings.show_logo_on_receipt === 'boolean' ? settings.show_logo_on_receipt : true);
+    const showPhone = typeof settings.showPhoneOnReceipt === 'boolean'
+      ? settings.showPhoneOnReceipt
+      : (typeof settings.show_phone_on_receipt === 'boolean' ? settings.show_phone_on_receipt : true);
     const receiptFooter = settings.receiptFooter || settings.receipt_footer || 'Terima kasih atas kunjungan Anda!';
 
     const invoice = tx.invoice_number || 'INV-000000000000';
@@ -265,15 +298,24 @@ class PrinterService {
           hour: '2-digit',
           minute: '2-digit',
         })
-      : new Date().toLocaleString('id-ID');
+      : new Date().toLocaleString('id-ID', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
     const cashierName = tx.cashier?.name || tx.cashier_name || 'Kasir';
     const customerName = tx.customer_name || 'Pelanggan Umum';
+    const customerPhone = tx.customer_phone || null;
 
     const items = tx.items || [];
     const subtotal = Number(tx.subtotal || 0);
     const discountAmount = Number(tx.discount_amount || 0);
+    const discountCode = tx.discount_code || '';
     const taxAmount = Number(tx.tax_amount || 0);
     const feeAmount = Number(tx.fee_amount || 0);
+    const feeDetails = Array.isArray(tx.fee_details) ? tx.fee_details : [];
     const totalAmount = Number(tx.total_amount || 0);
     const paidAmount = Number(tx.paid_amount || 0);
     const changeAmount = Number(tx.change_amount || 0);
@@ -285,7 +327,7 @@ class PrinterService {
       .map((it) => {
         const qty = Number(it.quantity || 1);
         const name = it.product_name || it.name || 'Produk';
-        const lineTotal = Number(it.subtotal || it.price * qty || 0);
+        const lineTotal = Number(it.subtotal || it.total_price || it.price * qty || 0);
         return `
           <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:12px;">
             <span style="max-width:68%; word-break:break-word;">${qty}x ${name}</span>
@@ -319,9 +361,33 @@ class PrinterService {
             padding: 8mm 4mm;
             background: #fff;
           }
+          .copy-label {
+            background: #f4f4f5;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #e4e4e7;
+            text-align: center;
+            font-weight: 700;
+            font-size: 11px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+          }
           .header {
             text-align: center;
             margin-bottom: 8px;
+          }
+          .logo-container {
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          .logo-img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 8px;
+            display: inline-block;
           }
           .title {
             font-size: 15px;
@@ -349,6 +415,7 @@ class PrinterService {
           .val {
             font-weight: 600;
             text-align: right;
+            white-space: nowrap;
           }
           .total-row {
             display: flex;
@@ -356,6 +423,9 @@ class PrinterService {
             font-size: 14px;
             font-weight: 700;
             margin: 6px 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 4px 0;
           }
           .footer {
             text-align: center;
@@ -368,9 +438,16 @@ class PrinterService {
         </style>
       </head>
       <body>
+        ${copyLabel ? `<div class="copy-label">*** ${copyLabel.toUpperCase()} ***</div>` : ''}
+
         <div class="header">
+          ${showLogo && storeLogo ? `
+            <div class="logo-container">
+              <img src="${storeLogo}" alt="Logo Toko" class="logo-img" />
+            </div>
+          ` : ''}
           <div class="title">${storeName}</div>
-          <div class="sub">${storeAddress}</div>
+          ${storeAddress ? `<div class="sub">${storeAddress}</div>` : ''}
           ${showPhone && storePhone ? `<div class="sub">WA: ${storePhone}</div>` : ''}
         </div>
 
@@ -379,7 +456,7 @@ class PrinterService {
         <div class="row"><span class="label">No. Nota</span><span class="val">${invoice}</span></div>
         <div class="row"><span class="label">Waktu</span><span class="val">${dateStr}</span></div>
         <div class="row"><span class="label">Kasir</span><span class="val">${cashierName}</span></div>
-        <div class="row"><span class="label">Pelanggan</span><span class="val">${customerName}</span></div>
+        <div class="row"><span class="label">Pelanggan</span><span class="val">${customerName}${customerPhone ? ` (${customerPhone})` : ''}</span></div>
 
         <div class="divider"></div>
 
@@ -390,9 +467,12 @@ class PrinterService {
         <div class="divider"></div>
 
         <div class="row"><span class="label">Subtotal</span><span class="val">${formatRp(subtotal)}</span></div>
-        ${discountAmount > 0 ? `<div class="row"><span class="label">Diskon</span><span class="val">-${formatRp(discountAmount)}</span></div>` : ''}
-        ${taxAmount > 0 ? `<div class="row"><span class="label">Pajak</span><span class="val">+${formatRp(taxAmount)}</span></div>` : ''}
-        ${feeAmount > 0 ? `<div class="row"><span class="label">Biaya Layanan</span><span class="val">+${formatRp(feeAmount)}</span></div>` : ''}
+        ${discountAmount > 0 ? `<div class="row"><span class="label">Diskon ${discountCode ? `(${discountCode})` : ''}</span><span class="val">-${formatRp(discountAmount)}</span></div>` : ''}
+        ${taxAmount > 0 ? `<div class="row"><span class="label">Pajak (PPN/PB1)</span><span class="val">+${formatRp(taxAmount)}</span></div>` : ''}
+        ${feeAmount > 0 ? `
+          <div class="row"><span class="label">Biaya Tambahan</span><span class="val">+${formatRp(feeAmount)}</span></div>
+          ${feeDetails.map((f) => `<div class="row" style="padding-left: 8px; font-size: 11px; color: #555;"><span class="label">• ${f.name}</span><span class="val">+${formatRp(f.amount)}</span></div>`).join('')}
+        ` : ''}
 
         <div class="total-row">
           <span>TOTAL</span>
@@ -407,7 +487,6 @@ class PrinterService {
 
         <div class="footer">
           <div>${receiptFooter}</div>
-          <div style="font-size: 9.5px; margin-top: 3px; color: #666;">KasirKita POS</div>
         </div>
       </body>
       </html>
@@ -435,10 +514,39 @@ class PrinterService {
     doc.write(html);
     doc.close();
 
-    frame.contentWindow.focus();
-    setTimeout(() => {
-      frame.contentWindow.print();
-    }, 250);
+    const triggerPrint = () => {
+      try {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      } catch (err) {
+        console.warn('Gagal memanggil print frame:', err);
+      }
+    };
+
+    // Ensure any images (e.g. store logo) are loaded before calling print dialog
+    const images = doc.images;
+    if (images && images.length > 0) {
+      let loaded = 0;
+      const onImageDone = () => {
+        loaded++;
+        if (loaded >= images.length) {
+          setTimeout(triggerPrint, 100);
+        }
+      };
+      for (let i = 0; i < images.length; i++) {
+        if (images[i].complete) {
+          loaded++;
+        } else {
+          images[i].onload = onImageDone;
+          images[i].onerror = onImageDone;
+        }
+      }
+      if (loaded >= images.length) {
+        setTimeout(triggerPrint, 150);
+      }
+    } else {
+      setTimeout(triggerPrint, 150);
+    }
   }
 }
 

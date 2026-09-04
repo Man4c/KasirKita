@@ -29,20 +29,26 @@ export default function ReceiptView({
       api.get('/settings/store').then((res) => {
         if (res.data?.success && res.data?.data && isMounted) {
           const cloud = res.data.data;
-          setLocalSettings((prev) => ({
-            ...prev,
-            storeName: cloud.name || prev?.storeName,
-            storeAddress: cloud.address !== undefined ? cloud.address : prev?.storeAddress,
-            storePhone: cloud.phone !== undefined ? cloud.phone : prev?.storePhone,
-            storeLogo: cloud.logo !== undefined ? cloud.logo : prev?.storeLogo,
-            receiptFooter: cloud.receipt_footer !== undefined ? cloud.receipt_footer : prev?.receiptFooter,
-            showLogoOnReceipt: typeof cloud.show_logo_on_receipt === 'boolean' 
-              ? cloud.show_logo_on_receipt 
-              : (typeof prev?.showLogoOnReceipt === 'boolean' ? prev.showLogoOnReceipt : true),
-            showPhoneOnReceipt: typeof cloud.show_phone_on_receipt === 'boolean' 
-              ? cloud.show_phone_on_receipt 
-              : (typeof prev?.showPhoneOnReceipt === 'boolean' ? prev.showPhoneOnReceipt : true),
-          }));
+          setLocalSettings((prev) => {
+            const merged = {
+              ...prev,
+              storeName: cloud.name || prev?.storeName,
+              storeAddress: cloud.address !== undefined ? cloud.address : prev?.storeAddress,
+              storePhone: cloud.phone !== undefined ? cloud.phone : prev?.storePhone,
+              storeLogo: cloud.logo !== undefined ? cloud.logo : prev?.storeLogo,
+              receiptFooter: cloud.receipt_footer !== undefined ? cloud.receipt_footer : prev?.receiptFooter,
+              showLogoOnReceipt: typeof cloud.show_logo_on_receipt === 'boolean' 
+                ? cloud.show_logo_on_receipt 
+                : (typeof prev?.showLogoOnReceipt === 'boolean' ? prev.showLogoOnReceipt : true),
+              showPhoneOnReceipt: typeof cloud.show_phone_on_receipt === 'boolean' 
+                ? cloud.show_phone_on_receipt 
+                : (typeof prev?.showPhoneOnReceipt === 'boolean' ? prev.showPhoneOnReceipt : true),
+            };
+            storage.getSettings().then((saved) => {
+              storage.setSettings({ ...(saved || {}), ...merged });
+            });
+            return merged;
+          });
         }
       }).catch(() => {});
 

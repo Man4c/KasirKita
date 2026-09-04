@@ -21,6 +21,7 @@ export default function PosReceiptModal({
   onNewTransaction,
   closeBtnText = 'Tutup',
   formatRp,
+  storeSettings,
 }) {
   const handleSecondaryAction = onNewTransaction || onClose;
 
@@ -52,6 +53,7 @@ export default function PosReceiptModal({
           >
             <ReceiptView
               transaction={completedTx}
+              storeSettings={storeSettings}
               formatRp={formatRp}
             />
           </ScrollView>
@@ -63,12 +65,12 @@ export default function PosReceiptModal({
               activeOpacity={0.8}
               onPress={async () => {
                 if (!completedTx) return;
-                const res = await printerService.printReceipt(completedTx);
+                const res = await printerService.printReceipt(completedTx, storeSettings);
                 if (res.mode === 'bluetooth') {
                   showAlert('Sukses', 'Struk berhasil dicetak ke printer Bluetooth.');
                 } else {
                   if (Platform.OS === 'web') {
-                    await printerService.printWebReceiptHtml(completedTx);
+                    await printerService.printWebReceiptHtml(completedTx, storeSettings);
                   } else {
                     showAlert('Simulasi Cetak', 'Perintah cetak ESC/POS disiapkan (Mode Simulasi). Hubungkan printer Bluetooth fisik di menu Pengaturan jika sudah ada perangkat.');
                   }

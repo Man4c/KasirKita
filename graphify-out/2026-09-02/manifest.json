@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1788358998.519407,
-    "ast_hash": "eccdfecdb9adbb64081d19c02d397d80",
+    "mtime": 1788147442.4646795,
+    "ast_hash": "614cefbd17fa6e8de2fb102dd67edeb9",
     "semantic_hash": ""
   },
   "ANTIGRAVITY.md": {
@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788487905.7831829,
-    "ast_hash": "1975238e5c377f6bf262c030d6a69855",
+    "mtime": 1788357598.999074,
+    "ast_hash": "bc9937f18d6ffaaebf99e2ac54baa942",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1300,8 +1300,8 @@
     "semantic_hash": ""
   },
   "web/src/components/layout/AppLayout.jsx": {
-    "mtime": 1788418342.0880382,
-    "ast_hash": "c5e70cb66bb29e9d62dcc13d54017e05",
+    "mtime": 1788326805.1161995,
+    "ast_hash": "f5d717260fc0184e64bd2d761e6810e6",
     "semantic_hash": ""
   },
   "web/src/context/AuthContext.jsx": {
@@ -1365,13 +1365,13 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788486050.99397,
-    "ast_hash": "04075988f5bc0da1bc3b941a9c1ad86b",
+    "mtime": 1788342252.0158052,
+    "ast_hash": "2342d6196ead922038ecfbd14cca5fd5",
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788416489.5675917,
-    "ast_hash": "872c4a27346f0358f6278afd31e77390",
+    "mtime": 1788343249.7831635,
+    "ast_hash": "4c6553088806a2b00d7e15f7d2645fcb",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788416483.1492271,
-    "ast_hash": "533ed72665d3dd82a44fc28a9b35331a",
+    "mtime": 1788343261.5534172,
+    "ast_hash": "96f966d0b342fa549ac70f8aee25f513",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -1390,8 +1390,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {
-    "mtime": 1788426990.1254337,
-    "ast_hash": "0864fd42220024720f0817d0db8467d6",
+    "mtime": 1788321843.284983,
+    "ast_hash": "6c7699808091bcfa9f034a25f2623daa",
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/PosScreen.js": {
-    "mtime": 1788486726.039095,
-    "ast_hash": "31c2814e3ef12403973826b1ffeeaddf",
+    "mtime": 1788357572.492722,
+    "ast_hash": "be1a68a071c71f005472d73cd6c3473b",
     "semantic_hash": ""
   },
   "mobile/src/services/api.js": {
@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/TransactionHistoryScreen.js": {
-    "mtime": 1788435589.0614643,
-    "ast_hash": "bc35de87bd35524ea9b7a164e6a97e9e",
+    "mtime": 1788325477.8756394,
+    "ast_hash": "ee668c30ec2c3a560076da469a09c58c",
     "semantic_hash": ""
   },
   "plans/260902-19-mobile-dedicated-checkout-screen/plan.md": {
@@ -2090,13 +2090,13 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788419264.311336,
-    "ast_hash": "c5c510b425c59efef4465cde79beba96",
+    "mtime": 1788356873.5503619,
+    "ast_hash": "ea92f194f08a448d7713df61c3c9e9d2",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {
-    "mtime": 1788487850.7419107,
-    "ast_hash": "09b69b12de02c9f17b0da33a80ecbb91",
+    "mtime": 1788332207.466334,
+    "ast_hash": "f397d01c7d07936fb1b8e74d4459fa63",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/StoreSettingController.php": {
@@ -2130,8 +2130,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/offlineStorage.js": {
-    "mtime": 1788426901.4801557,
-    "ast_hash": "ec895f634a749f85c5f7aa58abff4d83",
+    "mtime": 1788342711.8165183,
+    "ast_hash": "6221ecbc83afd600d477638b51d4fc93",
     "semantic_hash": ""
   },
   "mobile/src/services/syncManager.js": {
@@ -2145,18 +2145,23 @@
     "semantic_hash": ""
   },
   "mobile/src/services/escposGenerator.js": {
-    "mtime": 1788487842.2305665,
-    "ast_hash": "e1549f205fc377c1df0a81c073ce342d",
+    "mtime": 1788332165.9332676,
+    "ast_hash": "e140d68b63b829568a7a541b9a215876",
     "semantic_hash": ""
   },
   "mobile/src/services/printerService.js": {
-    "mtime": 1788487834.8145816,
-    "ast_hash": "2f8b7359d409a568c6502ea67505eb34",
+    "mtime": 1788332172.807608,
+    "ast_hash": "a60a2bcefa92fe16f46806eb5f834158",
     "semantic_hash": ""
   },
   "mobile/src/services/orientationService.js": {
     "mtime": 1788342205.37209,
     "ast_hash": "8f4a58de76f9f25b064d587c6e358697",
+    "semantic_hash": ""
+  },
+  "mobile/src/screens/PosScreen.backup.js": {
+    "mtime": 1788346488.7423906,
+    "ast_hash": "ebe06e3da93d2665dc7243ea5e140d5f",
     "semantic_hash": ""
   },
   "mobile/src/utils/alert.js": {
@@ -2180,8 +2185,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/LandscapeRegisterPanel.js": {
-    "mtime": 1788486230.3480263,
-    "ast_hash": "5b7741c957b188ef780c496cca45ade2",
+    "mtime": 1788355775.3395605,
+    "ast_hash": "55a09dfc8c88068404b1981cf9125f26",
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PosCartModal.js": {
@@ -2190,18 +2195,18 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PosCheckoutView.js": {
-    "mtime": 1788395425.7389922,
-    "ast_hash": "d045b2a9fc320d553268b87007ce0df5",
+    "mtime": 1788356283.3769553,
+    "ast_hash": "d05acc833f4301b4291746ba4ce768b6",
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PosReceiptModal.js": {
-    "mtime": 1788487863.5886426,
-    "ast_hash": "64accc2efad1100f75579fa4ecccca8d",
+    "mtime": 1788353036.2704263,
+    "ast_hash": "03f8f69adfb3f81340876afbd1c27ceb",
     "semantic_hash": ""
   },
   "mobile/src/components/pos/ProductGrid.js": {
-    "mtime": 1788485307.1914039,
-    "ast_hash": "9330651f8f56b185b4b277e6adcc9724",
+    "mtime": 1788354349.2535017,
+    "ast_hash": "afe63268ed18f8993264f3c4c83c1861",
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PromoVoucherModal.js": {
@@ -2212,96 +2217,6 @@
   "mobile/src/components/pos/TaxFeeModal.js": {
     "mtime": 1788353104.643382,
     "ast_hash": "2df632a760c62d2b0f44df2f3bb044ef",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/ChangePasswordModal.js": {
-    "mtime": 1788390953.234393,
-    "ast_hash": "e78d33591139c5a8bc2e909bed971372",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/PrinterGuideModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "ad2772e402ec83051d1ed4f2d985eca0",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/PrinterSettingsModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "c9647d6a419d13390858d6cf90457b25",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/SecurityAuditModal.js": {
-    "mtime": 1788391814.3198445,
-    "ast_hash": "1031ba186d08fc152d69cfa10f34d351",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/StoreIdentityModal.js": {
-    "mtime": 1788418369.4523647,
-    "ast_hash": "826e79fc35d4275c2488e85b7dd37604",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/TestReceiptModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "a000a79252a1c6bb830c516bd2fbe1ab",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/UserProfileModal.js": {
-    "mtime": 1788390953.234393,
-    "ast_hash": "fa1dc5950b6b2b4d61470fe7b19059f5",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/settings/index.js": {
-    "mtime": 1788391814.3198445,
-    "ast_hash": "ab863090ddfb8fcbb6008266fa5a4f96",
-    "semantic_hash": ""
-  },
-  "plans/260902-23-mobile-settings-screen-refactoring/plan.md": {
-    "mtime": 1788392265.683666,
-    "ast_hash": "78d48920ee91c5635eef92503e7a801b",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/pos/PosBarcodeScannerView.js": {
-    "mtime": 1788416606.5163212,
-    "ast_hash": "ec547a152b0a82b2355d7c41e8489b00",
-    "semantic_hash": ""
-  },
-  "mobile/src/services/soundService.js": {
-    "mtime": 1788416551.4137273,
-    "ast_hash": "ad4fd690d612e56815054af5d29cdafb",
-    "semantic_hash": ""
-  },
-  "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md": {
-    "mtime": 1788421380.9680214,
-    "ast_hash": "9bcf064c7f1695cad596d82df24c6f49",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/dashboard/DashboardDetailModal.js": {
-    "mtime": 1788425597.9332952,
-    "ast_hash": "49be2eebb86714927b48bc27ad9568b0",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/dashboard/DashboardMetricsGrid.js": {
-    "mtime": 1788425570.8580396,
-    "ast_hash": "72ebfe3d92c5d75869ca229207a6ed67",
-    "semantic_hash": ""
-  },
-  "mobile/src/utils/format.js": {
-    "mtime": 1788425516.2152076,
-    "ast_hash": "94cbd80365fd942015d35620dec6ba7d",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/dashboard/SalesTrendChart.js": {
-    "mtime": 1788428270.4390316,
-    "ast_hash": "a77ec6a1fb5926e37aae50315e5cca02",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/dashboard/RecentTransactionsSection.js": {
-    "mtime": 1788428293.281121,
-    "ast_hash": "b7d7c3dee4401fd88a3e59f0e0332387",
-    "semantic_hash": ""
-  },
-  "mobile/src/components/pos/PaymentSuccessModal.js": {
-    "mtime": 1788436735.9328358,
-    "ast_hash": "2e5662d0798b227980864ba09c1abff4",
     "semantic_hash": ""
   }
 }

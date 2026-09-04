@@ -246,7 +246,6 @@ export function buildReceiptEscpos(transaction = {}, storeSettings = {}, paperSi
   // 5. Footer & Ucapan Terima Kasih
   builder.alignCenter();
   builder.textLine(receiptFooter);
-  builder.textLine('KasirKita POS - Solusi UMKM Maju');
 
   // 6. Paper Feed & Cut
   builder.feedAndCut();

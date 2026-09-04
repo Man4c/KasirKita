@@ -54,6 +54,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Mengatur warna latar belakang tombol menjadi **Rose Brand (`#e11d48`)** dengan border kontras (`#f43f5e`).
   - Diterapkan secara seragam di layar kasir mode Portrait (`ProductGrid.js`) maupun panel register Landscape (`LandscapeRegisterPanel.js`).
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
+- **Penyelarasan Tampilan & Cetak Struk Transaksi (`printerService.js`, `ReceiptView.js`, `PosReceiptModal.js`, `escposGenerator.js`)**:
+  - **Sinkronisasi Logo Toko**:
+    - Menambahkan rendering logo toko (`storeLogo`) di header struk cetak web iframe (`printerService.printWebReceiptHtml`) yang sebelumnya terlewat, sehingga logo toko (seperti ikon toko/troli merah) muncul persis sama antara pratinjau modal (`ReceiptView.js`) dan struk fisik yang dicetak.
+    - Menambahkan listener `onload` pada gambar di dalam iframe sebelum memanggil `print()`, menjamin logo telah ter-decode sempurna saat dialog cetak browser terbuka.
+    - Menambahkan sinkronisasi identitas toko cloud (`getStoreSettings`) yang otomatis mengambil logo dari storage/API jika data lokal belum lengkap, serta melakukan background cache ke storage di `ReceiptView.js`.
+  - **Penghapusan Watermark Branding Bawah**:
+    - Menghapus teks tambahan *"KasirKita POS"* yang sebelumnya dicetak di bawah catatan kaki nota di `printWebReceiptHtml` dan `escposGenerator.js`.
+    - Hasil cetak kini 100% konsisten dan bersih sesuai yang tampil di modal pratinjau struk (hanya menampilkan teks `receiptFooter` kustom toko tanpa disisipi teks branding tambahan).
 - **Cetak Struk Web Murni Bersih via Dedicated Iframe (`printerService.printWebReceiptHtml`)**:
   - Menyelesaikan kendala halaman cetak putih kosong di browser dengan beralih ke pendekatan standar industri POS: menggunakan **dedicated hidden iframe** yang langsung merender dokumen HTML struk nota kasir murni.
   - Saat kasir menekan tombol **`[Cetak Struk]`** di browser/PC:
