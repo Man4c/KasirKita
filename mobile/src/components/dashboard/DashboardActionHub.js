@@ -150,28 +150,34 @@ export default function DashboardActionHub({
         </View>
       </View>
 
-      {/* 4-Column Grid: Compact Centered Square Tiles */}
+      {/* 4-Column Grid: Compact Individual Square Cards */}
       <View style={styles.gridContainer}>
         {masterItems.map((item) => {
           const IconComp = item.icon;
           return (
             <TouchableOpacity
               key={item.id}
-              style={styles.gridTile}
+              style={[
+                styles.gridCard,
+                item.id === 'product' && styles.productCardActive,
+              ]}
               activeOpacity={0.7}
               onPress={item.onPress}
             >
+              {/* Top-right low stock badge if present */}
+              {item.badge && (
+                <View style={[styles.tileBadge, { backgroundColor: item.badgeBg }]}>
+                  <Text style={[styles.tileBadgeText, { color: item.badgeColor }]}>
+                    {item.badge}
+                  </Text>
+                </View>
+              )}
+
               <View style={[styles.iconBox, { backgroundColor: item.bgColor }]}>
                 <IconComp size={20} color={item.color} />
-                {item.badge && (
-                  <View style={[styles.tileBadge, { backgroundColor: item.badgeBg }]}>
-                    <Text style={[styles.tileBadgeText, { color: item.badgeColor }]}>
-                      {item.badge}
-                    </Text>
-                  </View>
-                )}
               </View>
-              <Text style={styles.tileLabel} numberOfLines={2}>
+
+              <Text style={styles.cardTitle} numberOfLines={1}>
                 {item.name}
               </Text>
             </TouchableOpacity>
@@ -185,17 +191,12 @@ export default function DashboardActionHub({
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
-    backgroundColor: '#18181b',
-    borderWidth: 1,
-    borderColor: '#27272a',
-    borderRadius: 14,
-    padding: 12,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -228,46 +229,53 @@ const styles = StyleSheet.create({
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    rowGap: 12,
+    gap: 8,
   },
-  gridTile: {
-    width: '25%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 4,
-    paddingHorizontal: 2,
-  },
-  iconBox: {
-    width: 44,
-    height: 44,
+  gridCard: {
+    width: '23.2%',
+    aspectRatio: 1,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 6,
+    padding: 6,
     position: 'relative',
+  },
+  productCardActive: {
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+    backgroundColor: '#141c19',
+  },
+  iconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
   },
   tileBadge: {
     position: 'absolute',
-    top: -5,
-    right: -10,
+    top: 4,
+    right: 4,
     paddingHorizontal: 4,
     paddingVertical: 1,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: 'rgba(245, 158, 11, 0.4)',
+    zIndex: 2,
   },
   tileBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     lineHeight: 14,
   },
-  tileLabel: {
+  cardTitle: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#d4d4d8',
+    color: '#f4f4f5',
     textAlign: 'center',
-    lineHeight: 16,
-    maxWidth: '92%',
+    maxWidth: '100%',
   },
 });
