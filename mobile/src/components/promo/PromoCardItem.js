@@ -192,19 +192,19 @@ const PromoCardItem = React.memo(function PromoCardItem({
           {isExpiredOrExhausted ? (
             <View style={styles.statusPillExpired}>
               <Clock size={12} color="#f87171" style={{ flexShrink: 0 }} />
-              <Text style={styles.statusTextExpired}>
+              <Text style={styles.statusTextExpired} numberOfLines={1}>
                 {isDateExpired ? 'Kadaluarsa' : 'Kuota Habis'}
               </Text>
             </View>
           ) : isInactive ? (
             <View style={styles.statusPillInactive}>
               <AlertCircle size={12} color="#a1a1aa" style={{ flexShrink: 0 }} />
-              <Text style={styles.statusTextInactive}>Non-Aktif</Text>
+              <Text style={styles.statusTextInactive} numberOfLines={1}>Nonaktif</Text>
             </View>
           ) : (
             <View style={styles.statusPillActive}>
               <CheckCircle2 size={12} color="#34d399" style={{ flexShrink: 0 }} />
-              <Text style={styles.statusTextActive}>Aktif Digunakan</Text>
+              <Text style={styles.statusTextActive} numberOfLines={1}>Aktif</Text>
             </View>
           )}
 
@@ -215,8 +215,8 @@ const PromoCardItem = React.memo(function PromoCardItem({
                 value={Boolean(item.is_active)}
                 onValueChange={() => onToggleStatus(item)}
                 trackColor={{ false: '#3f3f46', true: '#e11d48' }}
-                thumbColor="#ffffff"
-                style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+                thumbColor={item.is_active ? '#ffffff' : '#a1a1aa'}
+                style={{ transform: [{ scaleX: 0.75 }, { scaleY: 0.75 }] }}
               />
             </View>
           )}
@@ -413,9 +413,10 @@ const styles = StyleSheet.create({
   statusCol: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    flex: 1,
+    gap: 6,
+    flexShrink: 1,
     minWidth: 0,
+    marginRight: 8,
   },
   statusPillActive: {
     flexDirection: 'row',
@@ -423,10 +424,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 8,
+    paddingHorizontal: 7,
     paddingVertical: 4,
     borderRadius: 6,
-    gap: 5,
+    gap: 4,
     flexShrink: 0,
   },
   statusTextActive: {
@@ -440,10 +441,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 8,
+    paddingHorizontal: 7,
     paddingVertical: 4,
     borderRadius: 6,
-    gap: 5,
+    gap: 4,
     flexShrink: 0,
   },
   statusTextInactive: {
@@ -457,10 +458,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 8,
+    paddingHorizontal: 7,
     paddingVertical: 4,
     borderRadius: 6,
-    gap: 5,
+    gap: 4,
     flexShrink: 0,
   },
   statusTextExpired: {
@@ -469,12 +470,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   switchWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
     flexShrink: 0,
   },
   actionBtnGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 5,
     flexShrink: 0,
   },
   editBtn: {
@@ -483,10 +486,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
     borderRadius: 8,
-    gap: 5,
+    gap: 4,
     flexShrink: 0,
   },
   editBtnText: {
@@ -500,10 +503,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
     borderRadius: 8,
-    gap: 5,
+    gap: 4,
     flexShrink: 0,
   },
   deleteBtnText: {

@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Collision Toggle Switch vs Tombol Edit pada Kartu Promo (`PromoCardItem.js`)**:
+  - Menyelesaikan masalah switch toggle menabrak dan menempel pada tombol Edit di baris footer kartu promo:
+    1. *Penyebab Root Cause*: Teks status badge sebelumnya panjang (`"Aktif Digunakan"`, 15 karakter), dipadukan switch toggle dan padding tombol Edit/Hapus `10px`, sehingga total kebutuhan lebar mencapai ~312px pada kontainer berlebar ~296px. Ketiadaan margin pemisah menyebabkan switch terdorong persis menyentuh tombol Edit.
+    2. *Penyederhanaan Microcopy*:
+       - Mengubah status badge menjadi `"Aktif"` dan `"Nonaktif"` dengan `numberOfLines={1}`, menghemat lebih dari 40px ruang horizontal.
+    3. *Penerapan Defensive Flexbox UI Craft*:
+       - Menetapkan `statusCol: { gap: 6, flexShrink: 1, minWidth: 0, marginRight: 8 }` untuk menjamin adanya margin minimal 8px antara switch dan tombol Edit.
+       - Menyesuaikan scale Switch ke 0.75 dan menyelaraskan padding tombol aksi menjadi `paddingHorizontal: 8, paddingVertical: 5, gap: 4`.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Collision Status Text vs Tombol Edit/Hapus pada Kartu Satuan & Kategori (`UnitCardItem.js`, `CategoryCardItem.js`)**:
   - Menyelesaikan masalah teks status menabrak border tombol Edit (*"Belum Dipakai (Aman)"* menempel ke `[Edit]`) serta teks *breakdown* yang terpotong 2 baris:
     1. *Penyebab Root Cause*: Teks status sebelumnya terlalu panjang (`"Belum Dipakai (Aman)"`, 21 karakter) dengan `flexShrink: 0`, ditambah padding tombol Edit/Hapus yang lebar, sehingga pada kartu berlebar ~300px ruang yang tersisa tidak cukup dan teks menabrak tombol Edit. Selain itu, label breakdown `"Multi-Konversi:"` (15 karakter) terlalu panjang sehingga kata `"varian"` patah ke baris kedua.
