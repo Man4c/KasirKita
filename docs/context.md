@@ -20,14 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Implementasi Komponen Hub Menu Navigasi di Dashboard Mobile (`DashboardScreen.js`, `DashboardActionHub.js`)**:
-  - Menempatkan kartu **Hub Menu (Akses Cepat & Navigasi Operasional Toko)** tepat setelah tombol *Perbarui Data* dan sebelum *Tren Omzet 7 Hari*.
-  - Menampilkan grid 2x2 interaktif yang rapi dan elegan:
-    1. **Master Produk**: Kartu aksen hijau emerald dengan highlight status dinamis (menampilkan jumlah produk aktif dan pill alert amber jika ada stok menipis `inv.low_stock_count`).
-    2. **Kasir POS**: Shortcut langsung untuk membuka terminal kasir (`navigation.navigate('pos')`).
-    3. **Riwayat Nota**: Shortcut untuk membuka riwayat transaksi (`navigation.navigate('history')`) dengan counter jumlah transaksi hari ini.
-    4. **Pengaturan**: Shortcut menuju konfigurasi printer Bluetooth dan toko (`navigation.navigate('settings')`).
-  - Mematuhi standar Impeccable defensive UI (kontras warna WCAG, font minimum 12px, zero design defect pada `detect.mjs`) dan lolos bundling Expo Web.
+- **Penyempurnaan Hub Menu Master Data di Dashboard Mobile (`DashboardScreen.js`, `DashboardActionHub.js`)**:
+  - Menata ulang tata letak Hub Menu di Dashboard Owner (posisi: setelah tombol *Perbarui Data* dan di atas grafik *Tren Omzet 7 Hari*).
+  - Mengubah desain dari kartu persegi panjang 2-kolom besar menjadi **grid app-launcher 4-kolom kompak ("susunan 4x4")** dengan kotak item kecil berpusat (`alignItems: 'center', justifyContent: 'center'`):
+    1. **Produk**: Ikon `Package` (emerald `#34d399`) dilengkapi indikator badge stok menipis jika terdeteksi.
+    2. **Kategori**: Ikon `FolderTree` (sky `#38bdf8`) untuk manajemen kategori katalog.
+    3. **Satuan**: Ikon `Scale` (purple `#c084fc`) untuk pengaturan unit jual (Pcs, Box, Kg, dll).
+    4. **Promosi**: Ikon `TicketPercent` (rose `#fb7185`) untuk voucher dan diskon.
+    5. **Pajak & Biaya**: Ikon `Percent` (amber `#fbbf24`) untuk tarif PPN / PB1 dan service charge.
+    6. **Pelanggan**: Ikon `Users` (teal `#2dd4bf`) untuk direktori kontak & member pelanggan.
+    7. **Pemasok**: Ikon `Truck` (orange `#fb923c`) untuk daftar supplier restock barang.
+  - Memastikan ukuran tile ringkas sehingga tidak bersaing dengan kartu metrik omzet (KPI), memenuhi *The Readability Floor Rule* (seluruh font $\ge$ 12px), nol error pada linter `detect.mjs`, dan sukses bundling Expo Web.
 
 - **Perencanaan Plan #25: Layar Master Produk & Inventaris di Mobile (`plans/260904-25-mobile-master-produk/plan.md`)**:
   - Menyusun rencana implementasi modul Master Produk langsung dari aplikasi HP bagi Owner dan Manajer:

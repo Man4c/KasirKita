@@ -7,10 +7,12 @@ import {
 } from 'react-native';
 import {
   Package,
-  ShoppingCart,
-  Receipt,
-  Settings,
-  ChevronRight,
+  FolderTree,
+  Scale,
+  TicketPercent,
+  Percent,
+  Users,
+  Truck,
   Sparkles,
   AlertTriangle,
 } from 'lucide-react-native';
@@ -24,148 +26,157 @@ export default function DashboardActionHub({
 }) {
   const lowStock = Number(inv?.low_stock_count || 0);
   const totalSku = Number(inv?.total_items || 0);
-  const totalTrxToday = Number(sales?.transaction_count || 0);
 
-  const handleMasterProductPress = () => {
+  const handleMasterProduct = () => {
     if (onOpenMasterProduct) {
       onOpenMasterProduct();
     } else {
       showAlert(
         'Master Produk (Plan #25)',
-        'Layar Master Produk siap diimplementasikan! Anda dapat mengelola katalog, harga, stok, dan scan barcode kemasan fisik langsung dari HP.'
+        'Layar Master Produk siap dikerjakan! Kelola katalog produk, edit harga & stok, serta scan barcode fisik kemasan langsung dari ponsel.'
       );
     }
   };
 
-  const handleNav = (tabKey) => {
-    if (navigation?.navigate) {
-      navigation.navigate(tabKey);
-    }
+  const handleMasterAction = (title, description) => {
+    showAlert(title, description);
   };
+
+  // Master Data launcher items (4 columns per row, compact centered square tiles)
+  const masterItems = [
+    {
+      id: 'product',
+      name: 'Produk',
+      icon: Package,
+      color: '#34d399',
+      bgColor: 'rgba(16, 185, 129, 0.16)',
+      badge: lowStock > 0 ? `${lowStock} tipis` : null,
+      badgeColor: '#fbbf24',
+      badgeBg: 'rgba(245, 158, 11, 0.2)',
+      onPress: handleMasterProduct,
+    },
+    {
+      id: 'category',
+      name: 'Kategori',
+      icon: FolderTree,
+      color: '#38bdf8',
+      bgColor: 'rgba(56, 189, 248, 0.16)',
+      badge: null,
+      onPress: () =>
+        handleMasterAction(
+          'Master Kategori',
+          'Kelola pengelompokan produk, departemen barang, dan tata letak kategori di kasir POS.'
+        ),
+    },
+    {
+      id: 'unit',
+      name: 'Satuan',
+      icon: Scale,
+      color: '#c084fc',
+      bgColor: 'rgba(192, 132, 252, 0.16)',
+      badge: null,
+      onPress: () =>
+        handleMasterAction(
+          'Master Satuan',
+          'Atur unit satuan penjualan produk (Pcs, Box, Kg, Liter, Cup, Porsi, dll).'
+        ),
+    },
+    {
+      id: 'promo',
+      name: 'Promosi',
+      icon: TicketPercent,
+      color: '#fb7185',
+      bgColor: 'rgba(251, 113, 133, 0.16)',
+      badge: null,
+      onPress: () =>
+        handleMasterAction(
+          'Master Promosi',
+          'Atur diskon bertingkat, voucher promo kasir, dan harga spesial periode tertentu.'
+        ),
+    },
+    {
+      id: 'tax_fee',
+      name: 'Pajak & Biaya',
+      icon: Percent,
+      color: '#fbbf24',
+      bgColor: 'rgba(251, 191, 36, 0.16)',
+      badge: null,
+      onPress: () =>
+        handleMasterAction(
+          'Master Pajak & Biaya',
+          'Kelola pengaturan tarif PPN / PB1 resto dan biaya layanan (service charge).'
+        ),
+    },
+    {
+      id: 'customer',
+      name: 'Pelanggan',
+      icon: Users,
+      color: '#2dd4bf',
+      bgColor: 'rgba(45, 212, 191, 0.16)',
+      badge: null,
+      onPress: () =>
+        handleMasterAction(
+          'Master Pelanggan',
+          'Data kontak pelanggan tetap, riwayat belanja member, dan poin loyalitas.'
+        ),
+    },
+    {
+      id: 'supplier',
+      name: 'Pemasok',
+      icon: Truck,
+      color: '#fb923c',
+      bgColor: 'rgba(251, 146, 60, 0.16)',
+      badge: null,
+      onPress: () =>
+        handleMasterAction(
+          'Master Pemasok',
+          'Daftar kontak distributor/supplier untuk pencatatan restock pasokan barang.'
+        ),
+    },
+  ];
 
   return (
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.headerRow}>
         <View style={styles.headerLeft}>
-          <Sparkles size={15} color="#fb7185" style={{ flexShrink: 0 }} />
+          <Sparkles size={14} color="#fb7185" style={{ flexShrink: 0 }} />
           <Text style={styles.headerTitle} numberOfLines={1}>
-            Akses Cepat & Navigasi
+            Master Data & Katalog
           </Text>
         </View>
         <View style={styles.roleBadge}>
-          <Text style={styles.roleBadgeText}>Owner Hub</Text>
+          <Text style={styles.roleBadgeText}>Owner</Text>
         </View>
       </View>
 
-      {/* 2x2 Interactive Action Cards Grid */}
-      <View style={styles.grid}>
-        {/* 1. Master Produk & Stok (Highlighted Hero Action) */}
-        <TouchableOpacity
-          style={[styles.actionCard, styles.productCardHero]}
-          activeOpacity={0.75}
-          onPress={handleMasterProductPress}
-        >
-          <View style={styles.cardTop}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
-              <Package size={20} color="#34d399" />
-            </View>
-            <View style={styles.arrowBox}>
-              <ChevronRight size={14} color="#a1a1aa" />
-            </View>
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle} numberOfLines={1}>
-              Master Produk
-            </Text>
-            <View style={styles.statusRow}>
-              {lowStock > 0 ? (
-                <View style={styles.lowStockPill}>
-                  <AlertTriangle size={12} color="#fbbf24" style={{ flexShrink: 0 }} />
-                  <Text style={styles.lowStockText} numberOfLines={1}>
-                    {lowStock} menipis
-                  </Text>
-                </View>
-              ) : (
-                <Text style={styles.cardSubtitle} numberOfLines={1}>
-                  {totalSku > 0 ? `${totalSku} produk aktif` : 'Kelola stok & harga'}
-                </Text>
-              )}
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        {/* 2. Kasir POS */}
-        <TouchableOpacity
-          style={styles.actionCard}
-          activeOpacity={0.75}
-          onPress={() => handleNav('pos')}
-        >
-          <View style={styles.cardTop}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(225, 29, 72, 0.15)' }]}>
-              <ShoppingCart size={20} color="#fb7185" />
-            </View>
-            <View style={styles.arrowBox}>
-              <ChevronRight size={14} color="#71717a" />
-            </View>
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle} numberOfLines={1}>
-              Kasir POS
-            </Text>
-            <Text style={styles.cardSubtitle} numberOfLines={1}>
-              Buka terminal kasir
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        {/* 3. Riwayat Transaksi */}
-        <TouchableOpacity
-          style={styles.actionCard}
-          activeOpacity={0.75}
-          onPress={() => handleNav('history')}
-        >
-          <View style={styles.cardTop}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(245, 158, 11, 0.15)' }]}>
-              <Receipt size={20} color="#fbbf24" />
-            </View>
-            <View style={styles.arrowBox}>
-              <ChevronRight size={14} color="#71717a" />
-            </View>
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle} numberOfLines={1}>
-              Riwayat Nota
-            </Text>
-            <Text style={styles.cardSubtitle} numberOfLines={1}>
-              {totalTrxToday > 0 ? `${totalTrxToday} nota hari ini` : 'Cari & cetak struk'}
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        {/* 4. Pengaturan Toko */}
-        <TouchableOpacity
-          style={styles.actionCard}
-          activeOpacity={0.75}
-          onPress={() => handleNav('settings')}
-        >
-          <View style={styles.cardTop}>
-            <View style={[styles.iconBox, { backgroundColor: 'rgba(129, 140, 248, 0.15)' }]}>
-              <Settings size={20} color="#a5b4fc" />
-            </View>
-            <View style={styles.arrowBox}>
-              <ChevronRight size={14} color="#71717a" />
-            </View>
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle} numberOfLines={1}>
-              Pengaturan
-            </Text>
-            <Text style={styles.cardSubtitle} numberOfLines={1}>
-              Printer & toko
-            </Text>
-          </View>
-        </TouchableOpacity>
+      {/* 4-Column Grid: Compact Centered Square Tiles */}
+      <View style={styles.gridContainer}>
+        {masterItems.map((item) => {
+          const IconComp = item.icon;
+          return (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.gridTile}
+              activeOpacity={0.7}
+              onPress={item.onPress}
+            >
+              <View style={[styles.iconBox, { backgroundColor: item.bgColor }]}>
+                <IconComp size={20} color={item.color} />
+                {item.badge && (
+                  <View style={[styles.tileBadge, { backgroundColor: item.badgeBg }]}>
+                    <Text style={[styles.tileBadgeText, { color: item.badgeColor }]}>
+                      {item.badge}
+                    </Text>
+                  </View>
+                )}
+              </View>
+              <Text style={styles.tileLabel} numberOfLines={2}>
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </View>
   );
@@ -174,12 +185,17 @@ export default function DashboardActionHub({
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
+    borderRadius: 14,
+    padding: 12,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -209,76 +225,49 @@ const styles = StyleSheet.create({
     color: '#fb7185',
     whiteSpace: 'nowrap',
   },
-  grid: {
+  gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    justifyContent: 'flex-start',
+    rowGap: 12,
   },
-  actionCard: {
-    width: '48.5%',
-    backgroundColor: '#18181b',
-    borderWidth: 1,
-    borderColor: '#27272a',
-    borderRadius: 14,
-    padding: 12,
-    justifyContent: 'space-between',
-    minHeight: 106,
-  },
-  productCardHero: {
-    borderColor: 'rgba(16, 185, 129, 0.35)',
-    backgroundColor: '#141c19',
-  },
-  cardTop: {
-    flexDirection: 'row',
+  gridTile: {
+    width: '25%',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    justifyContent: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 2,
   },
   iconBox: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 6,
+    position: 'relative',
   },
-  arrowBox: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cardContent: {
-    gap: 2,
-  },
-  cardTitle: {
-    fontSize: 13,
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#f4f4f5',
-  },
-  cardSubtitle: {
-    fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    color: '#a1a1aa',
-  },
-  statusRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  lowStockPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
-    paddingHorizontal: 6,
+  tileBadge: {
+    position: 'absolute',
+    top: -5,
+    right: -10,
+    paddingHorizontal: 4,
     paddingVertical: 1,
     borderRadius: 4,
-    marginTop: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(245, 158, 11, 0.4)',
   },
-  lowStockText: {
+  tileBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#fbbf24',
+    lineHeight: 14,
+  },
+  tileLabel: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#d4d4d8',
+    textAlign: 'center',
+    lineHeight: 16,
+    maxWidth: '92%',
   },
 });
