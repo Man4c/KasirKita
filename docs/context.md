@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #28 Fase 3: Komponen Kartu Tiket Promo (`PromoCardItem.js`) & Layar Utama (`PromoManagementScreen.js`)**:
+  - Mengembangkan tampilan antarmuka Master Promosi & Voucher Diskon berstandar *Impeccable Defensive UI*:
+    1. *Kartu Tiket Promo (`PromoCardItem.js`)*: Desain bergaya voucher kupon dengan aksen Rose Brand (`#fb7185`), badge kode kupon dashed border, nilai diskon persentase/potongan nominal kontras tinggi, identitas promo terlindungi `min-w-0 truncate`, rincian syarat minimal belanja & masa berlaku tanggal, progress bar pemakaian kuota voucher, indikator status (*Aktif Digunakan*, *Non-Aktif*, *Kadaluarsa / Kuota Habis*), saklar toggle `Switch` instan, serta tombol aksi cepat [Edit] dan [Hapus].
+    2. *Layar Utama (`PromoManagementScreen.js`)*: Header rapi dengan tombol kembali ke Dashboard dan refresh berputar, metrik ringkasan kupon (Total Promo, Voucher Aktif, Total Penggunaan), banner offline otomatis, pencarian instan debounce 350ms, filter status tab chips (*Semua*, *Aktif*, *Non-Aktif*, *Kadaluarsa / Habis*), FlatList dengan empty state terpadu, dan tombol FAB `[ + Tambah Promo ]`.
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web (`npx expo export --platform web`). Status Fase 3: `completed`.
+
 - **Penyelesaian Plan #28 Fase 2: Pembuatan Mobile API Service (`discountService.js`) & Cache Offline (`offlineStorage.js`)**:
   - Mengembangkan modul layanan API komprehensif [`mobile/src/services/discountService.js`](file:///d:/Projects/KasirKita/mobile/src/services/discountService.js):
     1. `getDiscounts(params)`: Mengambil daftar kupon diskon dengan dukungan paginasi, pencarian teks, filter tipe (`PERCENTAGE`, `FIXED`, `MIN_SPEND`), filter status (`active`, `inactive`, `expired`), dan pembaruan cache offline otomatis.
