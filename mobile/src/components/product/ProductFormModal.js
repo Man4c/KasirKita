@@ -283,7 +283,7 @@ export default function ProductFormModal({
                   activeOpacity={0.7}
                   onPress={() => setScannerOpen(true)}
                 >
-                  <ScanBarcode size={18} color="#ffffff" />
+                  <ScanBarcode size={22} color="#ffffff" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 9,
+    height: 42,
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     color: '#f4f4f5',
@@ -546,8 +546,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   scanTriggerBtn: {
-    width: 44,
-    height: 44,
+    width: 42,
+    height: 42,
     borderRadius: 10,
     backgroundColor: '#e11d48',
     alignItems: 'center',

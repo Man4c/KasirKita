@@ -291,7 +291,7 @@ export default function ProductManagementScreen({
             activeOpacity={0.7}
             onPress={() => setScannerModalVisible(true)}
           >
-            <ScanBarcode size={18} color="#ffffff" />
+            <ScanBarcode size={22} color="#ffffff" />
           </TouchableOpacity>
         </View>
 

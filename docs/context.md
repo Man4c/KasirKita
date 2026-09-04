@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelarasan Presisi Tinggi Wadah Tombol Scan Barcode & Pembesaran Ikon (`ProductFormModal.js`, `ProductManagementScreen.js`)**:
+  - **Penyebab Masalah**: Wadah kotak merah tombol scan barcode di modal form tambah/edit produk tampak terlalu besar dan menonjol lebih tinggi dibandingkan kolom input di sampingnya (sebelumnya berukuran 44x44px sementara kolom input tidak memiliki tinggi eksplisit sehingga hanya ~38px).
+  - **Solusi & Penyempurnaan**:
+    1. Mengunci tinggi kolom `textInput` menjadi **`height: 42`** dan wadah tombol `scanTriggerBtn` menjadi **`width: 42, height: 42`** dengan `borderRadius: 10`. Keduanya kini **100% sejajar rata (*flush*) dan sama persis tingginya**.
+    2. Menyesuaikan ukuran ikon `ScanBarcode` menjadi **`size={22}`** warna putih solid (sebelumnya `18`) di `ProductFormModal.js` dan `ProductManagementScreen.js`. Ikon kini tampil proporsional, jelas, dan dominan tanpa membuat layernya menonjol keluar kolom.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`).
+
 - **Eliminasi Padding Ganda Area Atas Layar Master Produk (`ProductManagementScreen.js`)**:
   - **Penyebab Masalah**: Muncul area kosong hitam yang terlalu lebar (*double top gap*) di atas header "Master Produk".
   - **Akar Masalah**: Komponen induk [`mobile/App.js`](file:///d:/Projects/KasirKita/mobile/App.js) sudah memiliki pembungkus utama ber-padding status bar sistem (`paddingTop: safeTopPadding`). Penggunaan `SafeAreaView` di dalam `ProductManagementScreen.js` menyebabkan padding status bar dihitung dua kali lipat (double insets).
