@@ -222,7 +222,7 @@ export default function ProductManagementScreen({
                 <ChevronLeft size={20} color="#f4f4f5" />
               </TouchableOpacity>
             )}
-            <View>
+            <View style={styles.screenTitleContainer}>
               <Text style={styles.screenTitle} numberOfLines={1}>
                 Master Produk
               </Text>
@@ -232,26 +232,14 @@ export default function ProductManagementScreen({
             </View>
           </View>
 
-          <View style={styles.headerActionGroup}>
-            <TouchableOpacity
-              style={styles.headerIconBtn}
-              onPress={handleRefresh}
-              disabled={refreshing}
-            >
-              <RotateCw size={16} color="#e4e4e7" />
-            </TouchableOpacity>
-
-            {isOwner && (
-              <TouchableOpacity
-                style={styles.createBtnHeader}
-                activeOpacity={0.8}
-                onPress={handleOpenCreateProduct}
-              >
-                <Plus size={16} color="#ffffff" />
-                <Text style={styles.createBtnHeaderText}>Produk</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          <TouchableOpacity
+            style={styles.headerIconBtn}
+            onPress={handleRefresh}
+            disabled={refreshing}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <RotateCw size={16} color="#e4e4e7" />
+          </TouchableOpacity>
         </View>
 
         {/* Offline Banner */}
@@ -390,7 +378,7 @@ export default function ProductManagementScreen({
             <Text style={styles.emptySubtitle}>
               {search || selectedCategory || stockFilter !== 'ALL'
                 ? 'Tidak ada produk yang cocok dengan kriteria filter Anda.'
-                : 'Belum ada produk di toko Anda. Tekan tombol "+ Produk" di atas untuk memulai.'}
+                : 'Belum ada produk di toko Anda. Tekan tombol "+" di kanan bawah untuk menambahkan produk pertama.'}
             </Text>
           </View>
         ) : (
@@ -421,6 +409,17 @@ export default function ProductManagementScreen({
           />
         )}
       </View>
+
+      {/* Floating Action Button (FAB) */}
+      {isOwner && (
+        <TouchableOpacity
+          style={styles.fab}
+          activeOpacity={0.85}
+          onPress={handleOpenCreateProduct}
+        >
+          <Plus size={22} color="#ffffff" />
+        </TouchableOpacity>
+      )}
 
       {/* Product Form Modal (Tambah & Edit) */}
       <ProductFormModal
@@ -489,6 +488,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',
+    flexShrink: 0,
+  },
+  screenTitleContainer: {
+    flex: 1,
+    minWidth: 0,
   },
   screenTitle: {
     fontSize: 22,
@@ -501,11 +505,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
   },
-  headerActionGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
   headerIconBtn: {
     width: 36,
     height: 36,
@@ -515,21 +514,7 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  createBtnHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    backgroundColor: '#e11d48',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 9,
-  },
-  createBtnHeaderText: {
-    fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#ffffff',
-    whiteSpace: 'nowrap',
+    flexShrink: 0,
   },
   offlineBanner: {
     flexDirection: 'row',
@@ -670,7 +655,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   listContent: {
-    paddingBottom: 30,
+    paddingBottom: 88,
   },
   centerBox: {
     flex: 1,
@@ -700,7 +685,7 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
+    color: '#a1a1aa',
     textAlign: 'center',
     lineHeight: 18,
   },
@@ -715,5 +700,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 24,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: '#e11d48',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    elevation: 6,
   },
 });

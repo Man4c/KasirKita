@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Standardisasi Floating Action Button (FAB) & Pembersihan Header Master Produk (`ProductManagementScreen.js`)**:
+  - Menyelaraskan Master Produk dengan pola UI Master Kategori, Satuan, dan Promo:
+    1. *Penghapusan Tombol Header*: Menghilangkan tombol `+ Produk` di kanan atas header, menyisakan ruang lega bagi `screenTitleContainer: { flex: 1, minWidth: 0 }` sehingga judul "Master Produk" tidak lagi terhimpit atau terpotong.
+    2. *Penambahan Floating Action Button (FAB)*: Menambahkan FAB bulat merah Rose (`#e11d48`, diameter 52px, shadow natural 0.35, icon `Plus` putih 22px) di kanan bawah layar untuk pengalaman penambahan produk yang ergonomis dan konsisten dengan seluruh modul master data.
+    3. *Penyesuaian Scroll Padding & Empty State*: Menaikkan `paddingBottom` dari 30 ke 88 pada `listContent` agar kartu produk terbawah tidak tertutup oleh FAB, serta memperbaiki teks dan kontras `emptySubtitle` ke `#a1a1aa`.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Pembersihan Redundant Action Button pada Header Master Kategori & Satuan (`CategoryManagementScreen.js`, `UnitManagementScreen.js`)**:
   - Menghilangkan tombol create ganda `+ Kategori` dan `+ Satuan` di pojok kanan atas (*header top bar*), karena aksi tambah data sudah tersedia melalui Floating Action Button (FAB) `+` di kanan bawah layar:
     1. *Pelegaan Ruang Header*: Judul layar (`screenTitle` dan `screenSubtitle`) kini memiliki ruang penuh dengan `screenTitleContainer: { flex: 1, minWidth: 0 }`, sehingga teks "Master Kategori" dan "Master Satuan" tidak lagi terhimpit/terpotong menjadi ellipsis.
