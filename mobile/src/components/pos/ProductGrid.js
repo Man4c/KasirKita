@@ -75,7 +75,7 @@ export default function ProductGrid({
                 onPress={onOpenBarcodeScanner}
                 activeOpacity={0.7}
               >
-                <ScanBarcode size={15} color="#ffffff" />
+                <ScanBarcode size={20} color="#ffffff" />
               </TouchableOpacity>
             )}
           </View>

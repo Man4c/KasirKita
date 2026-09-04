@@ -110,7 +110,7 @@ export default function LandscapeRegisterPanel({
               onPress={onToggleScanMode}
               activeOpacity={0.7}
             >
-              <ScanBarcode size={15} color="#ffffff" />
+              <ScanBarcode size={20} color="#ffffff" />
             </TouchableOpacity>
           )}
         </View>
@@ -181,100 +181,100 @@ export default function LandscapeRegisterPanel({
         {((showVoucherFeature && (availablePromos.length > 0 || appliedPromo)) ||
           takeawayFees.length > 0 ||
           (showTaxFeature && availableTaxes.length > 0)) && (
-          <View
-            style={[styles.regQuickOptionsRow, compact && styles.regQuickOptionsRowCompact]}
-          >
-            {/* Promo button */}
-            {showVoucherFeature && (availablePromos.length > 0 || appliedPromo) && (
-              <TouchableOpacity
-                style={[
-                  styles.regQuickPill,
-                  compact && styles.regQuickPillCompact,
-                  appliedPromo && styles.regQuickPillPromoActive,
-                ]}
-                onPress={() => {
-                  if (appliedPromo) {
-                    onRemovePromo();
-                  } else {
-                    onOpenPromoModal();
-                  }
-                }}
-              >
-                <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
-                <Text
+            <View
+              style={[styles.regQuickOptionsRow, compact && styles.regQuickOptionsRowCompact]}
+            >
+              {/* Promo button */}
+              {showVoucherFeature && (availablePromos.length > 0 || appliedPromo) && (
+                <TouchableOpacity
                   style={[
-                    styles.regQuickPillText,
-                    appliedPromo && styles.regQuickPillPromoTextActive,
+                    styles.regQuickPill,
+                    compact && styles.regQuickPillCompact,
+                    appliedPromo && styles.regQuickPillPromoActive,
                   ]}
-                >
-                  {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
-                </Text>
-                {appliedPromo && <X size={11} color="#ffffff" style={{ marginLeft: 2 }} />}
-              </TouchableOpacity>
-            )}
-
-            {/* Takeaway toggle */}
-            {takeawayFees.length > 0 && (
-              <TouchableOpacity
-                style={[
-                  styles.regQuickPill,
-                  compact && styles.regQuickPillCompact,
-                  isTakeaway && styles.regQuickPillActive,
-                ]}
-                onPress={onToggleTakeaway}
-              >
-                <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
-                <Text
-                  style={[
-                    styles.regQuickPillText,
-                    isTakeaway && styles.regQuickPillTextActive,
-                  ]}
-                >
-                  {isTakeaway ? 'Bungkus (+)' : 'Dine In'}
-                </Text>
-              </TouchableOpacity>
-            )}
-
-            {/* Tax status chip */}
-            {showTaxFeature && availableTaxes.length > 0 && (
-              <TouchableOpacity
-                style={[
-                  styles.regQuickPill,
-                  compact && styles.regQuickPillCompact,
-                  selectedTaxId && styles.regQuickPillActive,
-                ]}
-                onPress={() => {
-                  if (availableTaxes.length > 1) {
-                    onOpenTaxModal();
-                  } else {
-                    if (selectedTaxId) {
-                      onSelectTax('');
+                  onPress={() => {
+                    if (appliedPromo) {
+                      onRemovePromo();
                     } else {
-                      onSelectTax(availableTaxes[0]?.id || '');
+                      onOpenPromoModal();
                     }
-                  }
-                }}
-              >
-                <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
-                <Text
-                  style={[
-                    styles.regQuickPillText,
-                    selectedTaxId && styles.regQuickPillTextActive,
-                  ]}
+                  }}
                 >
-                  {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
-                </Text>
-                {availableTaxes.length > 1 && (
-                  <ChevronDown
-                    size={10}
-                    color={selectedTaxId ? '#ffffff' : '#a1a1aa'}
-                    style={{ marginLeft: 2 }}
-                  />
-                )}
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
+                  <TicketPercent size={12} color={appliedPromo ? '#ffffff' : '#a1a1aa'} />
+                  <Text
+                    style={[
+                      styles.regQuickPillText,
+                      appliedPromo && styles.regQuickPillPromoTextActive,
+                    ]}
+                  >
+                    {appliedPromo ? appliedPromo.discount_code : 'Voucher'}
+                  </Text>
+                  {appliedPromo && <X size={11} color="#ffffff" style={{ marginLeft: 2 }} />}
+                </TouchableOpacity>
+              )}
+
+              {/* Takeaway toggle */}
+              {takeawayFees.length > 0 && (
+                <TouchableOpacity
+                  style={[
+                    styles.regQuickPill,
+                    compact && styles.regQuickPillCompact,
+                    isTakeaway && styles.regQuickPillActive,
+                  ]}
+                  onPress={onToggleTakeaway}
+                >
+                  <Package size={12} color={isTakeaway ? '#ffffff' : '#a1a1aa'} />
+                  <Text
+                    style={[
+                      styles.regQuickPillText,
+                      isTakeaway && styles.regQuickPillTextActive,
+                    ]}
+                  >
+                    {isTakeaway ? 'Bungkus (+)' : 'Dine In'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              {/* Tax status chip */}
+              {showTaxFeature && availableTaxes.length > 0 && (
+                <TouchableOpacity
+                  style={[
+                    styles.regQuickPill,
+                    compact && styles.regQuickPillCompact,
+                    selectedTaxId && styles.regQuickPillActive,
+                  ]}
+                  onPress={() => {
+                    if (availableTaxes.length > 1) {
+                      onOpenTaxModal();
+                    } else {
+                      if (selectedTaxId) {
+                        onSelectTax('');
+                      } else {
+                        onSelectTax(availableTaxes[0]?.id || '');
+                      }
+                    }
+                  }}
+                >
+                  <Percent size={12} color={selectedTaxId ? '#ffffff' : '#a1a1aa'} />
+                  <Text
+                    style={[
+                      styles.regQuickPillText,
+                      selectedTaxId && styles.regQuickPillTextActive,
+                    ]}
+                  >
+                    {selectedTaxId ? activeTax?.name || 'Pajak' : 'Tanpa Pajak'}
+                  </Text>
+                  {availableTaxes.length > 1 && (
+                    <ChevronDown
+                      size={10}
+                      color={selectedTaxId ? '#ffffff' : '#a1a1aa'}
+                      style={{ marginLeft: 2 }}
+                    />
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
 
         {/* Bill Summary Rows */}
         {hasBillAdjustments && (
@@ -316,9 +316,9 @@ export default function LandscapeRegisterPanel({
             styles.regPayRow,
             compact && styles.regPayRowCompact,
             !hasBillAdjustments &&
-              !((showVoucherFeature && (availablePromos.length > 0 || appliedPromo)) ||
-                takeawayFees.length > 0 ||
-                (showTaxFeature && availableTaxes.length > 0)) && { borderTopWidth: 0, paddingTop: 0 },
+            !((showVoucherFeature && (availablePromos.length > 0 || appliedPromo)) ||
+              takeawayFees.length > 0 ||
+              (showTaxFeature && availableTaxes.length > 0)) && { borderTopWidth: 0, paddingTop: 0 },
           ]}
         >
           <View>
@@ -426,9 +426,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
   regScanBtn: {
-    padding: 6,
+    width: 28,
+    height: 28,
     borderRadius: 8,
     backgroundColor: '#e11d48',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#f43f5e',
   },
