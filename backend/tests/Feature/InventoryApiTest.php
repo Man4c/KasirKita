@@ -240,4 +240,50 @@ class InventoryApiTest extends TestCase
             'product_name' => 'Produk Hapus Test',
         ]);
     }
+
+    public function test_category_cannot_be_deleted_if_has_products(): void
+    {
+        $category = Category::create([
+            'name' => 'Kategori Punya Produk',
+            'slug' => 'kategori-punya-produk',
+        ]);
+
+        Product::create([
+            'category_id' => $category->id,
+            'name' => 'Produk Terikat',
+            'price' => 10000,
+            'avg_cost' => 5000,
+            'stock' => 5,
+        ]);
+
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->deleteJson("/api/categories/{$category->id}");
+
+        $response->assertStatus(422)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Kategori tidak dapat dihapus karena masih memiliki produk terkait.',
+            ]);
+
+        $this->assertDatabaseHas('categories', ['id' => $category->id]);
+    }
+
+    public function test_can_delete_empty_category(): void
+    {
+        $category = Category::create([
+            'name' => 'Kategori Kosong',
+            'slug' => 'kategori-kosong',
+        ]);
+
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->deleteJson("/api/categories/{$category->id}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Kategori berhasil dihapus.',
+            ]);
+
+        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+    }
 }

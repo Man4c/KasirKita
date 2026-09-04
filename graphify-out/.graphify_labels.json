@@ -340,5 +340,8 @@
   "338": "extractFindingIgnoreValue",
   "339": "expo",
   "340": "applyEditing",
-  "342": "Adaptation Strategies"
+  "341": "source-lock.mjs",
+  "342": "Adaptation Strategies",
+  "343": "serializeFindings",
+  "344": "expo-audio"
 }
