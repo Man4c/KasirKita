@@ -20,9 +20,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Standardisasi Tinggi Tombol Header Keranjang Kasir Landscape (`LandscapeRegisterPanel.js`)**:
-  - Menyamakan tinggi ketiga tombol di header keranjang panel kanan: tombol **`[ 📱 Portrait ]`**, tombol hapus keranjang **`[ 🗑️ ]`**, dan tombol scan barcode **`[ 🔴 ]`** secara presisi menjadi **`height: 28`** dengan sudut `borderRadius: 8`.
-  - Dimensi tinggi ini setara dan sejajar sempurna dengan tinggi pill filter kategori produk (`catChipCompact`) dan bilah pencarian produk di panel sebelah kiri.
+- **Standardisasi Presisi Tinggi Tombol Header Keranjang Kasir Landscape (`LandscapeRegisterPanel.js`)**:
+  - Menyamakan tinggi ketiga tombol di header keranjang panel kanan: tombol **`[ 📱 Portrait ]`**, tombol hapus keranjang **`[ 🗑️ ]`**, dan tombol scan barcode **`[ 🔴 ]`** secara presisi menjadi **`height: 24px`** dengan sudut **`borderRadius: 6px`**.
+  - Dimensi ini 100% identik dan sejajar sempurna dengan chip filter kategori produk (`catChipCompact`: padding vertical 2 + font 12 + border = 24px, borderRadius: 6px).
+  - Menyesuaikan ukuran ikon menjadi `size={16}` (barcode) dan `size={15}` (sampah) agar proporsional dan tidak menabrak batas kotak tombol.
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Penyelarasan Desain Tombol Hapus Keranjang (*Trash Clear Cart*) (`LandscapeRegisterPanel.js`)**:
   - Menyamakan warna ikon tempat sampah menjadi **putih solid (`#ffffff`)** dengan ukuran **`size={17}`** yang proporsional dan jelas.
