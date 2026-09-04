@@ -250,4 +250,70 @@ class PosApiTest extends TestCase
         $searchCashier->assertStatus(200);
         $this->assertCount(2, $searchCashier->json('data.data'));
     }
+
+    public function test_pos_checkout_preserves_offline_invoice_number_and_timestamp_and_is_searchable(): void
+    {
+        $product1 = Product::create([
+            'name' => 'Mie Goreng Spesial',
+            'price' => 3500,
+            'avg_cost' => 2000,
+            'stock' => 50,
+            'min_stock' => 5,
+        ]);
+
+        $product2 = Product::create([
+            'name' => 'Keripik Kentang Balado',
+            'price' => 12000,
+            'avg_cost' => 8000,
+            'stock' => 30,
+            'min_stock' => 5,
+        ]);
+
+        $offlineId = 'OFF-20260904064203-YYU7';
+        $offlineInvoice = 'INV-OFF-20260904064203-YYU7';
+        $clientTimestamp = '2026-09-04T06:42:03.000000Z';
+
+        // Checkout with offline metadata
+        $res = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->postJson('/api/pos/checkout', [
+                'offline_id' => $offlineId,
+                'invoice_number' => $offlineInvoice,
+                'created_at' => $clientTimestamp,
+                'customer_name' => 'Pelanggan Umum',
+                'paid_amount' => 20000,
+                'payment_method' => 'CASH',
+                'items' => [
+                    ['product_id' => $product1->id, 'quantity' => 1],
+                    ['product_id' => $product2->id, 'quantity' => 1],
+                ],
+            ]);
+
+        $res->assertStatus(201);
+        $data = $res->json('data');
+
+        // Verify invoice number and offline_id are strictly preserved
+        $this->assertEquals($offlineInvoice, $data['invoice_number']);
+        $this->assertEquals($offlineId, $data['offline_id']);
+
+        // Verify created_at timestamp is strictly preserved from client
+        $this->assertEquals('2026-09-04 06:42:03', \Illuminate\Support\Carbon::parse($data['created_at'])->format('Y-m-d H:i:s'));
+
+        // Verify item ordering matches cart order
+        $this->assertEquals($product1->id, $data['items'][0]['product_id']);
+        $this->assertEquals($product2->id, $data['items'][1]['product_id']);
+
+        // Verify search via offline invoice number
+        $searchRes = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->getJson('/api/pos/transactions?search=YYU7');
+        $searchRes->assertStatus(200);
+        $this->assertCount(1, $searchRes->json('data.data'));
+        $this->assertEquals($offlineInvoice, $searchRes->json('data.data.0.invoice_number'));
+
+        // Verify search via full offline_id
+        $searchRes2 = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->getJson("/api/pos/transactions?search={$offlineId}");
+        $searchRes2->assertStatus(200);
+        $this->assertCount(1, $searchRes2->json('data.data'));
+        $this->assertEquals($offlineInvoice, $searchRes2->json('data.data.0.invoice_number'));
+    }
 }

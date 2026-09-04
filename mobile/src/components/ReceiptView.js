@@ -89,7 +89,14 @@ export default function ReceiptView({
         minute: '2-digit',
       });
 
-  const subtotal = Number(tx.subtotal || 0);
+  // Defensive fallback: hitung subtotal dari penjumlahan item jika tx.subtotal kosong/0
+  const calculatedItemsSubtotal = items.reduce((sum, i) => {
+    const p = Number(i.unit_price || i.price || 0);
+    const q = Number(i.quantity || 1);
+    return sum + (Number(i.subtotal) || p * q);
+  }, 0);
+
+  const subtotal = Number(tx.subtotal) > 0 ? Number(tx.subtotal) : calculatedItemsSubtotal;
   const discountAmount = Number(tx.discount_amount || 0);
   const discountCode = tx.discount_code || '';
   const taxAmount = Number(tx.tax_amount || 0);

@@ -52,10 +52,15 @@ class PosService
             $subtotal = 0;
             $itemsToProcess = [];
 
-            // 1. Deadlock Prevention: Deterministically sort items by product_id
-            $sortedItems = collect($data['items'])->sortBy('product_id')->values()->all();
+            // 1. Deadlock Prevention: Deterministically pre-lock products by sorted ID
+            $uniqueProductIds = collect($data['items'])->pluck('product_id')->unique()->sort()->values();
+            $lockedProducts = Product::with(['baseUnit', 'conversions.unit'])
+                ->whereIn('id', $uniqueProductIds)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
 
-            foreach ($sortedItems as $item) {
+            foreach ($data['items'] as $item) {
                 $qty = (float) $item['quantity'];
                 if ($qty <= 0) {
                     throw new Exception('Jumlah item harus lebih dari 0.');
@@ -63,7 +68,7 @@ class PosService
 
                 // Pessimistic lock for atomic stock deduction
                 /** @var Product|null $product */
-                $product = Product::with(['baseUnit', 'conversions.unit'])->lockForUpdate()->find($item['product_id']);
+                $product = $lockedProducts->get($item['product_id']);
 
                 if (! $product) {
                     throw new Exception("Produk dengan ID {$item['product_id']} tidak ditemukan.");
@@ -160,7 +165,13 @@ class PosService
             }
 
             $changeAmount = $paidAmount - $totalAmount;
-            $invoiceNumber = 'INV-'.now()->format('YmdHis').'-'.strtoupper(Str::random(4));
+
+            // Preserve original invoice number from offline client if provided
+            $invoiceNumber = !empty($data['invoice_number'])
+                ? $data['invoice_number']
+                : (!empty($data['offline_id'])
+                    ? 'INV-' . $data['offline_id']
+                    : 'INV-'.now()->format('YmdHis').'-'.strtoupper(Str::random(4)));
 
             $customerId = !empty($data['customer_id']) ? $data['customer_id'] : null;
             $customerName = $data['customer_name'] ?? 'Pelanggan Umum';
@@ -198,7 +209,7 @@ class PosService
             ];
 
             if (!empty($data['created_at'])) {
-                $transactionData['created_at'] = $data['created_at'];
+                $transactionData['created_at'] = \Illuminate\Support\Carbon::parse($data['created_at']);
             }
 
             $transaction = Transaction::create($transactionData);

@@ -517,6 +517,7 @@ export default function PosScreen({
 
       const payload = {
         payment_method: paymentMethod,
+        subtotal: subtotal,
         total_amount: totalAmount,
         paid_amount: paymentMethod === 'CASH' ? paidNum : totalAmount,
         cash_received: paymentMethod === 'CASH' ? paidNum : totalAmount,

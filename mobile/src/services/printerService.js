@@ -310,7 +310,12 @@ class PrinterService {
     const customerPhone = tx.customer_phone || null;
 
     const items = tx.items || [];
-    const subtotal = Number(tx.subtotal || 0);
+    const calculatedItemsSubtotal = items.reduce((sum, it) => {
+      const qty = Number(it.quantity || 1);
+      const lineTotal = Number(it.subtotal || it.total_price || (it.price * qty) || 0);
+      return sum + lineTotal;
+    }, 0);
+    const subtotal = Number(tx.subtotal) > 0 ? Number(tx.subtotal) : calculatedItemsSubtotal;
     const discountAmount = Number(tx.discount_amount || 0);
     const discountCode = tx.discount_code || '';
     const taxAmount = Number(tx.tax_amount || 0);

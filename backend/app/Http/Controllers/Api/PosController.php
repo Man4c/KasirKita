@@ -42,6 +42,7 @@ class PosController extends Controller
             'change_amount' => ['nullable', 'numeric', 'min:0'],
             'paid_amount' => ['required', 'numeric', 'min:0'],
             'payment_method' => ['required', 'string', 'in:CASH,QRIS,TRANSFER,DEBIT'],
+            'invoice_number' => ['nullable', 'string', 'max:100'],
             'offline_id' => ['nullable', 'string', 'max:100'],
             'created_at' => ['nullable', 'date'],
             'notes' => ['nullable', 'string'],
@@ -69,11 +70,12 @@ class PosController extends Controller
     {
         $query = Transaction::with(['cashier:id,name,role', 'items']);
 
-        // Search by invoice, customer, or cashier
+        // Search by invoice, offline_id, customer, or cashier
         if ($search = $request->query('search')) {
             $operator = DB::getDriverName() === 'pgsql' ? 'ilike' : 'like';
             $query->where(function ($q) use ($search, $operator) {
                 $q->where('invoice_number', $operator, "%{$search}%")
+                  ->orWhere('offline_id', $operator, "%{$search}%")
                   ->orWhere('customer_name', $operator, "%{$search}%")
                   ->orWhereHas('cashier', function ($userQ) use ($search, $operator) {
                       $userQ->where('name', $operator, "%{$search}%");

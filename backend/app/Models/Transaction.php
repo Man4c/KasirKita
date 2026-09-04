@@ -33,6 +33,7 @@ class Transaction extends Model
         'payment_method',
         'payment_status',
         'notes',
+        'created_at',
     ];
 
     protected function casts(): array

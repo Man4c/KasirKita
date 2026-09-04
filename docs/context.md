@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyempurnaan Integritas Nota Transaksi Offline & Sinkronisasi Server (`Transaction.php`, `PosService.php`, `PosController.php`, `PosScreen.js`, `syncManager.js`, `ReceiptView.js`, `escposGenerator.js`, `printerService.js`)**:
+  - Menyelesaikan 4 anomali data transaksi offline-first:
+    1. **Preservasi Nomor Nota Cetak**: Server kini mempertahankan nomor faktur asli (`INV-OFF-...`) yang dikirim client saat sync, alih-alih menimpanya dengan nomor acak baru. Query pencarian server di `PosController.php` juga diperluas untuk mencari `offline_id` dan `invoice_number`, sehingga nota fisik di tangan pelanggan dapat dicari dua arah dengan instan.
+    2. **Akurasi Waktu Transaksi (Timestamp)**: Menambahkan `'created_at'` ke `$fillable` model `Transaction.php` dan parsing Carbon di `PosService.php`, menjamin jam transaksi nyata saat offline (misal 14.42) tetap tercatat sebagai waktu penjualan asli di database server, bukan jam saat koneksi internet kembali pulih (14.44).
+    3. **Perbaikan Subtotal Rp0**: Menambahkan field `subtotal: subtotal` pada payload kasir di `PosScreen.js` serta menambahkan kalkulasi subtotal defensif dari penjumlahan item pada `ReceiptView.js`, `escposGenerator.js`, dan `printerService.js` agar struk fisik dan virtual selalu menampilkan subtotal yang benar.
+    4. **Preservasi Urutan Item**: Mengoptimasi locking produk via `whereIn('id', ...)->lockForUpdate()` untuk pencegahan deadlock, sekaligus menjaga urutan pembuatan item transaksi tetap persis sesuai keranjang kasir.
+  - Lolos uji automated test suite backend (`php artisan test` $\rightarrow$ 70 passed, 313 assertions) dan uji bundling Expo Web (`npx expo export --platform web`).
+
 - **Optimasi Non-Blocking UI Thread & Migrasi `requestIdleCallback` (`TransactionHistoryScreen.js`, `offlineStorage.js`)**:
   - Menyelesaikan warning deprecasi `InteractionManager has been deprecated ... use 'requestIdleCallback' instead`:
     1. Mengganti `InteractionManager` dengan utilitas modern `runWhenIdle(task, timeout = 2500)` yang memanfaatkan `requestIdleCallback` (dengan fallback `setTimeout(1200)` jika tidak didukung engine).

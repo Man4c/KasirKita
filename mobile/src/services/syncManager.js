@@ -128,6 +128,7 @@ class SyncManager {
       try {
         const payload = {
           offline_id: tx.offline_id,
+          invoice_number: tx.invoice_number,
           created_at: tx.created_at,
           customer_id: tx.customer_id,
           customer_name: tx.customer_name,

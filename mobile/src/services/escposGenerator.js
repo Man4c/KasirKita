@@ -208,8 +208,13 @@ export function buildReceiptEscpos(transaction = {}, storeSettings = {}, paperSi
 
   builder.divider('-');
 
-  // 4. Kalkulasi & Pembayaran
-  const subtotalAmt = Number(tx.subtotal || 0);
+  // 4. Kalkulasi & Pembayaran (defensive fallback jika tx.subtotal kosong/0)
+  const calculatedItemsSubtotal = items.reduce((sum, item) => {
+    const qty = Number(item.quantity || 1);
+    const price = Number(item.price || item.unit_price || 0);
+    return sum + Number(item.subtotal || (price * qty));
+  }, 0);
+  const subtotalAmt = Number(tx.subtotal) > 0 ? Number(tx.subtotal) : calculatedItemsSubtotal;
   const discountAmt = Number(tx.discount_amount || 0);
   const taxAmt = Number(tx.tax_amount || 0);
   const feeAmt = Number(tx.fee_amount || 0);
