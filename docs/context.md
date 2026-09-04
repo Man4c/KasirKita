@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Proteksi Ketahanan Cache Riwayat Transaksi Offline (`offlineStorage.js`, `TransactionHistoryScreen.js`)**:
+  - Memastikan integritas `cacheRecentTransactions` terhadap *partial response* atau kegagalan jaringan:
+    1. Guard ketat `newTransactions.length === 0`: jika response kosong atau bukan array, fungsi langsung keluar tanpa menyentuh cache disk.
+    2. *Additive Merging & Attribute Preservation*: Menggunakan `existingMap` agar atribut lokal nota yang ada di disk tetap dipertahankan dan seluruh transaksi lama yang masih dalam jendela retensi 7 hari tetap utuh.
+    3. Proteksi Filter: Hanya memicu update snapshot cache umum pada pemuatan halaman 1 tanpa filter pencarian (`!activeSearch && activeMethod === 'ALL'`).
+    4. Kegagalan jaringan / timeout pada Axios langsung masuk ke blok `catch`, sehingga cache lama di disk tidak pernah tersentuh saat koneksi terputus di tengah jalan.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`).
+
 - **Perbaikan Transaksi Checkout Offline Mode Kasir Mobile POS (`PosScreen.js`, `offlineStorage.js`, `syncManager.js`)**:
   - **Penyebab Masalah**: Saat menekan tombol *Selesaikan Pembayaran* di mode offline, muncul error promise `TypeError: undefined is not a function`. Hal ini terjadi karena `handleOfflineSuccess` di `PosScreen.js` memanggil `offlineStorage.queueTransaction(...)` yang metodenya belum didefinisikan pada objek `offlineStorage` (nama method aslinya adalah `enqueueOfflineTransaction`).
   - **Solusi & Penyempurnaan**:

@@ -319,20 +319,30 @@ export const offlineStorage = {
    */
   async cacheRecentTransactions(newTransactions, options = {}) {
     try {
-      if (!Array.isArray(newTransactions)) return false;
+      // Guard: Jangan proses jika bukan array atau jika array kosong (mencegah overwrite dengan data parsial kosong)
+      if (!Array.isArray(newTransactions) || newTransactions.length === 0) return false;
       const { maxDays = 7, maxCap = 200 } = options;
 
       const { transactions: existing } = await this.getCachedRecentTransactions();
       const cutoffTime = Date.now() - maxDays * 24 * 60 * 60 * 1000;
 
-      const map = new Map();
-      // 1. Masukkan data transaksi baru
-      for (const item of newTransactions) {
+      // Peta data lama yang sudah ada di disk
+      const existingMap = new Map();
+      for (const item of existing) {
         const key = item.id || item.offline_id || item.invoice_number;
-        if (key) map.set(key, item);
+        if (key) existingMap.set(key, item);
       }
 
-      // 2. Pertahankan transaksi lama yang masih dalam jendela waktu retensi
+      const map = new Map();
+      // 1. Masukkan data transaksi baru (gabungkan atribut lama jika ada agar detail lokal tidak hilang)
+      for (const item of newTransactions) {
+        const key = item.id || item.offline_id || item.invoice_number;
+        if (!key) continue;
+        const oldItem = existingMap.get(key);
+        map.set(key, oldItem ? { ...oldItem, ...item } : item);
+      }
+
+      // 2. Pertahankan seluruh transaksi lama yang masih dalam jendela retensi waktu (default 7 hari)
       for (const item of existing) {
         const key = item.id || item.offline_id || item.invoice_number;
         if (!key || map.has(key)) continue;

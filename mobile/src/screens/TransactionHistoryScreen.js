@@ -226,8 +226,10 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
           // Tempatkan antrean offline lokal di paling atas
           setTransactions([...matchedQueue, ...uniqueServerList]);
 
-          // Perbarui snapshot cache riwayat lokal untuk offline fallback
-          offlineStorage.cacheRecentTransactions(list);
+          // Perbarui snapshot cache riwayat lokal untuk offline fallback (hanya saat daftar umum, tanpa filter pencarian)
+          if (!activeSearch && (!activeMethod || activeMethod === 'ALL')) {
+            offlineStorage.cacheRecentTransactions(list);
+          }
 
           // Jalankan background prefetch senyap (7 hari terakhir, max 200) tanpa memblokir UI
           offlineStorage.prefetchHistoryForOffline(api);
