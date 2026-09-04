@@ -9,6 +9,7 @@ use App\Traits\ApiResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PosController extends Controller
 {
@@ -33,6 +34,12 @@ class PosController extends Controller
             'tax_amount' => ['nullable', 'numeric', 'min:0'],
             'fee_amount' => ['nullable', 'numeric', 'min:0'],
             'fee_details' => ['nullable', 'array'],
+            'fee_details.*.name' => ['nullable', 'string', 'max:100'],
+            'fee_details.*.type' => ['nullable', 'string', 'max:50'],
+            'fee_details.*.rate' => ['nullable', 'numeric', 'min:0'],
+            'fee_details.*.amount' => ['nullable', 'numeric', 'min:0'],
+            'cash_received' => ['nullable', 'numeric', 'min:0'],
+            'change_amount' => ['nullable', 'numeric', 'min:0'],
             'paid_amount' => ['required', 'numeric', 'min:0'],
             'payment_method' => ['required', 'string', 'in:CASH,QRIS,TRANSFER,DEBIT'],
             'offline_id' => ['nullable', 'string', 'max:100'],
@@ -56,7 +63,7 @@ class PosController extends Controller
     }
 
     /**
-     * Display listing of transactions with filtering.
+     * Get transaction history with pagination.
      */
     public function index(Request $request): JsonResponse
     {
@@ -64,11 +71,12 @@ class PosController extends Controller
 
         // Search by invoice, customer, or cashier
         if ($search = $request->query('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('invoice_number', 'ilike', "%{$search}%")
-                  ->orWhere('customer_name', 'ilike', "%{$search}%")
-                  ->orWhereHas('cashier', function ($userQ) use ($search) {
-                      $userQ->where('name', 'ilike', "%{$search}%");
+            $operator = DB::getDriverName() === 'pgsql' ? 'ilike' : 'like';
+            $query->where(function ($q) use ($search, $operator) {
+                $q->where('invoice_number', $operator, "%{$search}%")
+                  ->orWhere('customer_name', $operator, "%{$search}%")
+                  ->orWhereHas('cashier', function ($userQ) use ($search, $operator) {
+                      $userQ->where('name', $operator, "%{$search}%");
                   });
             });
         }

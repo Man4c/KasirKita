@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import {
   StyleSheet,
@@ -28,6 +28,80 @@ import {
 } from 'lucide-react-native';
 import api from '../services/api';
 import PosReceiptModal from '../components/pos/PosReceiptModal';
+
+const getMethodIcon = (method) => {
+  switch (method) {
+    case 'QRIS':
+      return <QrCode size={13} color="#38bdf8" />;
+    case 'TRANSFER':
+      return <CreditCard size={13} color="#a78bfa" />;
+    default:
+      return <Banknote size={13} color="#34d399" />;
+  }
+};
+
+const TransactionCard = React.memo(function TransactionCard({ item, onPress, formatRp }) {
+  const isCancelled = item.payment_status === 'CANCELLED';
+  return (
+    <TouchableOpacity
+      style={styles.txCard}
+      activeOpacity={0.7}
+      onPress={() => onPress(item)}
+    >
+      <View style={styles.txCardHeader}>
+        <View style={styles.invoiceBadgeRow}>
+          <Receipt size={14} color="#fb7185" />
+          <Text style={styles.invoiceNumber} numberOfLines={1}>
+            {item.invoice_number}
+          </Text>
+        </View>
+        <View
+          style={[
+            styles.statusBadge,
+            isCancelled ? styles.statusBadgeCancelled : styles.statusBadgeSuccess,
+          ]}
+        >
+          <Text
+            style={[
+              styles.statusBadgeText,
+              isCancelled ? styles.statusTextCancelled : styles.statusTextSuccess,
+            ]}
+          >
+            {isCancelled ? 'Dibatalkan' : 'Selesai'}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.txMetaRow}>
+        <View style={styles.metaItem}>
+          <Calendar size={12} color="#71717a" />
+          <Text style={styles.metaText}>
+            {new Date(item.created_at).toLocaleDateString('id-ID', {
+              day: 'numeric',
+              month: 'short',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </Text>
+        </View>
+        <View style={styles.metaItem}>
+          <User size={12} color="#71717a" />
+          <Text style={styles.metaText} numberOfLines={1}>
+            {item.customer_name || 'Pelanggan Umum'}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.txCardFooter}>
+        <View style={styles.methodBadge}>
+          {getMethodIcon(item.payment_method)}
+          <Text style={styles.methodBadgeText}>{item.payment_method}</Text>
+        </View>
+        <Text style={styles.totalAmountText}>{formatRp(item.total_amount)}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+});
 
 export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [transactions, setTransactions] = useState([]);
@@ -140,84 +214,23 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
     fetchTransactions(1, true, debouncedSearch, filterMethod);
   };
 
-  const formatRp = (num) => 'Rp' + Number(num || 0).toLocaleString('id-ID');
+  const formatRp = useCallback((num) => 'Rp' + Number(num || 0).toLocaleString('id-ID'), []);
 
-  const getMethodIcon = (method) => {
-    switch (method) {
-      case 'QRIS':
-        return <QrCode size={13} color="#38bdf8" />;
-      case 'TRANSFER':
-        return <CreditCard size={13} color="#a78bfa" />;
-      default:
-        return <Banknote size={13} color="#34d399" />;
-    }
-  };
+  const handleSelectTx = useCallback((item) => {
+    setSelectedTx(item);
+    setReceiptModalOpen(true);
+  }, []);
 
-  const renderTransactionItem = ({ item }) => {
-    const isCancelled = item.payment_status === 'CANCELLED';
-    return (
-      <TouchableOpacity
-        style={styles.txCard}
-        activeOpacity={0.7}
-        onPress={() => {
-          setSelectedTx(item);
-          setReceiptModalOpen(true);
-        }}
-      >
-        <View style={styles.txCardHeader}>
-          <View style={styles.invoiceBadgeRow}>
-            <Receipt size={14} color="#fb7185" />
-            <Text style={styles.invoiceNumber} numberOfLines={1}>
-              {item.invoice_number}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.statusBadge,
-              isCancelled ? styles.statusBadgeCancelled : styles.statusBadgeSuccess,
-            ]}
-          >
-            <Text
-              style={[
-                styles.statusBadgeText,
-                isCancelled ? styles.statusTextCancelled : styles.statusTextSuccess,
-              ]}
-            >
-              {isCancelled ? 'Dibatalkan' : 'Selesai'}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.txMetaRow}>
-          <View style={styles.metaItem}>
-            <Calendar size={12} color="#71717a" />
-            <Text style={styles.metaText}>
-              {new Date(item.created_at).toLocaleDateString('id-ID', {
-                day: 'numeric',
-                month: 'short',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </Text>
-          </View>
-          <View style={styles.metaItem}>
-            <User size={12} color="#71717a" />
-            <Text style={styles.metaText} numberOfLines={1}>
-              {item.customer_name || 'Pelanggan Umum'}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.txCardFooter}>
-          <View style={styles.methodBadge}>
-            {getMethodIcon(item.payment_method)}
-            <Text style={styles.methodBadgeText}>{item.payment_method}</Text>
-          </View>
-          <Text style={styles.totalAmountText}>{formatRp(item.total_amount)}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const renderTransactionItem = useCallback(
+    ({ item }) => (
+      <TransactionCard
+        item={item}
+        onPress={handleSelectTx}
+        formatRp={formatRp}
+      />
+    ),
+    [handleSelectTx, formatRp]
+  );
 
   return (
     <View style={styles.container}>
@@ -319,9 +332,10 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.4}
           removeClippedSubviews={Platform.OS === 'android'}
-          maxToRenderPerBatch={10}
-          windowSize={7}
-          initialNumToRender={10}
+          initialNumToRender={8}
+          maxToRenderPerBatch={8}
+          windowSize={5}
+          updateCellsBatchingPeriod={50}
           ListFooterComponent={
             loadingMore ? (
               <View style={{ paddingVertical: 14, alignItems: 'center' }}>

@@ -194,4 +194,60 @@ class PosApiTest extends TestCase
         // Verify stock is restored to 10
         $this->assertEquals(10, (float) $product->fresh()->stock);
     }
+
+    public function test_pos_transaction_search_by_invoice_customer_and_cashier(): void
+    {
+        $product = Product::create([
+            'name' => 'Item Test Search',
+            'price' => 10000,
+            'avg_cost' => 5000,
+            'stock' => 50,
+            'min_stock' => 5,
+        ]);
+
+        // Create transaction with customer Budi
+        $resBudi = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->postJson('/api/pos/checkout', [
+                'customer_name' => 'Budi Sudarsono',
+                'paid_amount' => 10000,
+                'payment_method' => 'QRIS',
+                'items' => [
+                    ['product_id' => $product->id, 'quantity' => 1],
+                ],
+            ]);
+        $resBudi->assertStatus(201);
+        $invoiceBudi = $resBudi->json('data.invoice_number');
+
+        // Create transaction with customer Siti
+        $resSiti = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->postJson('/api/pos/checkout', [
+                'customer_name' => 'Siti Aminah',
+                'paid_amount' => 10000,
+                'payment_method' => 'CASH',
+                'items' => [
+                    ['product_id' => $product->id, 'quantity' => 1],
+                ],
+            ]);
+        $resSiti->assertStatus(201);
+
+        // 1. Search by customer name "Budi"
+        $searchCustomer = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->getJson('/api/pos/transactions?search=Budi');
+        $searchCustomer->assertStatus(200);
+        $this->assertCount(1, $searchCustomer->json('data.data'));
+        $this->assertEquals('Budi Sudarsono', $searchCustomer->json('data.data.0.customer_name'));
+
+        // 2. Search by invoice number
+        $searchInvoice = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->getJson("/api/pos/transactions?search={$invoiceBudi}");
+        $searchInvoice->assertStatus(200);
+        $this->assertCount(1, $searchInvoice->json('data.data'));
+        $this->assertEquals($invoiceBudi, $searchInvoice->json('data.data.0.invoice_number'));
+
+        // 3. Search by cashier name
+        $searchCashier = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->getJson('/api/pos/transactions?search=Kasir 1');
+        $searchCashier->assertStatus(200);
+        $this->assertCount(2, $searchCashier->json('data.data'));
+    }
 }
