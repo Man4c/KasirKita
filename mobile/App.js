@@ -191,6 +191,10 @@ function MainApp() {
             isLandscape={true}
             isCompactLandscape={isCompactLandscape}
             onCheckoutStateChange={setIsCheckoutActive}
+            onSwitchToPortrait={() => {
+              setActiveTab('pos');
+              setPortraitTab('pos');
+            }}
           />
         ) : activeTab === 'dashboard' && user?.role === 'owner' ? (
           <DashboardScreen

@@ -421,7 +421,6 @@ const styles = StyleSheet.create({
     color: '#fb7185',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    whiteSpace: 'nowrap',
     includeFontPadding: false,
   },
   regScanBtn: {

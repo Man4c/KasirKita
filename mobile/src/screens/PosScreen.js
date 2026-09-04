@@ -30,7 +30,12 @@ import LandscapeRegisterPanel from '../components/pos/LandscapeRegisterPanel';
 import PosCheckoutView from '../components/pos/PosCheckoutView';
 import PosBarcodeScannerView from '../components/pos/PosBarcodeScannerView';
 
-export default function PosScreen({ isLandscape = false, isCompactLandscape = false, onCheckoutStateChange }) {
+export default function PosScreen({
+  isLandscape = false,
+  isCompactLandscape = false,
+  onCheckoutStateChange,
+  onSwitchToPortrait,
+}) {
   const { width, height } = useWindowDimensions();
   const compact = isCompactLandscape || (isLandscape && height < 440);
   const [products, setProducts] = useState([]);
@@ -610,7 +615,15 @@ export default function PosScreen({ isLandscape = false, isCompactLandscape = fa
                 try {
                   const current = (await storage.getSettings()) || {};
                   await storage.setSettings({ ...current, orientationPref: 'AUTO' });
+                  if (onSwitchToPortrait) {
+                    onSwitchToPortrait();
+                  }
+                  // Kunci sejenak ke portrait untuk memutar layar, lalu lepas kunci (AUTO)
+                  // agar sensor rotasi perangkat tetap berfungsi saat HP dimiringkan kembali
                   await orientationService.applyPreference('PORTRAIT');
+                  setTimeout(async () => {
+                    await orientationService.applyPreference('AUTO');
+                  }, 600);
                 } catch (e) {
                   console.warn('Gagal switch portrait:', e);
                 }
