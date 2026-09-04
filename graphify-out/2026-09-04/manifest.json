@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788524939.9326303,
-    "ast_hash": "8c6d339796c1ef03443e7cd5e0e56879",
+    "mtime": 1788525948.2448027,
+    "ast_hash": "583634863dfe4061a823d0f6e38a8a67",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2330,8 +2330,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/product/ProductFormModal.js": {
-    "mtime": 1788524843.4191186,
-    "ast_hash": "6bd36169a1bfe1de2c986c56e4fcff7a",
+    "mtime": 1788525873.4293926,
+    "ast_hash": "ecbdb72755c747493958f2eaa1c7c075",
     "semantic_hash": ""
   },
   "mobile/src/components/product/QuickStockAdjustModal.js": {
@@ -2380,8 +2380,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/category/CategoryFormModal.js": {
-    "mtime": 1788524136.7696643,
-    "ast_hash": "9b79bd80d01b7e0b03fac24d56ea9cc6",
+    "mtime": 1788525843.6057136,
+    "ast_hash": "b7a625413980fe5a57c458b4e40f921b",
     "semantic_hash": ""
   },
   "mobile/src/screens/CategoryManagementScreen.js": {
@@ -2400,8 +2400,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/unit/UnitFormModal.js": {
-    "mtime": 1788524346.3931727,
-    "ast_hash": "4f7685708200622858e7f22a25d8f54c",
+    "mtime": 1788525855.84624,
+    "ast_hash": "55c50e0911ccd4cbbe5caf8521a8d561",
     "semantic_hash": ""
   },
   "mobile/src/screens/UnitManagementScreen.js": {
