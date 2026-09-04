@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Tombol Navigasi Mode "Portrait" pada Keranjang Layar Kasir Landscape (`LandscapeRegisterPanel.js`, `PosScreen.js`)**:
+  - Menggantikan tombol *Pelanggan* yang sebelumnya berdesakan di header keranjang panel kanan mode landscape dengan tombol aksi **`[ 📱 Portrait ]`**.
+  - Opsi pemilihan pelanggan tetap 100% lengkap dan elegan pada tampilan pembayaran kasir (*PosCheckoutView* di atas Total Tagihan) sesuai toggle pengaturan.
+  - Saat tombol **`[ 📱 Portrait ]`** ditekan:
+    - Sistem secara otomatis mereset preferensi orientasi menjadi **`AUTO`** di storage lokal.
+    - Membuka kunci hardware orientation lock (`orientationService.applyPreference('AUTO')`), sehingga layar dapat kembali ke mode Portrait dan pengguna dapat kembali mengakses seluruh menu/screen aplikasi (Dashboard, Riwayat, Pengaturan) tanpa kendala.
+  - Tampilan header keranjang menjadi sangat lega, tidak tabrakan, dan proporsional.
+  - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Penyegaran Tampilan Tombol Scan Barcode Kasir POS (`ProductGrid.js`, `LandscapeRegisterPanel.js`)**:
   - Memperbesar ukuran ikon barcode scanner menjadi **`size={20}`** warna **putih solid (`#ffffff`)** persis sesuai permintaan.
   - Mengunci ukuran kotak layer/wadah tombol tetap ringkas dan presisi pada dimensi **`width: 28, height: 28`** (dengan perataan tengah `justifyContent: 'center', alignItems: 'center'`), sehingga layer tidak melebar dan tetap sejajar rapi dengan elemen sekitarnya (seperti tombol pencarian dan tombol clear cart).
