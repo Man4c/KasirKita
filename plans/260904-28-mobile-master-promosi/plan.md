@@ -1,11 +1,12 @@
 ---
 title: Master Promosi & Voucher Diskon di Mobile
 description: Perancangan dan implementasi modul manajemen Master Promosi & Voucher Diskon pada aplikasi Mobile (React Native), mencakup katalog promosi aktif/kadaluarsa, formulir tambah/edit promo (Persentase, Potongan Nominal, Min. Belanja), pengaturan kuota & masa berlaku, toggle saklar aktif/nonaktif, integrasi peluncur di Action Hub Dashboard, serta sinkronisasi dengan keranjang dan modal promo kasir POS.
-status: pending
+status: completed
 priority: P1
 effort: 8h
 tags: [mobile, master-promosi, discounts, vouchers, pricing, offline-first, rbac, pos-sync]
 created: 2026-09-04
+completed: 2026-09-04
 assignee: Fullstack Mobile Specialist
 ---
 
@@ -107,6 +108,6 @@ mobile/src/
 | 3 | **Komponen Kartu & Layar Utama (`PromoCardItem.js` & `PromoManagementScreen.js`)**: Pembuatan layar master promosi dengan pencarian real-time, filter status (Semua, Aktif, Non-Aktif, Kadaluarsa), kartu bergaya voucher dengan aksen Rose Brand (`#fb7185`), progress bar kuota, dan saklar toggle status instan | completed |
 | 4 | **Modal Formulir Tambah/Edit (`PromoFormModal.js`)**: Pembuatan form modal interaktif dengan selector skema promo (Persentase, Potongan Rp, Min. Belanja), auto-format kapital kode voucher, batas maksimal diskon, tanggal aktif, dan proteksi hapus | completed |
 | 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi Kasir POS**: Menghubungkan peluncur di `DashboardActionHub.js`, rute di `App.js` dengan hak akses Owner, dan sinkronisasi reaktif ke modal pemilihan voucher (`PromoVoucherModal.js`) dan checkout POS | completed |
-| 6 | **Pengujian Komprehensif & Verifikasi Impeccable**: Uji alur CRUD promo, uji validasi checkout POS dengan kupon promo aktif/kadaluarsa/kuota habis, verifikasi linter `detect.mjs` (0 defect), dan uji bundling Expo Web | pending |
+| 6 | **Pengujian Komprehensif & Verifikasi Impeccable**: Uji alur CRUD promo, uji validasi checkout POS dengan kupon promo aktif/kadaluarsa/kuota habis, verifikasi linter `detect.mjs` (0 defect), dan uji bundling Expo Web | completed |
 
 

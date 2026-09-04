@@ -323,6 +323,7 @@
   "321": "expo-audio",
   "322": "BORDER_SAFE_TAGS",
   "323": "expo-font",
+  "324": "UserFactory",
   "325": "expo-image-picker",
   "326": "expo-secure-store",
   "327": "expo-status-bar",
@@ -337,7 +338,6 @@
   "336": "expo-camera",
   "337": "checkElementGptBorderShadowDOM",
   "341": "source-lock.mjs",
-  "342": "Adaptation Strategies",
   "343": "serializeFindings",
   "344": "expo-audio"
 }

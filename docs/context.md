@@ -20,6 +20,18 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Penuh Plan #28: Master Promosi & Voucher Diskon di Mobile (Fase 1 s/d Fase 6 - Status: COMPLETED)**:
+  - Mengembangkan modul manajemen Master Promosi & Voucher Diskon lengkap di aplikasi Mobile (React Native) untuk Owner/Manager UMKM:
+    1. *Layanan API & Cache Offline (`discountService.js`, `offlineStorage.js`)*: Mengelola CRUD promosi, paginasi, filter pencarian & status, toggle aktif/nonaktif atomik, serta validasi kupon checkout kasir (`checkVoucher`) yang dilengkapi **Graceful Offline Fallback** (`calculateDiscountOffline`) di memori lokal saat internet terputus.
+    2. *Komponen Antarmuka Defensive UI (`PromoCardItem.js`, `PromoManagementScreen.js`)*: Desain kartu kupon tiket aksen Rose Brand (`#fb7185`), flexbox pairing aman `min-w-0 truncate` vs `shrink-0`, progress bar pemakaian kuota, saklar toggle instan `Switch`, 3 kartu metrik ringkasan, pencarian instan debounce 350ms, filter status tab chips (*Semua*, *Aktif*, *Non-Aktif*, *Kadaluarsa / Habis*), dan FAB `[ + Tambah Promo ]`.
+    3. *Modal Formulir Tambah/Edit (`PromoFormModal.js`)*: Format huruf kapital otomatis kode voucher, selector 3 skema diskon (`PERCENTAGE`, `FIXED`, `MIN_SPEND`), batas maksimal nominal potongan, syarat minimal belanja, tanggal periode aktif 2-kolom, dan tombol hapus aman.
+    4. *Integrasi Navigasi Hub Menu & RBAC Role Owner (`DashboardActionHub.js`, `DashboardScreen.js`, `mobile/App.js`)*: Menghubungkan tile "Promosi" pada Action Hub Dashboard langsung ke `PromoManagementScreen`, mempertahankan strictly 4 bottom navigation tabs, dan menyinkronkan data voucher ke modal promo kasir POS (`availablePromos`).
+    5. *Pengujian Komprehensif & Verifikasi Kualitas*:
+       - Backend Feature Tests: `php artisan test --filter=DiscountApiTest` $\rightarrow$ **8 passed, 34 assertions** (100% lolos).
+       - Impeccable UI Linter: `detect.mjs` $\rightarrow$ **0 defects**.
+       - Expo Web Bundling: `npx expo export --platform web` $\rightarrow$ **Web Bundled 698ms index.js (2322 modules), 0 errors**.
+  - Plan #28 resmi berstatus **`completed`**.
+
 - **Penyelesaian Plan #28 Fase 5: Integrasi Navigasi Hub Menu Dashboard & Sinkronisasi Kasir POS (`DashboardActionHub.js`, `DashboardScreen.js`, `App.js`)**:
   - Menghubungkan modul Master Promosi & Voucher Diskon ke arsitektur navigasi mobile aplikasi:
     1. *Peluncur Action Hub Dashboard (`DashboardActionHub.js`)*: Ubin **"Promosi"** (ikon tiket `TicketPercent`, aksen Rose Brand `#fb7185`) kini terhubung langsung ke callback `onOpenMasterPromo` menggantikan alert placeholder sebelumnya.
