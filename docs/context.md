@@ -20,14 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Harmonisasi Header & Pembatas Garis Bawah pada Seluruh Screen Master Data (`CategoryManagementScreen.js`, `UnitManagementScreen.js`, `PromoManagementScreen.js`)**:
-  - Menyelaraskan tata letak dan estetika visual header bar seluruh modul master data agar identik dengan Master Produk:
-    1. *Pembatas Garis Bawah (`topBar`)*: Menambahkan `borderBottomWidth: 1, borderBottomColor: '#27272a', paddingVertical: 12, marginBottom: 12` pada `CategoryManagementScreen.js` dan `UnitManagementScreen.js` sehingga transisi antara header bar dan kartu metrik/konten memiliki garis batas pemisah yang tegas dan rapi.
-    2. *Standardisasi Header Master Promosi (`PromoManagementScreen.js`)*:
-       - Menghilangkan latar belakang bar abu-abu `#18181b` pada header, menjadikannya transparan di atas background `#09090b` dengan garis pemisah bawah (`borderBottomWidth: 1, borderBottomColor: '#27272a', paddingVertical: 12`).
-       - Menyelaraskan bentuk tombol Back dan Refresh dari sebelumnya bulat (`borderRadius: 18, backgroundColor: '#27272a'`) menjadi tombol persegi rounded modern (`borderRadius: 9, backgroundColor: '#18181b', borderWidth: 1, borderColor: '#27272a'`) yang seragam di semua layar master.
-       - Menghilangkan ikon `TicketPercent` di sebelah judul teks untuk tampilan bersih minimalis, serta mengubah teks subjudul menjadi format dinamis `{totalPromos} voucher promo terdaftar` (selaras dengan `{totalCategories} kategori terdaftar`, `{totalUnits} satuan barang terdaftar`, dan `{pagination.total} produk terdaftar`).
-       - Memperbarui ukuran dan warna ikon tombol refresh ke `size={16} color="#e4e4e7"` dan loading indicator `#e11d48`.
+- **Penyelarasan Batas Header & Segmented Filter Status pada Layar Master Promosi (`PromoManagementScreen.js`)**:
+  - Menyelesaikan masalah garis pembatas bawah header yang membentang penuh ke tepi layar dan filter status yang terpotong ke luar batas:
+    1. *Penyelarasan Garis Pembatas Bawah (`topBar`)*: Mengadopsi arsitektur kontainer bertingkat `styles.root` (`#09090b`) dan `styles.container` (`flex: 1, paddingHorizontal: 16, paddingTop: 8`) seperti pada `ProductManagementScreen` dan `CategoryManagementScreen`. Dengan demikian, garis bawah `topBar` tidak lagi menempel penuh ke pinggir layar (*full bleed*), melainkan memiliki batas margin 16px di kiri dan kanan yang 100% presisi dan sejajar dengan seluruh modul master data.
+    2. *Penyelarasan Filter Status Segmented (`filterRow`)*:
+       - Mengganti `ScrollView` horizontal dengan baris tombol segmented responsif (`flexDirection: 'row', gap: 6`) di mana setiap pill status memiliki `flex: 1` (`Semua`, `Aktif`, `Non-Aktif`, `Kadaluarsa`).
+       - Memperbaiki microcopy label filter dari `"Kadaluarsa / Habis"` yang terlalu panjang menjadi `"Kadaluarsa"` ringkas dengan `numberOfLines={1}`.
+       - Menghilangkan kemungkinan filter keluar dari batas layar (*overflowing/cut-off*) di semua ukuran perangkat.
   - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
 
 - **Resolusi Responsivitas & Overflow Tombol Footer pada Modal Promo (`PromoFormModal.js`)**:

@@ -171,150 +171,146 @@ export default function PromoManagementScreen({ navigation }) {
   }).length;
   const totalUsages = discounts.reduce((acc, curr) => acc + (Number(curr.usage_count) || 0), 0);
 
-  // Status Filter Chips Options
+  // Status Filter Options
   const filterOptions = [
     { key: 'all', label: 'Semua' },
     { key: 'active', label: 'Aktif' },
     { key: 'inactive', label: 'Non-Aktif' },
-    { key: 'expired', label: 'Kadaluarsa / Habis' },
+    { key: 'expired', label: 'Kadaluarsa' },
   ];
 
   return (
-    <View style={styles.container}>
-      {/* Header Bar */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={() => {
-              if (navigation?.goBack) {
-                navigation.goBack();
-              } else if (navigation?.navigate) {
-                navigation.navigate('dashboard');
-              }
-            }}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <ChevronLeft size={20} color="#f4f4f5" />
-          </TouchableOpacity>
-          <View style={styles.titleContainer}>
-            <Text style={styles.headerTitle} numberOfLines={1}>
-              Master Promosi
-            </Text>
-            <Text style={styles.headerSubtitle} numberOfLines={1}>
-              {totalPromos} voucher promo terdaftar
-            </Text>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          style={styles.refreshBtn}
-          onPress={handleRefresh}
-          disabled={refreshing || loading}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          {refreshing ? (
-            <ActivityIndicator size="small" color="#e11d48" />
-          ) : (
-            <RotateCw size={16} color="#e4e4e7" />
-          )}
-        </TouchableOpacity>
-      </View>
-
-      {/* Offline Alert Banner */}
-      {isOffline && (
-        <View style={styles.offlineBanner}>
-          <WifiOff size={14} color="#fbbf24" style={{ flexShrink: 0 }} />
-          <Text style={styles.offlineBannerText}>
-            Mode Offline: Menampilkan data cache voucher promosi lokal.
-          </Text>
-        </View>
-      )}
-
-      {/* Summary Metrics Cards */}
-      <View style={styles.metricsRow}>
-        <View style={styles.metricCard}>
-          <View style={styles.metricIconWrap}>
-            <TicketPercent size={14} color="#fb7185" />
-          </View>
-          <Text style={styles.metricVal}>{totalPromos}</Text>
-          <Text style={styles.metricLabel}>Total Promo</Text>
-        </View>
-
-        <View style={styles.metricCard}>
-          <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
-            <CheckCircle2 size={14} color="#34d399" />
-          </View>
-          <Text style={[styles.metricVal, { color: '#34d399' }]}>{activePromos}</Text>
-          <Text style={styles.metricLabel}>Voucher Aktif</Text>
-        </View>
-
-        <View style={styles.metricCard}>
-          <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
-            <Users size={14} color="#f4f4f5" />
-          </View>
-          <Text style={styles.metricVal}>{totalUsages}</Text>
-          <Text style={styles.metricLabel}>Total Dipakai</Text>
-        </View>
-      </View>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBox}>
-          <Search size={16} color="#a1a1aa" style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Cari kode promo atau nama voucher..."
-            placeholderTextColor="#a1a1aa"
-            value={search}
-            onChangeText={handleSearchChange}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          {search.length > 0 && (
+    <View style={styles.root}>
+      <View style={styles.container}>
+        {/* Top Header Bar */}
+        <View style={styles.topBar}>
+          <View style={styles.topBarLeft}>
             <TouchableOpacity
+              style={styles.backBtn}
               onPress={() => {
-                setSearch('');
-                setDebouncedSearch('');
+                if (navigation?.goBack) {
+                  navigation.goBack();
+                } else if (navigation?.navigate) {
+                  navigation.navigate('dashboard');
+                }
               }}
-              style={styles.clearSearchBtn}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
-              <X size={16} color="#a1a1aa" />
+              <ChevronLeft size={20} color="#f4f4f5" />
             </TouchableOpacity>
-          )}
-        </View>
-      </View>
+            <View style={styles.screenTitleContainer}>
+              <Text style={styles.screenTitle} numberOfLines={1}>
+                Master Promosi
+              </Text>
+              <Text style={styles.screenSubtitle} numberOfLines={1}>
+                {totalPromos} voucher promo terdaftar
+              </Text>
+            </View>
+          </View>
 
-      {/* Status Filter Chips */}
-      <View style={styles.filterSection}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filterChipsScroll}
-        >
+          <TouchableOpacity
+            style={styles.headerIconBtn}
+            onPress={handleRefresh}
+            disabled={refreshing || loading}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            {refreshing ? (
+              <ActivityIndicator size="small" color="#e11d48" />
+            ) : (
+              <RotateCw size={16} color="#e4e4e7" />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* Offline Alert Banner */}
+        {isOffline && (
+          <View style={styles.offlineBanner}>
+            <WifiOff size={13} color="#fbbf24" style={{ flexShrink: 0 }} />
+            <Text style={styles.offlineBannerText} numberOfLines={1}>
+              Mode Offline: Menampilkan data cache voucher promosi lokal.
+            </Text>
+          </View>
+        )}
+
+        {/* Summary Metrics Cards */}
+        <View style={styles.metricsRow}>
+          <View style={styles.metricCard}>
+            <View style={styles.metricIconWrap}>
+              <TicketPercent size={14} color="#fb7185" />
+            </View>
+            <Text style={styles.metricVal}>{totalPromos}</Text>
+            <Text style={styles.metricLabel}>Total Promo</Text>
+          </View>
+
+          <View style={styles.metricCard}>
+            <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
+              <CheckCircle2 size={14} color="#34d399" />
+            </View>
+            <Text style={[styles.metricVal, { color: '#34d399' }]}>{activePromos}</Text>
+            <Text style={styles.metricLabel}>Voucher Aktif</Text>
+          </View>
+
+          <View style={styles.metricCard}>
+            <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
+              <Users size={14} color="#f4f4f5" />
+            </View>
+            <Text style={styles.metricVal}>{totalUsages}</Text>
+            <Text style={styles.metricLabel}>Total Dipakai</Text>
+          </View>
+        </View>
+
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <View style={styles.searchBox}>
+            <Search size={16} color="#a1a1aa" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Cari kode promo atau nama voucher..."
+              placeholderTextColor="#a1a1aa"
+              value={search}
+              onChangeText={handleSearchChange}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+            {search.length > 0 && (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearch('');
+                  setDebouncedSearch('');
+                }}
+                style={styles.clearSearchBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={16} color="#a1a1aa" />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+
+        {/* Status Filter Row */}
+        <View style={styles.filterRow}>
           {filterOptions.map((opt) => {
             const isSelected = statusFilter === opt.key;
             return (
               <TouchableOpacity
                 key={opt.key}
-                style={[styles.filterChip, isSelected && styles.filterChipActive]}
+                style={[styles.filterPill, isSelected && styles.filterPillActive]}
                 onPress={() => setStatusFilter(opt.key)}
                 activeOpacity={0.7}
               >
                 <Text
                   style={[
-                    styles.filterChipText,
-                    isSelected && styles.filterChipTextActive,
+                    styles.filterPillText,
+                    isSelected && styles.filterPillTextActive,
                   ]}
+                  numberOfLines={1}
                 >
                   {opt.label}
                 </Text>
               </TouchableOpacity>
             );
           })}
-        </ScrollView>
-      </View>
+        </View>
 
       {/* Main Promo FlatList */}
       {loading && !refreshing ? (
@@ -373,6 +369,7 @@ export default function PromoManagementScreen({ navigation }) {
           }
         />
       )}
+      </View>
 
       {/* Floating Action Button (FAB) Owner */}
       {isOwner && (
@@ -398,20 +395,25 @@ export default function PromoManagementScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
     backgroundColor: '#09090b',
   },
-  header: {
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+  },
+  topBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
+    marginBottom: 12,
   },
-  headerLeft: {
+  topBarLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
@@ -429,22 +431,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  titleContainer: {
+  screenTitleContainer: {
     flex: 1,
     minWidth: 0,
   },
-  headerTitle: {
+  screenTitle: {
     color: '#f4f4f5',
     fontSize: 22,
     fontFamily: 'Poppins_700Bold',
     letterSpacing: -0.4,
   },
-  headerSubtitle: {
+  screenSubtitle: {
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
-  refreshBtn: {
+  headerIconBtn: {
     width: 36,
     height: 36,
     borderRadius: 9,
@@ -458,12 +460,14 @@ const styles = StyleSheet.create({
   offlineBanner: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 6,
     backgroundColor: 'rgba(251, 191, 36, 0.12)',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(251, 191, 36, 0.25)',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(251, 191, 36, 0.3)',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
   },
   offlineBannerText: {
     color: '#fbbf24',
@@ -473,9 +477,7 @@ const styles = StyleSheet.create({
   },
   metricsRow: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 6,
+    paddingBottom: 10,
     gap: 8,
   },
   metricCard: {
@@ -510,8 +512,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   searchContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    marginBottom: 10,
   },
   searchBox: {
     flexDirection: 'row',
@@ -538,38 +539,40 @@ const styles = StyleSheet.create({
     padding: 4,
     flexShrink: 0,
   },
-  filterSection: {
-    paddingBottom: 8,
+  filterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 12,
   },
-  filterChipsScroll: {
-    paddingHorizontal: 16,
-    gap: 8,
-  },
-  filterChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+  filterPill: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 7,
+    paddingHorizontal: 2,
+    borderRadius: 8,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',
   },
-  filterChipActive: {
+  filterPillActive: {
     backgroundColor: '#e11d48',
     borderColor: '#e11d48',
   },
-  filterChipText: {
+  filterPillText: {
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    textAlign: 'center',
   },
-  filterChipTextActive: {
+  filterPillTextActive: {
     color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
   },
   listContent: {
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 80,
+    paddingTop: 2,
+    paddingBottom: 88,
   },
   centerLoading: {
     flex: 1,
