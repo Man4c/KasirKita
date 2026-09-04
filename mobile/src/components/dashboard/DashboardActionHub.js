@@ -150,37 +150,49 @@ export default function DashboardActionHub({
         </View>
       </View>
 
-      {/* 4-Column Grid: Compact Individual Square Cards */}
+      {/* 4-Column Grid with Centered Incomplete Rows */}
       <View style={styles.gridContainer}>
-        {masterItems.map((item) => {
-          const IconComp = item.icon;
+        {Array.from({ length: Math.ceil(masterItems.length / 4) }).map((_, rowIndex) => {
+          const rowItems = masterItems.slice(rowIndex * 4, rowIndex * 4 + 4);
           return (
-            <TouchableOpacity
-              key={item.id}
-              style={[
-                styles.gridCard,
-                item.id === 'product' && styles.productCardActive,
-              ]}
-              activeOpacity={0.7}
-              onPress={item.onPress}
-            >
-              {/* Top-right low stock badge if present */}
-              {item.badge && (
-                <View style={[styles.tileBadge, { backgroundColor: item.badgeBg }]}>
-                  <Text style={[styles.tileBadgeText, { color: item.badgeColor }]}>
-                    {item.badge}
-                  </Text>
-                </View>
-              )}
+            <View key={`row-${rowIndex}`} style={styles.gridRow}>
+              {rowItems.map((item) => {
+                const IconComp = item.icon;
+                return (
+                  <TouchableOpacity
+                    key={item.id}
+                    style={[
+                      styles.gridCard,
+                      item.id === 'product' && styles.productCardActive,
+                    ]}
+                    activeOpacity={0.7}
+                    onPress={item.onPress}
+                  >
+                    {/* Top-right low stock badge if present */}
+                    {item.badge && (
+                      <View style={[styles.tileBadge, { backgroundColor: item.badgeBg }]}>
+                        <Text style={[styles.tileBadgeText, { color: item.badgeColor }]}>
+                          {item.badge}
+                        </Text>
+                      </View>
+                    )}
 
-              <View style={[styles.iconBox, { backgroundColor: item.bgColor }]}>
-                <IconComp size={18} color={item.color} />
-              </View>
+                    <View style={[styles.iconBox, { backgroundColor: item.bgColor }]}>
+                      <IconComp size={18} color={item.color} />
+                    </View>
 
-              <Text style={styles.cardTitle} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.85}>
-                {item.name}
-              </Text>
-            </TouchableOpacity>
+                    <Text
+                      style={styles.cardTitle}
+                      numberOfLines={1}
+                      adjustsFontSizeToFit
+                      minimumFontScale={0.85}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           );
         })}
       </View>
@@ -227,14 +239,15 @@ const styles = StyleSheet.create({
     whiteSpace: 'nowrap',
   },
   gridContainer: {
+    flexDirection: 'column',
+    gap: 8,
+  },
+  gridRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    justifyContent: 'center',
     gap: 8,
   },
   gridCard: {
-    // Exact 4-column math: (100% - (3 * 8px gap)) / 4 = calc((100% - 24px) / 4)
-    // On 360px viewport: 360 - 32px padding = 328px. (328 - 24) / 4 = 76px.
-    // 76 / 328 = 23.17%. With gap: 8, 22.8% guarantees it never wraps to 3 columns.
     width: '22.8%',
     aspectRatio: 1,
     backgroundColor: '#18181b',
