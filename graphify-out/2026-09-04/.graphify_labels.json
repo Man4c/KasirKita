@@ -319,7 +319,6 @@
   "317": "checkRadialSpotlight",
   "318": "isGeneratedFile",
   "319": "applyEditing",
-  "320": "Adaptation Strategies",
   "321": "expo-audio",
   "322": "BORDER_SAFE_TAGS",
   "323": "expo-font",
@@ -337,6 +336,5 @@
   "335": "barcode-detector",
   "336": "expo-camera",
   "337": "checkElementGptBorderShadowDOM",
-  "338": "checkElementRadialSpotlightDOM",
-  "339": "expo-audio"
+  "338": "checkElementRadialSpotlightDOM"
 }
