@@ -408,10 +408,11 @@ const styles = StyleSheet.create({
   regPortraitBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    height: 28,
     gap: 4,
     backgroundColor: '#27272a',
     paddingHorizontal: 8,
-    paddingVertical: 4,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#3f3f46',
