@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #26 Fase 5: Integrasi Navigasi Hub Menu Dashboard & Hak Akses Role Owner (`App.js`, `DashboardScreen.js`, `DashboardActionHub.js`)**:
+  - Menghubungkan layar Master Kategori ke sistem navigasi aplikasi mobile:
+    1. *Peluncur Action Hub*: Menghubungkan kartu **"Kategori"** pada `DashboardActionHub.js` via handler `onOpenMasterCategory` yang diteruskan dari `DashboardScreen.js`.
+    2. *Bottom Navigation Bersih*: Mempertahankan strictly 4 tab navigasi utama (Dashboard, Kasir POS, Riwayat, Pengaturan) tanpa menambah tab baru.
+    3. *Routing App Terproteksi Role*: Mendaftarkan rute internal `category_management` pada body screen `App.js` dengan proteksi peran khusus Owner (`user?.role === 'owner'`).
+    4. *Navigasi Dua Arah*: Tombol kembali (`ChevronLeft`) di header `CategoryManagementScreen` mengembalikan navigasi secara presisi ke tampilan `Dashboard`.
+  - Lolos uji linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web (`npx expo export --platform web`). Status Fase 5: `completed`.
+
 - **Penyelesaian Plan #26 Fase 3 & Fase 4: Komponen Kartu, Layar Utama (`CategoryManagementScreen.js`), & Modal Form Tambah/Edit (`CategoryFormModal.js`)**:
   - Mengembangkan antarmuka Master Kategori mobile yang utuh dan berstandar *Impeccable Defensive UI*:
     1. *Kartu Kategori (`CategoryCardItem.js`)*: Menampilkan identitas kategori dengan ikon `FolderTree`, nama tebal `min-w-0 truncate`, slug unik, badge jumlah produk berkait (`products_count`) aksen Sky (`#38bdf8`), indikator status keterpakaian produk (*"Terhubung Produk"* vs *"Belum Ada Produk"*), serta tombol aksi [Edit] dan [Hapus] (terproteksi jika berproduk).

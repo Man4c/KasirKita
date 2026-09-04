@@ -23,6 +23,7 @@ export default function DashboardActionHub({
   sales = {},
   inv = {},
   onOpenMasterProduct,
+  onOpenMasterCategory,
 }) {
   const lowStock = Number(inv?.low_stock_count || 0);
   const totalSku = Number(inv?.total_items || 0);
@@ -34,6 +35,17 @@ export default function DashboardActionHub({
       showAlert(
         'Master Produk (Plan #25)',
         'Layar Master Produk siap dikerjakan! Kelola katalog produk, edit harga & stok, serta scan barcode fisik kemasan langsung dari ponsel.'
+      );
+    }
+  };
+
+  const handleMasterCategory = () => {
+    if (onOpenMasterCategory) {
+      onOpenMasterCategory();
+    } else {
+      showAlert(
+        'Master Kategori (Plan #26)',
+        'Kelola pengelompokan produk, departemen barang, dan tata letak kategori di kasir POS.'
       );
     }
   };
@@ -62,11 +74,7 @@ export default function DashboardActionHub({
       color: '#38bdf8',
       bgColor: 'rgba(56, 189, 248, 0.16)',
       badge: null,
-      onPress: () =>
-        handleMasterAction(
-          'Master Kategori',
-          'Kelola pengelompokan produk, departemen barang, dan tata letak kategori di kasir POS.'
-        ),
+      onPress: handleMasterCategory,
     },
     {
       id: 'unit',

@@ -94,5 +94,5 @@ mobile/src/
 | 2 | **Mobile API Service (`categoryService.js`)**: Pembuatan modul layanan API kategori terintegrasi dengan penanganan error responsif dan fallback cache lokal `offlineStorage` | completed |
 | 3 | **Komponen Kartu & Layar Utama (`CategoryCardItem.js` & `CategoryManagementScreen.js`)**: Pembuatan layar master kategori dengan pencarian real-time, badge jumlah produk, indikator kategori kosong, dan tombol aksi | completed |
 | 4 | **Modal Formulir Tambah/Edit (`CategoryFormModal.js`)**: Pembuatan form modal interaktif dengan auto-generate slug, validasi field wajib, dan proteksi aksi hapus kategori | completed |
-| 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi POS/Produk**: Menghubungkan peluncur di `DashboardActionHub.js`, rute di `App.js` dengan hak akses Owner, dan sinkronisasi reaktif ke filter kasir POS & Master Produk | pending |
+| 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi POS/Produk**: Menghubungkan peluncur di `DashboardActionHub.js`, rute di `App.js` dengan hak akses Owner, dan sinkronisasi reaktif ke filter kasir POS & Master Produk | completed |
 | 6 | **Pengujian Komprehensif & Verifikasi Impeccable**: Uji alur CRUD, uji proteksi penghapusan kategori berproduk, verifikasi linter `detect.mjs` (0 defect), dan uji bundling Expo Web | pending |

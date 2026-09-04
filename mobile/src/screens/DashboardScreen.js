@@ -233,6 +233,11 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
             navigation.navigate('product_management');
           }
         }}
+        onOpenMasterCategory={() => {
+          if (navigation?.navigate) {
+            navigation.navigate('category_management');
+          }
+        }}
       />
 
       {/* 7-Day Sales Trend Interactive Chart */}
