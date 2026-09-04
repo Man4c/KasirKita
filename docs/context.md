@@ -20,6 +20,18 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Responsivitas & Overflow Tombol Footer pada Modal Promo (`PromoFormModal.js`)**:
+  - Menyelesaikan masalah tombol footer meluap ke luar kartu modal (*"Simpan Perubahan"* terpotong di kanan dan tombol *"Hapus"* terdorong ke kiri) serta teks subtitle dan placeholder yang terpotong:
+    1. *Penyebab Root Cause*: Tiga tombol aksi (`[Hapus]`, `[Batal]`, `[Simpan Perubahan]`) dipaksakan sejajar dalam satu baris `modalFooter`, membutuhkan lebar ~341px yang melampaui lebar dalam kartu modal (~288px pada layar HP). Akibatnya tombol terdorong ke luar layar modal.
+    2. *Relokasi Aksi Berbahaya (Danger Zone)*: Memindahkan tombol *"Hapus Program Promo Ini"* ke bagian bawah area scrollable formulir (`ScrollView`) sebagai tombol selebar penuh, menjauhkan dari risiko salah klik dan melegakan baris footer.
+    3. *Footer Bersih & Responsif 2-Kolom*: Baris `modalFooter` kini hanya berisi dua tombol responsif berbasis flex: `cancelButton` (`flex: 1`) dan `submitButton` (`flex: 1.5`) dengan label ringkas *"Simpan"* / *"Buat Promo"*, menjamin 100% responsif di semua resolusi HP.
+    4. *Penyempurnaan Header, Skema Diskon, & Placeholders*:
+       - Menetapkan `numberOfLines={2}` dan `lineHeight: 16` pada subtitle header modal agar teks tidak terpotong menjadi titik-titik (`...`).
+       - Memperbarui label tipe diskon menjadi *"Diskon Rp"* dengan `gap: 4` dan `paddingHorizontal: 4` agar tombol tidak mematahkan teks 2 baris secara canggung.
+       - Menyingkat placeholder input berlebih (42+ karakter) menjadi microcopy ringkas seperti *"Contoh: 25.000 (Opsional)"*.
+       - Menyesuaikan padding kartu modal dari 20px menjadi 16px untuk menambah ruang lebar efektif.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Collision Toggle Switch vs Tombol Edit pada Kartu Promo (`PromoCardItem.js`)**:
   - Menyelesaikan masalah switch toggle menabrak dan menempel pada tombol Edit di baris footer kartu promo:
     1. *Penyebab Root Cause*: Teks status badge sebelumnya panjang (`"Aktif Digunakan"`, 15 karakter), dipadukan switch toggle dan padding tombol Edit/Hapus `10px`, sehingga total kebutuhan lebar mencapai ~312px pada kontainer berlebar ~296px. Ketiadaan margin pemisah menyebabkan switch terdorong persis menyentuh tombol Edit.

@@ -225,19 +225,23 @@ export default function PromoFormModal({
               <View style={styles.iconCircle}>
                 <TicketPercent size={20} color="#fb7185" />
               </View>
-              <View style={{ flex: 1, minWidth: 0 }}>
+              <View style={styles.headerTextContainer}>
                 <Text style={styles.modalTitle} numberOfLines={1}>
                   {isEditMode ? 'Edit Program Promosi' : 'Tambah Promosi Baru'}
                 </Text>
-                <Text style={styles.modalSubtitle} numberOfLines={1}>
+                <Text style={styles.modalSubtitle} numberOfLines={2}>
                   {isEditMode
                     ? 'Perbarui skema diskon & masa berlaku kupon'
                     : 'Atur diskon belanja untuk transaksi kasir'}
                 </Text>
               </View>
             </View>
-            <TouchableOpacity onPress={onClose} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-              <X size={20} color="#a1a1aa" />
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={onClose}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <X size={18} color="#a1a1aa" />
             </TouchableOpacity>
           </View>
 
@@ -301,7 +305,7 @@ export default function PromoFormModal({
                 >
                   <Coins size={14} color={type === 'FIXED' ? '#ffffff' : '#a1a1aa'} />
                   <Text style={[styles.typeOptionText, type === 'FIXED' && styles.typeOptionTextActive]}>
-                    Potongan Rp
+                    Diskon Rp
                   </Text>
                 </TouchableOpacity>
 
@@ -346,7 +350,7 @@ export default function PromoFormModal({
                 <Text style={styles.label}>Maksimal Potongan (Rp, Opsional)</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Misal: 25000 (Kosongkan jika tanpa batas)"
+                  placeholder="Contoh: 25.000 (Opsional)"
                   placeholderTextColor="#a1a1aa"
                   value={maxDiscountAmount}
                   onChangeText={(val) => setMaxDiscountAmount(val.replace(/[^0-9]/g, ''))}
@@ -363,7 +367,7 @@ export default function PromoFormModal({
               </View>
               <TextInput
                 style={[styles.input, errors.minPurchaseAmount && styles.inputError]}
-                placeholder="Misal: 50000 (0 = Tanpa minimal belanja)"
+                placeholder="Contoh: 50.000 (0 = Tanpa minimal)"
                 placeholderTextColor="#a1a1aa"
                 value={minPurchaseAmount}
                 onChangeText={(val) => {
@@ -411,7 +415,7 @@ export default function PromoFormModal({
               <Text style={styles.label}>Batas Kuota Pemakaian (Opsional)</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Misal: 100 (Kosongkan jika kuota tak terbatas)"
+                placeholder="Contoh: 100 (Opsional)"
                 placeholderTextColor="#a1a1aa"
                 value={quota}
                 onChangeText={(val) => setQuota(val.replace(/[^0-9]/g, ''))}
@@ -448,31 +452,36 @@ export default function PromoFormModal({
                 value={isActive}
                 onValueChange={setIsActive}
                 trackColor={{ false: '#3f3f46', true: '#e11d48' }}
-                thumbColor="#ffffff"
+                thumbColor={isActive ? '#ffffff' : '#a1a1aa'}
               />
             </View>
+
+            {/* Danger Zone: Hapus Program Promo */}
+            {isEditMode && (
+              <View style={styles.dangerZone}>
+                <TouchableOpacity
+                  style={styles.deleteBtnFull}
+                  onPress={handleDelete}
+                  disabled={submitting || deleting}
+                  activeOpacity={0.8}
+                >
+                  {deleting ? (
+                    <ActivityIndicator size="small" color="#f87171" />
+                  ) : (
+                    <>
+                      <Trash2 size={16} color="#f87171" />
+                      <Text style={styles.deleteBtnFullText}>Hapus Program Promo Ini</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <View style={{ height: 16 }} />
           </ScrollView>
 
           {/* Modal Footer: Action Buttons */}
           <View style={styles.modalFooter}>
-            {isEditMode && (
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={handleDelete}
-                disabled={submitting || deleting}
-                activeOpacity={0.8}
-              >
-                {deleting ? (
-                  <ActivityIndicator size="small" color="#f87171" />
-                ) : (
-                  <>
-                    <Trash2 size={16} color="#f87171" />
-                    <Text style={styles.deleteButtonText}>Hapus</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            )}
-
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={onClose}
@@ -494,7 +503,7 @@ export default function PromoFormModal({
                 <>
                   <Check size={16} color="#ffffff" />
                   <Text style={styles.submitButtonText}>
-                    {isEditMode ? 'Simpan Perubahan' : 'Buat Promo'}
+                    {isEditMode ? 'Simpan' : 'Buat Promo'}
                   </Text>
                 </>
               )}
@@ -516,13 +525,13 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#18181b',
-    borderRadius: 20,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#27272a',
     width: '100%',
     maxWidth: 520,
     maxHeight: '90%',
-    padding: 20,
+    padding: 16,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
@@ -543,6 +552,11 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     gap: 12,
+    marginRight: 8,
+  },
+  headerTextContainer: {
+    flex: 1,
+    minWidth: 0,
   },
   iconCircle: {
     width: 40,
@@ -564,6 +578,18 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
+    lineHeight: 16,
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
   formScroll: {
     paddingVertical: 12,
@@ -626,7 +652,7 @@ const styles = StyleSheet.create({
   },
   typeSelectorRow: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 6,
   },
   typeOptionBtn: {
     flex: 1,
@@ -638,7 +664,8 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingVertical: 10,
-    gap: 6,
+    paddingHorizontal: 4,
+    gap: 4,
   },
   typeOptionBtnActive: {
     backgroundColor: '#e11d48',
@@ -648,6 +675,7 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    textAlign: 'center',
   },
   typeOptionTextActive: {
     color: '#ffffff',
@@ -660,7 +688,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#121215',
     borderRadius: 10,
     padding: 12,
-    marginBottom: 14,
+    marginBottom: 8,
     gap: 12,
   },
   switchLabel: {
@@ -673,37 +701,43 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
   },
-  modalFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 10,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#27272a',
+  dangerZone: {
+    marginTop: 10,
+    marginBottom: 4,
   },
-  deleteButton: {
+  deleteBtnFull: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 10,
     gap: 6,
-    marginRight: 'auto',
   },
-  deleteButtonText: {
+  deleteBtnFullText: {
     color: '#f87171',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
   },
+  modalFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+  },
   cancelButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 11,
     borderRadius: 10,
     backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
   },
   cancelButtonText: {
     color: '#d4d4d8',
@@ -711,11 +745,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
   submitButton: {
+    flex: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#e11d48',
-    paddingHorizontal: 18,
-    paddingVertical: 10,
+    paddingVertical: 11,
     borderRadius: 10,
     gap: 6,
   },
