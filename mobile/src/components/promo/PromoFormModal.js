@@ -251,7 +251,7 @@ export default function PromoFormModal({
               <TextInput
                 style={[styles.input, styles.codeInput, errors.code && styles.inputError]}
                 placeholder="Misal: HEMAT10, GAJIAN50K"
-                placeholderTextColor="#71717a"
+                placeholderTextColor="#a1a1aa"
                 value={code}
                 onChangeText={handleCodeChange}
                 autoCapitalize="characters"
@@ -269,7 +269,7 @@ export default function PromoFormModal({
               <TextInput
                 style={[styles.input, errors.name && styles.inputError]}
                 placeholder="Misal: Diskon Hemat Gajian 10%"
-                placeholderTextColor="#71717a"
+                placeholderTextColor="#a1a1aa"
                 value={name}
                 onChangeText={(val) => {
                   setName(val);
@@ -288,7 +288,7 @@ export default function PromoFormModal({
                   onPress={() => setType('PERCENTAGE')}
                   activeOpacity={0.7}
                 >
-                  <Percent size={14} color={type === 'PERCENTAGE' ? '#fb7185' : '#a1a1aa'} />
+                  <Percent size={14} color={type === 'PERCENTAGE' ? '#ffffff' : '#a1a1aa'} />
                   <Text style={[styles.typeOptionText, type === 'PERCENTAGE' && styles.typeOptionTextActive]}>
                     Diskon %
                   </Text>
@@ -299,7 +299,7 @@ export default function PromoFormModal({
                   onPress={() => setType('FIXED')}
                   activeOpacity={0.7}
                 >
-                  <Coins size={14} color={type === 'FIXED' ? '#fb7185' : '#a1a1aa'} />
+                  <Coins size={14} color={type === 'FIXED' ? '#ffffff' : '#a1a1aa'} />
                   <Text style={[styles.typeOptionText, type === 'FIXED' && styles.typeOptionTextActive]}>
                     Potongan Rp
                   </Text>
@@ -310,7 +310,7 @@ export default function PromoFormModal({
                   onPress={() => setType('MIN_SPEND')}
                   activeOpacity={0.7}
                 >
-                  <TicketPercent size={14} color={type === 'MIN_SPEND' ? '#fb7185' : '#a1a1aa'} />
+                  <TicketPercent size={14} color={type === 'MIN_SPEND' ? '#ffffff' : '#a1a1aa'} />
                   <Text style={[styles.typeOptionText, type === 'MIN_SPEND' && styles.typeOptionTextActive]}>
                     Min. Belanja
                   </Text>
@@ -329,7 +329,7 @@ export default function PromoFormModal({
               <TextInput
                 style={[styles.input, errors.value && styles.inputError]}
                 placeholder={type === 'FIXED' ? 'Misal: 15000' : 'Misal: 10 (untuk 10%)'}
-                placeholderTextColor="#71717a"
+                placeholderTextColor="#a1a1aa"
                 value={value}
                 onChangeText={(val) => {
                   setValue(val.replace(/[^0-9.]/g, ''));
@@ -347,7 +347,7 @@ export default function PromoFormModal({
                 <TextInput
                   style={styles.input}
                   placeholder="Misal: 25000 (Kosongkan jika tanpa batas)"
-                  placeholderTextColor="#71717a"
+                  placeholderTextColor="#a1a1aa"
                   value={maxDiscountAmount}
                   onChangeText={(val) => setMaxDiscountAmount(val.replace(/[^0-9]/g, ''))}
                   keyboardType="numeric"
@@ -364,7 +364,7 @@ export default function PromoFormModal({
               <TextInput
                 style={[styles.input, errors.minPurchaseAmount && styles.inputError]}
                 placeholder="Misal: 50000 (0 = Tanpa minimal belanja)"
-                placeholderTextColor="#71717a"
+                placeholderTextColor="#a1a1aa"
                 value={minPurchaseAmount}
                 onChangeText={(val) => {
                   setMinPurchaseAmount(val.replace(/[^0-9]/g, ''));
@@ -384,7 +384,7 @@ export default function PromoFormModal({
                 <TextInput
                   style={styles.input}
                   placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#71717a"
+                  placeholderTextColor="#a1a1aa"
                   value={startDate}
                   onChangeText={setStartDate}
                 />
@@ -395,7 +395,7 @@ export default function PromoFormModal({
                 <TextInput
                   style={[styles.input, errors.endDate && styles.inputError]}
                   placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#71717a"
+                  placeholderTextColor="#a1a1aa"
                   value={endDate}
                   onChangeText={(val) => {
                     setEndDate(val);
@@ -412,7 +412,7 @@ export default function PromoFormModal({
               <TextInput
                 style={styles.input}
                 placeholder="Misal: 100 (Kosongkan jika kuota tak terbatas)"
-                placeholderTextColor="#71717a"
+                placeholderTextColor="#a1a1aa"
                 value={quota}
                 onChangeText={(val) => setQuota(val.replace(/[^0-9]/g, ''))}
                 keyboardType="numeric"
@@ -425,7 +425,7 @@ export default function PromoFormModal({
               <TextInput
                 style={[styles.input, styles.textArea]}
                 placeholder="Catatan ketentuan pemakaian promo..."
-                placeholderTextColor="#71717a"
+                placeholderTextColor="#a1a1aa"
                 value={description}
                 onChangeText={setDescription}
                 multiline
@@ -548,7 +548,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(251, 113, 133, 0.15)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -639,8 +641,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   typeOptionBtnActive: {
-    backgroundColor: 'rgba(251, 113, 133, 0.15)',
-    borderColor: '#fb7185',
+    backgroundColor: '#e11d48',
+    borderColor: '#e11d48',
   },
   typeOptionText: {
     color: '#a1a1aa',
@@ -648,7 +650,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
   typeOptionTextActive: {
-    color: '#fb7185',
+    color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
   },
   switchRow: {
@@ -683,9 +685,9 @@ const styles = StyleSheet.create({
   deleteButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(248, 113, 113, 0.15)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(248, 113, 113, 0.3)',
+    borderColor: '#3f3f46',
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 10,

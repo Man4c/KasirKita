@@ -231,7 +231,7 @@ const PromoCardItem = React.memo(function PromoCardItem({
               onPress={() => onEdit(item)}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
-              <Edit3 size={14} color="#fb7185" style={{ flexShrink: 0 }} />
+              <Edit3 size={14} color="#d4d4d8" style={{ flexShrink: 0 }} />
               <Text style={styles.editBtnText}>Edit</Text>
             </TouchableOpacity>
 
@@ -288,10 +288,9 @@ const styles = StyleSheet.create({
   couponBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(251, 113, 133, 0.12)',
+    backgroundColor: '#202023',
     borderWidth: 1,
-    borderColor: 'rgba(251, 113, 133, 0.35)',
-    borderStyle: 'dashed',
+    borderColor: '#3f3f46',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -358,7 +357,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   detailLabel: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     width: 80,
@@ -421,7 +420,9 @@ const styles = StyleSheet.create({
   statusPillActive: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -436,7 +437,9 @@ const styles = StyleSheet.create({
   statusPillInactive: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(161, 161, 170, 0.12)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -451,7 +454,9 @@ const styles = StyleSheet.create({
   statusPillExpired: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(248, 113, 113, 0.12)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -475,30 +480,30 @@ const styles = StyleSheet.create({
   editBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(251, 113, 133, 0.12)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(251, 113, 133, 0.25)',
+    borderColor: '#3f3f46',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
-    gap: 4,
+    gap: 5,
     flexShrink: 0,
   },
   editBtnText: {
-    color: '#fb7185',
+    color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
   deleteBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(248, 113, 113, 0.12)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(248, 113, 113, 0.25)',
+    borderColor: '#3f3f46',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
-    gap: 4,
+    gap: 5,
     flexShrink: 0,
   },
   deleteBtnText: {

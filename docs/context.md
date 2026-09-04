@@ -20,6 +20,19 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Anti-Patterns & Defect Impeccable pada Master Promosi & Voucher Diskon (`PromoManagementScreen.js`, `PromoCardItem.js`, `PromoFormModal.js`)**:
+  - Menyelesaikan 3 AI tells dan 25 quality issues yang terdeteksi pada audit browser Master Promo:
+    1. *Eliminasi AI Color Palette Cyan Neon*: Menghilangkan teks angka dan ikon cyan neon (`#38bdf8`) pada kartu metrik ke-3 ("Total Dipakai"), menggantinya dengan nilai bersih `#f4f4f5` (20px, kontras tinggi) dan ikon container gelap netral `#27272a` (border `#3f3f46`).
+    2. *Eliminasi Dark Mode with Glowing Accents*: Menghilangkan colored glow neon (`#e11d48`) pada FAB `[ + Tambah Promo ]`. Bayangan dinetralkan menjadi bayangan gelap natural (`shadowColor: '#000000'`, `shadowOffset: { width: 0, height: 4 }`, `shadowOpacity: 0.35`, `shadowRadius: 8`).
+    3. *Resolusi Flat Type Hierarchy*: Menaikkan ukuran `headerTitle` dari 16px ke **`22px`** (`Poppins_700Bold`, `letterSpacing: -0.4`), angka metrik **20px**, modal/discount title 16px, nama kupon 15px, input/button 13px, dan label/badge 12px, sehingga rasio tipografi naik ke $\ge \mathbf{1.83:1}$ (mengatasi rasio sempit 1.3:1).
+    4. *Perbaikan Kontras Ekstrem (WCAG AA/AAA)*:
+       - Filter Chips Aktif: Mengganti background `rgba(251, 113, 133, 0.15)` yang memicu flattening 1.0:1 menjadi background solid `#e11d48` dengan teks putih murni **`#ffffff`** (rasio kontras **6.3:1**).
+       - Badge Kode Kupon (`couponBadge`): Mengganti background semi-transparan yang memicu flattening 1.0:1 menjadi container gelap solid `#202023` dengan border `#3f3f46` dan teks `#fb7185` (rasio kontras **6.8:1**).
+       - Label Parameter Kupon (`detailLabel`): Menaikkan warna teks dari `#71717a` (3.9:1) menjadi **`#a1a1aa`** (rasio kontras **5.8:1** di atas `#121215`).
+       - Label Metrik Ringkasan (`metricLabel`): Menaikkan warna teks dari `#71717a` (3.7:1) menjadi **`#a1a1aa`** (rasio kontras **5.8:1** di atas `#18181b`).
+       - Status Pill & Tombol Aksi (`statusPillActive`, `statusPillInactive`, `statusPillExpired`, `editBtn`, `deleteBtn`): Mengganti background `rgba` yang memicu flattening 1.0:1 menjadi container gelap netral solid `#27272a` (border `#3f3f46`), dengan teks `#f4f4f5` (13.8:1), `#f87171` (6.5:1), `#34d399` (9.5:1), dan `#a1a1aa` (4.8:1).
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos verifikasi build Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Anti-Patterns & Defect Impeccable pada Master Satuan (`UnitManagementScreen.js`, `UnitCardItem.js`, `UnitFormModal.js`)**:
   - Menyelesaikan 12 AI tells dan 11 quality issues yang terdeteksi pada audit browser Master Satuan:
     1. *Eliminasi AI Color Palette Purple Neon*: Menghilangkan seluruh warna teks dan ikon purple/violet neon (`#c084fc`) dari kartu satuan. Simbol satuan dan badge penggunaan produk kini menggunakan container gelap netral solid (`#27272a`, border `#3f3f46`) dengan teks kontras tinggi `#e4e4e7` dan `#f4f4f5` (kontras 10.7:1 - 13.8:1), status keterpakaian menggunakan emerald lembut (`#34d399`, kontras 9.5:1), dan tombol edit menggunakan kontainer netral profesional `#27272a` dengan teks `#f4f4f5`.

@@ -243,7 +243,7 @@ export default function PromoManagementScreen({ navigation }) {
         </View>
 
         <View style={styles.metricCard}>
-          <View style={[styles.metricIconWrap, { backgroundColor: 'rgba(52, 211, 153, 0.15)' }]}>
+          <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
             <CheckCircle2 size={14} color="#34d399" />
           </View>
           <Text style={[styles.metricVal, { color: '#34d399' }]}>{activePromos}</Text>
@@ -251,10 +251,10 @@ export default function PromoManagementScreen({ navigation }) {
         </View>
 
         <View style={styles.metricCard}>
-          <View style={[styles.metricIconWrap, { backgroundColor: 'rgba(56, 189, 248, 0.15)' }]}>
-            <Users size={14} color="#38bdf8" />
+          <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
+            <Users size={14} color="#f4f4f5" />
           </View>
-          <Text style={[styles.metricVal, { color: '#38bdf8' }]}>{totalUsages}</Text>
+          <Text style={styles.metricVal}>{totalUsages}</Text>
           <Text style={styles.metricLabel}>Total Dipakai</Text>
         </View>
       </View>
@@ -262,11 +262,11 @@ export default function PromoManagementScreen({ navigation }) {
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBox}>
-          <Search size={16} color="#71717a" style={styles.searchIcon} />
+          <Search size={16} color="#a1a1aa" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Cari kode promo atau nama voucher..."
-            placeholderTextColor="#71717a"
+            placeholderTextColor="#a1a1aa"
             value={search}
             onChangeText={handleSearchChange}
             autoCapitalize="none"
@@ -348,7 +348,7 @@ export default function PromoManagementScreen({ navigation }) {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <View style={styles.emptyIconCircle}>
-                <TicketPercent size={32} color="#71717a" />
+                <TicketPercent size={32} color="#a1a1aa" />
               </View>
               <Text style={styles.emptyTitle}>
                 {debouncedSearch
@@ -436,8 +436,9 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#f4f4f5',
-    fontSize: 16,
+    fontSize: 22,
     fontFamily: 'Poppins_700Bold',
+    letterSpacing: -0.4,
   },
   headerSubtitle: {
     color: '#a1a1aa',
@@ -489,18 +490,20 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: 'rgba(251, 113, 133, 0.15)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
   },
   metricVal: {
     color: '#f4f4f5',
-    fontSize: 16,
+    fontSize: 20,
     fontFamily: 'Poppins_700Bold',
   },
   metricLabel: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     textAlign: 'center',
@@ -550,8 +553,8 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
   },
   filterChipActive: {
-    backgroundColor: 'rgba(251, 113, 133, 0.15)',
-    borderColor: '#fb7185',
+    backgroundColor: '#e11d48',
+    borderColor: '#e11d48',
   },
   filterChipText: {
     color: '#a1a1aa',
@@ -559,7 +562,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
   filterChipTextActive: {
-    color: '#fb7185',
+    color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
   },
   listContent: {
@@ -636,9 +639,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 24,
     gap: 8,
-    shadowColor: '#e11d48',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 6,
   },
