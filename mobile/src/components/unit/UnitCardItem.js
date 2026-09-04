@@ -55,7 +55,7 @@ const UnitCardItem = React.memo(function UnitCardItem({
 
         {/* Badge Total Penggunaan Produk */}
         <View style={[styles.usageBadge, isInUse ? styles.usageBadgeActive : styles.usageBadgeEmpty]}>
-          <Package size={12} color={isInUse ? '#c084fc' : '#71717a'} style={{ flexShrink: 0 }} />
+          <Package size={12} color={isInUse ? '#e4e4e7' : '#a1a1aa'} style={{ flexShrink: 0 }} />
           <Text style={[styles.usageText, isInUse ? styles.usageTextActive : styles.usageTextEmpty]}>
             {totalUsage} Produk
           </Text>
@@ -87,7 +87,7 @@ const UnitCardItem = React.memo(function UnitCardItem({
         <View style={styles.statusIndicator}>
           {isInUse ? (
             <View style={styles.statusPillActive}>
-              <CheckCircle2 size={12} color='#c084fc' style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={12} color='#34d399' style={{ flexShrink: 0 }} />
               <Text style={styles.statusTextActive}>Digunakan Produk</Text>
             </View>
           ) : (
@@ -106,7 +106,7 @@ const UnitCardItem = React.memo(function UnitCardItem({
               onPress={() => onEdit(item)}
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
             >
-              <Edit3 size={14} color='#c084fc' style={{ flexShrink: 0 }} />
+              <Edit3 size={14} color='#d4d4d8' style={{ flexShrink: 0 }} />
               <Text style={styles.editBtnText}>Edit</Text>
             </TouchableOpacity>
 
@@ -118,7 +118,7 @@ const UnitCardItem = React.memo(function UnitCardItem({
             >
               <Trash2
                 size={14}
-                color={isInUse ? '#71717a' : '#f87171'}
+                color={isInUse ? '#a1a1aa' : '#f87171'}
                 style={{ flexShrink: 0 }}
               />
               <Text style={[styles.deleteBtnText, isInUse && styles.deleteBtnTextDisabled]}>
@@ -167,21 +167,21 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   symbolBoxActive: {
-    backgroundColor: 'rgba(192, 132, 252, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(192, 132, 252, 0.3)',
-  },
-  symbolBoxEmpty: {
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
+  },
+  symbolBoxEmpty: {
+    backgroundColor: '#202023',
+    borderWidth: 1,
+    borderColor: '#27272a',
   },
   symbolText: {
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
   },
   symbolTextActive: {
-    color: '#c084fc',
+    color: '#f4f4f5',
   },
   symbolTextEmpty: {
     color: '#a1a1aa',
@@ -212,14 +212,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   usageBadgeActive: {
-    backgroundColor: 'rgba(192, 132, 252, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(192, 132, 252, 0.25)',
-  },
-  usageBadgeEmpty: {
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
+  },
+  usageBadgeEmpty: {
+    backgroundColor: '#202023',
+    borderWidth: 1,
+    borderColor: '#27272a',
   },
   usageText: {
     fontSize: 12,
@@ -227,10 +227,10 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   usageTextActive: {
-    color: '#c084fc',
+    color: '#e4e4e7',
   },
   usageTextEmpty: {
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   descriptionText: {
     fontSize: 12,
@@ -288,12 +288,12 @@ const styles = StyleSheet.create({
   statusPillActive: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 5,
   },
   statusTextActive: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#c084fc',
+    color: '#34d399',
     flexShrink: 0,
   },
   statusPillEmpty: {
@@ -316,19 +316,19 @@ const styles = StyleSheet.create({
   editBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(192, 132, 252, 0.1)',
+    gap: 5,
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(192, 132, 252, 0.3)',
+    borderColor: '#3f3f46',
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 6,
     borderRadius: 8,
     flexShrink: 0,
   },
   editBtnText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#c084fc',
+    color: '#f4f4f5',
     flexShrink: 0,
   },
   deleteBtn: {
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(244, 63, 94, 0.3)',
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 6,
     borderRadius: 8,
     flexShrink: 0,
   },
@@ -354,6 +354,6 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   deleteBtnTextDisabled: {
-    color: '#71717a',
+    color: '#a1a1aa',
   },
 });

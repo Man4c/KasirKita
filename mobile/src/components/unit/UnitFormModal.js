@@ -123,7 +123,7 @@ export default function UnitFormModal({
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
               <View style={styles.iconCircle}>
-                <Scale size={20} color='#c084fc' />
+                <Scale size={20} color='#f43f5e' />
               </View>
               <View>
                 <Text style={styles.modalTitle}>
@@ -146,7 +146,7 @@ export default function UnitFormModal({
             {!isEditMode && (
               <View style={styles.presetSection}>
                 <View style={styles.presetHeader}>
-                  <Sparkles size={13} color='#c084fc' />
+                  <Sparkles size={13} color='#fb7185' />
                   <Text style={styles.presetTitle}>Preset Cepat Rekomendasi</Text>
                 </View>
                 <ScrollView
@@ -180,7 +180,7 @@ export default function UnitFormModal({
               <TextInput
                 style={[styles.input, errors.name && styles.inputError]}
                 placeholder='Contoh: Pieces, Kilogram, Botol...'
-                placeholderTextColor='#71717a'
+                placeholderTextColor='#a1a1aa'
                 value={name}
                 onChangeText={(val) => {
                   setName(val);
@@ -203,7 +203,7 @@ export default function UnitFormModal({
               <TextInput
                 style={[styles.input, errors.symbol && styles.inputError]}
                 placeholder='Contoh: pcs, box, kg, btl, cup'
-                placeholderTextColor='#71717a'
+                placeholderTextColor='#a1a1aa'
                 value={symbol}
                 onChangeText={handleSymbolChange}
                 autoCapitalize='none'
@@ -220,7 +220,7 @@ export default function UnitFormModal({
               <TextInput
                 style={[styles.input, styles.textArea]}
                 placeholder='Catatan peruntukan satuan barang...'
-                placeholderTextColor='#71717a'
+                placeholderTextColor='#a1a1aa'
                 value={description}
                 onChangeText={setDescription}
                 multiline
@@ -298,9 +298,9 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 10,
-    backgroundColor: 'rgba(192, 132, 252, 0.12)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(192, 132, 252, 0.3)',
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -320,9 +320,9 @@ const styles = StyleSheet.create({
   },
   presetSection: {
     marginBottom: 14,
-    backgroundColor: 'rgba(192, 132, 252, 0.06)',
+    backgroundColor: '#202023',
     borderWidth: 1,
-    borderColor: 'rgba(192, 132, 252, 0.18)',
+    borderColor: '#27272a',
     borderRadius: 10,
     padding: 10,
   },
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
   presetTitle: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#c084fc',
+    color: '#e4e4e7',
   },
   presetRow: {
     gap: 6,
@@ -350,8 +350,8 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
   },
   presetChipActive: {
-    backgroundColor: 'rgba(192, 132, 252, 0.2)',
-    borderColor: '#c084fc',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderColor: '#e11d48',
   },
   presetChipText: {
     fontSize: 12,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
   },
   presetChipTextActive: {
-    color: '#c084fc',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
   },
   formGroup: {
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
   subLabel: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   requiredMark: {
     color: '#f43f5e',
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: '#9333ea',
+    backgroundColor: '#e11d48',
   },
   submitBtnText: {
     fontSize: 13,

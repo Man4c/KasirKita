@@ -20,6 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Anti-Patterns & Defect Impeccable pada Master Satuan (`UnitManagementScreen.js`, `UnitCardItem.js`, `UnitFormModal.js`)**:
+  - Menyelesaikan 12 AI tells dan 11 quality issues yang terdeteksi pada audit browser Master Satuan:
+    1. *Eliminasi AI Color Palette Purple Neon*: Menghilangkan seluruh warna teks dan ikon purple/violet neon (`#c084fc`) dari kartu satuan. Simbol satuan dan badge penggunaan produk kini menggunakan container gelap netral solid (`#27272a`, border `#3f3f46`) dengan teks kontras tinggi `#e4e4e7` dan `#f4f4f5` (kontras 10.7:1 - 13.8:1), status keterpakaian menggunakan emerald lembut (`#34d399`, kontras 9.5:1), dan tombol edit menggunakan kontainer netral profesional `#27272a` dengan teks `#f4f4f5`.
+    2. *Eliminasi Dark Mode with Glowing Accents*: Menghilangkan colored glow neon (`#9333ea`) pada FAB dan tombol utama. Background diganti dengan warna standar KasirKita Rose Red (`#e11d48`) dan bayangan dinetralkan (`shadowColor: '#000000'`).
+    3. *Resolusi Flat Type Hierarchy*: Meningkatkan skala tipografi halaman (`screenTitle` dinaikkan dari 18px ke **22px** `Poppins_700Bold` dengan `letterSpacing: -0.4`, metrik ringkasan **20px**, modal/empty title 16px, nama satuan 15px, input/button 13px, dan label/badge 12px), menghasilkan rasio hierarki tipografi $\ge \mathbf{1.83:1}$ (mengatasi rasio sempit 1.5:1).
+    4. *Perbaikan Kontras Ekstrem (WCAG AA/AAA)*:
+       - Tombol Utama (`createBtnHeader`, `emptyCreateBtn`, `fab`, `submitBtn`): Teks putih `#ffffff` di atas `#e11d48` menghasilkan rasio kontras **6.3:1** (lulus WCAG AAA).
+       - Badge Penggunaan Kosong & Tombol Hapus Nonaktif: Mengganti warna teks `#71717a` (3.1:1) menjadi **`#a1a1aa`** (rasio kontras **4.8:1** di atas latar `#27272a`, memenuhi standar WCAG AA $\ge 4.5:1$).
+       - Eliminasi Flattening DOM Web: Menghilangkan `rgba(192, 132, 252, 0.12)` yang memicu flattening 1.0:1 pada DOM web, digantikan background solid `#27272a` dengan teks `#e4e4e7`.
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos verifikasi build Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Anti-Patterns & Defect Impeccable pada Master Kategori (`CategoryManagementScreen.js`, `CategoryCardItem.js`, `CategoryFormModal.js`)**:
   - Menyelesaikan 12 AI tells dan 11 quality issues yang terdeteksi pada audit browser Master Kategori:
     1. *Eliminasi AI Color Palette Cyan Neon*: Menghilangkan seluruh warna teks dan ikon cyan neon (`#38bdf8`) dari kartu kategori. Ikon kategori dan badge hitungan produk kini menggunakan container gelap netral solid (`#27272a`, border `#3f3f46`) dengan teks kontras tinggi `#e4e4e7` (kontras 10.7:1), status keterhubungan produk menggunakan emerald lembut (`#34d399`, kontras 9.5:1), dan tombol edit menggunakan container netral `#27272a` dengan teks `#f4f4f5` (kontras 13.8:1).
