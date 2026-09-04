@@ -38,30 +38,58 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [selectedTx, setSelectedTx] = useState(null);
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   useEffect(() => {
-    fetchTransactions();
+    fetchTransactions(1);
   }, []);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (pageNum = 1, isRefresh = false) => {
     try {
-      setLoading(true);
-      const res = await api.get('/pos/transactions');
+      if (pageNum === 1 && !isRefresh) {
+        setLoading(true);
+      }
+      const res = await api.get(`/pos/transactions?page=${pageNum}&per_page=20`);
       if (res.data.success) {
-        // Backend returns paginated data: res.data.data.data or res.data.data
-        const list = res.data.data?.data || res.data.data || [];
-        setTransactions(Array.isArray(list) ? list : []);
+        const paginated = res.data.data;
+        const list = paginated?.data || (Array.isArray(paginated) ? paginated : []);
+        const currentPage = paginated?.current_page || pageNum;
+        const lastPage = paginated?.last_page || 1;
+
+        if (pageNum === 1) {
+          setTransactions(list);
+        } else {
+          setTransactions((prev) => {
+            const existingIds = new Set(prev.map((t) => t.id));
+            const newItems = list.filter((t) => !existingIds.has(t.id));
+            return [...prev, ...newItems];
+          });
+        }
+        setPage(currentPage);
+        setHasMore(currentPage < lastPage);
       }
     } catch (err) {
       console.log('Error fetching transactions:', err.message);
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (!loading && !loadingMore && hasMore) {
+      setLoadingMore(true);
+      fetchTransactions(page + 1);
     }
   };
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchTransactions();
+    setPage(1);
+    fetchTransactions(1, true);
   };
 
   const formatRp = (num) => 'Rp' + Number(num || 0).toLocaleString('id-ID');
@@ -246,6 +274,18 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
           renderItem={renderTransactionItem}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.4}
+          ListFooterComponent={
+            loadingMore ? (
+              <View style={{ paddingVertical: 14, alignItems: 'center' }}>
+                <ActivityIndicator size="small" color="#e11d48" />
+                <Text style={{ color: '#71717a', fontSize: 12, marginTop: 4, fontFamily: 'Poppins_400Regular' }}>
+                  Memuat transaksi lainnya...
+                </Text>
+              </View>
+            ) : null
+          }
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

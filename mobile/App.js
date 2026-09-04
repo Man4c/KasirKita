@@ -116,9 +116,10 @@ function MainApp() {
 
   const handleTabChange = (newTab) => {
     setIsCheckoutActive(false);
-    setActiveTab(newTab);
+    const targetTab = newTab === 'Riwayat' ? 'history' : newTab;
+    setActiveTab(targetTab);
     if (!isLandscape) {
-      setPortraitTab(newTab);
+      setPortraitTab(targetTab);
     }
   };
 

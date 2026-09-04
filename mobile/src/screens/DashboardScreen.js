@@ -233,7 +233,7 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
           setSelectedTx(tx);
           setReceiptModalOpen(true);
         }}
-        onViewAll={() => navigation?.navigate && navigation.navigate('Riwayat')}
+        onViewAll={() => navigation?.navigate && navigation.navigate('history')}
       />
 
       {/* Modular Detail Tooltip Modal */}

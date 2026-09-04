@@ -54,6 +54,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Mengatur warna latar belakang tombol menjadi **Rose Brand (`#e11d48`)** dengan border kontras (`#f43f5e`).
   - Diterapkan secara seragam di layar kasir mode Portrait (`ProductGrid.js`) maupun panel register Landscape (`LandscapeRegisterPanel.js`).
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
+- **Perbaikan Navigasi Tombol Riwayat Dashboard & Paginasi Riwayat (`DashboardScreen.js`, `App.js`, `TransactionHistoryScreen.js`)**:
+  - **Perbaikan Navigasi Tab Riwayat**:
+    - Memperbaiki tautan tombol *"Riwayat →"* di bagian 10 Transaksi Penjualan Terakhir Dashboard ([`DashboardScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/DashboardScreen.js)) yang sebelumnya memanggil `navigation.navigate('Riwayat')` sehingga salah diarahkan ke fallback Kasir POS. Sekarang memanggil `navigation.navigate('history')`, serta menambahkan normalisasi alias di `handleTabChange` ([`App.js`](file:///d:/Projects/KasirKita/mobile/App.js)), menjamin user langsung mendarat di tab Riwayat dengan ikon aktif menyala.
+  - **Optimalisasi Performa & Infinite Scroll (Paginasi Cerdas)**:
+    - Menjawab kekhawatiran beban data besar: backend Laravel secara bawaan membatasi beban melalui paginasi (`per_page: 20`), dan React Native menggunakan virtualisasi `<FlatList>` (hanya merender item yang tampak di layar HP sehingga memori tetap ringan).
+    - Menambahkan mekanisme **Infinite Scroll / Load More** pada [`TransactionHistoryScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/TransactionHistoryScreen.js) menggunakan `onEndReached` dan `onEndReachedThreshold={0.4}` dengan indikator pemuatan halus (`ListFooterComponent`). Saat kasir men-scroll ke bawah, 20 data berikutnya dimuat secara bertahap tanpa membuat aplikasi berat atau membebani kuota internet.
 - **Perbaikan & Perapian Input Pencarian Riwayat Transaksi (`TransactionHistoryScreen.js`, `CustomerPickerModal.js`)**:
   - **Penyelarasan Vertikal Presisi (Android Defensive UI Craft)**:
     - Menetapkan tinggi tetap yang proporsional (`height: 44`) pada kotak search bar dan menghilangkan `paddingVertical` dinamis platform yang sebelumnya memicu pembengkakan tinggi input di Android (hingga >50px).
