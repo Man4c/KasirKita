@@ -269,6 +269,69 @@ export const offlineStorage = {
   },
 
   /**
+   * Cache discounts/promos list locally for promo management and POS checkout.
+   */
+  async cachePromos(promos) {
+    if (!Array.isArray(promos)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.PROMOS, JSON.stringify(promos));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache promosi:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached discounts/promos list.
+   */
+  async getCachedPromos() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.PROMOS);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  },
+
+  /**
+   * Insert or update a single promo in local cache.
+   */
+  async upsertCachedPromo(promo) {
+    if (!promo || !promo.id) return false;
+    try {
+      const promos = await this.getCachedPromos();
+      const index = promos.findIndex((p) => p.id === promo.id);
+      if (index >= 0) {
+        promos[index] = { ...promos[index], ...promo };
+      } else {
+        promos.unshift(promo);
+      }
+      await AsyncStorage.setItem(KEYS.PROMOS, JSON.stringify(promos));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache promosi lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single promo from local cache.
+   */
+  async removeCachedPromo(promoId) {
+    if (!promoId) return false;
+    try {
+      let promos = await this.getCachedPromos();
+      promos = promos.filter((p) => String(p.id) !== String(promoId));
+      await AsyncStorage.setItem(KEYS.PROMOS, JSON.stringify(promos));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus promosi dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
    * Enqueue an offline transaction.
    * Assigns an offline ID, temporary offline invoice, and deducts local stock.
    */

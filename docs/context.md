@@ -20,6 +20,18 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #28 Fase 2: Pembuatan Mobile API Service (`discountService.js`) & Cache Offline (`offlineStorage.js`)**:
+  - Mengembangkan modul layanan API komprehensif [`mobile/src/services/discountService.js`](file:///d:/Projects/KasirKita/mobile/src/services/discountService.js):
+    1. `getDiscounts(params)`: Mengambil daftar kupon diskon dengan dukungan paginasi, pencarian teks, filter tipe (`PERCENTAGE`, `FIXED`, `MIN_SPEND`), filter status (`active`, `inactive`, `expired`), dan pembaruan cache offline otomatis.
+    2. `getDiscount(id)`: Mengambil rincian detail promo beserta riwayat 5 transaksi pemakai kupon.
+    3. `createDiscount(payload)`: Membuat program promosi baru, mengkapitalisasi kode voucher, dan menyimpan ke cache lokal (`upsertCachedPromo`).
+    4. `updateDiscount(id, payload)`: Menyunting parameter promo dan memperbarui snapshot lokal.
+    5. `deleteDiscount(id)`: Menghapus promo dari backend dan cache lokal (`removeCachedPromo`).
+    6. `toggleStatus(id)`: Saklar cepat aktifkan / nonaktifkan promo secara atomik.
+    7. `checkVoucher(code, subtotal)`: Validasi kupon voucher online via API dengan *graceful offline fallback* kalkulasi lokal (`calculateDiscountOffline`), mengecek masa berlaku, kuota penggunaan, dan minimum pembelanjaan secara mandiri saat internet kasir terputus.
+  - Memperkaya [`mobile/src/services/offlineStorage.js`](file:///d:/Projects/KasirKita/mobile/src/services/offlineStorage.js) dengan helper method: `cachePromos`, `getCachedPromos`, `upsertCachedPromo`, dan `removeCachedPromo`.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`) dan audit linter Impeccable (0 defects). Status Fase 2: `completed`.
+
 - **Penyelesaian Plan #28 Fase 1: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend Master Promosi & Voucher (`plans/260904-28-mobile-master-promosi/plan.md`)**:
   - Memverifikasi endpoint backend REST API Laravel di `DiscountController.php`:
     1. `GET /api/discounts`: Mengambil daftar diskon & kupon dengan filter pencarian (`search`), tipe (`PERCENTAGE`, `FIXED`, `MIN_SPEND`), status (`active`, `inactive`, `expired`), dan relasi `transactions_count`.
