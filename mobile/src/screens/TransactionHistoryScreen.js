@@ -140,6 +140,8 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
     fetchTransactions(1, true, debouncedSearch, filterMethod);
   };
 
+  const formatRp = (num) => 'Rp' + Number(num || 0).toLocaleString('id-ID');
+
   const getMethodIcon = (method) => {
     switch (method) {
       case 'QRIS':
