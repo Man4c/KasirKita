@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #28 Fase 4: Modal Formulir Tambah & Edit Promosi (`PromoFormModal.js`)**:
+  - Mengembangkan modal formulir interaktif [`mobile/src/components/promo/PromoFormModal.js`](file:///d:/Projects/KasirKita/mobile/src/components/promo/PromoFormModal.js) berstandar *Impeccable Defensive UI*:
+    1. *Identitas & Kode Kupon*: Input otomatis huruf kapital dan pembersihan spasi (`toUpperCase().replace(/\s+/g, '')`), nama promosi publik, serta catatan deskripsi/syarat ketentuan.
+    2. *Selector Skema Diskon*: Pilihan 3 chip tipe promosi fleksibel: `PERCENTAGE` (Diskon %), `FIXED` (Potongan Rp), dan `MIN_SPEND` (Min. Belanja).
+    3. *Parameter & Batasan Promosi*: Input besaran diskon persen (1-100%) atau nominal rupiah, batas maksimal potongan nominal rupiah (khusus persentase), batas minimal belanja pelanggan, batas kuota total penukaran kupon, dan input 2-kolom tanggal mulai s/d selesai masa berlaku (`YYYY-MM-DD`).
+    4. *Status & Proteksi Aksi*: Saklar toggle status aktif promo (`Switch`), tombol simpan dengan spinner saat proses submit, serta tombol hapus terproteksi konfirmasi aman di mode edit.
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web (`npx expo export --platform web`). Status Fase 4: `completed`.
+
 - **Penyelesaian Plan #28 Fase 3: Komponen Kartu Tiket Promo (`PromoCardItem.js`) & Layar Utama (`PromoManagementScreen.js`)**:
   - Mengembangkan tampilan antarmuka Master Promosi & Voucher Diskon berstandar *Impeccable Defensive UI*:
     1. *Kartu Tiket Promo (`PromoCardItem.js`)*: Desain bergaya voucher kupon dengan aksen Rose Brand (`#fb7185`), badge kode kupon dashed border, nilai diskon persentase/potongan nominal kontras tinggi, identitas promo terlindungi `min-w-0 truncate`, rincian syarat minimal belanja & masa berlaku tanggal, progress bar pemakaian kuota voucher, indikator status (*Aktif Digunakan*, *Non-Aktif*, *Kadaluarsa / Kuota Habis*), saklar toggle `Switch` instan, serta tombol aksi cepat [Edit] dan [Hapus].
