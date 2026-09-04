@@ -16,6 +16,7 @@ import DashboardMetricsGrid from '../components/dashboard/DashboardMetricsGrid';
 import DashboardDetailModal from '../components/dashboard/DashboardDetailModal';
 import SalesTrendChart from '../components/dashboard/SalesTrendChart';
 import RecentTransactionsSection from '../components/dashboard/RecentTransactionsSection';
+import DashboardActionHub from '../components/dashboard/DashboardActionHub';
 import PosReceiptModal from '../components/pos/PosReceiptModal';
 
 export default function DashboardScreen({ isLandscape = false, navigation }) {
@@ -221,6 +222,13 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
           {refreshing ? 'Memperbarui...' : 'Perbarui Data'}
         </Text>
       </TouchableOpacity>
+
+      {/* Hub Menu: Akses Cepat & Navigasi Operasional Toko */}
+      <DashboardActionHub
+        navigation={navigation}
+        sales={sales}
+        inv={inv}
+      />
 
       {/* 7-Day Sales Trend Interactive Chart */}
       <SalesTrendChart trends={trends} formatRp={formatRp} />

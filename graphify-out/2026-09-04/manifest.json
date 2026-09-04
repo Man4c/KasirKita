@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788504980.347049,
-    "ast_hash": "650fe4073234bd81a9df961c34cce7eb",
+    "mtime": 1788507192.5182376,
+    "ast_hash": "72d8ab046ffb38c37a6e3138f8e3bbf7",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2307,6 +2307,11 @@
   "backend/database/migrations/2026_09_04_000001_add_trgm_and_indexes_to_transactions.php": {
     "mtime": 1788490758.554982,
     "ast_hash": "ad83d8a10bdf4831d9d64badb9649524",
+    "semantic_hash": ""
+  },
+  "plans/260904-25-mobile-master-produk/plan.md": {
+    "mtime": 1788507173.96695,
+    "ast_hash": "77ddd700c4c84f84e906954b7bd941fa",
     "semantic_hash": ""
   }
 }
