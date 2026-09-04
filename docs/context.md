@@ -20,6 +20,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pemeliharaan Keranjang & Pelepasan Kunci Auto-Rotate saat Switch Portrait (`PosScreen.js`, `App.js`)**:
+  - Menyelesaikan masalah layar terkunci mati di Portrait setelah menekan tombol `[ 📱 Portrait ]`.
+  - Mengubah siklus orientasi tombol: memutar layar ke Portrait sesaat (`PORTRAIT_UP`), lalu dalam 600ms otomatis melepaskan kuncinya kembali ke `AUTO` (`ScreenOrientation.unlockAsync()`). Dengan ini, sensor gravitasi auto-rotate perangkat tetap aktif dan HP bisa langsung kembali berputar ke Landscape saat dimiringkan kembali oleh kasir.
+  - Memastikan state keranjang (*cart*) dan tab Kasir POS tetap aktif terjaga di mode Portrait (`onSwitchToPortrait` mengarahkan `activeTab` dan `portraitTab` ke `'pos'`), sehingga produk yang sudah dimasukkan ke keranjang tidak hilang saat beralih orientasi.
 - **Perbaikan Jarak & Tata Letak Grid Kartu Produk Kasir (`ProductGrid.js`)**:
   - Menyelesaikan masalah jarak renggang asimetris pada item produk baris terakhir (kartu produk ganjil yang melebar memenuhi seluruh baris).
   - Mengimplementasikan `columnWrapperStyle={[styles.gridRow, ...]}` dengan aturan `gap` seragam horizontal dan vertikal pada FlatList 2-kolom.
