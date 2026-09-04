@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #27 Fase 3 & Fase 4: Komponen Kartu, Layar Utama (`UnitManagementScreen.js`), & Modal Form Tambah/Edit (`UnitFormModal.js`)**:
+  - Mengembangkan antarmuka Master Satuan Barang mobile yang utuh dan berstandar *Impeccable Defensive UI*:
+    1. *Kartu Satuan (`UnitCardItem.js`)*: Menampilkan identitas satuan dengan badge simbol kontras ungu modern (`#c084fc`, misal: `[ PCS ]`, `[ KG ]`, `[ BOX ]`), nama satuan `min-w-0 truncate`, rincian breakdown pemakaian produk dasar & varian multi-konversi, indikator status *"Digunakan Produk"* vs *"Belum Dipakai (Aman)"*, serta tombol aksi [Edit] dan [Hapus] (terproteksi jika berelasi).
+    2. *Layar Utama (`UnitManagementScreen.js`)*: Header bersih dengan tombol kembali ke Dashboard & refresh, ringkasan metrik satuan total & satuan aktif dipakai produk, pencarian real-time (nama, simbol), banner offline otomatis, FlatList dengan empty state elegan, dan FAB `[ + ]`.
+    3. *Modal Formulir (`UnitFormModal.js`)*: Formulir interaktif dengan preset cepat rekomendasi satuan populer UMKM Indonesia (*pcs, box, btl, porsi, cup, kg, gr, ltr, pack, sachet*) untuk pengisian 1-ketukan, validasi simbol wajib unik, dan penanganan error responsif.
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos verifikasi build Expo Web (`npx expo export --platform web`). Status Fase 3 & 4: `completed`.
+
 - **Penyelesaian Plan #27 Fase 2: Pembuatan Mobile API Service (`unitService.js`) & Sinkronisasi Cache Offline Satuan (`offlineStorage.js`)**:
   - Mengembangkan service wrapper terintegrasi [`mobile/src/services/unitService.js`](file:///d:/Projects/KasirKita/mobile/src/services/unitService.js):
     1. `getUnits(params)`: Mengambil daftar satuan barang, mendukung filter pencarian lokal/server, dan meng-cache data lokal secara otomatis.

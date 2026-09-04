@@ -92,8 +92,8 @@ mobile/src/
 |---|---|---|
 | 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/units` (CRUD + withCount products & conversions) dan perancangan tata letak defensive UI layar master satuan | completed |
 | 2 | **Mobile API Service (`unitService.js`)**: Pembuatan modul layanan API satuan terintegrasi dengan penanganan error responsif, parser validasi 422 simbol unik, dan fallback cache lokal `offlineStorage` | completed |
-| 3 | **Komponen Kartu & Layar Utama (`UnitCardItem.js` & `UnitManagementScreen.js`)**: Pembuatan layar master satuan dengan pencarian real-time, badge simbol bergaya ungu modern, statistik penggunaan produk, dan tombol aksi cepat | pending |
-| 4 | **Modal Formulir Tambah/Edit (`UnitFormModal.js`)**: Pembuatan form modal interaktif dengan chip preset satuan populer Indonesia (pcs, box, btl, kg, dll), validasi simbol unik, dan proteksi penghapusan satuan berelasi | pending |
+| 3 | **Komponen Kartu & Layar Utama (`UnitCardItem.js` & `UnitManagementScreen.js`)**: Pembuatan layar master satuan dengan pencarian real-time, badge simbol bergaya ungu modern, statistik penggunaan produk, dan tombol aksi cepat | completed |
+| 4 | **Modal Formulir Tambah/Edit (`UnitFormModal.js`)**: Pembuatan form modal interaktif dengan chip preset satuan populer Indonesia (pcs, box, btl, kg, dll), validasi simbol unik, dan proteksi penghapusan satuan berelasi | completed |
 | 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi Master Produk/POS**: Menghubungkan peluncur di `DashboardActionHub.js`, rute di `App.js` dengan hak akses Owner, dan sinkronisasi reaktif ke selector satuan di form produk & POS | pending |
 | 6 | **Pengujian Komprehensif & Verifikasi Impeccable**: Uji alur CRUD, uji proteksi penghapusan satuan bertaut produk/konversi, verifikasi linter `detect.mjs` (0 defect), dan uji bundling Expo Web | pending |
 
