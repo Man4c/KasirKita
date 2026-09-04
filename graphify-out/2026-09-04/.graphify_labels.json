@@ -320,6 +320,7 @@
   "318": "isGeneratedFile",
   "319": "Impeccable Documenter",
   "320": "expo-audio",
+  "321": "normalizeWorkspacePattern",
   "322": "onAnnotDown",
   "323": "expo-font",
   "324": "normalizeGitHubEvent",
@@ -332,5 +333,6 @@
   "331": "react-native-safe-area-context",
   "332": "react-native-svg",
   "333": "react-native-web",
+  "334": "isScreenReaderOnlyTextStyle",
   "337": "expo-camera"
 }

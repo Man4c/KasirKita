@@ -61,8 +61,8 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - **Interaksi & Fokus Visual**:
     - Menambahkan state `isSearchFocused` dengan border aktif kontras Rose Brand (`#e11d48`) dan background sedikit terang saat kolom pencarian aktif disentuh pengguna.
     - Ikon `Search` kini bertransisi warna menjadi `#fb7185` saat aktif, dan tombol hapus pencarian `(X)` dilengkapi badge bulat rapi ber-hitSlop sentuh ramah jari.
-  - **Responsivitas Filter Chips**:
-    - Membungkus baris filter chip (`Semua`, `Tunai`, `QRIS`, `TRANSFER`) dalam `ScrollView` horizontal tanpa scroll indicator agar tidak terpotong atau menabrak pinggir layar pada HP berspesifikasi layar sempit.
+  - **Penataan Filter Chips**:
+    - Mempertahankan kontainer baris `View` standar untuk deretan filter chip (`Semua`, `Tunai`, `QRIS`, `TRANSFER`) agar ketinggian tombol tidak terkompresi atau terpotong vertikal (menghindari clipping issue pada ScrollView horizontal tanpa ketinggian eksplisit).
   - Lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Penyelarasan Tampilan & Cetak Struk Transaksi (`printerService.js`, `ReceiptView.js`, `PosReceiptModal.js`, `escposGenerator.js`)**:
   - **Sinkronisasi Logo Toko**:

@@ -196,12 +196,7 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
       </View>
 
       {/* Filter Chips */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filterChipsRow}
-        style={{ flexGrow: 0 }}
-      >
+      <View style={styles.filterChipsRow}>
         {['ALL', 'CASH', 'QRIS', 'TRANSFER'].map((method) => {
           const isSelected = filterMethod === method;
           const label =
@@ -228,7 +223,7 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
             </TouchableOpacity>
           );
         })}
-      </ScrollView>
+      </View>
 
       {/* Transaction List */}
       {loading ? (
@@ -340,8 +335,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     paddingHorizontal: 16,
-    marginBottom: 14,
-    alignItems: 'center',
+    marginBottom: 12,
   },
   filterChip: {
     paddingHorizontal: 12,
