@@ -93,7 +93,7 @@ export default function LandscapeRegisterPanel({
           {/* Clear Cart Button */}
           {cart.length > 0 && (
             <TouchableOpacity style={styles.regClearBtn} onPress={onClearCart}>
-              <Trash2 size={17} color="#ffffff" />
+              <Trash2 size={15} color="#ffffff" />
             </TouchableOpacity>
           )}
 
@@ -107,7 +107,7 @@ export default function LandscapeRegisterPanel({
               onPress={onToggleScanMode}
               activeOpacity={0.7}
             >
-              <ScanBarcode size={17} color="#ffffff" />
+              <ScanBarcode size={16} color="#ffffff" />
             </TouchableOpacity>
           )}
         </View>
@@ -409,11 +409,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 28,
+    height: 24,
     gap: 4,
     backgroundColor: '#27272a',
     paddingHorizontal: 8,
-    borderRadius: 8,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: '#3f3f46',
   },
@@ -422,11 +422,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     whiteSpace: 'nowrap',
+    includeFontPadding: false,
   },
   regScanBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
+    width: 24,
+    height: 24,
+    borderRadius: 6,
     backgroundColor: '#e11d48',
     justifyContent: 'center',
     alignItems: 'center',
@@ -438,9 +439,9 @@ const styles = StyleSheet.create({
     borderColor: '#9f1239',
   },
   regClearBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
+    width: 24,
+    height: 24,
+    borderRadius: 6,
     backgroundColor: '#e11d48',
     justifyContent: 'center',
     alignItems: 'center',
