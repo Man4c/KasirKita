@@ -20,6 +20,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelarasan Desain Tombol Hapus Keranjang (*Trash Clear Cart*) (`LandscapeRegisterPanel.js`)**:
+  - Menyamakan warna ikon tempat sampah menjadi **putih solid (`#ffffff`)** dengan ukuran **`size={17}`** yang proporsional dan jelas.
+  - Menyesuaikan kotak layer tombol menjadi warna **Rose Brand solid (`#e11d48`)** dengan border kontras (`#f43f5e`), dimensi tetap presisi **`28x28`**, dan sudut membulat `borderRadius: 8`, identik dan serasi dengan tombol scan barcode di sebelahnya.
+  - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Tombol Navigasi Mode "Portrait" pada Keranjang Layar Kasir Landscape (`LandscapeRegisterPanel.js`, `PosScreen.js`)**:
   - Menggantikan tombol *Pelanggan* yang sebelumnya berdesakan di header keranjang panel kanan mode landscape dengan tombol aksi **`[ 📱 Portrait ]`**.
   - Opsi pemilihan pelanggan tetap 100% lengkap dan elegan pada tampilan pembayaran kasir (*PosCheckoutView* di atas Total Tagihan) sesuai toggle pengaturan.
