@@ -20,6 +20,20 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Migrasi `SafeAreaView` Modern & Penggantian Emoticon dengan Ikon Lucide di Master Produk (`ProductManagementScreen.js`, `ProductBarcodeScannerModal.js`)**:
+  - **Penyelesaian Warning Deprecated `SafeAreaView`**:
+    1. Mengganti import usang `SafeAreaView` dari package `react-native` dengan `SafeAreaView` standar resmi dari `react-native-safe-area-context` di [`ProductManagementScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/ProductManagementScreen.js) dan [`ProductBarcodeScannerModal.js`](file:///d:/Projects/KasirKita/mobile/src/components/product/ProductBarcodeScannerModal.js).
+    2. Menghilangkan pesan warning kuning `WARN SafeAreaView has been deprecated and will be removed in a future release`.
+  - **Penggantian Emoticon dengan Ikon Vektor Lucide**:
+    1. Mengganti emoticon teks `⚠️ Menipis` dan `🛑 Habis` pada filter pil status stok produk dengan ikon vektor konsisten:
+       - Filter **Semua**: ikon `<Layers size={12} />`
+       - Filter **Menipis**: ikon `<AlertTriangle size={12} color="#fbbf24" />`
+       - Filter **Habis**: ikon `<XCircle size={12} color="#f87171" />`
+       - Filter **Non-Aktif**: ikon `<EyeOff size={12} color="#a1a1aa" />`
+    2. Memperbarui `styles.stockFilterPill` dengan tata letak `flexDirection: 'row'`, `alignItems: 'center'`, dan `gap: 4`.
+    3. Seluruh modul Master Produk kini 100% bebas dari emoticon teks dan memiliki tampilan yang rapi, profesional, dan serasi.
+  - Lolos uji linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
+
 - **Perbaikan Resolusi Barcode Scanner Kasir POS (`PosBarcodeScannerView.js`, `PosScreen.js`)**:
   - **Penyebab Masalah**: Saat kasir memindai barcode produk fisik (misal: barcode produk kemasan `8992931025202`), aplikasi memunculkan pesan `"Barcode tidak dikenali - Kode 8992931025202 belum terdaftar di katalog produk"`, padahal saat dicari via pencarian manual atau scanner di Master Produk, produk tersebut berhasil ditemukan.
   - **Akar Masalah**:

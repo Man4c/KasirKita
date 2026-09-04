@@ -5,11 +5,11 @@ import {
   View,
   TouchableOpacity,
   Modal,
-  SafeAreaView,
   ActivityIndicator,
   Animated,
   Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { X, Zap, ZapOff, Camera, AlertCircle } from 'lucide-react-native';
 import { soundService } from '../../services/soundService';

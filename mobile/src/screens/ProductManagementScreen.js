@@ -8,9 +8,9 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  SafeAreaView,
   Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Search,
   X,
@@ -21,6 +21,10 @@ import {
   SlidersHorizontal,
   WifiOff,
   ChevronLeft,
+  AlertTriangle,
+  XCircle,
+  EyeOff,
+  Layers,
 } from 'lucide-react-native';
 import { productService } from '../services/productService';
 import { formatRp } from '../utils/format';
@@ -330,7 +334,12 @@ export default function ProductManagementScreen({
           <TouchableOpacity
             style={[styles.stockFilterPill, stockFilter === 'ALL' && styles.stockFilterPillActive]}
             onPress={() => setStockFilter('ALL')}
+            activeOpacity={0.7}
           >
+            <Layers
+              size={12}
+              color={stockFilter === 'ALL' ? '#f4f4f5' : '#71717a'}
+            />
             <Text style={[styles.stockFilterText, stockFilter === 'ALL' && styles.stockFilterTextActive]}>
               Semua
             </Text>
@@ -339,25 +348,40 @@ export default function ProductManagementScreen({
           <TouchableOpacity
             style={[styles.stockFilterPill, stockFilter === 'LOW' && styles.stockFilterPillActiveLow]}
             onPress={() => setStockFilter('LOW')}
+            activeOpacity={0.7}
           >
+            <AlertTriangle
+              size={12}
+              color={stockFilter === 'LOW' ? '#fbbf24' : '#71717a'}
+            />
             <Text style={[styles.stockFilterText, stockFilter === 'LOW' && styles.stockFilterTextActiveLow]}>
-              ⚠️ Menipis
+              Menipis
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.stockFilterPill, stockFilter === 'OUT' && styles.stockFilterPillActiveOut]}
             onPress={() => setStockFilter('OUT')}
+            activeOpacity={0.7}
           >
+            <XCircle
+              size={12}
+              color={stockFilter === 'OUT' ? '#f87171' : '#71717a'}
+            />
             <Text style={[styles.stockFilterText, stockFilter === 'OUT' && styles.stockFilterTextActiveOut]}>
-              🛑 Habis
+              Habis
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.stockFilterPill, stockFilter === 'INACTIVE' && styles.stockFilterPillActiveInactive]}
             onPress={() => setStockFilter('INACTIVE')}
+            activeOpacity={0.7}
           >
+            <EyeOff
+              size={12}
+              color={stockFilter === 'INACTIVE' ? '#a1a1aa' : '#71717a'}
+            />
             <Text style={[styles.stockFilterText, stockFilter === 'INACTIVE' && styles.stockFilterTextActiveInactive]}>
               Non-Aktif
             </Text>
@@ -606,8 +630,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   stockFilterPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderRadius: 6,
     backgroundColor: '#18181b',
     borderWidth: 1,
