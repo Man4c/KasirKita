@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pembuatan & Pendaftaran Dokumen Plan #28: Master Promosi & Voucher Diskon di Mobile (`plans/260904-28-mobile-master-promosi/plan.md`)**:
+  - Menyusun rencana kerja modular lengkap 6 fase untuk manajemen Master Promosi & Voucher di aplikasi Mobile (React Native):
+    1. *Fase 1*: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend (`/api/discounts` CRUD, `check-voucher`, `toggle-status`, filter status & tipe).
+    2. *Fase 2*: Mobile API Service (`discountService.js`) terintegrasi penanganan status kuota/kadaluarsa dan fallback cache lokal `offlineStorage.js`.
+    3. *Fase 3*: Komponen Kartu Tiket Voucher (`PromoCardItem.js`) & Layar Utama (`PromoManagementScreen.js`) berstandar Defensive UI Impeccable (badge kode `#fb7185`, copy-code, progress kuota, toggle switch instan).
+    4. *Fase 4*: Modal Formulir Tambah/Edit Promo (`PromoFormModal.js`) dengan selector skema diskon (Persentase, Potongan Rp, Min. Belanja), auto-kapitalisasi kode kupon, dan batas maksimal potongan.
+    5. *Fase 5*: Integrasi Navigasi Hub Menu Dashboard (`DashboardActionHub.js`), proteksi role Owner di `App.js`, dan sinkronisasi reaktif ke modal pemilihan voucher kasir POS (`PromoVoucherModal.js`).
+    6. *Fase 6*: Pengujian Komprehensif, uji validasi checkout POS kupon aktif/kadaluarsa, audit linter `detect.mjs` (0 defect), dan Expo Web bundling.
+
 - **Pembuatan & Pendaftaran Dokumen Plan #27: Master Satuan Barang di Mobile (`plans/260904-27-mobile-master-satuan/plan.md`)**:
   - Menyusun rencana kerja modular lengkap 6 fase untuk manajemen Master Satuan (UoM) di aplikasi Mobile (React Native):
     1. *Fase 1*: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend (`/api/units` CRUD + `withCount(['products', 'conversions'])`).
