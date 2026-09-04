@@ -337,5 +337,7 @@
   "335": "barcode-detector",
   "336": "expo-camera",
   "337": "checkElementGptBorderShadowDOM",
-  "339": "expo"
+  "338": "extractFindingIgnoreValue",
+  "339": "expo",
+  "340": "applyEditing"
 }

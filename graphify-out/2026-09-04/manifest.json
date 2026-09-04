@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788519544.287626,
-    "ast_hash": "384586298a2c9f023fbc4a569e7af1c2",
+    "mtime": 1788519725.5473258,
+    "ast_hash": "853ee5e9224e9975a0ccf1f2cd2a6713",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2362,6 +2362,11 @@
   "plans/260904-27-mobile-master-satuan/plan.md": {
     "mtime": 1788519536.228135,
     "ast_hash": "bc0ee35b60a8f026df6e17fe236afea3",
+    "semantic_hash": ""
+  },
+  "plans/260904-28-mobile-master-promosi/plan.md": {
+    "mtime": 1788519719.3766305,
+    "ast_hash": "01a75d12dfef7b8fc2ccae5e70556024",
     "semantic_hash": ""
   }
 }

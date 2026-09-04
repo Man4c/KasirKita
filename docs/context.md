@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #26 Fase 1: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend Master Kategori (`plans/260904-26-mobile-master-kategori/plan.md`)**:
+  - Memverifikasi endpoint backend REST API Laravel:
+    1. `GET /api/categories`: Mengambil seluruh kategori dengan penghitungan otomatis `products_count`.
+    2. `GET /api/categories/{id}`: Mengambil detail kategori dan daftar produk aktifnya.
+    3. `POST /api/categories`: Menambahkan kategori baru (`name`, `slug`, `description`) dengan middleware otorisasi `role:owner`.
+    4. `PUT /api/categories/{id}`: Memperbarui nama, slug unik, dan deskripsi kategori (`role:owner`).
+    5. `DELETE /api/categories/{id}`: Menghapus kategori, terproteksi dengan validasi penolakan error 422 jika kategori masih memiliki produk terkait (`products_count > 0`).
+  - Merancang arsitektur defensive UI `CategoryManagementScreen.js`, kartu `CategoryCardItem.js`, dan formulir `CategoryFormModal.js` berstandar Impeccable (font minimal 12px, flexbox pairing kontras `#38bdf8`, dan dukungan cache offline). Status Fase 1: `completed`.
+
 - **Pembuatan & Pendaftaran Dokumen Plan #28: Master Promosi & Voucher Diskon di Mobile (`plans/260904-28-mobile-master-promosi/plan.md`)**:
   - Menyusun rencana kerja modular lengkap 6 fase untuk manajemen Master Promosi & Voucher di aplikasi Mobile (React Native):
     1. *Fase 1*: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend (`/api/discounts` CRUD, `check-voucher`, `toggle-status`, filter status & tipe).
