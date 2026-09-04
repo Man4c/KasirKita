@@ -90,7 +90,7 @@ mobile/src/
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/units` (CRUD + withCount products & conversions) dan perancangan tata letak defensive UI layar master satuan | pending |
+| 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/units` (CRUD + withCount products & conversions) dan perancangan tata letak defensive UI layar master satuan | completed |
 | 2 | **Mobile API Service (`unitService.js`)**: Pembuatan modul layanan API satuan terintegrasi dengan penanganan error responsif, parser validasi 422 simbol unik, dan fallback cache lokal `offlineStorage` | pending |
 | 3 | **Komponen Kartu & Layar Utama (`UnitCardItem.js` & `UnitManagementScreen.js`)**: Pembuatan layar master satuan dengan pencarian real-time, badge simbol bergaya ungu modern, statistik penggunaan produk, dan tombol aksi cepat | pending |
 | 4 | **Modal Formulir Tambah/Edit (`UnitFormModal.js`)**: Pembuatan form modal interaktif dengan chip preset satuan populer Indonesia (pcs, box, btl, kg, dll), validasi simbol unik, dan proteksi penghapusan satuan berelasi | pending |

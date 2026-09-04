@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Plan #27 Fase 1: Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend Master Satuan (`plans/260904-27-mobile-master-satuan/plan.md`)**:
+  - Memverifikasi endpoint backend REST API Laravel:
+    1. `GET /api/units`: Mengembalikan seluruh satuan dengan penghitungan relasi `products_count` (base unit) dan `conversions_count` (multi-UoM).
+    2. `GET /api/units/{id}`: Mengambil detail satuan.
+    3. `POST /api/units`: Menambahkan satuan baru (`name`, `symbol` unik, `description`) dengan otorisasi `role:owner`.
+    4. `PUT /api/units/{id}`: Memperbarui data satuan dengan validasi `unique:units,symbol` except id.
+    5. `DELETE /api/units/{id}`: Menghapus satuan, terproteksi dengan validasi error 422 jika `products_count > 0 || conversions_count > 0` (*"Satuan tidak dapat dihapus karena masih digunakan oleh produk aktif."*).
+  - Merancang arsitektur komponen defensive UI: `UnitManagementScreen.js`, kartu `UnitCardItem.js` (badge aksen ungu `#c084fc`, flexbox pairing), modal `UnitFormModal.js` dengan chip preset cepat satuan populer UMKM (*pcs, box, btl, porsi, cup, kg, gr, ltr*), dan integrasi cache offline `offlineStorage.js`. Status Fase 1: `completed`.
+
 - **Penyelesaian Plan #26 Fase 6: Pengujian Komprehensif & Finalisasi Master Kategori di Mobile (`plans/260904-26-mobile-master-kategori/plan.md`)**:
   - Melakukan serangkaian pengujian integrasi dan kualitas end-to-end:
     1. *Pengujian Backend*: Menambahkan feature tests baru pada `InventoryApiTest.php` (`test_category_cannot_be_deleted_if_has_products` dan `test_can_delete_empty_category`). Seluruh 7 feature tests backend inventaris & kategori lolos 100% (34 assertions).
