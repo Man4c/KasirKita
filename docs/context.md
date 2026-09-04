@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Jarak & Tata Letak Grid Kartu Produk Kasir (`ProductGrid.js`)**:
+  - Menyelesaikan masalah jarak renggang asimetris pada item produk baris terakhir (kartu produk ganjil yang melebar memenuhi seluruh baris).
+  - Mengimplementasikan `columnWrapperStyle={[styles.gridRow, ...]}` dengan aturan `gap` seragam horizontal dan vertikal pada FlatList 2-kolom.
+  - Menghapus `margin: 4` individual pada kartu produk yang sebelumnya bertabrakan dengan flexbox gap.
+  - Hasilnya: setiap kartu produk kini memiliki ukuran lebar 50% yang konsisten, jarak spasi antar-kartu rapi dan seragam di semua baris, baik saat jumlah produk genap maupun ganjil.
+  - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Standardisasi Presisi Tinggi Tombol Header Keranjang Kasir Landscape (`LandscapeRegisterPanel.js`)**:
   - Menyamakan tinggi ketiga tombol di header keranjang panel kanan: tombol **`[ 📱 Portrait ]`**, tombol hapus keranjang **`[ 🗑️ ]`**, dan tombol scan barcode **`[ 🔴 ]`** secara presisi menjadi **`height: 24px`** dengan sudut **`borderRadius: 6px`**.
   - Dimensi ini 100% identik dan sejajar sempurna dengan chip filter kategori produk (`catChipCompact`: padding vertical 2 + font 12 + border = 24px, borderRadius: 6px).
