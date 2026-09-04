@@ -98,7 +98,7 @@ mobile/src/
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | Spesifikasi UX/UI Wireframe & Kontrak Endpoint API Backend Produk (`/api/products`, `/api/categories`, `/api/units`) | pending |
+| 1 | Spesifikasi UX/UI Wireframe & Kontrak Endpoint API Backend Produk (`/api/products`, `/api/categories`, `/api/units`) | completed |
 | 2 | Mobile: Pembuatan Modul Layanan API Produk (`productService.js`) lengkap dengan integrasi cache offline | pending |
 | 3 | Mobile: Pembuatan Layar Utama Master Produk (`ProductManagementScreen.js`) & Komponen Kartu (`ProductCardItem.js`) | pending |
 | 4 | Mobile: Pembuatan Modal Form Tambah/Edit Produk (`ProductFormModal.js`) dengan Validasi & Integrasi Kamera Barcode | pending |

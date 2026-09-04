@@ -145,9 +145,9 @@ export default function DashboardActionHub({
             Master Data & Katalog
           </Text>
         </View>
-        <View style={styles.roleBadge}>
+        {/* <View style={styles.roleBadge}>
           <Text style={styles.roleBadgeText}>Owner</Text>
-        </View>
+        </View> */}
       </View>
 
       {/* 4-Column Grid with Centered Incomplete Rows */}

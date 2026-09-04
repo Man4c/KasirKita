@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eksekusi Plan #25 Fase 1: Spesifikasi UX/UI & Kontrak Endpoint API Master Produk Mobile (`docs/spesifikasi-master-produk-mobile.md`, `plans/260904-25-mobile-master-produk/plan.md`)**:
+  - Menyelesaikan spesifikasi teknis dan perancangan wireframe antarmuka modul Master Produk Mobile:
+    1. *Kontrak API Backend*: Memetakan endpoint RESTful Laravel terproteksi Sanctum & RBAC Role Owner (`GET/POST/PUT/DELETE /api/products`, `POST /api/products/{id}/restock`, `GET /api/categories`, `GET /api/units`) beserta struktur payload request, pagination query, dan format response JSON.
+    2. *Wireframe UI*: Menjabarkan tata letak 3 komponen utama (Layar Daftar Produk dengan chip filter stok/kategori & FAB tambah produk, Modal Form Tambah/Edit Produk dengan tombol scan barcode kamera, dan Modal Quick Restock/Adjust Stok dengan rumus moving average).
+    3. *Aturan Ketahanan*: Menetapkan integrasi parser nominal uang, verifikasi kamera barcode ganda (anti false-positive), dan sinkronisasi lokal ke memori katalog POS (`offlineStorage.js`).
+  - Status Fase 1 diubah menjadi `completed`.
+
 - **Penyempurnaan Hub Menu Master Data di Dashboard Mobile (`DashboardScreen.js`, `DashboardActionHub.js`)**:
   - Menata ulang tata letak Hub Menu di Dashboard Owner (posisi: setelah tombol *Perbarui Data* dan di atas grafik *Tren Omzet 7 Hari*).
   - Mengubah desain dari kartu persegi panjang 2-kolom besar menjadi **grid app-launcher 4-kolom kompak ("susunan 4x4")** dengan kotak item kecil berpusat (`alignItems: 'center', justifyContent: 'center'`):
