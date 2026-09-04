@@ -93,7 +93,7 @@ export default function LandscapeRegisterPanel({
           {/* Clear Cart Button */}
           {cart.length > 0 && (
             <TouchableOpacity style={styles.regClearBtn} onPress={onClearCart}>
-              <Trash2 size={17} color="#fb7185" />
+              <Trash2 size={17} color="#ffffff" />
             </TouchableOpacity>
           )}
 
@@ -437,9 +437,14 @@ const styles = StyleSheet.create({
     borderColor: '#9f1239',
   },
   regClearBtn: {
-    padding: 6,
+    width: 28,
+    height: 28,
     borderRadius: 8,
-    backgroundColor: 'rgba(225, 29, 72, 0.1)',
+    backgroundColor: '#e11d48',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#f43f5e',
   },
   registerEmptyBox: {
     flex: 1,
