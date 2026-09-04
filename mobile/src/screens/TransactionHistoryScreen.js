@@ -13,7 +13,6 @@ import {
   RefreshControl,
   Platform,
   useWindowDimensions,
-  InteractionManager,
 } from 'react-native';
 import {
   Search,
@@ -33,6 +32,17 @@ import {
 import api from '../services/api';
 import { offlineStorage } from '../services/offlineStorage';
 import PosReceiptModal from '../components/pos/PosReceiptModal';
+
+/**
+ * Run non-urgent background task when JS thread is idle without blocking UI.
+ * Modern replacement for deprecated InteractionManager using requestIdleCallback with graceful fallback.
+ */
+const runWhenIdle = (task, timeout = 2500) => {
+  if (typeof requestIdleCallback === 'function') {
+    return requestIdleCallback(task, { timeout });
+  }
+  return setTimeout(task, 1200);
+};
 
 const getMethodIcon = (method) => {
   switch (method) {
@@ -233,12 +243,9 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
             offlineStorage.cacheRecentTransactions(list);
           }
 
-          // Jalankan background prefetch senyap (7 hari terakhir, max 200) secara non-blocking
-          // Gunakan InteractionManager + delay agar tidak bersaing dengan render FlatList dan scroll kasir
-          InteractionManager.runAfterInteractions(() => {
-            setTimeout(() => {
-              offlineStorage.prefetchHistoryForOffline(api);
-            }, 1200);
+          // Jalankan background prefetch senyap (7 hari terakhir, max 200) secara non-blocking saat thread idle
+          runWhenIdle(() => {
+            offlineStorage.prefetchHistoryForOffline(api);
           });
         } else {
           setTransactions((prev) => {

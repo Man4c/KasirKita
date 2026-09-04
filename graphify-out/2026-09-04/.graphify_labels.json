@@ -319,6 +319,8 @@
   "317": "checkRadialSpotlight",
   "318": "isGeneratedFile",
   "319": "checkHeroEyebrow",
+  "320": "checkTextOcclusionDOM",
+  "321": "checkRadialSpotlight",
   "323": "expo-font",
   "324": "normalizeGitHubEvent",
   "325": "expo-image-picker",

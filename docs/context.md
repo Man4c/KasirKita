@@ -20,11 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Optimasi Non-Blocking UI Thread pada Background Prefetch Riwayat (`TransactionHistoryScreen.js`, `offlineStorage.js`)**:
-  - Menyelesaikan potensi *micro-stutter* / frame drop pada perangkat Android kelas menengah/bawah saat prefetch 200 data riwayat dieksekusi:
-    1. Menggunakan `InteractionManager.runAfterInteractions` + jeda napas 1.200ms di `TransactionHistoryScreen.js`, sehingga prefetch baru dieksekusi setelah transisi layar, animasi pembuka, dan render 20 kartu pertama selesai sepenuhnya.
-    2. Menyisipkan *tick yield* ke JavaScript Event Loop (`await new Promise(r => setTimeout(r, 50))` & `setTimeout(r, 0)`) sebelum `cacheRecentTransactions` dan sebelum `AsyncStorage.multiSet`.
-    3. Memberikan prioritas utama bagi antrean sentuhan kasir (scroll, tap kartu, dan ketik cari), menjamin antarmuka tetap berjalan mulus 60 FPS tanpa efek freeze.
+- **Optimasi Non-Blocking UI Thread & Migrasi `requestIdleCallback` (`TransactionHistoryScreen.js`, `offlineStorage.js`)**:
+  - Menyelesaikan warning deprecasi `InteractionManager has been deprecated ... use 'requestIdleCallback' instead`:
+    1. Mengganti `InteractionManager` dengan utilitas modern `runWhenIdle(task, timeout = 2500)` yang memanfaatkan `requestIdleCallback` (dengan fallback `setTimeout(1200)` jika tidak didukung engine).
+    2. Menghapus sepenuhnya import `InteractionManager` dari `react-native`, sehingga log console warning kuning bersih 100%.
+    3. Menyisipkan *tick yield* ke JavaScript Event Loop (`await new Promise(r => setTimeout(r, 50))` & `setTimeout(r, 0)`) sebelum `cacheRecentTransactions` dan sebelum `AsyncStorage.multiSet`.
+    4. Memberikan prioritas utama bagi antrean sentuhan kasir (scroll, tap kartu, dan ketik cari), menjamin antarmuka tetap berjalan mulus 60 FPS tanpa efek freeze.
   - Lolos uji bundling Expo Web (`npx expo export --platform web`).
 
 - **Proteksi Ketahanan Cache Riwayat Transaksi Offline (`offlineStorage.js`, `TransactionHistoryScreen.js`)**:
