@@ -1,11 +1,12 @@
 ---
 title: Master Satuan Barang di Mobile
 description: Perancangan dan implementasi modul manajemen Master Satuan Barang (Unit of Measure / UoM) pada aplikasi Mobile (React Native), mencakup katalog satuan dengan hitungan produk & konversi terkait, formulir tambah/edit simbol & nama satuan, proteksi penghapusan satuan yang digunakan produk, integrasi peluncur di Action Hub Dashboard, serta sinkronisasi dengan unit picker di Master Produk dan Kasir POS.
-status: pending
+status: completed
 priority: P1
 effort: 8h
 tags: [mobile, master-satuan, uom, unit-management, offline-first, rbac, product-sync]
 created: 2026-09-04
+completed: 2026-09-04
 assignee: Fullstack Mobile Specialist
 ---
 
@@ -94,6 +95,6 @@ mobile/src/
 | 2 | **Mobile API Service (`unitService.js`)**: Pembuatan modul layanan API satuan terintegrasi dengan penanganan error responsif, parser validasi 422 simbol unik, dan fallback cache lokal `offlineStorage` | completed |
 | 3 | **Komponen Kartu & Layar Utama (`UnitCardItem.js` & `UnitManagementScreen.js`)**: Pembuatan layar master satuan dengan pencarian real-time, badge simbol bergaya ungu modern, statistik penggunaan produk, dan tombol aksi cepat | completed |
 | 4 | **Modal Formulir Tambah/Edit (`UnitFormModal.js`)**: Pembuatan form modal interaktif dengan chip preset satuan populer Indonesia (pcs, box, btl, kg, dll), validasi simbol unik, dan proteksi penghapusan satuan berelasi | completed |
-| 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi Master Produk/POS**: Menghubungkan peluncur di `DashboardActionHub.js`, rute di `App.js` dengan hak akses Owner, dan sinkronisasi reaktif ke selector satuan di form produk & POS | pending |
-| 6 | **Pengujian Komprehensif & Verifikasi Impeccable**: Uji alur CRUD, uji proteksi penghapusan satuan bertaut produk/konversi, verifikasi linter `detect.mjs` (0 defect), dan uji bundling Expo Web | pending |
+| 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi Master Produk/POS**: Menghubungkan peluncur di `DashboardActionHub.js`, rute di `App.js` dengan hak akses Owner, dan sinkronisasi reaktif ke selector satuan di form produk & POS | completed |
+| 6 | **Pengujian Komprehensif & Verifikasi Impeccable**: Uji alur CRUD, uji proteksi penghapusan satuan bertaut produk/konversi, verifikasi linter `detect.mjs` (0 defect), dan uji bundling Expo Web | completed |
 

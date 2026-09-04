@@ -20,6 +20,18 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Penuh Plan #27: Master Satuan Barang di Mobile (Fase 1 s/d Fase 6 - Status: COMPLETED)**:
+  - Mengembangkan modul manajemen Master Satuan Barang (*Unit of Measure / UoM*) lengkap di aplikasi Mobile (React Native) untuk Owner/Manager UMKM:
+    1. *Layanan API & Cache Offline (`unitService.js`, `offlineStorage.js`)*: Mengelola CRUD satuan dengan sinkronisasi instan ke storage offline, pencarian lokal/server, serta penanganan error responsif (termasuk validasi simbol unik 422).
+    2. *Komponen Antarmuka Defensive UI (`UnitCardItem.js`, `UnitManagementScreen.js`)*: Menampilkan identitas satuan dengan badge simbol ungu modern (`#c084fc`, misal `[ PCS ]`, `[ KG ]`, `[ BOX ]`), nama satuan `min-w-0 truncate`, statistik pemakaian produk dasar & konversi, status tag *"Digunakan Produk"* vs *"Bisa Dihapus"*, metrik ringkasan, pencarian instan, dan FAB tambah kilat.
+    3. *Modal Formulir Tambah/Edit (`UnitFormModal.js`)*: Dilengkapi tombol chip preset rekomendasi satuan populer UMKM Indonesia (*pcs, box, btl, porsi, cup, kg, gr, ltr, pack, sachet*) untuk entri 1-ketukan, validasi simbol wajib, dan proteksi hapus satuan berelasi.
+    4. *Integrasi Peluncur & Navigasi RBAC (`DashboardActionHub.js`, `DashboardScreen.js`, `App.js`)*: Menghubungkan ubin **"Satuan"** pada Action Hub Dashboard langsung ke `UnitManagementScreen` di bawah otorisasi Owner, dengan tombol kembali ke Dashboard dan tetap mempertahankan strictly 4 tab bottom navigation.
+    5. *Pengujian Komprehensif & Verifikasi Kualitas*:
+       - Backend Feature Tests: `php artisan test --filter=MultiUomTest` $\rightarrow$ **2 passed, 18 assertions** (100% lolos).
+       - Impeccable UI Linter: `detect.mjs` $\rightarrow$ **0 defects**.
+       - Expo Web Bundling: `npx expo export --platform web` $\rightarrow$ **Web Bundled 707ms index.js (2318 modules), 0 errors**.
+  - Plan #27 resmi berstatus **`completed`**.
+
 - **Penyelesaian Plan #27 Fase 3 & Fase 4: Komponen Kartu, Layar Utama (`UnitManagementScreen.js`), & Modal Form Tambah/Edit (`UnitFormModal.js`)**:
   - Mengembangkan antarmuka Master Satuan Barang mobile yang utuh dan berstandar *Impeccable Defensive UI*:
     1. *Kartu Satuan (`UnitCardItem.js`)*: Menampilkan identitas satuan dengan badge simbol kontras ungu modern (`#c084fc`, misal: `[ PCS ]`, `[ KG ]`, `[ BOX ]`), nama satuan `min-w-0 truncate`, rincian breakdown pemakaian produk dasar & varian multi-konversi, indikator status *"Digunakan Produk"* vs *"Belum Dipakai (Aman)"*, serta tombol aksi [Edit] dan [Hapus] (terproteksi jika berelasi).

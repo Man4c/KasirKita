@@ -24,6 +24,7 @@ export default function DashboardActionHub({
   inv = {},
   onOpenMasterProduct,
   onOpenMasterCategory,
+  onOpenMasterUnit,
 }) {
   const lowStock = Number(inv?.low_stock_count || 0);
   const totalSku = Number(inv?.total_items || 0);
@@ -46,6 +47,17 @@ export default function DashboardActionHub({
       showAlert(
         'Master Kategori (Plan #26)',
         'Kelola pengelompokan produk, departemen barang, dan tata letak kategori di kasir POS.'
+      );
+    }
+  };
+
+  const handleMasterUnit = () => {
+    if (onOpenMasterUnit) {
+      onOpenMasterUnit();
+    } else {
+      showAlert(
+        'Master Satuan (Plan #27)',
+        'Atur unit satuan penjualan produk (Pcs, Box, Kg, Liter, Cup, Porsi, dll).'
       );
     }
   };
@@ -83,11 +95,7 @@ export default function DashboardActionHub({
       color: '#c084fc',
       bgColor: 'rgba(192, 132, 252, 0.16)',
       badge: null,
-      onPress: () =>
-        handleMasterAction(
-          'Master Satuan',
-          'Atur unit satuan penjualan produk (Pcs, Box, Kg, Liter, Cup, Porsi, dll).'
-        ),
+      onPress: handleMasterUnit,
     },
     {
       id: 'promo',

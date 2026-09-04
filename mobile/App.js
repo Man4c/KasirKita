@@ -30,6 +30,7 @@ import TransactionHistoryScreen from './src/screens/TransactionHistoryScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import ProductManagementScreen from './src/screens/ProductManagementScreen';
 import CategoryManagementScreen from './src/screens/CategoryManagementScreen';
+import UnitManagementScreen from './src/screens/UnitManagementScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
 
@@ -213,6 +214,13 @@ function MainApp() {
           />
         ) : activeTab === 'category_management' && user?.role === 'owner' ? (
           <CategoryManagementScreen
+            navigation={{
+              goBack: () => handleTabChange('dashboard'),
+              navigate: handleTabChange,
+            }}
+          />
+        ) : activeTab === 'unit_management' && user?.role === 'owner' ? (
+          <UnitManagementScreen
             navigation={{
               goBack: () => handleTabChange('dashboard'),
               navigate: handleTabChange,
