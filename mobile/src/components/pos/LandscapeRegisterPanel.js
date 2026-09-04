@@ -110,7 +110,7 @@ export default function LandscapeRegisterPanel({
               onPress={onToggleScanMode}
               activeOpacity={0.7}
             >
-              <ScanBarcode size={13} color={isScanMode ? '#ffffff' : '#fb7185'} />
+              <ScanBarcode size={15} color="#ffffff" />
             </TouchableOpacity>
           )}
         </View>
@@ -428,13 +428,13 @@ const styles = StyleSheet.create({
   regScanBtn: {
     padding: 6,
     borderRadius: 8,
-    backgroundColor: 'rgba(225, 29, 72, 0.1)',
+    backgroundColor: '#e11d48',
     borderWidth: 1,
-    borderColor: 'rgba(225, 29, 72, 0.25)',
+    borderColor: '#f43f5e',
   },
   regScanBtnActive: {
-    backgroundColor: '#e11d48',
-    borderColor: '#e11d48',
+    backgroundColor: '#be123c',
+    borderColor: '#9f1239',
   },
   regClearBtn: {
     padding: 6,

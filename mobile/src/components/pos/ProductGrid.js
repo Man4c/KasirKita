@@ -75,7 +75,7 @@ export default function ProductGrid({
                 onPress={onOpenBarcodeScanner}
                 activeOpacity={0.7}
               >
-                <ScanBarcode size={13} color="#fb7185" />
+                <ScanBarcode size={15} color="#ffffff" />
               </TouchableOpacity>
             )}
           </View>
@@ -343,11 +343,11 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     borderRadius: 8,
-    backgroundColor: '#27272a',
+    backgroundColor: '#e11d48',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#3f3f46',
+    borderColor: '#f43f5e',
   },
   landscapeSearchBox: {
     flexDirection: 'row',
