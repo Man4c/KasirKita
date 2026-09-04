@@ -161,6 +161,11 @@ export default function ProductGrid({
           keyExtractor={(item) => item.id}
           numColumns={2}
           style={{ flex: 1 }}
+          columnWrapperStyle={[
+            styles.gridRow,
+            isLandscape && styles.gridRowLandscape,
+            compact && styles.gridRowCompactLandscape,
+          ]}
           contentContainerStyle={[
             styles.gridContent,
             {
@@ -438,9 +443,17 @@ const styles = StyleSheet.create({
     padding: 6,
     gap: 4,
   },
+  gridRow: {
+    gap: 8,
+  },
+  gridRowLandscape: {
+    gap: 6,
+  },
+  gridRowCompactLandscape: {
+    gap: 4,
+  },
   productCard: {
     flex: 1,
-    margin: 4,
     backgroundColor: '#18181b',
     borderRadius: 12,
     padding: 10,
@@ -449,12 +462,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   productCardLandscape: {
-    margin: 3,
     padding: 8,
     borderRadius: 10,
   },
   productCardCompactLandscape: {
-    margin: 2,
     padding: 6,
     borderRadius: 8,
   },
