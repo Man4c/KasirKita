@@ -54,6 +54,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Mengatur warna latar belakang tombol menjadi **Rose Brand (`#e11d48`)** dengan border kontras (`#f43f5e`).
   - Diterapkan secara seragam di layar kasir mode Portrait (`ProductGrid.js`) maupun panel register Landscape (`LandscapeRegisterPanel.js`).
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
+- **Perbaikan & Perapian Input Pencarian Riwayat Transaksi (`TransactionHistoryScreen.js`, `CustomerPickerModal.js`)**:
+  - **Penyelarasan Vertikal Presisi (Android Defensive UI Craft)**:
+    - Menetapkan tinggi tetap yang proporsional (`height: 44`) pada kotak search bar dan menghilangkan `paddingVertical` dinamis platform yang sebelumnya memicu pembengkakan tinggi input di Android (hingga >50px).
+    - Menambahkan `height: '100%'`, `paddingVertical: 0`, `textAlignVertical: 'center'`, dan `includeFontPadding: false` pada `TextInput` Android, menghilangkan padding internal bawaan `EditText` dan font baseline offset yang membuat teks placeholder dan ikon kaca pembesar sebelumnya tidak sejajar vertikal.
+  - **Interaksi & Fokus Visual**:
+    - Menambahkan state `isSearchFocused` dengan border aktif kontras Rose Brand (`#e11d48`) dan background sedikit terang saat kolom pencarian aktif disentuh pengguna.
+    - Ikon `Search` kini bertransisi warna menjadi `#fb7185` saat aktif, dan tombol hapus pencarian `(X)` dilengkapi badge bulat rapi ber-hitSlop sentuh ramah jari.
+  - **Responsivitas Filter Chips**:
+    - Membungkus baris filter chip (`Semua`, `Tunai`, `QRIS`, `TRANSFER`) dalam `ScrollView` horizontal tanpa scroll indicator agar tidak terpotong atau menabrak pinggir layar pada HP berspesifikasi layar sempit.
+  - Lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Penyelarasan Tampilan & Cetak Struk Transaksi (`printerService.js`, `ReceiptView.js`, `PosReceiptModal.js`, `escposGenerator.js`)**:
   - **Sinkronisasi Logo Toko**:
     - Menambahkan rendering logo toko (`storeLogo`) di header struk cetak web iframe (`printerService.printWebReceiptHtml`) yang sebelumnya terlewat, sehingga logo toko (seperti ikon toko/troli merah) muncul persis sama antara pratinjau modal (`ReceiptView.js`) dan struk fisik yang dicetak.

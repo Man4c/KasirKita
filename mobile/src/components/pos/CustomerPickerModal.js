@@ -178,6 +178,10 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
+    height: '100%',
+    paddingVertical: 0,
+    textAlignVertical: 'center',
+    includeFontPadding: false,
   },
   customerOptionItem: {
     flexDirection: 'row',

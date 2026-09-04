@@ -33,6 +33,7 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [filterMethod, setFilterMethod] = useState('ALL'); // ALL, CASH, QRIS, TRANSFER
   const [selectedTx, setSelectedTx] = useState(null);
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
@@ -165,24 +166,42 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
       </View>
 
       {/* Search Input */}
-      <View style={styles.searchBar}>
-        <Search size={16} color="#71717a" style={{ marginRight: 8 }} />
+      <View style={[styles.searchBar, isSearchFocused && styles.searchBarFocused]}>
+        <Search
+          size={16}
+          color={isSearchFocused || search ? '#fb7185' : '#a1a1aa'}
+          style={{ marginRight: 10 }}
+        />
         <TextInput
           style={styles.searchInput}
           placeholder="Cari no. invoice / pelanggan..."
           placeholderTextColor="#71717a"
           value={search}
           onChangeText={setSearch}
+          onFocus={() => setIsSearchFocused(true)}
+          onBlur={() => setIsSearchFocused(false)}
+          returnKeyType="search"
+          clearButtonMode="never"
         />
         {search.length > 0 && (
-          <TouchableOpacity onPress={() => setSearch('')}>
-            <X size={16} color="#71717a" />
+          <TouchableOpacity
+            onPress={() => setSearch('')}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            style={styles.searchClearBtn}
+            activeOpacity={0.7}
+          >
+            <X size={12} color="#d4d4d8" />
           </TouchableOpacity>
         )}
       </View>
 
       {/* Filter Chips */}
-      <View style={styles.filterChipsRow}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.filterChipsRow}
+        style={{ flexGrow: 0 }}
+      >
         {['ALL', 'CASH', 'QRIS', 'TRANSFER'].map((method) => {
           const isSelected = filterMethod === method;
           const label =
@@ -196,6 +215,7 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
               key={method}
               style={[styles.filterChip, isSelected && styles.filterChipActive]}
               onPress={() => setFilterMethod(method)}
+              activeOpacity={0.7}
             >
               <Text
                 style={[
@@ -208,7 +228,7 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
 
       {/* Transaction List */}
       {loading ? (
@@ -289,21 +309,39 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginHorizontal: 16,
     marginTop: 8,
-    marginBottom: 10,
+    marginBottom: 12,
     paddingHorizontal: 12,
-    paddingVertical: Platform.OS === 'ios' ? 10 : 6,
+    height: 44,
+  },
+  searchBarFocused: {
+    borderColor: '#e11d48',
+    backgroundColor: '#1c1917',
   },
   searchInput: {
     flex: 1,
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
+    height: '100%',
+    paddingVertical: 0,
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+  },
+  searchClearBtn: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 6,
   },
   filterChipsRow: {
     flexDirection: 'row',
     gap: 8,
     paddingHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: 14,
+    alignItems: 'center',
   },
   filterChip: {
     paddingHorizontal: 12,
