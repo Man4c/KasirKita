@@ -227,4 +227,19 @@ export const productService = {
       return await offlineStorage.getCachedUnits();
     }
   },
+
+  /**
+   * Fetch suppliers list for restock supplier picker.
+   *
+   * @returns {Promise<Array>}
+   */
+  async getSuppliers() {
+    try {
+      const response = await api.get('/suppliers', { params: { all: true } });
+      return response.data?.data || [];
+    } catch (err) {
+      return [];
+    }
+  },
 };
+

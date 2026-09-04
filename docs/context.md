@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eksekusi Plan #25 Fase 5: Modal Penyesuaian Stok Cepat & Moving Average Cost (`QuickStockAdjustModal.js`)**:
+  - Mengembangkan modal penyesuaian stok masuk kilat (`QuickStockAdjustModal.js`):
+    1. *Kartu Status Terkini*: Menampilkan stok fisik terkini dan nilai modal HPP rata-rata berjalan (*Moving Average Cost*).
+    2. *Input Restock Cepat*: Input jumlah barang masuk (otomatis mengambil simbol satuan unit produk) dan input harga kulakan/beli per unit.
+    3. *Live Calculation Card*: Simulasi real-time perubahan estimasi stok total baru, nilai HPP rata-rata baru (rumus moving average: $((S_{current} \times C_{current}) + (S_{in} \times C_{in})) / (S_{current} + S_{in})$), serta total biaya pengeluaran kas.
+    4. *Pemasok & Catatan*: Pemilihan supplier/distributor via chip selector dan kolom catatan/nomor faktur pembelian.
+    5. *Kepatuhan Standar UI*: 0 defect pada `detect.mjs`, font minimal 12px, dan sukses lolos bundling Expo Web. Status Fase 5: `completed`.
+
 - **Eksekusi Plan #25 Fase 4: Modal Form Tambah/Edit Produk & Integrasi Kamera Barcode (`ProductFormModal.js`, `ProductBarcodeScannerModal.js`)**:
   - Mengimplementasikan formulir lengkap pembuatan dan pembaruan produk dengan validasi ketat & scanner kamera:
     1. *Formulir Produk (`ProductFormModal.js`)*: Input nama produk (wajib), kategori picker chips, satuan unit picker chips (pcs, botol, box, porsi, cup, dll), input barcode terintegrasi kamera scanner, format rupiah otomatis untuk harga jual & modal HPP, input kuantitas stok awal & batas minimum stok alert, switch toggle visibilitas di kasir POS, dan tombol konfirmasi hapus produk (khusus edit).

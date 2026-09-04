@@ -28,11 +28,12 @@ import { useAuth } from '../context/AuthContext';
 import ProductCardItem from '../components/product/ProductCardItem';
 import ProductFormModal from '../components/product/ProductFormModal';
 import ProductBarcodeScannerModal from '../components/product/ProductBarcodeScannerModal';
+import QuickStockAdjustModal from '../components/product/QuickStockAdjustModal';
 import { showAlert } from '../utils/alert';
 
 export default function ProductManagementScreen({
   navigation,
-  onOpenRestock,
+  onOpenRestock: externalOpenRestock,
 }) {
   const { user } = useAuth();
   const isOwner = user?.role === 'owner';
@@ -51,6 +52,8 @@ export default function ProductManagementScreen({
   const [formModalVisible, setFormModalVisible] = useState(false);
   const [selectedProductForEdit, setSelectedProductForEdit] = useState(null);
   const [scannerModalVisible, setScannerModalVisible] = useState(false);
+  const [restockModalVisible, setRestockModalVisible] = useState(false);
+  const [selectedProductForRestock, setSelectedProductForRestock] = useState(null);
 
   // Filters & Pagination
   const [search, setSearch] = useState('');
@@ -178,16 +181,14 @@ export default function ProductManagementScreen({
 
   const handleRestockProduct = useCallback(
     (product) => {
-      if (onOpenRestock) {
-        onOpenRestock(product);
+      if (externalOpenRestock) {
+        externalOpenRestock(product);
       } else {
-        showAlert(
-          'Stok Masuk / Restock (Fase 5)',
-          `Modal penyesuaian stok masuk untuk "${product.name}" akan dibuka pada fase pengerjaan berikutnya.`
-        );
+        setSelectedProductForRestock(product);
+        setRestockModalVisible(true);
       }
     },
-    [onOpenRestock]
+    [externalOpenRestock]
   );
 
   const renderProductItem = useCallback(
@@ -427,6 +428,16 @@ export default function ProductManagementScreen({
         onScanBarcode={(code) => {
           setSearch(code);
           setDebouncedSearch(code);
+        }}
+      />
+
+      {/* Quick Stock Adjust / Restock Modal */}
+      <QuickStockAdjustModal
+        visible={restockModalVisible}
+        product={selectedProductForRestock}
+        onClose={() => setRestockModalVisible(false)}
+        onSuccess={() => {
+          loadProducts(1, false);
         }}
       />
     </SafeAreaView>
