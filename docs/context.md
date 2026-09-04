@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eliminasi Padding Ganda Area Atas Layar Master Produk (`ProductManagementScreen.js`)**:
+  - **Penyebab Masalah**: Muncul area kosong hitam yang terlalu lebar (*double top gap*) di atas header "Master Produk".
+  - **Akar Masalah**: Komponen induk [`mobile/App.js`](file:///d:/Projects/KasirKita/mobile/App.js) sudah memiliki pembungkus utama ber-padding status bar sistem (`paddingTop: safeTopPadding`). Penggunaan `SafeAreaView` di dalam `ProductManagementScreen.js` menyebabkan padding status bar dihitung dua kali lipat (double insets).
+  - **Solusi & Penyempurnaan**:
+    1. Menghapus pembungkus `SafeAreaView` pada `ProductManagementScreen.js` dan menggantikannya dengan `<View style={styles.root}>` biasa (identik dengan arsitektur `DashboardScreen`, `PosScreen`, dan `TransactionHistoryScreen`).
+    2. Menghilangkan ketergantungan import `SafeAreaView` yang tidak diperlukan.
+    3. Jarak header "Master Produk" dari status bar atas kini pas, proporsional, dan serasi dengan layar lainnya di aplikasi.
+  - Lolos uji linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
+
 - **Optimasi Ketahanan Layout Bar Filter Stok Master Produk (`ProductManagementScreen.js`)**:
   - **Penyebab Masalah**: Setelah menambahkan ikon Lucide pada filter stok, tombol filter ke-4 (`Non-Aktif`) terdorong keluar layar (*tergeser*) di HP dengan lebar sempit (360px) karena total lebar 4 pil melebihi ruang kontainer 328px.
   - **Solusi & Penyempurnaan**:

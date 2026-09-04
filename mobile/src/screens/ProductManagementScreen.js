@@ -10,7 +10,6 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Search,
   X,
@@ -209,7 +208,7 @@ export default function ProductManagementScreen({
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.root}>
       <View style={styles.container}>
         {/* Top Header Bar */}
         <View style={styles.topBar}>
@@ -454,12 +453,12 @@ export default function ProductManagementScreen({
           loadProducts(1, false);
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  root: {
     flex: 1,
     backgroundColor: '#09090b',
   },
