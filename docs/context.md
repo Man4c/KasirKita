@@ -55,11 +55,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Diterapkan secara seragam di layar kasir mode Portrait (`ProductGrid.js`) maupun panel register Landscape (`LandscapeRegisterPanel.js`).
   - Lolos uji linter desain Impeccable (`detect.mjs` $\rightarrow$ 0 defect) dan lolos uji bundling Expo Web (`npx expo export --platform web`).
 - **Arsitektur Offline-First & Pencarian Riwayat Transaksi (`TransactionHistoryScreen.js`, `offlineStorage.js`, `PosController.php`)**:
-  - **Dukungan Offline-First Penuh (Hybrid Cache & Queue Merge)**:
-    - Menyelesaikan batasan riwayat transaksi saat koneksi internet mati/offline:
-      - Menambahkan `cacheRecentTransactions(transactions)` dan `getCachedRecentTransactions()` pada [`offlineStorage.js`](file:///d:/Projects/KasirKita/mobile/src/services/offlineStorage.js) untuk menyimpan snapshot 100 nota riwayat terakhir secara lokal di HP.
-      - Mengintegrasikan antrean transaksi offline ([`offlineStorage.getOfflineQueue()`](file:///d:/Projects/KasirKita/mobile/src/services/offlineStorage.js)): nota yang dibuat saat kasir offline (`INV-OFF-...`) otomatis disisipkan di **urutan teratas** daftar riwayat lengkap dengan badge amber **`[ ⏳ Belum Sinkron ]`**.
-      - Saat offline total (*Network Error*), layar riwayat otomatis beralih ke *Offline Fallback Mode*, menampilkan banner status offline, serta tetap mengizinkan kasir mencari, memfilter, dan **mencetak ulang struk offline ke printer Bluetooth thermal** tanpa butuh internet.
+  - **Dukungan Offline-First Penuh (Pemisahan Prefetch Background vs Render Tampilan)**:
+    - **Pemisahan Jalur Ambil Data**:
+      - Layar UI tetap memuat **20 nota pertama** (`per_page: 20`) agar proses pembukaan layar dan pencarian awal di jaringan seluler/3G tetap instan dan tidak berat.
+      - **Background Prefetch Senyap**: Terpisah di latar belakang (tanpa memblokir UI dan tanpa loading spinner), aplikasi memanggil `prefetchHistoryForOffline()` dengan rentang waktu **7 hari terakhir** (`start_date=...`) dan batas pengaman *safety cap* hingga **200 transaksi**. Dilengkapi *cooldown throttle* 15 menit agar tidak memboroskan kuota/baterai, kecuali saat user melakukan pull-to-refresh manual.
+    - **Algoritma Akumulasi Cache (Merge + Dedup + Sort + Time Retention)**:
+      - Alih-alih menimpa file, `cacheRecentTransactions` menggabungkan nota baru dan nota lama di memori HP, membuang duplikat berdasarkan ID/invoice unik, mempertahankan transaksi 7 hari terakhir, dan mengurutkannya dari yang terbaru.
+    - **Integrasi Antrean Offline & Cetak Ulang Struk**:
+      - Nota yang dibuat saat kasir offline (`INV-OFF-...`) otomatis disisipkan di urutan paling atas daftar riwayat lengkap dengan badge amber **`[ ⏳ Belum Sinkron ]`**.
+      - Saat offline total (*Network Error*), layar riwayat otomatis beralih ke *Offline Fallback Mode*, menampilkan banner status `Mode Offline: Menampilkan X nota tersimpan di HP (7 hari terakhir)`, serta tetap mengizinkan kasir mencari, memfilter, dan **mencetak ulang struk offline ke printer Bluetooth thermal** tanpa internet.
       - Saat online kembali, antrean offline otomatis disinkronkan oleh `syncManager` dan layar riwayat kembali beralih ke pencarian server-side database PostgreSQL.
   - **Pencarian Cerdas Server-Side & Filtering Database**:
     - Memindahkan logika pencarian riwayat transaksi dari client-side (yang sebelumnya hanya memfilter 20 data halaman pertama) ke server-side query di backend Laravel [`PosController.php`](file:///d:/Projects/KasirKita/backend/app/Http/Controllers/Api/PosController.php).

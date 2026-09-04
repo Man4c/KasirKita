@@ -228,6 +228,9 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
 
           // Perbarui snapshot cache riwayat lokal untuk offline fallback
           offlineStorage.cacheRecentTransactions(list);
+
+          // Jalankan background prefetch senyap (7 hari terakhir, max 200) tanpa memblokir UI
+          offlineStorage.prefetchHistoryForOffline(api);
         } else {
           setTransactions((prev) => {
             const existingIds = new Set(prev.map((t) => t.id || t.offline_id));
@@ -282,6 +285,8 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
     setRefreshing(true);
     setPage(1);
     fetchTransactions(1, true, debouncedSearch, filterMethod);
+    // Jalankan background prefetch paksa saat user menarik layar (pull to refresh)
+    offlineStorage.prefetchHistoryForOffline(api, true);
   };
 
   const formatRp = useCallback((num) => 'Rp' + Number(num || 0).toLocaleString('id-ID'), []);
@@ -377,7 +382,7 @@ export default function TransactionHistoryScreen({ isLandscape = false }) {
         <View style={styles.offlineBanner}>
           <WifiOff size={14} color="#f59e0b" style={{ marginRight: 8, flexShrink: 0 }} />
           <Text style={styles.offlineBannerText}>
-            Mode Offline: Menampilkan {transactions.length} nota tersimpan di HP.
+            Mode Offline: Menampilkan {transactions.length} nota tersimpan di HP (7 hari terakhir).
           </Text>
         </View>
       ) : offlineQueueCount > 0 ? (

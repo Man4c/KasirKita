@@ -99,8 +99,9 @@ class PosController extends Controller
             $query->whereDate('created_at', '<=', $endDate);
         }
 
+        $perPage = min(max((int) $request->query('per_page', 20), 1), 200);
         $transactions = $query->orderBy('created_at', 'desc')
-            ->paginate($request->query('per_page', 20));
+            ->paginate($perPage);
 
         return $this->successResponse($transactions, 'Riwayat transaksi berhasil diambil.');
     }

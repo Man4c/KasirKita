@@ -14,6 +14,7 @@ const KEYS = {
   DASHBOARD_LAST_SYNC: 'kasirkita_offline_dashboard_last_sync',
   HISTORY_CACHE: 'kasirkita_offline_history_cache',
   HISTORY_LAST_SYNC: 'kasirkita_offline_history_last_sync',
+  HISTORY_LAST_PREFETCH: 'kasirkita_offline_history_last_prefetch',
 };
 
 export const offlineStorage = {
@@ -306,15 +307,48 @@ export const offlineStorage = {
   },
 
   /**
-   * Cache transaction history list for offline fallback (up to 100 items).
+   * Cache transaction history list for offline fallback.
+   * Performs merge, deduplication, time-based retention (default 7 days), and safety cap (default 200 items).
    */
-  async cacheRecentTransactions(transactions) {
+  async cacheRecentTransactions(newTransactions, options = {}) {
     try {
-      if (!Array.isArray(transactions)) return false;
-      const slice = transactions.slice(0, 100);
+      if (!Array.isArray(newTransactions)) return false;
+      const { maxDays = 7, maxCap = 200 } = options;
+
+      const { transactions: existing } = await this.getCachedRecentTransactions();
+      const cutoffTime = Date.now() - maxDays * 24 * 60 * 60 * 1000;
+
+      const map = new Map();
+      // 1. Masukkan data transaksi baru
+      for (const item of newTransactions) {
+        const key = item.id || item.offline_id || item.invoice_number;
+        if (key) map.set(key, item);
+      }
+
+      // 2. Pertahankan transaksi lama yang masih dalam jendela waktu retensi
+      for (const item of existing) {
+        const key = item.id || item.offline_id || item.invoice_number;
+        if (!key || map.has(key)) continue;
+
+        const itemTime = item.created_at ? new Date(item.created_at).getTime() : 0;
+        if (itemTime >= cutoffTime) {
+          map.set(key, item);
+        }
+      }
+
+      // 3. Urutkan berdasarkan created_at descending (terbaru di atas)
+      const merged = Array.from(map.values()).sort((a, b) => {
+        const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return timeB - timeA;
+      });
+
+      // 4. Terapkan safety cap batas maksimum
+      const capped = merged.slice(0, maxCap);
       const now = new Date().toISOString();
+
       await AsyncStorage.multiSet([
-        [KEYS.HISTORY_CACHE, JSON.stringify(slice)],
+        [KEYS.HISTORY_CACHE, JSON.stringify(capped)],
         [KEYS.HISTORY_LAST_SYNC, now],
       ]);
       return true;
@@ -342,6 +376,69 @@ export const offlineStorage = {
     } catch (err) {
       console.warn('Gagal membaca cache riwayat transaksi:', err.message);
       return { transactions: [], lastSync: null };
+    }
+  },
+
+  /**
+   * Check whether background prefetch should run (cooldown 15 minutes).
+   */
+  async shouldRunHistoryPrefetch(cooldownMinutes = 15) {
+    try {
+      const last = await AsyncStorage.getItem(KEYS.HISTORY_LAST_PREFETCH);
+      if (!last) return true;
+      const elapsedMs = Date.now() - new Date(last).getTime();
+      return elapsedMs > cooldownMinutes * 60 * 1000;
+    } catch {
+      return true;
+    }
+  },
+
+  /**
+   * Record last prefetch timestamp.
+   */
+  async recordHistoryPrefetchTimestamp() {
+    try {
+      await AsyncStorage.setItem(KEYS.HISTORY_LAST_PREFETCH, new Date().toISOString());
+    } catch (err) {
+      console.warn('Gagal menyimpan timestamp prefetch riwayat:', err.message);
+    }
+  },
+
+  /**
+   * Background silent prefetch for offline history resilience.
+   * Pulls transactions from past 7 days (up to 200 items) in background without blocking UI.
+   */
+  async prefetchHistoryForOffline(apiClient, force = false) {
+    try {
+      if (!force) {
+        const shouldRun = await this.shouldRunHistoryPrefetch(15);
+        if (!shouldRun) return false;
+      }
+
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      const startDateStr = sevenDaysAgo.toISOString().split('T')[0];
+
+      const res = await apiClient.get('/pos/transactions', {
+        params: {
+          start_date: startDateStr,
+          per_page: 200,
+        },
+      });
+
+      if (res.data?.success) {
+        const paginated = res.data.data;
+        const list = paginated?.data || (Array.isArray(paginated) ? paginated : []);
+        if (list.length > 0) {
+          await this.cacheRecentTransactions(list, { maxDays: 7, maxCap: 200 });
+        }
+        await this.recordHistoryPrefetchTimestamp();
+        return true;
+      }
+      return false;
+    } catch (err) {
+      // Silent catch: do not disrupt UI or show error popups
+      console.log('Background prefetch history silent skip:', err.message);
+      return false;
     }
   },
 };
