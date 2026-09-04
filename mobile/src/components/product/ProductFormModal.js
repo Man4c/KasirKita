@@ -219,7 +219,7 @@ export default function ProductFormModal({
               <TextInput
                 style={styles.textInput}
                 placeholder="Contoh: Kopi Susu Aren"
-                placeholderTextColor="#71717a"
+                placeholderTextColor="#a1a1aa"
                 value={name}
                 onChangeText={setName}
               />
@@ -274,7 +274,7 @@ export default function ProductFormModal({
                 <TextInput
                   style={[styles.textInput, { flex: 1 }]}
                   placeholder="Scan atau ketik kode barcode kemasan"
-                  placeholderTextColor="#71717a"
+                  placeholderTextColor="#a1a1aa"
                   value={skuBarcode}
                   onChangeText={setSkuBarcode}
                 />
@@ -299,7 +299,7 @@ export default function ProductFormModal({
                 <TextInput
                   style={styles.textInput}
                   placeholder="0"
-                  placeholderTextColor="#71717a"
+                  placeholderTextColor="#a1a1aa"
                   keyboardType="numeric"
                   value={formatDisplayRp(price)}
                   onChangeText={handlePriceChange}
@@ -311,7 +311,7 @@ export default function ProductFormModal({
                 <TextInput
                   style={styles.textInput}
                   placeholder="0"
-                  placeholderTextColor="#71717a"
+                  placeholderTextColor="#a1a1aa"
                   keyboardType="numeric"
                   value={formatDisplayRp(avgCost)}
                   onChangeText={handleCostChange}
@@ -329,7 +329,7 @@ export default function ProductFormModal({
                   <TextInput
                     style={styles.textInput}
                     placeholder="0"
-                    placeholderTextColor="#71717a"
+                    placeholderTextColor="#a1a1aa"
                     keyboardType="numeric"
                     value={stock}
                     onChangeText={setStock}
@@ -342,7 +342,7 @@ export default function ProductFormModal({
                 <TextInput
                   style={styles.textInput}
                   placeholder="5"
-                  placeholderTextColor="#71717a"
+                  placeholderTextColor="#a1a1aa"
                   keyboardType="numeric"
                   value={minStock}
                   onChangeText={setMinStock}
@@ -359,7 +359,7 @@ export default function ProductFormModal({
               <Switch
                 value={isForSale}
                 onValueChange={setIsForSale}
-                thumbColor={isForSale ? '#e11d48' : '#71717a'}
+                thumbColor={isForSale ? '#e11d48' : '#a1a1aa'}
                 trackColor={{ false: '#27272a', true: 'rgba(225, 29, 72, 0.4)' }}
               />
             </View>
@@ -453,14 +453,17 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   headerTitle: {
-    fontSize: 15,
-    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 18,
+    fontFamily: 'Poppins_700Bold',
+    letterSpacing: -0.3,
     color: '#ffffff',
   },
   headerSubtitle: {
@@ -528,8 +531,8 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
   },
   pickerChipActive: {
-    backgroundColor: 'rgba(225, 29, 72, 0.15)',
-    borderColor: '#fb7185',
+    backgroundColor: '#e11d48',
+    borderColor: '#e11d48',
   },
   pickerChipText: {
     fontSize: 12,
@@ -537,7 +540,7 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
   },
   pickerChipTextActive: {
-    color: '#fb7185',
+    color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
   },
   barcodeInputGroup: {
@@ -574,15 +577,15 @@ const styles = StyleSheet.create({
   toggleDesc: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
-    color: '#71717a',
+    color: '#a1a1aa',
   },
   deleteBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    borderColor: 'rgba(248, 113, 113, 0.25)',
+    backgroundColor: '#27272a',
+    borderColor: '#3f3f46',
     borderWidth: 1,
     paddingVertical: 10,
     borderRadius: 10,

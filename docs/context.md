@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Anti-Patterns & Defect Impeccable pada Modal Form Produk (`ProductFormModal.js`)**:
+  - Menyelesaikan 1 AI tell dan 3 quality issues yang terdeteksi pada audit browser Modal Produk:
+    1. *Resolusi Flat Type Hierarchy*: Menaikkan ukuran `headerTitle` dari 15px ke **`18px`** (`Poppins_700Bold`, `letterSpacing: -0.3`), tombol submit/cancel 14px, input text 13px, dan label form/chips 12px, memberikan pemisahan hierarki visual yang jelas antara judul modal dan form fields.
+    2. *Perbaikan Kontras Rendah Chips Kategori & Satuan (1.7:1 $\rightarrow$ 6.3:1)*: Mengganti background chip aktif yang sebelumnya semi-transparan `rgba(225, 29, 72, 0.15)` dengan teks `#fb7185` (yang terdeteksi 1.7:1 terhadap `#e11d48` di DOM web) menjadi container solid brand `#e11d48` dengan teks putih **`#ffffff`** (`Poppins_600SemiBold`), menghasilkan rasio kontras prima **6.3:1** (lulus WCAG AAA).
+    3. *Perbaikan Kontras Deskripsi Toggle Status (4.1:1 $\rightarrow$ 5.8:1)*: Menaikkan warna teks `toggleDesc` ("Tampilkan produk di terminal penjualan kasir") dari `#71717a` (4.1:1) menjadi **`#a1a1aa`** (rasio kontras **5.8:1** di atas `#09090b`, memenuhi standar WCAG AA $\ge 4.5:1$).
+    4. *Penyelarasan Placeholder Input & Switch*: Mengganti seluruh 6 `placeholderTextColor="#71717a"` menjadi **`#a1a1aa`**, serta switch off-thumb color menjadi `#a1a1aa`. Container icon header dan tombol delete juga distandarisasi ke netral solid `#27272a` (border `#3f3f46`).
+  - Lolos audit linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan lolos verifikasi bundle Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Anti-Patterns & Defect Impeccable pada Master Promosi & Voucher Diskon (`PromoManagementScreen.js`, `PromoCardItem.js`, `PromoFormModal.js`)**:
   - Menyelesaikan 3 AI tells dan 25 quality issues yang terdeteksi pada audit browser Master Promo:
     1. *Eliminasi AI Color Palette Cyan Neon*: Menghilangkan teks angka dan ikon cyan neon (`#38bdf8`) pada kartu metrik ke-3 ("Total Dipakai"), menggantinya dengan nilai bersih `#f4f4f5` (20px, kontras tinggi) dan ikon container gelap netral `#27272a` (border `#3f3f46`).
