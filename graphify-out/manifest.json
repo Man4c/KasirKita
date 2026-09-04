@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788523436.0176847,
-    "ast_hash": "223e0911e61d72d891169bb8936121df",
+    "mtime": 1788523930.4715908,
+    "ast_hash": "ca085a870b879aeec43b26261a07c6b0",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2325,8 +2325,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/product/ProductCardItem.js": {
-    "mtime": 1788510130.8592906,
-    "ast_hash": "38bfbbc0f6c41dfda95a6442998746b0",
+    "mtime": 1788523875.7261603,
+    "ast_hash": "db9de3e71c55f4726d18040d5dd798e9",
     "semantic_hash": ""
   },
   "mobile/src/components/product/ProductFormModal.js": {
@@ -2340,8 +2340,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/ProductManagementScreen.js": {
-    "mtime": 1788513669.0692341,
-    "ast_hash": "93d316dcfaf30c7f272f2da954168343",
+    "mtime": 1788523907.4664996,
+    "ast_hash": "3ef3f96fe337b65451a1ceaed3412905",
     "semantic_hash": ""
   },
   "mobile/src/services/productService.js": {

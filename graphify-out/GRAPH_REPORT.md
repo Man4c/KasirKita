@@ -1,16 +1,16 @@
 # Graph Report - KasirKita  (2026-09-04)
 
 ## Corpus Check
-- 461 files · ~631,974 words
+- 461 files · ~632,180 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5136 nodes · 11585 edges · 343 communities (294 shown, 49 thin omitted)
+- 5136 nodes · 11585 edges · 340 communities (291 shown, 49 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 354 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4b00ccb9`
+- Built from commit: `40bd86a7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -62,7 +62,6 @@
 - comp-spec.mjs
 - parseRgb
 - live-poll.mjs
-- roots.mjs
 - reader.js
 - markdown-novel-viewer
 - openTunePopover
@@ -263,14 +262,12 @@
 - checkElementRadialSpotlightDOM
 - Operate mode depth (and Read notes)
 - Cloud Sync Preferences & Local Data Backup-Restore
-- checkRadialSpotlight
 - isGeneratedFile
 - applyEditing
 - onAnnotDown
 - expo-audio
 - BORDER_SAFE_TAGS
 - expo-font
-- UserFactory
 - expo-image-picker
 - expo-secure-store
 - expo-status-bar
@@ -316,7 +313,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (343 total, 49 thin omitted)
+## Communities (340 total, 49 thin omitted)
 
 ### Community 0 - "live-browser.js"
 Cohesion: 0.03
@@ -407,8 +404,8 @@ Cohesion: 0.09
 Nodes (37): contextSourcePath(), contextSourceStatus(), directChildDirs(), discoverRootsForPattern(), discoverTargetCandidates(), expandSimplePattern(), findMonorepoRoot(), findTargetExample() (+29 more)
 
 ### Community 22 - "live-accept.mjs"
-Cohesion: 0.12
-Nodes (38): acceptCli(), acceptReceiptPath(), argVal(), buildAcceptedWrappedSource(), buildCarbonizeReplacement(), decodeHtmlAttr(), deindentContent(), detectCommentSyntax() (+30 more)
+Cohesion: 0.08
+Nodes (51): extensionCache, LIVE_TEMPLATE_EXTENSIONS, matchesTemplateExtension(), mergeExtensions(), normalizeExtensionEntries(), readLiveTemplateExtensions(), resolveLiveTemplateExtensions(), safeReadJson() (+43 more)
 
 ### Community 23 - "checkHtmlPatterns"
 Cohesion: 0.17
@@ -491,8 +488,8 @@ Cohesion: 0.15
 Nodes (27): applyFixes(), PRODUCT_DEPRECATED_SECTIONS, PRODUCT_V4_SECTIONS, productStampLine(), readProductSchemaVersion(), readSidecarSchemaVersion(), stampProductSchema(), BUILD_PATH_VALUES (+19 more)
 
 ### Community 43 - "mountSvelteComponentVariant"
-Cohesion: 0.15
-Nodes (6): CustomerController, JsonResponse, Request, Customer, HasMany, CustomerApiTest
+Cohesion: 0.19
+Nodes (5): CustomerController, JsonResponse, Request, Customer, CustomerApiTest
 
 ### Community 44 - "comp-spec.mjs"
 Cohesion: 0.11
@@ -505,10 +502,6 @@ Nodes (34): checkColors(), checkElementAIPaletteDOM(), checkElementColors(), che
 ### Community 46 - "live-poll.mjs"
 Cohesion: 0.11
 Nodes (36): completionAckForAcceptResult(), completionTypeForAcceptResult(), PREVIEW_MODES_WITHOUT_SOURCE_MARKERS, acceptInstructions(), bootInstructions(), deferredWrapperInstructions(), generateInstructions(), insertScaffoldInstructions() (+28 more)
-
-### Community 47 - "roots.mjs"
-Cohesion: 0.09
-Nodes (10): Authenticatable, JsonResponse, Request, UserController, HasMany, User, AuthApiTest, UserApiTest (+2 more)
 
 ### Community 48 - "reader.js"
 Cohesion: 0.17
@@ -567,8 +560,8 @@ Cohesion: 0.22
 Nodes (20): Analysis, analyzeAttributes(), analyzeFragment(), analyzeNode(), analyzeSvelteMarkup(), applyReplacements(), classifyEachKey(), classifyRoots() (+12 more)
 
 ### Community 62 - "User"
-Cohesion: 0.05
-Nodes (17): BelongsTo, HasMany, HasOne, Product, EndToEndFlowTest, ExampleTest, FinanceApiTest, InventoryApiTest (+9 more)
+Cohesion: 0.04
+Nodes (21): Authenticatable, JsonResponse, Request, UserController, HasMany, User, AuthApiTest, EndToEndFlowTest (+13 more)
 
 ### Community 63 - "onboard.md"
 Cohesion: 0.09
@@ -607,8 +600,8 @@ Cohesion: 0.10
 Nodes (20): Animate complex properties, Assess What "Extraordinary" Means Here, For data-heavy interfaces, For functional UI, For performance-critical UI, For visual/marketing surfaces, Implement with Discipline, Interact with the device (+12 more)
 
 ### Community 72 - "Product"
-Cohesion: 0.14
-Nodes (8): JsonResponse, Request, ProductController, BelongsTo, StockMovement, InventoryService, DatabaseSeeder, Seeder
+Cohesion: 0.07
+Nodes (14): JsonResponse, Request, ProductController, BelongsTo, HasMany, HasOne, Product, BelongsTo (+6 more)
 
 ### Community 73 - "[Feature Name] Implementation Plan"
 Cohesion: 0.10
@@ -715,8 +708,8 @@ Cohesion: 0.25
 Nodes (13): applyTanStackLiveAdapter(), buildTanStackLiveRootComponent(), detectTanStackStartProject(), escapeRegExp(), insertAfterLastImport(), isManagedComponent(), patchTanStackRoot(), pruneEmptyDir() (+5 more)
 
 ### Community 99 - "live-status.mjs"
-Cohesion: 0.14
-Nodes (11): ApiResponse, AuthController, JsonResponse, Request, JsonResponse, Request, StockOpnameController, JsonResponse (+3 more)
+Cohesion: 0.11
+Nodes (15): ApiResponse, AuthController, JsonResponse, Request, JsonResponse, Request, PosController, JsonResponse (+7 more)
 
 ### Community 100 - "package.json"
 Cohesion: 0.13
@@ -735,8 +728,8 @@ Cohesion: 0.20
 Nodes (12): checkElementMotion(), checkElementMotionDOM(), checkLayout(), checkMotion(), checkPageLayout(), isCardLike(), isCardLikeDOM(), isCardLikeFromProps() (+4 more)
 
 ### Community 105 - "openTunePopover"
-Cohesion: 0.08
-Nodes (16): FinanceController, JsonResponse, Request, JsonResponse, Request, PosController, Controller, CashFlow (+8 more)
+Cohesion: 0.13
+Nodes (9): FinanceController, JsonResponse, Request, BelongsTo, HasMany, HasOne, Transaction, FinanceService (+1 more)
 
 ### Community 106 - "detect-utils.mjs"
 Cohesion: 0.21
@@ -759,8 +752,8 @@ Cohesion: 0.60
 Nodes (5): isStopEvent(), writeAuditLog(), main(), readStdin(), stdinIsStop()
 
 ### Community 111 - "extractFindingIgnoreValue"
-Cohesion: 0.15
-Nodes (12): BelongsTo, ProductUnitConversion, BelongsTo, HasMany, StockOpname, BelongsTo, StockOpnameItem, BelongsTo (+4 more)
+Cohesion: 0.09
+Nodes (16): CashFlow, BelongsTo, HasMany, BelongsTo, ProductUnitConversion, BelongsTo, HasMany, StockOpname (+8 more)
 
 ### Community 112 - "index.mjs"
 Cohesion: 0.13
@@ -1107,8 +1100,8 @@ Cohesion: 0.18
 Nodes (10): 1. Kontrak Endpoint API Backend, 2. Spesifikasi UI/UX & Wireframe Layar, 3. Aturan Ketahanan & Validasi (Defensive Rules), A. Katalog Produk (`/api/products`), B. Master Kategori & Satuan Pendukung, C. Format Response API, Spesifikasi UX/UI Wireframe & Kontrak Endpoint API - Master Produk Mobile (Plan #25 Fase 1), Wireframe 1: Layar Utama Master Produk (`ProductManagementScreen.js`) (+2 more)
 
 ### Community 246 - "Unit"
-Cohesion: 0.31
-Nodes (5): JsonResponse, Request, UnitController, HasMany, Unit
+Cohesion: 0.18
+Nodes (8): JsonResponse, Request, UnitController, HasMany, Unit, UserFactory, Factory, static
 
 ### Community 248 - "Master Cabang & Multi-Outlet (Multi-Branch Management)"
 Cohesion: 0.40
@@ -1170,10 +1163,6 @@ Nodes (27): checkElementHeroEyebrow(), checkElementHeroEyebrowDOM(), checkHeroEy
 Cohesion: 0.29
 Nodes (6): 1. Solusi 1: Cloud Sync Preferensi Toko (Free-Tier Ready: Supabase + Render), 2. Solusi 3: Ekspor / Impor Cadangan Data Mandiri (JSON Backup), Arsitektur & Spesifikasi Solusi, Cloud Sync Preferences & Local Data Backup-Restore, Overview, Phase Breakdown
 
-### Community 317 - "checkRadialSpotlight"
-Cohesion: 0.19
-Nodes (13): extensionCache, LIVE_TEMPLATE_EXTENSIONS, matchesTemplateExtension(), mergeExtensions(), normalizeExtensionEntries(), readLiveTemplateExtensions(), resolveLiveTemplateExtensions(), safeReadJson() (+5 more)
-
 ### Community 318 - "isGeneratedFile"
 Cohesion: 0.27
 Nodes (7): styles, UnitCardItem, COMMON_PRESETS, styles, UnitFormModal(), styles, unitService
@@ -1193,10 +1182,6 @@ Nodes (9): addRules(), applyInlineIgnores(), getSet(), hasDirectives(), isInline
 ### Community 322 - "BORDER_SAFE_TAGS"
 Cohesion: 0.20
 Nodes (9): 1. Layar Daftar Master Kategori (`CategoryManagementScreen.js`), 2. Formulir Tambah / Edit Kategori (`CategoryFormModal.js`), 3. Layanan API & Offline Cache (`categoryService.js`), 4. Integrasi Navigasi, Action Hub, & Sinkronisasi POS, Arsitektur Komponen & Struktur File, Fitur Utama & Kebutuhan Pengguna, Master Kategori di Mobile, Overview (+1 more)
-
-### Community 324 - "UserFactory"
-Cohesion: 0.47
-Nodes (3): UserFactory, Factory, static
 
 ### Community 328 - "lucide-react-native"
 Cohesion: 0.67

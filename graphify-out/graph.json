@@ -18675,8 +18675,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "template-extensions.mjs"
     },
     {
@@ -18686,8 +18686,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_live_template_extensions",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "live_template_extensions"
     },
     {
@@ -18697,8 +18697,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_normalizeextensionentries",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "normalizeextensionentries()"
     },
     {
@@ -18708,8 +18708,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_mergeextensions",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "mergeextensions()"
     },
     {
@@ -18730,8 +18730,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_matchestemplateextension",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "matchestemplateextension()"
     },
     {
@@ -18741,8 +18741,8 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_resolvelivetemplateextensions",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "resolvelivetemplateextensions()"
     },
     {
@@ -18752,8 +18752,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_extensioncache",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "extensioncache"
     },
     {
@@ -18763,8 +18763,8 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_cleartemplateextensioncache",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "cleartemplateextensioncache()"
     },
     {
@@ -18774,8 +18774,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_readlivetemplateextensions",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "readlivetemplateextensions()"
     },
     {
@@ -18785,8 +18785,8 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_safereadjson",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "safereadjson()"
     },
     {
@@ -19181,8 +19181,8 @@
       "source_location": "L888",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_accept_findsessionfile",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "findsessionfile()"
     },
     {
@@ -31468,8 +31468,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "source-search.mjs"
     },
     {
@@ -31479,8 +31479,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_source_search_dirs",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "source_search_dirs"
     },
     {
@@ -31490,8 +31490,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_never_source_dirs",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "never_source_dirs"
     },
     {
@@ -31501,8 +31501,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_findsourcefile",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "findsourcefile()"
     },
     {
@@ -31512,8 +31512,8 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_walk",
-      "community": 317,
-      "community_name": "checkRadialSpotlight",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "walk()"
     },
     {
@@ -35450,8 +35450,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "poscontroller.php"
     },
     {
@@ -35461,8 +35461,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "poscontroller"
     },
     {
@@ -35472,8 +35472,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_construct",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".__construct()"
     },
     {
@@ -35483,8 +35483,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_checkout",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".checkout()"
     },
     {
@@ -35494,8 +35494,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_php_request",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "request"
     },
     {
@@ -35505,8 +35505,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_php_jsonresponse",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "jsonresponse"
     },
     {
@@ -35516,8 +35516,8 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_index",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".index()"
     },
     {
@@ -35527,8 +35527,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_show",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".show()"
     },
     {
@@ -35538,8 +35538,8 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_cancel",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".cancel()"
     },
     {
@@ -36165,8 +36165,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "usercontroller.php"
     },
     {
@@ -36176,8 +36176,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "usercontroller"
     },
     {
@@ -36187,8 +36187,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_index",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".index()"
     },
     {
@@ -36198,8 +36198,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_php_request",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "request"
     },
     {
@@ -36209,8 +36209,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_php_jsonresponse",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "jsonresponse"
     },
     {
@@ -36220,8 +36220,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_store",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".store()"
     },
     {
@@ -36231,8 +36231,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_show",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".show()"
     },
     {
@@ -36242,8 +36242,8 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_update",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".update()"
     },
     {
@@ -36253,8 +36253,8 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_destroy",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".destroy()"
     },
     {
@@ -36264,8 +36264,8 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_resetpassword",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".resetpassword()"
     },
     {
@@ -36275,8 +36275,8 @@
       "source_location": "L204",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_togglestatus",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".togglestatus()"
     },
     {
@@ -36286,8 +36286,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_http_controllers_controller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "controller.php"
     },
     {
@@ -36297,8 +36297,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "backend_app_http_controllers_controller_controller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "controller"
     },
     {
@@ -36374,8 +36374,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_models_cashflow",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "cashflow.php"
     },
     {
@@ -36385,8 +36385,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "cashflow"
     },
     {
@@ -36429,8 +36429,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_casts",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".casts()"
     },
     {
@@ -36440,8 +36440,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_user",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".user()"
     },
     {
@@ -36451,8 +36451,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_php_belongsto",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "belongsto"
     },
     {
@@ -36462,8 +36462,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_transaction",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".transaction()"
     },
     {
@@ -36473,8 +36473,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_supplier",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".supplier()"
     },
     {
@@ -36528,8 +36528,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_models_customer",
-      "community": 43,
-      "community_name": "mountSvelteComponentVariant",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "customer.php"
     },
     {
@@ -36572,8 +36572,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "backend_app_models_customer_customer_transactions",
-      "community": 43,
-      "community_name": "mountSvelteComponentVariant",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".transactions()"
     },
     {
@@ -36583,8 +36583,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_models_customer_php_hasmany",
-      "community": 43,
-      "community_name": "mountSvelteComponentVariant",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "hasmany"
     },
     {
@@ -36715,8 +36715,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_app_models_product_product",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": "product"
     },
     {
@@ -36726,8 +36726,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "backend_app_models_product_product_casts",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".casts()"
     },
     {
@@ -36737,8 +36737,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "backend_app_models_product_product_booted",
-      "community": 62,
-      "community_name": "User",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": ".booted()"
     },
     {
@@ -36748,8 +36748,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "backend_app_models_product_product_category",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".category()"
     },
     {
@@ -36759,8 +36759,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_models_product_php_belongsto",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": "belongsto"
     },
     {
@@ -36770,8 +36770,8 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "backend_app_models_product_product_baseunit",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".baseunit()"
     },
     {
@@ -36781,8 +36781,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "backend_app_models_product_product_defaultposunit",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".defaultposunit()"
     },
     {
@@ -36792,8 +36792,8 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "backend_app_models_product_product_conversions",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".conversions()"
     },
     {
@@ -36803,8 +36803,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_models_product_php_hasmany",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": "hasmany"
     },
     {
@@ -36814,8 +36814,8 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "backend_app_models_product_product_baseconversion",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".baseconversion()"
     },
     {
@@ -36825,8 +36825,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_models_product_php_hasone",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": "hasone"
     },
     {
@@ -36836,8 +36836,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "backend_app_models_product_product_stockmovements",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".stockmovements()"
     },
     {
@@ -36847,8 +36847,8 @@
       "source_location": "L98",
       "_origin": "ast",
       "id": "backend_app_models_product_product_transactionitems",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".transactionitems()"
     },
     {
@@ -37562,8 +37562,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_models_user",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "user.php"
     },
     {
@@ -37573,8 +37573,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "backend_app_models_user_user",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "user"
     },
     {
@@ -37584,8 +37584,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "authenticatable",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "authenticatable"
     },
     {
@@ -37595,8 +37595,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "hasapitokens",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "hasapitokens"
     },
     {
@@ -37606,8 +37606,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "notifiable",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "notifiable"
     },
     {
@@ -37617,8 +37617,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "backend_app_models_user_user_casts",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".casts()"
     },
     {
@@ -37628,8 +37628,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "backend_app_models_user_user_isowner",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".isowner()"
     },
     {
@@ -37639,8 +37639,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "backend_app_models_user_user_iscashier",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".iscashier()"
     },
     {
@@ -37650,8 +37650,8 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "backend_app_models_user_user_transactions",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".transactions()"
     },
     {
@@ -37661,8 +37661,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_models_user_php_hasmany",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "hasmany"
     },
     {
@@ -37672,8 +37672,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "backend_app_models_user_user_cashflows",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".cashflows()"
     },
     {
@@ -37683,8 +37683,8 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "backend_app_models_user_user_stockmovements",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".stockmovements()"
     },
     {
@@ -37848,8 +37848,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_services_posservice",
-      "community": 43,
-      "community_name": "mountSvelteComponentVariant",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "posservice.php"
     },
     {
@@ -37859,8 +37859,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "backend_app_services_posservice_posservice",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "posservice"
     },
     {
@@ -37870,8 +37870,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "backend_app_services_posservice_posservice_checkout",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".checkout()"
     },
     {
@@ -37881,8 +37881,8 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "backend_app_services_posservice_posservice_canceltransaction",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".canceltransaction()"
     },
     {
@@ -38728,8 +38728,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_config_auth",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "auth.php"
     },
     {
@@ -38838,8 +38838,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory",
-      "community": 324,
-      "community_name": "UserFactory",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": "userfactory.php"
     },
     {
@@ -38849,8 +38849,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory_userfactory",
-      "community": 324,
-      "community_name": "UserFactory",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": "userfactory"
     },
     {
@@ -38860,8 +38860,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "factory",
-      "community": 324,
-      "community_name": "UserFactory",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": "factory"
     },
     {
@@ -38871,8 +38871,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory_userfactory_definition",
-      "community": 324,
-      "community_name": "UserFactory",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": ".definition()"
     },
     {
@@ -38882,8 +38882,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory_userfactory_unverified",
-      "community": 324,
-      "community_name": "UserFactory",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": ".unverified()"
     },
     {
@@ -38893,8 +38893,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "static",
-      "community": 324,
-      "community_name": "UserFactory",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": "static"
     },
     {
@@ -40070,8 +40070,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "authapitest.php"
     },
     {
@@ -40081,8 +40081,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest_authapitest",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "authapitest"
     },
     {
@@ -40103,8 +40103,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest_authapitest_test_api_health_endpoint_returns_success",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_api_health_endpoint_returns_success()"
     },
     {
@@ -40114,8 +40114,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest_authapitest_test_user_can_login_with_valid_credentials",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_user_can_login_with_valid_credentials()"
     },
     {
@@ -40125,8 +40125,8 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest_authapitest_test_user_cannot_login_with_invalid_password",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_user_cannot_login_with_invalid_password()"
     },
     {
@@ -40136,8 +40136,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest_authapitest_test_authenticated_user_can_get_profile_and_logout",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_authenticated_user_can_get_profile_and_logout()"
     },
     {
@@ -40147,8 +40147,8 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest_authapitest_test_authenticated_user_can_update_profile",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_authenticated_user_can_update_profile()"
     },
     {
@@ -40158,8 +40158,8 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "backend_tests_feature_authapitest_authapitest_test_authenticated_user_can_change_password",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_authenticated_user_can_change_password()"
     },
     {
@@ -40169,8 +40169,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_feature_customerapitest",
-      "community": 43,
-      "community_name": "mountSvelteComponentVariant",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "customerapitest.php"
     },
     {
@@ -40554,8 +40554,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": "inventoryapitest"
     },
     {
@@ -40565,8 +40565,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_setup",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".setup()"
     },
     {
@@ -40576,8 +40576,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_test_can_create_and_list_categories",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_can_create_and_list_categories()"
     },
     {
@@ -40587,8 +40587,8 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_test_can_create_product_with_initial_stock_movement",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_can_create_product_with_initial_stock_movement()"
     },
     {
@@ -40598,8 +40598,8 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_test_perpetual_restock_calculates_average_cost_correctly",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_perpetual_restock_calculates_average_cost_correctly()"
     },
     {
@@ -40609,8 +40609,8 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_test_stock_opname_creates_audit_and_adjusts_inventory",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_stock_opname_creates_audit_and_adjusts_inventory()"
     },
     {
@@ -40620,8 +40620,8 @@
       "source_location": "L196",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_test_soft_delete_hides_product_but_preserves_transaction_history",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_soft_delete_hides_product_but_preserves_transaction_history()"
     },
     {
@@ -40631,8 +40631,8 @@
       "source_location": "L244",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_test_category_cannot_be_deleted_if_has_products",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_category_cannot_be_deleted_if_has_products()"
     },
     {
@@ -40642,8 +40642,8 @@
       "source_location": "L271",
       "_origin": "ast",
       "id": "backend_tests_feature_inventoryapitest_inventoryapitest_test_can_delete_empty_category",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_can_delete_empty_category()"
     },
     {
@@ -40774,8 +40774,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "backend_tests_feature_posapitest_posapitest",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": "posapitest"
     },
     {
@@ -40785,8 +40785,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "backend_tests_feature_posapitest_posapitest_setup",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".setup()"
     },
     {
@@ -40796,8 +40796,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "backend_tests_feature_posapitest_posapitest_test_pos_checkout_succeeds_and_deducts_stock_automatically",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_pos_checkout_succeeds_and_deducts_stock_automatically()"
     },
     {
@@ -40807,8 +40807,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "backend_tests_feature_posapitest_posapitest_test_pos_checkout_fails_if_stock_is_insufficient",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_pos_checkout_fails_if_stock_is_insufficient()"
     },
     {
@@ -40818,8 +40818,8 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "backend_tests_feature_posapitest_posapitest_test_pos_can_cancel_transaction_and_restore_stock",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_pos_can_cancel_transaction_and_restore_stock()"
     },
     {
@@ -40829,8 +40829,8 @@
       "source_location": "L198",
       "_origin": "ast",
       "id": "backend_tests_feature_posapitest_posapitest_test_pos_transaction_search_by_invoice_customer_and_cashier",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_pos_transaction_search_by_invoice_customer_and_cashier()"
     },
     {
@@ -40840,8 +40840,8 @@
       "source_location": "L254",
       "_origin": "ast",
       "id": "backend_tests_feature_posapitest_posapitest_test_pos_checkout_preserves_offline_invoice_number_and_timestamp_and_is_searchable",
-      "community": 62,
-      "community_name": "User",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".test_pos_checkout_preserves_offline_invoice_number_and_timestamp_and_is_searchable()"
     },
     {
@@ -41214,8 +41214,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "userapitest.php"
     },
     {
@@ -41225,8 +41225,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "userapitest"
     },
     {
@@ -41236,8 +41236,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_setup",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".setup()"
     },
     {
@@ -41247,8 +41247,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_cashier_cannot_access_user_management",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_cashier_cannot_access_user_management()"
     },
     {
@@ -41258,8 +41258,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_owner_can_list_users_with_search_and_filter",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_owner_can_list_users_with_search_and_filter()"
     },
     {
@@ -41269,8 +41269,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_owner_can_create_new_cashier",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_owner_can_create_new_cashier()"
     },
     {
@@ -41280,8 +41280,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_cannot_create_user_with_duplicate_email",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_cannot_create_user_with_duplicate_email()"
     },
     {
@@ -41291,8 +41291,8 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_owner_can_update_user",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_owner_can_update_user()"
     },
     {
@@ -41302,8 +41302,8 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_owner_cannot_deactivate_or_delete_self",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_owner_cannot_deactivate_or_delete_self()"
     },
     {
@@ -41313,8 +41313,8 @@
       "source_location": "L160",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_owner_can_reset_password_and_revoke_tokens",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_owner_can_reset_password_and_revoke_tokens()"
     },
     {
@@ -41324,8 +41324,8 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "backend_tests_feature_userapitest_userapitest_test_deactivated_user_cannot_login",
-      "community": 47,
-      "community_name": "roots.mjs",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".test_deactivated_user_cannot_login()"
     },
     {
@@ -42960,7 +42960,7 @@
       "label": "styles",
       "file_type": "code",
       "source_file": "mobile/src/components/product/ProductCardItem.js",
-      "source_location": "L206",
+      "source_location": "L208",
       "_origin": "ast",
       "id": "mobile_src_components_product_productcarditem_styles",
       "community": 228,
@@ -53608,7 +53608,7 @@
       "label": "Keputusan Arsitektur",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L800",
+      "source_location": "L810",
       "_origin": "ast",
       "id": "docs_context_keputusan_arsitektur",
       "community": 146,
@@ -53619,7 +53619,7 @@
       "label": "Keputusan UI",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L868",
+      "source_location": "L878",
       "_origin": "ast",
       "id": "docs_context_keputusan_ui",
       "community": 146,
@@ -53630,7 +53630,7 @@
       "label": "Keputusan Logic / Data",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L877",
+      "source_location": "L887",
       "_origin": "ast",
       "id": "docs_context_keputusan_logic_data",
       "community": 146,
@@ -53641,7 +53641,7 @@
       "label": "Catatan Verifikasi",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L881",
+      "source_location": "L891",
       "_origin": "ast",
       "id": "docs_context_catatan_verifikasi",
       "community": 146,
@@ -53652,7 +53652,7 @@
       "label": "Hal Yang Perlu Diperhatikan Agent",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L890",
+      "source_location": "L900",
       "_origin": "ast",
       "id": "docs_context_hal_yang_perlu_diperhatikan_agent",
       "community": 146,
@@ -174371,7 +174371,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "mobile/src/components/product/ProductCardItem.js",
-      "source_location": "L206",
+      "source_location": "L208",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_components_product_productcarditem",
@@ -188306,7 +188306,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L881",
+      "source_location": "L891",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -188317,7 +188317,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L890",
+      "source_location": "L900",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -188328,7 +188328,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L800",
+      "source_location": "L810",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -188339,7 +188339,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L877",
+      "source_location": "L887",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -188350,7 +188350,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L868",
+      "source_location": "L878",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -190834,5 +190834,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4b00ccb9b6ad57aaf8ad52b74a15f930ee8e1b9c"
+  "built_at_commit": "40bd86a75478d85b19e452b5e511e281096fe6e8"
 }

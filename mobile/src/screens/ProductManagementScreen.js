@@ -345,7 +345,7 @@ export default function ProductManagementScreen({
           >
             <AlertTriangle
               size={12}
-              color={stockFilter === 'LOW' ? '#fbbf24' : '#71717a'}
+              color={stockFilter === 'LOW' ? '#fbbf24' : '#a1a1aa'}
             />
             <Text style={[styles.stockFilterText, stockFilter === 'LOW' && styles.stockFilterTextActiveLow]}>
               Menipis
@@ -359,7 +359,7 @@ export default function ProductManagementScreen({
           >
             <XCircle
               size={12}
-              color={stockFilter === 'OUT' ? '#f87171' : '#71717a'}
+              color={stockFilter === 'OUT' ? '#f87171' : '#a1a1aa'}
             />
             <Text style={[styles.stockFilterText, stockFilter === 'OUT' && styles.stockFilterTextActiveOut]}>
               Habis
@@ -491,10 +491,10 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
   },
   screenTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
-    letterSpacing: -0.3,
+    letterSpacing: -0.4,
   },
   screenSubtitle: {
     fontSize: 12,
@@ -599,8 +599,8 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
   },
   catChipActive: {
-    backgroundColor: 'rgba(225, 29, 72, 0.15)',
-    borderColor: '#fb7185',
+    backgroundColor: '#e11d48',
+    borderColor: '#e11d48',
   },
   catChipText: {
     fontSize: 12,
@@ -609,7 +609,7 @@ const styles = StyleSheet.create({
     whiteSpace: 'nowrap',
   },
   catChipTextActive: {
-    color: '#fb7185',
+    color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
   },
   stockFilterRow: {
@@ -650,11 +650,11 @@ const styles = StyleSheet.create({
   stockFilterText: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#71717a',
+    color: '#d4d4d8',
     whiteSpace: 'nowrap',
   },
   stockFilterTextActive: {
-    color: '#f4f4f5',
+    color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
   },
   stockFilterTextActiveLow: {

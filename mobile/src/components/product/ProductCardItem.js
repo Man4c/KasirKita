@@ -90,9 +90,11 @@ const ProductCardItem = React.memo(function ProductCardItem({
             </View>
 
             <View style={styles.subMetaRow}>
-              <Text style={styles.categoryBadge} numberOfLines={1}>
-                {categoryName}
-              </Text>
+              <View style={styles.categoryBadge}>
+                <Text style={styles.categoryBadgeText} numberOfLines={1}>
+                  {categoryName}
+                </Text>
+              </View>
               {item.sku_barcode ? (
                 <View style={styles.barcodeWrapper}>
                   <Barcode size={12} color="#71717a" style={{ flexShrink: 0 }} />
@@ -239,17 +241,17 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   avatarBoxSafe: {
-    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+    backgroundColor: '#12261e',
     borderColor: 'rgba(52, 211, 153, 0.25)',
     borderWidth: 1,
   },
   avatarBoxLow: {
-    backgroundColor: 'rgba(245, 158, 11, 0.12)',
+    backgroundColor: '#292010',
     borderColor: 'rgba(251, 191, 36, 0.25)',
     borderWidth: 1,
   },
   avatarBoxOut: {
-    backgroundColor: 'rgba(239, 68, 68, 0.12)',
+    backgroundColor: '#2a1418',
     borderColor: 'rgba(248, 113, 113, 0.25)',
     borderWidth: 1,
   },
@@ -265,7 +267,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   productName: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: 'Poppins_600SemiBold',
     color: '#f4f4f5',
     flex: 1,
@@ -290,11 +292,20 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   categoryBadge: {
-    fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    color: '#38bdf8',
+    backgroundColor: '#27272a',
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     flexShrink: 0,
-    maxWidth: 100,
+    maxWidth: 110,
+  },
+  categoryBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    color: '#d4d4d8',
+    whiteSpace: 'nowrap',
   },
   barcodeWrapper: {
     flexDirection: 'row',
@@ -320,16 +331,16 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   stockPillSafe: {
-    backgroundColor: 'rgba(16, 185, 129, 0.12)',
-    borderColor: 'rgba(52, 211, 153, 0.3)',
+    backgroundColor: '#12261e',
+    borderColor: 'rgba(52, 211, 153, 0.35)',
   },
   stockPillLow: {
-    backgroundColor: 'rgba(245, 158, 11, 0.12)',
-    borderColor: 'rgba(251, 191, 36, 0.3)',
+    backgroundColor: '#292010',
+    borderColor: 'rgba(251, 191, 36, 0.35)',
   },
   stockPillOut: {
-    backgroundColor: 'rgba(239, 68, 68, 0.12)',
-    borderColor: 'rgba(248, 113, 113, 0.3)',
+    backgroundColor: '#2a1418',
+    borderColor: 'rgba(248, 113, 113, 0.35)',
   },
   stockPillText: {
     fontSize: 12,
@@ -365,7 +376,7 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
   },
   priceValue: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: 'Poppins_700Bold',
     color: '#fb7185',
     whiteSpace: 'nowrap',
@@ -405,8 +416,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: 'rgba(16, 185, 129, 0.12)',
-    borderColor: 'rgba(52, 211, 153, 0.3)',
+    backgroundColor: '#12261e',
+    borderColor: 'rgba(52, 211, 153, 0.35)',
     borderWidth: 1,
     paddingVertical: 7,
     borderRadius: 8,
