@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 4 Master Pajak & Biaya Layanan di Mobile (`TaxFormModal.js`, Plan #29)**:
+  - Menyelesaikan formulir modal interaktif penambahan & pengeditan komponen pajak/biaya (`mobile/src/components/tax/TaxFormModal.js`):
+    1. *Klasifikasi Komponen*: Tab pemilih Pajak (`is_tax: true`) vs Biaya Layanan (`is_tax: false`) dengan penyesuaian label dinamis.
+    2. *Skema Tarif Fleksibel*: Pilihan Persentase (`PERCENTAGE` / `%`) dan Nominal Tetap (`FIXED` / `Rp`) lengkap dengan format input terproteksi regex numerik.
+    3. *Live Preview Kalkulasi*: Kotak kalkulasi simulasi interaktif berdasarkan nilai belanja Rp100.000 untuk membantu pengguna memverifikasi beban biaya sebelum menyimpan.
+    4. *Aturan Pemicu Transaksi (`apply_to`)*: 4 kartu pilihan dengan radio button kustom: Semua Transaksi (`ALL`), Pilihan Kasir Manual (`MANUAL`), Bawa Pulang Saja (`TAKEAWAY_ONLY`), dan Khusus Metode Pembayaran (`SPECIFIC_PAYMENT` dengan sub-pilihan QRIS, Transfer Bank, Kartu Debit).
+    5. *Opsi Tambahan & Defensive UI*: Saklar jadikan default POS, status aktif/nonaktif, catatan keterangan, tombol hapus komponen aman (khusus mode edit), dan penanganan error validasi field.
+    6. *Kepatuhan & Linter*: Lolos verifikasi sintaks JS (`node -c`) dan lolos audit linter `detect.mjs` (0 defect). Phase 4 berstatus `completed`.
+
 - **Implementasi Phase 3 Master Pajak & Biaya Layanan di Mobile (`TaxCardItem.js`, `TaxManagementScreen.js`, Plan #29)**:
   - Mengimplementasikan komponen visual kartu item dan layar utama berstandar Defensive UI Impeccable:
     1. *Kartu Item (`TaxCardItem.js`)*: Desain bernuansa warna khas (Pajak: Amber `#fbbf24`, Biaya Layanan: Ungu/Indigo `#c084fc`), badge `Default`, badge aturan `apply_to` dinamis (`ALL`, `SPECIFIC_PAYMENT`, `TAKEAWAY_ONLY`, `MANUAL`), saklar toggle switch instan, dan tombol Edit/Hapus dengan dialog konfirmasi aman.
