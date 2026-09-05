@@ -20,6 +20,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyempurnaan Layout Spacing & Safety Margin FAB Master Pajak & Biaya (`TaxManagementScreen.js`)**:
+  - Menyelesaikan temuan critique [P3] melalui skill `impeccable layout`:
+    1. *Proteksi Ruang Scroll FAB*: Memperbesar `paddingBottom` pada `listContent` dari 88dp menjadi **110dp** agar kartu item terbawah dapat di-scroll sepenuhnya ke atas melewati Floating Action Button (`+ Tambah Pajak / Biaya`) dan bilah navigasi bawah, memastikan tombol Edit, Hapus, dan Switch tidak terhalang.
+    2. *Verifikasi & Multi-Platform Export*: Lolos verifikasi sintaks JS (`node -c`), detektor Impeccable (0 defect), dan `npx expo export --platform web` (2.347 modul lolos).
+
 - **Penyederhanaan Visual & Distill Kepadatan Badge Master Pajak & Biaya (`TaxCardItem.js`)**:
   - Menyelesaikan temuan critique [P2] melalui skill `impeccable distill`:
     1. *Eliminasi Nested Container (Anti-Pattern Box-in-Box)*: Mengganti kontainer `ruleSection` berlatar gelap `#121215` yang menampung badge di dalam kartu menjadi baris metadata terintegrasi `ruleRow` yang bersih dan lapang.
