@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788594954.647169,
-    "ast_hash": "22710c7194ef52dfdbe1d90fefe88a86",
+    "mtime": 1788596919.6729887,
+    "ast_hash": "b36d2665bdb1887c3f6106d04baa9d71",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2470,18 +2470,18 @@
     "semantic_hash": ""
   },
   "mobile/src/components/tax/TaxCardItem.js": {
-    "mtime": 1788592136.3962936,
-    "ast_hash": "3a041e06d60544a41205c4a30c4a8ed9",
+    "mtime": 1788596558.209991,
+    "ast_hash": "fd02bf5c75c0666dc01a152c35c0edac",
     "semantic_hash": ""
   },
   "mobile/src/components/tax/TaxFormModal.js": {
-    "mtime": 1788592481.8873162,
-    "ast_hash": "cd3448c477b62edb5abeda4b4811efe4",
+    "mtime": 1788595719.5727522,
+    "ast_hash": "39daccbb56ec039eb97d719f65a6c4b9",
     "semantic_hash": ""
   },
   "mobile/src/screens/TaxManagementScreen.js": {
-    "mtime": 1788592225.439451,
-    "ast_hash": "dc7a06fc961d72b29b9dc89146e21e9d",
+    "mtime": 1788596893.5625558,
+    "ast_hash": "5262200ed3bd87728dc2b8fcf7150de5",
     "semantic_hash": ""
   },
   "mobile/src/components/customer/CustomerCardItem.js": {

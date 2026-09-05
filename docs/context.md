@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Kestabilan Angka Tab & Client-Side Filtering Master Pajak & Biaya (`TaxManagementScreen.js`)**:
+  - Menyelesaikan masalah angka tab berubah saat berpindah filter (misal: saat memilih tab "Pajak", angka tab "Semua" berubah menjadi 2 bukannya 5, dan label "Biaya Layanan" terpotong):
+    1. *Pemisahan Master Data & Filtered Items*: Mengubah pemanggilan `taxService.getTaxesAndFees()` untuk selalu mengambil seluruh data master toko ke state `allItems`, tanpa menyaring parameter kategori dan status di backend.
+    2. *Kestabilan Hitungan Komponen*: Menghitung metrik master (`totalItems`, `activeCount`, `taxCount`, `feeCount`) langsung dari `allItems` sehingga angka pada label tab (`Semua (5)`, `Pajak (2)`, `Biaya (3)`) serta subjudul header (`5 komponen terdaftar (4 aktif)`) tetap konsisten dan tidak berubah saat beralih tab.
+    3. *Penyempurnaan Label Tab*: Mengubah label tab ketiga dari `Biaya Layanan (N)` menjadi `Biaya (N)` agar muat secara proporsional dan tidak terpotong (`Biaya Layanan (...`) pada layar perangkat mobile standar (360-390px).
+    4. *Perpindahan Tab Instan (0ms Latency)*: Menggunakan hook `useMemo` untuk `displayedItems` berdasarkan `activeTab`, `statusFilter`, dan `debouncedSearch`, meniadakan request server berulang dan menghilangkan kedipan loading indicator saat user berganti tab.
+    5. *Verifikasi & Kepatuhan*: Lolos verifikasi sintaks JS (`node -c`) dan detektor Impeccable (0 defect).
+
 - **Penyederhanaan Layout & Eliminasi 3 Metric Cards Atas (`TaxManagementScreen.js`)**:
   - Meniadakan 3 kartu metrik atas (*Pajak*, *Biaya Layanan*, *Aktif Digunakan*) yang memakan ruang vertikal layar mobile secara berlebihan.
   - Memindahkan informasi jumlah komponen secara dinamis langsung ke dalam label tab kategori: `Semua (N)`, `Pajak (N)`, dan `Biaya Layanan (N)`, serta mempertahankan ringkasan keaktifan pada subjudul header (`{total} komponen terdaftar ({active} aktif)`).

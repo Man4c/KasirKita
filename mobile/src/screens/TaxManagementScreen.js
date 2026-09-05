@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   StyleSheet,
   Text,
@@ -30,7 +30,7 @@ export default function TaxManagementScreen({ navigation }) {
   const isOwner = user?.role === 'owner';
 
   // State
-  const [items, setItems] = useState([]);
+  const [allItems, setAllItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
@@ -63,12 +63,9 @@ export default function TaxManagementScreen({ navigation }) {
     }
 
     try {
-      const res = await taxService.getTaxesAndFees({
-        search: debouncedSearch.trim() || undefined,
-        is_tax: activeTab === 'ALL' ? undefined : activeTab === 'TAX',
-        is_active: statusFilter === 'ALL' ? undefined : statusFilter === 'ACTIVE',
-      });
-      setItems(res.items || []);
+      // Muat seluruh komponen toko tanpa filter query server agar angka master tetap konsisten dan stabil
+      const res = await taxService.getTaxesAndFees();
+      setAllItems(res.items || []);
       setIsOffline(Boolean(res.fromCache));
     } catch (err) {
       console.warn('Gagal memuat daftar pajak & biaya:', err.message);
@@ -77,7 +74,7 @@ export default function TaxManagementScreen({ navigation }) {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [debouncedSearch, activeTab, statusFilter]);
+  }, []);
 
   useEffect(() => {
     loadItems();
@@ -108,18 +105,18 @@ export default function TaxManagementScreen({ navigation }) {
     setTogglingId(item.id);
 
     // Optimistic update
-    setItems((prev) =>
+    setAllItems((prev) =>
       prev.map((i) => (i.id === item.id ? { ...i, is_active: newStatus } : i))
     );
 
     try {
       const updated = await taxService.toggleStatus(item.id);
-      setItems((prev) =>
+      setAllItems((prev) =>
         prev.map((i) => (i.id === item.id ? { ...i, ...updated } : i))
       );
     } catch (err) {
       // Revert upon failure
-      setItems((prev) =>
+      setAllItems((prev) =>
         prev.map((i) => (i.id === item.id ? { ...i, is_active: originalState } : i))
       );
       showAlert('Gagal Mengubah Status', err.message || 'Terjadi kesalahan saat mengubah status.');
@@ -142,7 +139,7 @@ export default function TaxManagementScreen({ navigation }) {
           onPress: async () => {
             try {
               await taxService.deleteTaxAndFee(item.id);
-              setItems((prev) => prev.filter((i) => i.id !== item.id));
+              setAllItems((prev) => prev.filter((i) => i.id !== item.id));
               showAlert('Berhasil', `Komponen "${item.name}" telah dihapus.`);
             } catch (err) {
               showAlert('Gagal Menghapus', err.message || 'Terjadi kesalahan saat menghapus komponen.');
@@ -156,25 +153,48 @@ export default function TaxManagementScreen({ navigation }) {
   // Modal save success callback
   const handleFormSuccess = (savedItem, isEditMode) => {
     if (isEditMode) {
-      setItems((prev) =>
+      setAllItems((prev) =>
         prev.map((i) => (i.id === savedItem.id ? { ...i, ...savedItem } : i))
       );
     } else {
-      setItems((prev) => [savedItem, ...prev]);
+      setAllItems((prev) => [savedItem, ...prev]);
     }
   };
 
-  // Calculated Metrics
-  const totalItems = items.length;
-  const activeCount = items.filter((i) => i.is_active).length;
-  const taxCount = items.filter((i) => i.is_tax).length;
-  const feeCount = items.filter((i) => !i.is_tax).length;
+  // Calculated Metrics (selalu dihitung dari master data toko agar stabil)
+  const totalItems = allItems.length;
+  const activeCount = allItems.filter((i) => i.is_active).length;
+  const taxCount = allItems.filter((i) => i.is_tax).length;
+  const feeCount = allItems.filter((i) => !i.is_tax).length;
 
-  // Segmented Type Tabs with live counts
+  // Client-side Filtered Items (Instan 0ms latency tanpa refetch berkedip)
+  const displayedItems = useMemo(() => {
+    return allItems.filter((item) => {
+      // 1. Filter Kategori (Semua / Pajak / Biaya)
+      if (activeTab === 'TAX' && !item.is_tax) return false;
+      if (activeTab === 'FEE' && item.is_tax) return false;
+
+      // 2. Filter Status (Semua / Aktif / Nonaktif)
+      if (statusFilter === 'ACTIVE' && !item.is_active) return false;
+      if (statusFilter === 'INACTIVE' && item.is_active) return false;
+
+      // 3. Filter Pencarian
+      if (debouncedSearch.trim()) {
+        const query = debouncedSearch.toLowerCase().trim();
+        const matchName = item.name?.toLowerCase().includes(query);
+        const matchDesc = item.description?.toLowerCase().includes(query);
+        if (!matchName && !matchDesc) return false;
+      }
+
+      return true;
+    });
+  }, [allItems, activeTab, statusFilter, debouncedSearch]);
+
+  // Segmented Type Tabs with live master counts (Biaya disingkat agar tidak terpotong di HP)
   const tabOptions = [
     { key: 'ALL', label: `Semua (${totalItems})` },
     { key: 'TAX', label: `Pajak (${taxCount})` },
-    { key: 'FEE', label: `Biaya Layanan (${feeCount})` },
+    { key: 'FEE', label: `Biaya (${feeCount})` },
   ];
 
   // Status Filter Options
@@ -334,7 +354,7 @@ export default function TaxManagementScreen({ navigation }) {
         </View>
       ) : (
         <FlatList
-          data={items}
+          data={displayedItems}
           keyExtractor={(item) => String(item.id)}
           renderItem={renderTaxItem}
           contentContainerStyle={styles.listContent}
@@ -360,14 +380,18 @@ export default function TaxManagementScreen({ navigation }) {
               <Text style={styles.emptyTitle}>
                 {debouncedSearch
                   ? 'Komponen Tidak Ditemukan'
+                  : activeTab !== 'ALL' || statusFilter !== 'ALL'
+                  ? 'Tidak Ada Komponen yang Cocok'
                   : 'Belum Ada Komponen Pajak / Biaya'}
               </Text>
               <Text style={styles.emptyDesc}>
                 {debouncedSearch
                   ? `Tidak ada komponen yang cocok dengan kata kunci "${debouncedSearch}".`
+                  : activeTab !== 'ALL' || statusFilter !== 'ALL'
+                  ? 'Tidak ada komponen yang sesuai dengan filter yang Anda pilih.'
                   : 'Tambahkan tarif PPN, PB1 restoran, atau biaya layanan untuk transaksi toko.'}
               </Text>
-              {isOwner && !debouncedSearch && (
+              {isOwner && !debouncedSearch && activeTab === 'ALL' && statusFilter === 'ALL' && (
                 <TouchableOpacity
                   style={styles.emptyActionBtn}
                   onPress={handleOpenCreate}
