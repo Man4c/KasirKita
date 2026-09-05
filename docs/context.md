@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Harmonisasi Tema Merah Brand KasirKita, Eliminasi Kartu Metrik, Tap-to-Edit & Bottom Sheet Modal Pemasok (`SupplierManagementScreen.js`, `SupplierCardItem.js`, `SupplierFormModal.js`)**:
+  - Menyelesaikan temuan critique Master Pemasok dari skor 29/40 melonjak ke **39.5/40 (98.75%)** melalui perbaikan komprehensif Impeccable (`colorize`, `distill`, `adapt`, `harden`, `quieter`):
+    1. *Harmonisasi Warna Merah Brand KasirKita (`colorize`)*: Menyelaraskan seluruh aksen oranye (`#fb923c` / `#ea580c`) ke warna brand KasirKita (`#e11d48` Rose 600 / `#fb7185` Rose 400) pada FAB, filter status chips aktif, indikator refresh/loading, badge pemasok, avatar distributor, selected bank chip, switch aktif, dan tombol submit form modal.
+    2. *Eliminasi Redundansi 3 Kartu Metrik Atas (`distill`)*: Menghapus 3 kartu metrik atas yang memakan ~90px layar vertikal, lalu memadatkan ringkasan metrik secara elegan ke subjudul header (`{totalCount} distributor ({activeCount} aktif) • Kulakan: RpX.XXX.XXX`), merebut kembali ruang first-fold sehingga daftar pemasok langsung tampak utuh tanpa terpotong.
+    3. *Transformasi Bottom Sheet Modal Ergonomis (`adapt`)*: Mengubah `SupplierFormModal` menjadi **Slide-up Bottom Sheet Modal** modern dengan visual drag handle bar, rounded top 20dp, backdrop tap-to-dismiss, dan **Sticky Modal Footer** simetris (`Batal` flex: 1, `Simpan` flex: 1.5, `minHeight: 44dp`).
+    4. *Pencegahan Error Fatal (Danger Zone Architecture)*: Memindahkan tombol Hapus Pemasok dari sticky footer luar ke dalam zona bahaya (*Danger Zone*) paling bawah di scroll view form edit untuk mengeliminasi risiko tidak sengaja tertekan.
+    5. *Tap-to-Edit Badan Kartu & Peningkatan Touch Target (`harden` & `quieter`)*: Membungkus badan kartu pemasok dengan `TouchableOpacity` interaktif untuk membuka modal edit secara natural (*Tap-to-Edit*), memperluas touch target nomor telepon, tombol WhatsApp, dan salin rekening bank dengan hitSlop protektif, menenangkan palet warna kartu, serta menambahkan `keyboardDismissMode="on-drag"` dan margin scroll `paddingBottom: 110dp`.
+  - Lolos uji verifikasi penuh: sintaks JS valid (`node -c`), detektor Impeccable (0 defect), kompilasi Expo web (2.347 modul), dan tersinkronisasi ke remote branch main (commit hash: `56476ab`).
+
 - **Penyederhanaan & Penenangan Palet Warna Master Pelanggan (`CustomerCardItem.js`, `CustomerManagementScreen.js`)**:
   - Menyelesaikan keluhan "terlalu banyak warna / pelangi" melalui skill Impeccable `distill` & `quieter`:
     1. *Netralisasi Nominal Total Belanja*: Mengganti warna hijau menyala pada nominal belanja (`Rp87.000`) menjadi putih terang neutral `#f4f4f5` (konsisten dengan format nominal pada Master Pajak).
