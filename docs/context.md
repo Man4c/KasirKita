@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyederhanaan & Penenangan Palet Warna Master Pelanggan (`CustomerCardItem.js`, `CustomerManagementScreen.js`)**:
+  - Menyelesaikan keluhan "terlalu banyak warna / pelangi" melalui skill Impeccable `distill` & `quieter`:
+    1. *Netralisasi Nominal Total Belanja*: Mengganti warna hijau menyala pada nominal belanja (`Rp87.000`) menjadi putih terang neutral `#f4f4f5` (konsisten dengan format nominal pada Master Pajak).
+    2. *Netralisasi Chip Nomor Telepon*: Mengganti teks dan ikon hijau telepon menjadi abu-abu neutral `#f4f4f5` dan `#a1a1aa`, menghilangkan tabrakan visual hijau di tengah nama dan email.
+    3. *Penenangan Tombol Chat WA*: Mengganti background hijau terang menjadi latar neutral `#27272a` dengan border `#3f3f46`, menjaga aksen hijau hanya pada ikon WhatsApp kecil `#34d399`.
+    4. *Unifikasi Tab Kategori Keanggotaan*: Mengganti background warna-warni pada tab VIP dan Grosir menjadi neutral active `#27272a` dengan teks aktif konsisten merah Rose KasirKita (`#fb7185`).
+    5. *Fokus Visual Murni*: Satu-satunya elemen beraksen warna khusus pada badan kartu kini terisolasi hanya pada **Badge & Avatar Tier Keanggotaan** (VIP Emas, Grosir Biru, Reguler Rose), menghasilkan hierarki visual yang sangat tenang, bersih, dan profesional.
+  - Lolos pengujian: sintaks JS valid (`node -c`), detektor Impeccable (0 defect), dan kompilasi Expo web (2.347 modul).
+
 - **Harmonisasi Tema Merah Brand KasirKita, Eliminasi Kartu Metrik & Bottom Sheet Modal Pelanggan (`CustomerManagementScreen.js`, `CustomerCardItem.js`, `CustomerFormModal.js`)**:
   - Menyelesaikan temuan critique [P1] dan [P2] melalui paket implementasi komprehensif Impeccable (`colorize`, `distill`, `adapt`, `harden`):
     1. *Harmonisasi Warna Merah Brand KasirKita (`colorize`)*: Mengganti seluruh aksen teal (`#2dd4bf`) pada FAB, tombol aksi empty state, submit CTA modal, tab aktif, filter status aktif, indikator refresh/loading, dan tier member reguler menjadi warna merah khas brand KasirKita (`#e11d48` Rose 600 / `#fb7185` Rose 400). Pembedaan tier VIP (Emas `#fbbf24`) dan Grosir (Biru `#38bdf8`) tetap dipertahankan.

@@ -552,12 +552,18 @@ const styles = StyleSheet.create({
   },
   tabButtonActive: {
     backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
   },
   tabButtonActiveVip: {
-    backgroundColor: 'rgba(251, 191, 36, 0.15)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
   },
   tabButtonActiveWholesale: {
-    backgroundColor: 'rgba(56, 189, 248, 0.15)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
   },
   tabText: {
     color: '#a1a1aa',
@@ -569,11 +575,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   tabTextActiveVip: {
-    color: '#fbbf24',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
   },
   tabTextActiveWholesale: {
-    color: '#38bdf8',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
   },
   statusChipsRow: {

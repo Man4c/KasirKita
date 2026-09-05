@@ -162,7 +162,7 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
                   activeOpacity={0.7}
                   hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
                 >
-                  <Phone size={12} color="#34d399" style={{ flexShrink: 0 }} />
+                  <Phone size={12} color="#a1a1aa" style={{ flexShrink: 0 }} />
                   <Text style={styles.contactChipText} numberOfLines={1}>
                     {item.phone}
                   </Text>
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   spentValue: {
-    color: '#34d399',
+    color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
@@ -385,13 +385,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#27272a',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
     borderRadius: 6,
     maxWidth: '100%',
   },
   contactChipText: {
-    color: '#34d399',
+    color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
   },
@@ -460,9 +462,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(52, 211, 153, 0.3)',
+    borderColor: '#3f3f46',
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: 8,
