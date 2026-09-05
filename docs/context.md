@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Temuan Impeccable Master Pemasok & Distributor (`SupplierCardItem.js` & `SupplierManagementScreen.js`)**:
+  - Menyelesaikan temuan kualitas, kontras, dan layout occlusion dari hasil audit Impeccable pada screen master pemasok:
+    1. *Pemberantasan Low Contrast Text (WCAG AA Compliance)*: Memperbaiki warna teks alamat (`addressText`) dan placeholder kontak (`noContactText`) dari `#71717a` (3.7:1) menjadi `#a1a1aa` (5.3:1) terhadap latar dark mode.
+    2. *Pelegaan Padding & Touch Target (Cramped Padding Elimination)*: Menaikkan horizontal padding pada tombol aksi (`actionBtn`, `waBtn`, `contactChip`) menjadi $\ge 10-12\text{px}$ dan tinggi tombol menjadi $36\text{dp}$ dengan `hitSlop={8}`.
+    3. *Pemberantasan FAB Occlusion*: Menaikkan padding bawah daftar pemasok (`listContent: paddingBottom: 120`) sehingga kartu paling bawah dapat di-scroll sepenuhnya dan tidak tertutup/tertimpa tombol FAB melayang (*"Tambah Pemasok"*).
+    4. *Penyempurnaan Ritme Spacing*: Memvariasikan spacing vertikal dan horizontal (6px, 8px, 12px) untuk menghilangkan pola repetisi monoton 4px.
+  - Lolos uji detektor Impeccable (0 defect) dan commit tersimpan permanen via git.
+
 - **Penyelesaian Temuan Impeccable Master Pengguna & Staf (`UserCardItem.js` & `UserManagementScreen.js`)**:
   - Menyelesaikan temuan kualitas dan AI tell dari hasil audit Impeccable pada tampilan web/mobile:
     1. *Pemberantasan Glowing Shadow AI Tell*: Mengganti colored box-shadow `#e11d48` (`rgba(225, 29, 72, 0.4)`) pada tombol aksi FAB Tambah Staf (`UserManagementScreen.js`) dan bottom button scanner (`PosBarcodeScannerView.js`) menjadi bayangan netral bernuansa kedalaman fisik nyata (`shadowColor: '#000000'`, `rgba(0, 0, 0, 0.4)`), menghilangkan kesan artifisial "neon glow" antipattern.
