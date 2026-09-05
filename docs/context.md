@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Timeout Koneksi Server & Auto-Healing API URL (`api.js`, `LoginScreen.js`, `backend/.env`)**:
+  - Mengidentifikasi dan menyelesaikan akar masalah error `timeout of 10000ms exceeded` saat backend aktif:
+    1. *Penyebab Root Cause*: State awal `apiUrl` di `LoginScreen.js` sebelumnya di-hardcode ke `http://192.168.1.5:8000/api` dan tersimpan di `storage` browser. Sementara itu, IP laptop di jaringan WiFi telah berganti menjadi `192.168.1.3`. Akibatnya, saat aplikasi dibuka di browser (`localhost:8081`), Axios mencoba mengirim request ke IP usang `192.168.1.5:8000` yang tidak merespons, sehingga memicu timeout 10 detik dan memaksa aplikasi jatuh ke fallback offline.
+    2. *Auto-Healing & Adaptive Base URL (`api.js`)*: Menambahkan logika adaptif pada `getDefaultBaseUrl()` dan interceptor request: jika aplikasi berjalan di platform Web (`localhost` atau `127.0.0.1`), aplikasi secara otomatis mengarahkan target API ke `http://localhost:8000/api` (atau `http://${window.location.hostname}:8000/api`) dan memperbarui storage lokal, mencegah penguncian ke IP LAN usang.
+    3. *Peningkatan Konkurensi Backend (`backend/.env`)*: Mengaktifkan `PHP_CLI_SERVER_WORKERS=4` pada Laravel built-in server agar mampu melayani request paralel bersamaan dari kasir POS dan dashboard tanpa antrean blocking single-threaded.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Normalisasi Spasi Atas Header pada Layar Dashboard, Riwayat Transaksi, & Pengaturan (`DashboardScreen.js`, `TransactionHistoryScreen.js`, `SettingsScreen.js`)**:
   - Menyelaraskan seluruh screen utama aplikasi agar memiliki spasi atas (*top spacing*) yang seragam (tepat 12px) dan pembatas garis bawah yang konsisten:
     1. *Normalisasi Spasi Atas Dashboard (`DashboardScreen.js`)*: Menghilangkan penumpukan padding atas ganda dengan mengatur `content: { paddingHorizontal: 16, paddingTop: 0, paddingBottom: 40 }`. Dengan `header: { paddingVertical: 12 }`, jarak atas judul "Dashboard" kini tepat 12px dari batas Safe Area, sejajar presisi dengan "Riwayat Transaksi" (12px).

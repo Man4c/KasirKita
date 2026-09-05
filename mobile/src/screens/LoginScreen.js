@@ -22,6 +22,7 @@ import {
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
+import { getDefaultBaseUrl } from '../services/api';
 
 // Disable layout property transitions on web
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -41,7 +42,7 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [apiUrl, setApiUrl] = useState('http://192.168.1.5:8000/api');
+  const [apiUrl, setApiUrl] = useState(getDefaultBaseUrl());
   const [showConfig, setShowConfig] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,10 +52,22 @@ export default function LoginScreen() {
 
   useEffect(() => {
     storage.getApiUrl().then((saved) => {
-      if (saved) {
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        const host = window.location.hostname || 'localhost';
+        if ((host === 'localhost' || host === '127.0.0.1') && (!saved || saved.includes('192.168.'))) {
+          const webUrl = `http://${host}:8000/api`;
+          setApiUrl(webUrl);
+          storage.setApiUrl(webUrl);
+          return;
+        }
+      }
+
+      if (saved && !saved.includes('192.168.1.5')) {
         setApiUrl(saved);
       } else {
-        setApiUrl('http://192.168.1.5:8000/api');
+        const fallback = getDefaultBaseUrl();
+        setApiUrl(fallback);
+        storage.setApiUrl(fallback);
       }
     });
   }, []);

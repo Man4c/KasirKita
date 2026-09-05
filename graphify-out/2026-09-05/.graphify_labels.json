@@ -316,7 +316,6 @@
   "314": "checkElementRadialSpotlightDOM",
   "315": "Operate mode depth (and Read notes)",
   "316": "Cloud Sync Preferences & Local Data Backup-Restore",
-  "317": "updateBarContent",
   "318": "isGeneratedFile",
   "319": "applyEditing",
   "320": "onAnnotDown",
@@ -338,10 +337,7 @@
   "336": "expo-camera",
   "337": "checkElementGptBorderShadowDOM",
   "338": "Impeccable Documenter",
-  "339": "constants.mjs",
-  "340": "syncEditBadgeHitProxies",
   "341": "source-lock.mjs",
-  "342": "expo",
   "343": "UserFactory",
   "344": "barcode-detector"
 }
