@@ -188,6 +188,8 @@ export default function SupplierFormModal({
     }
   };
 
+  if (!visible) return null;
+
   return (
     <Modal
       visible={visible}
@@ -199,12 +201,22 @@ export default function SupplierFormModal({
         style={styles.modalOverlay}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={styles.modalContainer}>
+          {/* Drag Handle Bar (Native Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Header */}
           <View style={styles.modalHeader}>
             <View style={styles.headerTitleRow}>
               <View style={styles.headerIconWrap}>
-                <Truck size={18} color="#fb923c" />
+                <Truck size={18} color="#fb7185" />
               </View>
               <View style={styles.headerTextGroup}>
                 <Text style={styles.modalTitle} numberOfLines={1}>
@@ -219,7 +231,7 @@ export default function SupplierFormModal({
             <TouchableOpacity
               style={styles.closeBtn}
               onPress={onClose}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <X size={20} color="#a1a1aa" />
             </TouchableOpacity>
@@ -238,7 +250,7 @@ export default function SupplierFormModal({
             {/* Nama Pemasok (Wajib) */}
             <View style={styles.fieldGroup}>
               <View style={styles.labelRow}>
-                <Building2 size={13} color="#fb923c" style={{ flexShrink: 0 }} />
+                <Building2 size={13} color="#fb7185" style={{ flexShrink: 0 }} />
                 <Text style={styles.fieldLabel}>Nama Perusahaan / Distributor *</Text>
               </View>
               <TextInput
@@ -345,7 +357,7 @@ export default function SupplierFormModal({
             {/* Nama Bank */}
             <View style={styles.fieldGroup}>
               <View style={styles.labelRow}>
-                <CreditCard size={13} color="#fb923c" style={{ flexShrink: 0 }} />
+                <CreditCard size={13} color="#fb7185" style={{ flexShrink: 0 }} />
                 <Text style={styles.fieldLabel}>Nama Bank</Text>
               </View>
               {/* Quick Bank Chips */}
@@ -358,6 +370,7 @@ export default function SupplierFormModal({
                       style={[styles.bankChip, isSelected && styles.bankChipSelected]}
                       onPress={() => setBankName(b)}
                       activeOpacity={0.7}
+                      hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
                     >
                       <Text style={[styles.bankChipText, isSelected && styles.bankChipTextSelected]}>
                         {b}
@@ -414,8 +427,8 @@ export default function SupplierFormModal({
               <Switch
                 value={isActive}
                 onValueChange={setIsActive}
-                trackColor={{ false: '#3f3f46', true: '#ea580c' }}
-                thumbColor={isActive ? '#fb923c' : '#a1a1aa'}
+                trackColor={{ false: '#3f3f46', true: '#e11d48' }}
+                thumbColor={isActive ? '#fb7185' : '#a1a1aa'}
               />
             </View>
 
@@ -435,33 +448,38 @@ export default function SupplierFormModal({
                 onChangeText={setNotes}
               />
             </View>
-          </ScrollView>
 
-          {/* Footer Actions */}
-          <View style={styles.modalFooter}>
+            {/* Danger Zone: Delete Button inside ScrollView in Edit Mode */}
             {isEditMode && (
-              <TouchableOpacity
-                style={styles.deleteBtn}
-                onPress={handleDelete}
-                disabled={submitting || deleting}
-                activeOpacity={0.7}
-              >
-                {deleting ? (
-                  <ActivityIndicator size="small" color="#f87171" />
-                ) : (
-                  <>
-                    <Trash2 size={16} color="#f87171" />
-                    <Text style={styles.deleteBtnText}>Hapus</Text>
-                  </>
-                )}
-              </TouchableOpacity>
+              <View style={styles.dangerZoneBox}>
+                <TouchableOpacity
+                  style={styles.deleteBtnFull}
+                  onPress={handleDelete}
+                  disabled={submitting || deleting}
+                  activeOpacity={0.8}
+                >
+                  {deleting ? (
+                    <ActivityIndicator size="small" color="#f87171" />
+                  ) : (
+                    <>
+                      <Trash2 size={16} color="#f87171" />
+                      <Text style={styles.deleteBtnFullText}>Hapus Data Pemasok</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              </View>
             )}
 
+            <View style={{ height: 16 }} />
+          </ScrollView>
+
+          {/* Sticky Modal Footer: Action Buttons */}
+          <View style={styles.modalFooter}>
             <TouchableOpacity
               style={styles.cancelBtn}
               onPress={onClose}
               disabled={submitting || deleting}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
             >
               <Text style={styles.cancelBtnText}>Batal</Text>
             </TouchableOpacity>
@@ -470,13 +488,13 @@ export default function SupplierFormModal({
               style={[styles.submitBtn, submitting && styles.submitBtnDisabled]}
               onPress={handleSubmit}
               disabled={submitting || deleting}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
             >
               {submitting ? (
-                <ActivityIndicator size="small" color="#09090b" />
+                <ActivityIndicator size="small" color="#ffffff" />
               ) : (
                 <>
-                  <Check size={16} color="#09090b" />
+                  <Check size={16} color="#ffffff" />
                   <Text style={styles.submitBtnText}>
                     {isEditMode ? 'Simpan Perubahan' : 'Daftarkan Pemasok'}
                   </Text>
@@ -496,6 +514,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     justifyContent: 'flex-end',
   },
+  backdropTouchable: {
+    flex: 1,
+  },
   modalContainer: {
     backgroundColor: '#18181b',
     borderTopLeftRadius: 20,
@@ -503,14 +524,38 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#27272a',
     maxHeight: '92%',
-    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
+    paddingTop: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.35,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 12,
+      },
+      web: {
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.5)',
+      },
+    }),
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
@@ -525,9 +570,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 9,
-    backgroundColor: 'rgba(251, 146, 60, 0.12)',
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(251, 146, 60, 0.3)',
+    borderColor: 'rgba(225, 29, 72, 0.3)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -547,7 +592,14 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   closeBtn: {
-    padding: 6,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
     flexShrink: 0,
   },
   formScroll: {
@@ -558,7 +610,7 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   sectionHeader: {
-    color: '#fb923c',
+    color: '#fb7185',
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0.6,
@@ -610,13 +662,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#121215',
     borderWidth: 1,
     borderColor: '#27272a',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 7,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    minHeight: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   bankChipSelected: {
-    backgroundColor: 'rgba(251, 146, 60, 0.15)',
-    borderColor: '#fb923c',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderColor: '#e11d48',
   },
   bankChipText: {
     color: '#a1a1aa',
@@ -624,7 +679,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   bankChipTextSelected: {
-    color: '#fb923c',
+    color: '#fb7185',
   },
   switchRow: {
     flexDirection: 'row',
@@ -652,38 +707,50 @@ const styles = StyleSheet.create({
     marginTop: 2,
     lineHeight: 16,
   },
-  modalFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 12,
+  dangerZoneBox: {
+    marginTop: 8,
     borderTopWidth: 1,
     borderTopColor: '#27272a',
+    paddingTop: 14,
   },
-  deleteBtn: {
+  deleteBtnFull: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: 'rgba(239, 68, 68, 0.12)',
-    borderColor: 'rgba(239, 68, 68, 0.3)',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderColor: 'rgba(239, 68, 68, 0.35)',
     borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderRadius: 10,
-    marginRight: 'auto',
+    minHeight: 44,
   },
-  deleteBtnText: {
+  deleteBtnFullText: {
     color: '#f87171',
     fontSize: 13,
     fontWeight: '600',
   },
+  modalFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 14,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    backgroundColor: '#18181b',
+  },
   cancelBtn: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
   },
   cancelBtnText: {
     color: '#d4d4d8',
@@ -691,19 +758,21 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   submitBtn: {
+    flex: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#fb923c',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    backgroundColor: '#e11d48',
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
   },
   submitBtnDisabled: {
     opacity: 0.6,
   },
   submitBtnText: {
-    color: '#09090b',
+    color: '#ffffff',
     fontSize: 13,
     fontWeight: '700',
   },

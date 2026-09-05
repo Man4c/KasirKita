@@ -37,7 +37,7 @@ function formatRp(value) {
  * Berstandar Impeccable Defensive UI:
  * - The Flexbox Pairing Rule: min-w-0 truncate untuk nama/sales/alamat, shrink-0 whitespace-nowrap untuk badge bank/status.
  * - The Readability Floor Rule: seluruh teks berukuran minimum 12px (text-xs).
- * - Aksen tema Distributor: Warm Orange (#fb923c / #ea580c).
+ * - Aksen tema Distributor: KasirKita Rose (#e11d48 / #fb7185).
  */
 const SupplierCardItem = React.memo(function SupplierCardItem({
   item,
@@ -110,19 +110,19 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
     copyTimerRef.current = setTimeout(() => {
       setCopied(false);
     }, 2000);
-
-    if (Platform.OS !== 'web') {
-      showAlert('Rekening Tersalin', `Nomor rekening ${item.bank_name || ''} ${textToCopy} atas nama ${item.bank_holder || '-'} siap ditransfer.`);
-    }
   };
 
   return (
-    <View style={[styles.card, isInactive && styles.cardInactive]}>
+    <TouchableOpacity
+      style={[styles.card, isInactive && styles.cardInactive]}
+      onPress={() => onEdit(item)}
+      activeOpacity={0.88}
+    >
       {/* Top Header: Badge Distributor & Status */}
       <View style={styles.cardHeader}>
         <View style={styles.headerLeft}>
           <View style={styles.supplierBadge}>
-            <Truck size={12} color="#fb923c" style={{ flexShrink: 0 }} />
+            <Truck size={12} color="#fb7185" style={{ flexShrink: 0 }} />
             <Text style={styles.supplierBadgeText}>PEMASOK</Text>
           </View>
           {isInactive ? (
@@ -138,7 +138,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
 
         {/* Aggregated Purchases Pill */}
         <View style={styles.spentBadge}>
-          <Text style={styles.spentLabel}>Total Kulakan:</Text>
+          <Text style={styles.spentLabel}>Kulakan:</Text>
           <Text style={styles.spentValue}>{formatRp(totalPurchases)}</Text>
         </View>
       </View>
@@ -146,7 +146,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
       {/* Main Body: Supplier Identity & Avatar */}
       <View style={styles.cardBody}>
         <View style={styles.avatarBox}>
-          <Building2 size={20} color="#fb923c" />
+          <Building2 size={20} color="#fb7185" />
         </View>
 
         <View style={styles.identityContainer}>
@@ -171,6 +171,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
                 style={styles.contactChip}
                 onPress={handleCallPhone}
                 activeOpacity={0.7}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 <Phone size={12} color="#34d399" style={{ flexShrink: 0 }} />
                 <Text style={styles.contactChipText} numberOfLines={1}>
@@ -215,8 +216,8 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
         <View style={styles.bankBox}>
           <View style={styles.bankBoxHeader}>
             <View style={styles.bankTag}>
-              <CreditCard size={12} color="#fb923c" style={{ flexShrink: 0 }} />
-              <Text style={styles.bankTagText}>
+              <CreditCard size={12} color="#fb7185" style={{ flexShrink: 0 }} />
+              <Text style={styles.bankTagText} numberOfLines={1}>
                 {item.bank_name || 'BANK'}
               </Text>
             </View>
@@ -225,7 +226,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
                 style={[styles.copyBtn, copied && styles.copyBtnSuccess]}
                 onPress={handleCopyAccount}
                 activeOpacity={0.7}
-                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 {copied ? (
                   <>
@@ -260,7 +261,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
         <View style={styles.statBox}>
           <Package size={13} color="#a1a1aa" style={{ flexShrink: 0 }} />
           <Text style={styles.statText}>
-            <Text style={styles.statBold}>{restocksCount}</Text> Kali Pasokan Masuk
+            <Text style={styles.statBold}>{restocksCount}</Text> Kali Pasokan
           </Text>
         </View>
 
@@ -271,7 +272,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
               style={styles.waBtn}
               onPress={handleOpenWhatsApp}
               activeOpacity={0.7}
-              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
             >
               <MessageCircle size={14} color="#34d399" />
               <Text style={styles.waBtnText}>Chat WA</Text>
@@ -284,9 +285,9 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
                 style={styles.actionBtn}
                 onPress={() => onEdit(item)}
                 activeOpacity={0.7}
-                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
               >
-                <Edit3 size={14} color="#38bdf8" />
+                <Edit3 size={14} color="#f4f4f5" />
                 <Text style={styles.actionBtnEditText}>Edit</Text>
               </TouchableOpacity>
 
@@ -294,7 +295,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
                 style={[styles.actionBtn, styles.actionBtnDelete]}
                 onPress={() => onDelete(item)}
                 activeOpacity={0.7}
-                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 <Trash2 size={14} color="#f87171" />
               </TouchableOpacity>
@@ -302,7 +303,7 @@ const SupplierCardItem = React.memo(function SupplierCardItem({
           )}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 });
 
@@ -354,8 +355,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(251, 146, 60, 0.12)',
-    borderColor: 'rgba(251, 146, 60, 0.35)',
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    borderColor: 'rgba(225, 29, 72, 0.35)',
     borderWidth: 1,
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   supplierBadgeText: {
-    color: '#fb923c',
+    color: '#fb7185',
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0.4,
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   spentValue: {
-    color: '#fb923c',
+    color: '#f4f4f5',
     fontSize: 12,
     fontWeight: '700',
   },
@@ -427,8 +428,8 @@ const styles = StyleSheet.create({
     height: 42,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'rgba(251, 146, 60, 0.3)',
-    backgroundColor: 'rgba(251, 146, 60, 0.1)',
+    borderColor: 'rgba(225, 29, 72, 0.3)',
+    backgroundColor: 'rgba(225, 29, 72, 0.1)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -463,10 +464,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#27272a',
-    paddingHorizontal: 7,
-    paddingVertical: 3,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: 6,
     maxWidth: '100%',
+    minHeight: 26,
   },
   contactChipText: {
     color: '#34d399',
@@ -516,20 +518,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 4,
+    marginBottom: 6,
+    gap: 8,
   },
   bankTag: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(251, 146, 60, 0.1)',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    backgroundColor: 'rgba(225, 29, 72, 0.1)',
+    paddingHorizontal: 7,
+    paddingVertical: 3,
     borderRadius: 4,
-    flexShrink: 0,
+    flexShrink: 1,
+    minWidth: 0,
   },
   bankTagText: {
-    color: '#fb923c',
+    color: '#fb7185',
     fontSize: 12,
     fontWeight: '700',
   },
@@ -539,9 +543,10 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: '#27272a',
     paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderRadius: 6,
-    minHeight: 28,
+    minHeight: 30,
+    flexShrink: 0,
   },
   copyBtnSuccess: {
     backgroundColor: 'rgba(52, 211, 153, 0.15)',
@@ -612,10 +617,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 211, 153, 0.12)',
     borderColor: 'rgba(52, 211, 153, 0.3)',
     borderWidth: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingHorizontal: 9,
+    paddingVertical: 6,
     borderRadius: 7,
-    minHeight: 32,
+    minHeight: 34,
   },
   waBtnText: {
     color: '#34d399',
@@ -627,13 +632,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#27272a',
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingHorizontal: 9,
+    paddingVertical: 6,
     borderRadius: 7,
-    minHeight: 32,
+    minHeight: 34,
   },
   actionBtnEditText: {
-    color: '#38bdf8',
+    color: '#f4f4f5',
     fontSize: 12,
     fontWeight: '600',
   },
@@ -641,6 +646,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(239, 68, 68, 0.12)',
     borderColor: 'rgba(239, 68, 68, 0.3)',
     borderWidth: 1,
-    paddingHorizontal: 7,
+    paddingHorizontal: 9,
   },
 });
