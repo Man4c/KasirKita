@@ -285,8 +285,9 @@ function MainApp() {
             >
               <View style={[styles.navIconPill, activeTab === 'dashboard' && styles.navIconPillActive]}>
                 <BarChart3
-                  size={20}
-                  color={activeTab === 'dashboard' ? '#fb7185' : '#71717a'}
+                  size={22}
+                  strokeWidth={2}
+                  color={activeTab === 'dashboard' ? '#fb7185' : '#9ca3af'}
                 />
               </View>
               <Text style={[styles.navText, activeTab === 'dashboard' && styles.navTextActive]} numberOfLines={1}>
@@ -303,8 +304,9 @@ function MainApp() {
           >
             <View style={[styles.navIconPill, activeTab === 'pos' && styles.navIconPillActive]}>
               <ShoppingCart
-                size={20}
-                color={activeTab === 'pos' ? '#fb7185' : '#71717a'}
+                size={22}
+                strokeWidth={2}
+                color={activeTab === 'pos' ? '#fb7185' : '#9ca3af'}
               />
             </View>
             <Text style={[styles.navText, activeTab === 'pos' && styles.navTextActive]} numberOfLines={1}>
@@ -320,8 +322,9 @@ function MainApp() {
           >
             <View style={[styles.navIconPill, activeTab === 'history' && styles.navIconPillActive]}>
               <Receipt
-                size={20}
-                color={activeTab === 'history' ? '#fb7185' : '#71717a'}
+                size={22}
+                strokeWidth={2}
+                color={activeTab === 'history' ? '#fb7185' : '#9ca3af'}
               />
             </View>
             <Text style={[styles.navText, activeTab === 'history' && styles.navTextActive]} numberOfLines={1}>
@@ -337,8 +340,9 @@ function MainApp() {
           >
             <View style={[styles.navIconPill, activeTab === 'settings' && styles.navIconPillActive]}>
               <Settings
-                size={20}
-                color={activeTab === 'settings' ? '#fb7185' : '#71717a'}
+                size={22}
+                strokeWidth={2}
+                color={activeTab === 'settings' ? '#fb7185' : '#9ca3af'}
               />
             </View>
             <Text style={[styles.navText, activeTab === 'settings' && styles.navTextActive]} numberOfLines={1}>
@@ -556,8 +560,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#18181b',
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    paddingTop: 10,
-    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingHorizontal: 8,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -580,22 +584,26 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   navIconPill: {
-    paddingVertical: 4,
-    paddingHorizontal: 12,
-    borderRadius: 14,
+    minWidth: 54,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'transparent',
   },
   navIconPillActive: {
-    backgroundColor: 'rgba(225, 29, 72, 0.16)',
+    backgroundColor: 'rgba(244, 63, 94, 0.16)',
   },
   navText: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#a1a1aa',
+    color: '#9ca3af',
+    includeFontPadding: false,
+    textAlign: 'center',
   },
   navTextActive: {
     color: '#fb7185',
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins_600SemiBold',
   },
   body: {
     flex: 1,
