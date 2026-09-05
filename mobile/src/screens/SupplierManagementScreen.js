@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   listContent: {
-    paddingBottom: 100,
+    paddingBottom: 120,
   },
   listContentEmpty: {
     flexGrow: 1,
