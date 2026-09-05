@@ -1,7 +1,7 @@
 ---
 title: Master Pelanggan & Keanggotaan di Mobile
 description: Perancangan dan implementasi modul manajemen Master Pelanggan (Customer) dan Keanggotaan (Membership REGULAR, VIP, WHOLESALE) pada aplikasi Mobile (React Native), mencakup ringkasan metrik total belanja dan kunjungan, pencarian cepat nama/telepon, filter level member, formulir modal tambah/edit pelanggan, integrasi WhatsApp direct call/chat, tombol aksi hub dashboard, serta sinkronisasi reaktif dengan Customer Picker kasir POS.
-status: pending
+status: completed
 priority: P1
 effort: 6h
 tags: [mobile, master-pelanggan, customer, membership, pos-sync, whatsapp, offline-first, rbac]
@@ -87,7 +87,7 @@ mobile/src/
 | 3 | **Komponen Kartu & Layar Utama (`CustomerCardItem.js` & `CustomerManagementScreen.js`)**: Pembuatan kartu pelanggan dengan badge membership VIP/Grosir, metrik total belanja, aksi cepat kontak WhatsApp, tab segmented, dan FlatList tervirtualisasi. | completed |
 | 4 | **Modal Formulir Tambah/Edit (`CustomerFormModal.js`)**: Pembuatan modal interaktif pendaftaran/edit member dengan selector tipe membership, validasi nomor HP unik, catatan khusus, dan tombol hapus aman. | completed |
 | 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi Kasir POS**: Menghubungkan launcher di `DashboardActionHub.js`, registrasi rute di `App.js` dengan proteksi peran Owner/Manager, serta sinkronisasi reaktif ke Customer Picker di kasir POS. | completed |
-| 6 | **Audit Kualitas, Defensive UI Check, & Uji Coba Multi-Platform**: Audit linter (`node detect.mjs`), uji ekspor Web (`npx expo export --platform web`), verifikasi kepatuhan WCAG readability floor (min. 12px), dan verifikasi sinkronisasi offline-first. | pending |
+| 6 | **Audit Kualitas, Defensive UI Check, & Uji Coba Multi-Platform**: Audit linter (`node detect.mjs`), uji ekspor Web (`npx expo export --platform web`), verifikasi kepatuhan WCAG readability floor (min. 12px), dan verifikasi sinkronisasi offline-first. | completed |
 
 ---
 

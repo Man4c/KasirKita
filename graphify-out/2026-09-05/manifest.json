@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788592295.0804932,
-    "ast_hash": "a04a1d5f06012c43f0b25395fa695ccb",
+    "mtime": 1788592948.3004992,
+    "ast_hash": "7311dfc2a6d2b24109c6a02525575577",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788580810.1917827,
-    "ast_hash": "57f3347e4a55042f69d0a57b027e0dd2",
+    "mtime": 1788592687.342721,
+    "ast_hash": "35c202d01a2113c24267ed5db5c665e5",
     "semantic_hash": ""
   },
   "mobile/app.json": {
@@ -1390,8 +1390,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {
-    "mtime": 1788578010.7852814,
-    "ast_hash": "b295024e5079e08aa8c4fe6ec53f7a15",
+    "mtime": 1788592665.4380002,
+    "ast_hash": "4c78454325cacb1cd220e666012c9ffa",
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
@@ -2210,8 +2210,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/TaxFeeModal.js": {
-    "mtime": 1788353104.643382,
-    "ast_hash": "2df632a760c62d2b0f44df2f3bb044ef",
+    "mtime": 1788592714.307803,
+    "ast_hash": "45c4dd8b568b6b9cc6dda47a7d839a30",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/ChangePasswordModal.js": {
@@ -2315,8 +2315,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/dashboard/DashboardActionHub.js": {
-    "mtime": 1788572557.5979393,
-    "ast_hash": "76e6e504858c9902a879bdc2fd83597f",
+    "mtime": 1788592651.853786,
+    "ast_hash": "c49f76a4aeccebb5ce5a8d69d2b2a148",
     "semantic_hash": ""
   },
   "mobile/src/components/product/ProductBarcodeScannerModal.js": {
@@ -2460,8 +2460,8 @@
     "semantic_hash": ""
   },
   "plans/260905-29-mobile-master-pajak-dan-biaya/plan.md": {
-    "mtime": 1788592288.1036332,
-    "ast_hash": "c14ffb83d67ea63e6ecb89a6cf3b4685",
+    "mtime": 1788592942.4664216,
+    "ast_hash": "11a8205b15b2c647a58e113a9734746e",
     "semantic_hash": ""
   },
   "mobile/src/services/taxService.js": {
@@ -2475,8 +2475,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/tax/TaxFormModal.js": {
-    "mtime": 1788592180.7471533,
-    "ast_hash": "300ad19c6a5cbfd063ded73fbc4d4631",
+    "mtime": 1788592481.8873162,
+    "ast_hash": "cd3448c477b62edb5abeda4b4811efe4",
     "semantic_hash": ""
   },
   "mobile/src/screens/TaxManagementScreen.js": {
