@@ -319,7 +319,6 @@
   "317": "updateBarContent",
   "318": "bolder.md",
   "319": "applyEditing",
-  "320": "onAnnotDown",
   "321": "expo-audio",
   "322": "BORDER_SAFE_TAGS",
   "323": "expo-font",
@@ -342,15 +341,9 @@
   "340": "barcode-detector",
   "341": "TransactionHistoryScreen.js",
   "342": "syncEditBadgeHitProxies",
-  "343": "bolder.md",
   "344": "UserFactory",
   "345": "checkHeroEyebrow",
   "346": "react",
   "347": "react-native",
-  "348": "@react-native-community/datetimepicker",
-  "349": "BORDER_SAFE_TAGS",
-  "350": "Generate Report",
-  "351": "Diagnostic Scan",
-  "352": "Visualize: Direction Comps & Asset Production",
-  "353": "Adaptation Strategies"
+  "348": "@react-native-community/datetimepicker"
 }

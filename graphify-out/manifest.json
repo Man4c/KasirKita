@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788592001.7956026,
-    "ast_hash": "c957eaa818f906c0be0c121f613266ce",
+    "mtime": 1788592295.0804932,
+    "ast_hash": "a04a1d5f06012c43f0b25395fa695ccb",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2460,13 +2460,28 @@
     "semantic_hash": ""
   },
   "plans/260905-29-mobile-master-pajak-dan-biaya/plan.md": {
-    "mtime": 1788591993.7456405,
-    "ast_hash": "2de2ffeee9397cdc84828158f6c15e3f",
+    "mtime": 1788592288.1036332,
+    "ast_hash": "c14ffb83d67ea63e6ecb89a6cf3b4685",
     "semantic_hash": ""
   },
   "mobile/src/services/taxService.js": {
     "mtime": 1788591977.0441022,
     "ast_hash": "5a48279c70ea295f6d0979e148c04cb7",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/tax/TaxCardItem.js": {
+    "mtime": 1788592136.3962936,
+    "ast_hash": "3a041e06d60544a41205c4a30c4a8ed9",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/tax/TaxFormModal.js": {
+    "mtime": 1788592180.7471533,
+    "ast_hash": "300ad19c6a5cbfd063ded73fbc4d4631",
+    "semantic_hash": ""
+  },
+  "mobile/src/screens/TaxManagementScreen.js": {
+    "mtime": 1788592225.439451,
+    "ast_hash": "dc7a06fc961d72b29b9dc89146e21e9d",
     "semantic_hash": ""
   }
 }
