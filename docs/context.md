@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Combo Soft Delete & Hapus Cerdas (Smart Reassign) pada Master Kategori & Satuan**:
+  - Menyempurnakan arsitektur integritas data pada Master Kategori dan Master Satuan:
+    1. *Database Migrasi Soft Delete (`2026_09_05_153720_add_soft_deletes_to_categories_and_units_tables.php`)*: Menambahkan kolom `deleted_at` pada tabel `categories` dan `units`.
+    2. *Eloquent Model Traits (`Category.php` & `Unit.php`)*: Mengaktifkan trait `SoftDeletes` pada kedua model, menjamin bahwa kategori dan satuan yang dihapus tidak pernah hilang permanen, sehingga riwayat kalkulasi transaksi/struk dan laporan audit masa lalu tetap utuh.
+    3. *Backend Smart Reassign Satuan (`UnitController.php`)*: Mengupgrade endpoint `DELETE /api/units/{id}` untuk mendukung parameter `{ action: 'reassign', target_unit_id: ... }`. Saat satuan yang masih menaungi produk dasar atau varian konversi dihapus, seluruh produk otomatis dialihkan ke satuan pengganti (`base_unit_id`), referensi konversi duplikat dibersihkan, dan satuan lama di-soft delete secara aman.
+    4. *Native Bottom Sheet Hapus Cerdas Satuan (`UnitDeleteModal.js`)*: Menghadirkan bottom sheet dialog modern jika pengguna menghapus satuan yang memiliki produk/konversi $> 0$. Pengguna dapat memilih satuan pengganti (misal: *Pcs*, *Kg*, *Botol*, dll.) secara interaktif, tombol Batal dan tombol eksekusi *"Pindahkan & Hapus"* (minHeight 44dp).
+    5. *Integrasi Layar Master Satuan Mobile (`UnitManagementScreen.js`, `UnitCardItem.js`, `unitService.js`)*: Mengaktifkan tombol Hapus pada seluruh kartu satuan (tanpa status disabled), menghubungkan `UnitDeleteModal`, dan menambahkan dukungan payload pada `unitService.deleteUnit()`.
+  - Lolos uji detektor Impeccable (0 defect) dan kompatibilitas sintaks penuh.
+
 - **Perbaikan Eksekusi Konfirmasi Hapus Data Master (`mobile/src/utils/alert.js`)**:
   - Menyelesaikan bug tombol konfirmasi hapus (seperti pada Master Kategori, Pelanggan, Pajak, Satuan, Promosi) yang hanya memunculkan dialog info dengan tombol "OK" tunggal tanpa tombol "Ya, Hapus" / "Batal":
     1. *Penyebab*: Fungsi pembantu [`showAlert.js`](file:///d:/Projects/KasirKita/mobile/src/utils/alert.js) sebelumnya hanya menerima parameter `(title, message)` dan mengabaikan parameter array `buttons`. Pada React Native Web/browser, `Alert.alert` terpanggil tanpa tombol pilihan atau hanya memunculkan modal OK bawaan browser, sehingga callback `onPress` untuk `categoryService.deleteCategory()` tidak pernah dapat dieksekusi oleh pengguna.
