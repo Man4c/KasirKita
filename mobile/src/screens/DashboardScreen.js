@@ -52,6 +52,7 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
 
       if (cachedSummary?.summary) {
         setSummary(cachedSummary.summary);
+        setLoading(false);
         if (cachedSummary.lastSync) {
           setLastSyncTime(new Date(cachedSummary.lastSync));
         }
@@ -138,16 +139,9 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
     }
   };
 
-  // Full-screen spinner only on initial load when NO cached data is available
-  if (loading && !summary) {
-    return (
-      <View style={styles.centerBox}>
-        <ActivityIndicator color="#e11d48" size="large" />
-        <Text style={styles.loadingText}>Memuat ringkasan toko...</Text>
-      </View>
-    );
-  }
-
+  // Instant non-blocking render: do not block screen with full-page spinner.
+  // Render the dashboard shell and cards immediately for sub-second LCP.
+  const isInitialLoading = loading && !summary;
   const sales = summary?.sales || {};
   const profit = summary?.profitability || {};
   const inv = summary?.inventory || {};
@@ -165,13 +159,18 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <Text style={styles.headerTitle}>Dashboard</Text>
-          {lastSyncTime && (
+          {lastSyncTime ? (
             <View style={styles.syncBadge}>
               <Text style={styles.syncBadgeText}>
                 Sinkron: {formatLastSync(lastSyncTime)}
               </Text>
             </View>
-          )}
+          ) : isInitialLoading ? (
+            <View style={[styles.syncBadge, { flexDirection: 'row', alignItems: 'center', gap: 6 }]}>
+              <ActivityIndicator size="small" color="#fb7185" />
+              <Text style={styles.syncBadgeText}>Memuat...</Text>
+            </View>
+          ) : null}
         </View>
         <Text style={styles.headerSubtitle}>
           Ringkasan performa penjualan dan keuangan hari ini
