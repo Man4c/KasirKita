@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Kestabilan Angka Tab & Filter Master Pelanggan & Pemasok (Pencegahan Tab-Switch Metrics Collapse)**:
+  - Menyelesaikan bug di mana saat berpindah ke tab *"VIP"*, counter tab *"Semua"* dan tab lainnya menyusut atau menjadi 0 (`Semua (3) -> Semua (1)`, `Grosir (1) -> Grosir (0)`, dan subjudul `1 pelanggan terdaftar (1 VIP, 0 Grosir)`):
+    1. *Stabilitas Master Data*: `loadCustomers` dan `loadSuppliers` kini memuat seluruh data master toko (`{ all: true }`) tanpa menyertakan filter kategori/status ke query backend, sehingga array master tetap utuh.
+    2. *Kestabilan Metrik*: Total counter pelanggan, penghitungan per-tier (VIP, Grosir, Reguler), total pemasok, dan nominal belanja/kulakan di subjudul header selalu dihitung dari master data toko sehingga tidak pernah kolaps/berubah saat berpindah tab.
+    3. *Client-side Filter Instan (0ms Latency)*: Menggunakan `useMemo` (`displayedCustomers` & `displayedItems`) untuk memfilter item berdasarkan tab aktif, filter status, dan pencarian secara real-time tanpa berkedip atau memicu spinner loading ulang.
+  - Lolos uji verifikasi penuh: detektor Impeccable (0 defect) dan kompilasi Expo web sukses (2.347 modul).
+
 - **Penyelarasan Presisi Header & Filter Master Pemasok dengan Standar Master Pajak & Pelanggan (`SupplierManagementScreen.js`)**:
   - Menyamakan 100% susunan visual, tipografi, dan kontrol filter header `SupplierManagementScreen.js` agar identik dengan standar `TaxManagementScreen.js` dan `CustomerManagementScreen.js`:
     1. *Struktur Container Baku*: Mengubah wrapper menjadi `<View style={styles.root}><View style={styles.container}>` dengan background murni `#09090b` dan padding horizontal konsisten 16dp, menghilangkan background abu-abu terpisah `#121215` pada header.

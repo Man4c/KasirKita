@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -72,10 +72,7 @@ export default function SupplierManagementScreen({ navigation }) {
       }
 
       try {
-        const res = await supplierService.getSuppliers({
-          search: debouncedSearch.trim() || undefined,
-          is_active: statusFilter === 'ALL' ? undefined : statusFilter === 'ACTIVE',
-        });
+        const res = await supplierService.getSuppliers({ all: true });
         setItems(res.items || []);
         setIsOffline(Boolean(res.fromCache));
       } catch (err) {
@@ -86,7 +83,7 @@ export default function SupplierManagementScreen({ navigation }) {
         setRefreshing(false);
       }
     },
-    [debouncedSearch, statusFilter]
+    []
   );
 
   useEffect(() => {
@@ -159,11 +156,33 @@ export default function SupplierManagementScreen({ navigation }) {
     [isOwner, loadSuppliers]
   );
 
-  // Aggregated Metrics Calculation
+  // Aggregated Metrics Calculation (Dihitung stabil dari master seluruh pemasok toko)
   const totalCount = items.length;
   const activeCount = items.filter((item) => Boolean(item.is_active)).length;
   const totalRestocks = items.reduce((acc, curr) => acc + Number(curr.restocks_count || 0), 0);
   const totalPurchasesAmount = items.reduce((acc, curr) => acc + Number(curr.total_purchases || 0), 0);
+
+  // Client-side Filtered Items (Instan 0ms latency tanpa refetch & angka header stabil)
+  const displayedItems = useMemo(() => {
+    return items.filter((item) => {
+      // 1. Filter Status Aktif
+      if (statusFilter === 'ACTIVE' && !item.is_active) return false;
+      if (statusFilter === 'INACTIVE' && item.is_active) return false;
+
+      // 2. Filter Pencarian
+      if (debouncedSearch.trim()) {
+        const q = debouncedSearch.toLowerCase().trim();
+        const matchName = item.name?.toLowerCase().includes(q);
+        const matchContact = item.contact_person?.toLowerCase().includes(q);
+        const matchPhone = item.phone?.includes(q);
+        const matchEmail = item.email?.toLowerCase().includes(q);
+        const matchBank = item.bank_account?.includes(q) || item.bank_name?.toLowerCase().includes(q);
+        if (!matchName && !matchContact && !matchPhone && !matchEmail && !matchBank) return false;
+      }
+
+      return true;
+    });
+  }, [items, statusFilter, debouncedSearch]);
 
   // Status Filter Chips
   const statusChips = [
@@ -291,7 +310,7 @@ export default function SupplierManagementScreen({ navigation }) {
           </View>
         ) : (
           <FlatList
-            data={items}
+            data={displayedItems}
             keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => (
               <SupplierCardItem
@@ -303,7 +322,7 @@ export default function SupplierManagementScreen({ navigation }) {
             )}
             contentContainerStyle={[
               styles.listContent,
-              items.length === 0 && styles.listContentEmpty,
+              displayedItems.length === 0 && styles.listContentEmpty,
             ]}
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
@@ -321,15 +340,21 @@ export default function SupplierManagementScreen({ navigation }) {
                   <Building2 size={36} color="#52525b" />
                 </View>
                 <Text style={styles.emptyTitle}>
-                  {search ? 'Pemasok Tidak Ditemukan' : 'Belum Ada Pemasok'}
+                  {debouncedSearch
+                    ? 'Pemasok Tidak Ditemukan'
+                    : statusFilter !== 'ALL'
+                    ? 'Tidak Ada Pemasok di Filter Ini'
+                    : 'Belum Ada Pemasok'}
                 </Text>
                 <Text style={styles.emptySubtitle}>
-                  {search
-                    ? `Tidak ada distributor yang cocok dengan kata kunci "${search}". Periksa ejaan nama atau nomor telepon.`
+                  {debouncedSearch
+                    ? `Tidak ada distributor yang cocok dengan kata kunci "${debouncedSearch}". Periksa ejaan nama atau nomor telepon.`
+                    : statusFilter !== 'ALL'
+                    ? 'Tidak ada distributor yang sesuai dengan filter status yang Anda pilih.'
                     : 'Daftarkan distributor barang pertama Anda untuk mengelola kontak sales, nomor rekening, dan riwayat pasokan barang.'}
                 </Text>
 
-                {isOwner && !search && (
+                {isOwner && !debouncedSearch && statusFilter === 'ALL' && (
                   <TouchableOpacity
                     style={styles.emptyActionBtn}
                     onPress={handleOpenCreate}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -76,11 +76,7 @@ export default function CustomerManagementScreen({ navigation }) {
       }
 
       try {
-        const res = await customerService.getCustomers({
-          search: debouncedSearch.trim() || undefined,
-          membership_type: activeTab === 'ALL' ? undefined : activeTab,
-          is_active: statusFilter === 'ALL' ? undefined : statusFilter === 'ACTIVE',
-        });
+        const res = await customerService.getCustomers({ all: true });
         setItems(res.items || []);
         setIsOffline(Boolean(res.fromCache));
       } catch (err) {
@@ -91,7 +87,7 @@ export default function CustomerManagementScreen({ navigation }) {
         setRefreshing(false);
       }
     },
-    [debouncedSearch, activeTab, statusFilter]
+    []
   );
 
   useEffect(() => {
@@ -146,7 +142,7 @@ export default function CustomerManagementScreen({ navigation }) {
     []
   );
 
-  // Summary Metrics Aggregations
+  // Summary Metrics Aggregations (Dihitung stabil dari master seluruh pelanggan toko)
   const totalCustomers = items.length;
   const vipCount = items.filter((i) => (i.membership_type || '').toUpperCase() === 'VIP').length;
   const wholesaleCount = items.filter((i) => (i.membership_type || '').toUpperCase() === 'WHOLESALE').length;
@@ -155,6 +151,32 @@ export default function CustomerManagementScreen({ navigation }) {
     return type === 'REGULAR' || !type;
   }).length;
   const totalAccumulatedSpent = items.reduce((acc, curr) => acc + Number(curr.total_spent || 0), 0);
+
+  // Client-side Filtered Items (Instan 0ms latency tanpa refetch berkedip & mencegah angka tab kolaps)
+  const displayedCustomers = useMemo(() => {
+    return items.filter((item) => {
+      // 1. Filter Keanggotaan / Membership
+      if (activeTab !== 'ALL') {
+        const memType = (item.membership_type || 'REGULAR').toUpperCase();
+        if (memType !== activeTab) return false;
+      }
+
+      // 2. Filter Status Aktif
+      if (statusFilter === 'ACTIVE' && !item.is_active) return false;
+      if (statusFilter === 'INACTIVE' && item.is_active) return false;
+
+      // 3. Filter Pencarian
+      if (debouncedSearch.trim()) {
+        const query = debouncedSearch.toLowerCase().trim();
+        const matchName = item.name?.toLowerCase().includes(query);
+        const matchPhone = item.phone?.includes(query);
+        const matchEmail = item.email?.toLowerCase().includes(query);
+        if (!matchName && !matchPhone && !matchEmail) return false;
+      }
+
+      return true;
+    });
+  }, [items, activeTab, statusFilter, debouncedSearch]);
 
   const renderCustomerItem = useCallback(
     ({ item }) => (
@@ -357,7 +379,7 @@ export default function CustomerManagementScreen({ navigation }) {
           </View>
         ) : (
           <FlatList
-            data={items}
+            data={displayedCustomers}
             renderItem={renderCustomerItem}
             keyExtractor={(item) => String(item.id)}
             contentContainerStyle={styles.listContent}
@@ -380,14 +402,18 @@ export default function CustomerManagementScreen({ navigation }) {
                 <Text style={styles.emptyTitle}>
                   {debouncedSearch
                     ? 'Pelanggan Tidak Ditemukan'
+                    : activeTab !== 'ALL' || statusFilter !== 'ALL'
+                    ? 'Tidak Ada Pelanggan di Filter Ini'
                     : 'Belum Ada Pelanggan Terdaftar'}
                 </Text>
                 <Text style={styles.emptyDesc}>
                   {debouncedSearch
                     ? `Tidak ada pelanggan yang cocok dengan kata kunci "${debouncedSearch}".`
+                    : activeTab !== 'ALL' || statusFilter !== 'ALL'
+                    ? 'Tidak ada pelanggan yang sesuai dengan kategori keanggotaan atau status yang Anda pilih.'
                     : 'Daftarkan pelanggan atau member tetap untuk mencatat riwayat transaksi dan loyalty point.'}
                 </Text>
-                {isOwner && !debouncedSearch && (
+                {isOwner && !debouncedSearch && activeTab === 'ALL' && statusFilter === 'ALL' && (
                   <TouchableOpacity
                     style={styles.emptyActionBtn}
                     onPress={handleOpenCreate}
