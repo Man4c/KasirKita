@@ -79,6 +79,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     2. *Memoization Callback `renderItem`*: Mengonversi seluruh renderItem inline di `PromoManagementScreen` dan `ProductGrid` menjadi `useCallback` memoized agar tidak memicu re-instansiasi komponen kartu yang tidak perlu saat state parent berubah.
   - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
 
+- **Penyederhanaan Skema Promosi & Progressive Disclosure Minimal Belanja (`PromoFormModal.js`, `Discounts.jsx`)**:
+  - Menyelesaikan kebingungan mental model pada formulir promosi di mana sebelumnya terdapat 3 tombol skema (`Diskon %`, `Diskon Rp`, `Min. Belanja`) namun kolom minimal belanja tetap muncul di semua tipe:
+    1. *Penyederhanaan Skema Diskon*: Selector tipe diskon disederhanakan menjadi 2 bentuk pemotong utama murni: `Diskon %` (`PERCENTAGE`) dan `Diskon Rp` (`FIXED`), menghilangkan tombol redundan `Min. Belanja`.
+    2. *Progressive Disclosure Syarat Minimal Belanja*: Menambahkan toggle switch interaktif *"Syarat Minimal Belanja"*:
+       - Secara default (OFF), formulir sangat ringkas dan bersih tanpa kolom minimal belanja.
+       - Saat diaktifkan (ON), kolom input `Minimal Pembelian (Rp) *` muncul secara mulus dengan validasi $> 0$.
+       - Jika dinonaktifkan, nilai minimal belanja otomatis di-reset ke 0.
+    3. *Penerapan Serentak Mobile & Web*: Fitur ini diimplementasikan seragam di modal mobile (`PromoFormModal.js`) dan modal web (`Discounts.jsx`).
+    4. *Backward Compatibility*: Promo lama di database dengan tipe `MIN_SPEND` otomatis dimetakan sebagai `PERCENTAGE` dengan toggle minimal belanja aktif dan nominal belanja yang terisi presisi.
+  - Lolos pengujian build platform web (`npm run build` $\rightarrow$ Vite build sukses 0 error) dan mobile web export (`npx expo export --platform web` $\rightarrow$ 0 error).
+
 - **Penyelarasan Stroke Ikon, Indikator Aktif Pill, dan Kontras Bottom Navigation Bar (`App.js`)**:
   - Menyelesaikan 3 poin kerapian visual pada bilah navigasi bawah (*bottom nav*):
     1. *Konsistensi Stroke & Ukuran Ikon*: Menetapkan `size={22}` dan `strokeWidth={2}` eksplisit dan seragam pada seluruh ikon navigasi (`BarChart3`, `ShoppingCart`, `Receipt`, `Settings`) dari `lucide-react-native`, menghilangkan ketimpangan ketebalan visual antara keranjang dan gear.
