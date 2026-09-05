@@ -26,6 +26,7 @@ import {
 import { customerService } from '../services/customerService';
 import { useAuth } from '../context/AuthContext';
 import CustomerCardItem from '../components/customer/CustomerCardItem';
+import CustomerFormModal from '../components/customer/CustomerFormModal';
 import { showAlert } from '../utils/alert';
 
 /**
@@ -103,19 +104,20 @@ export default function CustomerManagementScreen({ navigation }) {
 
   // Open Create Customer Modal
   const handleOpenCreate = () => {
-    showAlert(
-      'Tambah Pelanggan (Fase 4)',
-      'Modal formulir pendaftaran pelanggan baru akan diaktifkan penuh pada pengerjaan Fase 4.'
-    );
+    setSelectedCustomerForEdit(null);
+    setFormModalVisible(true);
   };
 
   // Open Edit Customer Modal
   const handleEditCustomer = useCallback((customer) => {
-    showAlert(
-      'Edit Pelanggan (Fase 4)',
-      `Formulir pengeditan untuk "${customer.name}" akan diaktifkan pada Fase 4.`
-    );
+    setSelectedCustomerForEdit(customer);
+    setFormModalVisible(true);
   }, []);
+
+  // Form Success callback
+  const handleFormSuccess = () => {
+    loadCustomers(false);
+  };
 
   // Delete Customer with Confirmation
   const handleDeleteCustomer = useCallback(
@@ -416,6 +418,14 @@ export default function CustomerManagementScreen({ navigation }) {
           <Text style={styles.fabText}>Tambah Pelanggan</Text>
         </TouchableOpacity>
       )}
+
+      {/* Customer Form Modal */}
+      <CustomerFormModal
+        visible={formModalVisible}
+        onClose={() => setFormModalVisible(false)}
+        customer={selectedCustomerForEdit}
+        onSuccess={handleFormSuccess}
+      />
     </View>
   );
 }

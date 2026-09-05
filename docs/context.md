@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 4 Master Pelanggan & Keanggotaan di Mobile (`CustomerFormModal.js`, Plan #30)**:
+  - Menyelesaikan formulir modal pendaftaran dan edit pelanggan (`mobile/src/components/customer/CustomerFormModal.js`):
+    1. *Formulir Identitas Lengkap*: Input nama lengkap pelanggan (wajib), nomor telepon / WhatsApp (validasi numerik min 8 digit), email terverifikasi regex, dan alamat domisili/pengiriman.
+    2. *Selector Tingkat Keanggotaan (Membership Tier)*: Kartu pilihan interaktif dengan radio visual untuk `REGULAR` (Teal), `VIP` (Amber Gold), dan `WHOLESALE` (Sky Blue).
+    3. *Status & Catatan Toko*: Switch status aktif pelanggan untuk POS dan input catatan preferensi/instruksi belanja.
+    4. *Aksi Edit & Hapus*: Tombol hapus pelanggan aman khusus mode edit, loading submit state, dan pesan error validasi inline 422.
+    5. *Kepatuhan & Linter*: Lolos verifikasi sintaks JS (`node -c`) dan lolos audit linter `detect.mjs` (0 defect). Phase 4 Plan #30 berstatus `completed`.
+
 - **Implementasi Phase 3 Master Pelanggan & Keanggotaan di Mobile (`CustomerCardItem.js`, `CustomerManagementScreen.js`, Plan #30)**:
   - Mengimplementasikan komponen visual kartu item dan layar utama berstandar Defensive UI Impeccable:
     1. *Kartu Item Pelanggan (`CustomerCardItem.js`)*: Desain dengan badge membership kontras (VIP: Amber Gold `#fbbf24`, WHOLESALE: Sky Blue `#38bdf8`, REGULAR: Teal `#2dd4bf`), avatar tier, kontak telepon/email, alamat pengiriman, indikator frekuensi transaksi & total akumulasi belanja, serta aksi cepat chat WhatsApp (`Linking.openURL`), panggilan telepon, tombol Edit, dan Hapus aman.
