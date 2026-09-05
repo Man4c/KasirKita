@@ -38,7 +38,7 @@ const TransactionCardItem = React.memo(function TransactionCardItem({
   return (
     <TouchableOpacity
       style={[styles.txCard, isOfflinePending && styles.txCardOfflinePending]}
-      activeOpacity={0.7}
+      activeOpacity={0.85}
       onPress={() => onPress(item)}
     >
       <View style={styles.txCardHeader}>

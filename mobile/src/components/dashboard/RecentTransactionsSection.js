@@ -97,7 +97,7 @@ export default function RecentTransactionsSection({
               <TouchableOpacity
                 key={tx.id || idx}
                 style={[styles.txItem, !isLast && styles.txItemBorder]}
-                activeOpacity={0.7}
+                activeOpacity={0.82}
                 onPress={() => onSelectTx && onSelectTx(tx)}
               >
                 {/* Left: Invoice, Customer, and Time */}
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 9,
+    paddingVertical: 12,
     gap: 8,
   },
   txItemBorder: {

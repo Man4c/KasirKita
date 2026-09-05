@@ -28,12 +28,22 @@ export default function PosReceiptModal({
   return (
     <Modal
       visible={visible}
-      animationType={isLandscape ? 'fade' : 'slide'}
+      animationType="slide"
       transparent={true}
       onRequestClose={onClose}
     >
       <View style={styles.receiptModalOverlay}>
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={[styles.receiptSheet, isLandscape && styles.receiptSheetLandscape]}>
+          {/* Drag Handle Bar (Mobile Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Modal Header Bar */}
           <View style={styles.receiptTopBar}>
             <Text style={styles.receiptTopBarTitle}>Struk Transaksi</Text>
@@ -42,14 +52,14 @@ export default function PosReceiptModal({
               style={styles.receiptCloseBtn}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <X size={18} color="#71717a" />
+              <X size={18} color="#a1a1aa" />
             </TouchableOpacity>
           </View>
 
           <ScrollView
             style={styles.receiptScroll}
             contentContainerStyle={styles.receiptScrollContent}
-            showsVerticalScrollIndicator={true}
+            showsVerticalScrollIndicator={false}
           >
             <ReceiptView
               transaction={completedTx}
@@ -58,7 +68,7 @@ export default function PosReceiptModal({
             />
           </ScrollView>
 
-          {/* Action CTA Buttons */}
+          {/* Action CTA Buttons (Sticky Footer) */}
           <View style={styles.receiptActionRow}>
             <TouchableOpacity
               style={styles.printThermalButton}
@@ -82,9 +92,9 @@ export default function PosReceiptModal({
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.newTxButton, { flex: 1, marginTop: 0 }]}
+              style={styles.newTxButton}
               onPress={handleSecondaryAction}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
             >
               <Text style={styles.newTxButtonText}>{closeBtnText}</Text>
             </TouchableOpacity>
@@ -98,30 +108,50 @@ export default function PosReceiptModal({
 const styles = StyleSheet.create({
   receiptModalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.85)',
-    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    padding: 16,
+  },
+  backdropTouchable: {
+    ...StyleSheet.absoluteFillObject,
   },
   receiptSheet: {
     backgroundColor: '#18181b',
-    borderRadius: 20,
-    width: '100%',
-    maxWidth: 420,
-    maxHeight: '90%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
+    borderBottomWidth: 0,
     borderColor: '#27272a',
+    width: '100%',
+    maxWidth: 500,
+    maxHeight: '92%',
+    paddingTop: 8,
     overflow: 'hidden',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 12,
   },
   receiptSheetLandscape: {
-    maxWidth: 480,
+    maxWidth: 520,
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   receiptTopBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
@@ -131,9 +161,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_700Bold',
   },
   receiptCloseBtn: {
-    padding: 4,
+    width: 32,
+    height: 32,
     borderRadius: 8,
     backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
   receiptScroll: {
     flexGrow: 0,
@@ -144,8 +180,11 @@ const styles = StyleSheet.create({
   },
   receiptActionRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
-    padding: 14,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 14,
     borderTopWidth: 1,
     borderTopColor: '#27272a',
     backgroundColor: '#18181b',
@@ -155,25 +194,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3f3f46',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    minHeight: 44,
     paddingVertical: 12,
-    borderRadius: 12,
+    borderRadius: 10,
   },
   printThermalButtonText: {
-    color: '#ffffff',
+    color: '#d4d4d8',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
   },
   newTxButton: {
-    backgroundColor: '#e11d48',
-    paddingVertical: 12,
-    borderRadius: 12,
+    flex: 1.5,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#e11d48',
+    minHeight: 44,
+    paddingVertical: 12,
+    borderRadius: 10,
   },
   newTxButtonText: {
     color: '#ffffff',
     fontSize: 13,
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins_600SemiBold',
   },
 });

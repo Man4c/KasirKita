@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Transformasi Native Bottom Sheet Modal & Peningkatan Touch Target pada Struk Transaksi Penjualan & Riwayat (`PosReceiptModal.js`, `RecentTransactionsSection.js`, `TransactionCardItem.js`)**:
+  - Menyelaraskan tampilan modal struk transaksi belanja yang dipicu dari section 10 transaksi penjualan terakhir di Dashboard (`DashboardScreen.js`) dan layar Riwayat Transaksi (`TransactionHistoryScreen.js`):
+    1. *Transformasi Native Slide-Up Bottom Sheet Modal*: Mengubah `PosReceiptModal.js` dari kotak dialog tengah melayang menjadi **Slide-up Native Bottom Sheet Modal** dengan visual drag handle bar (38dp), sudut atas melengkung 20dp, backdrop tap-to-dismiss (`backdropTouchable`), dan sudut bottom sheet yang menempel ergonomis di bagian bawah layar.
+    2. *Sticky Modal Footer Simetris & Standar Touch Target 44dp*: Tombol `Cetak Struk` (latar `#27272a`, border `#3f3f46`, flex: 1, `minHeight: 44dp`) dan tombol `Tutup` (latar brand `#e11d48`, flex: 1.5, `minHeight: 44dp`) kini berada di sticky footer zona jempol dengan padding sentuh aman (`paddingBottom: Platform.OS === 'ios' ? 24 : 14`).
+    3. *Peningkatan Touch Target & Ergonomi 10 Transaksi Penjualan Terakhir*: Menambah tinggi vertikal item transaksi pada `RecentTransactionsSection.js` (`paddingVertical: 12`), meningkatkan feedback sentuhan `activeOpacity={0.82}`, dan memastikan transisi tap-to-inspect struk mulus dan responsif.
+    4. *Peningkatan Tap Feedback Riwayat Transaksi*: Mengoptimalkan `TransactionCardItem.js` dengan `activeOpacity={0.85}` untuk responsivitas sentuhan kartu transaksi.
+  - Lolos uji verifikasi penuh: syntax check (`node -c`), detektor Impeccable (0 defect), dan Expo Web Bundler export sukses (2.347 modul).
+
 - **Transformasi Komprehensif Master Promosi, Satuan, Kategori, & Produk (Native Bottom Sheet Modal, Tap-to-Edit, Extended Pill FAB, & Peningkatan Touch Target)**:
   - Menyelaraskan 100% konsistensi arsitektur dan ergonomi UI/UX di 4 modul inti (`Promo`, `Unit`, `Category`, `Product`) sesuai standar baku `TaxManagementScreen`, `CustomerManagementScreen`, dan `SupplierManagementScreen`:
     1. *Transformasi Native Slide-Up Bottom Sheet Modal*:
