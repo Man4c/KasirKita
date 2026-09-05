@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 3 Master Pemasok & Distributor di Mobile (`SupplierCardItem.js`, `SupplierManagementScreen.js`, Plan #31)**:
+  - Mengimplementasikan kartu item dan layar utama berstandar Defensive UI Impeccable:
+    1. *Kartu Item Pemasok (`mobile/src/components/supplier/SupplierCardItem.js`)*: Desain dengan badge identitas distributor oranye hangat (`#fb923c`), avatar entitas gedung, status aktif/nonaktif, kontak PIC/sales, telepon/email, alamat gudang, catatan termin/tempo pembayaran, metrik frekuensi pasokan barang masuk & akumulasi nominal belanja kulakan, kartu rekening bank transfer dengan tombol salin instan (*Copy to clipboard* + feedback visual), serta aksi cepat panggilan telepon, WhatsApp, edit, dan hapus aman.
+    2. *Layar Utama Pemasok (`mobile/src/screens/SupplierManagementScreen.js`)*: Header dengan tombol kembali & refresh, 3 kartu ringkasan metrik (Total Pemasok, Total Restock Pasokan Masuk, Total Nominal Belanja Pembelian), pencarian debounced 350ms, filter chip status (Semua, Aktif, Nonaktif), FlatList tervirtualisasi, mode offline banner, dialog konfirmasi hapus aman, dan FAB Tambah Pemasok.
+    3. *Kepatuhan Impeccable & Defensive UI*: Flexbox pairing (`min-w-0 truncate` vs `shrink-0 whitespace-nowrap`), readability floor ($\ge 12$px), touch targets $\ge 44 \times 44$ dp, serta lolos audit linter `detect.mjs` (0 defect). Phase 3 Plan #31 berstatus `completed`.
+
 - **Implementasi Phase 1 & 2 Master Pemasok & Distributor di Mobile (`supplierService.js`, `offlineStorage.js`, Plan #31)**:
   - Menyelesaikan pemetaan kontrak backend dan modul service mobile untuk distributor:
     1. *Pemetaan Kontrak API & RBAC*: Endpoint `/api/suppliers` terverifikasi diproteksi middleware `role:owner`, mencakup paginasi 15 item, pencarian `search` (nama, contact person, phone, email), filter `is_active`, parameter `all=true`, agregasi metrik `restocks_count` & `total_purchases`, operasi CRUD lengkap, serta riwayat pasokan barang `/api/suppliers/{id}/history`.
