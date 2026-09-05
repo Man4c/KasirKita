@@ -364,6 +364,8 @@ export default function TaxManagementScreen({ navigation }) {
           updateCellsBatchingPeriod={50}
           removeClippedSubviews={Platform.OS === 'android'}
           showsVerticalScrollIndicator={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

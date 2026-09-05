@@ -97,55 +97,62 @@ const TaxCardItem = React.memo(function TaxCardItem({
 
   return (
     <View style={[styles.card, isInactive && styles.cardInactive]}>
-      {/* Top Header: Badge Kategori (Pajak/Biaya) & Nilai Tarif */}
-      <View style={styles.cardHeader}>
-        <View style={styles.leftBadgeGroup}>
-          <View style={[styles.categoryBadge, { borderColor: accentBorder }]}>
-            {isTax ? (
-              <ReceiptText size={14} color={accentColor} style={{ flexShrink: 0 }} />
-            ) : (
-              <Coins size={14} color={accentColor} style={{ flexShrink: 0 }} />
+      {/* Area Kartu Atas & Badan yang Dapat Diklik untuk Edit Cepat */}
+      <TouchableOpacity
+        activeOpacity={0.75}
+        onPress={() => isOwner && onEdit && onEdit(item)}
+        disabled={!isOwner}
+      >
+        {/* Top Header: Badge Kategori (Pajak/Biaya) & Nilai Tarif */}
+        <View style={styles.cardHeader}>
+          <View style={styles.leftBadgeGroup}>
+            <View style={[styles.categoryBadge, { borderColor: accentBorder }]}>
+              {isTax ? (
+                <ReceiptText size={14} color={accentColor} style={{ flexShrink: 0 }} />
+              ) : (
+                <Coins size={14} color={accentColor} style={{ flexShrink: 0 }} />
+              )}
+              <Text style={[styles.categoryBadgeText, { color: accentColor }]} numberOfLines={1}>
+                {isTax ? 'PAJAK' : 'BIAYA LAYANAN'}
+              </Text>
+            </View>
+
+            {isDefault && (
+              <View style={styles.defaultBadge}>
+                <Sparkles size={11} color="#34d399" style={{ flexShrink: 0 }} />
+                <Text style={styles.defaultBadgeText} numberOfLines={1}>Default</Text>
+              </View>
             )}
-            <Text style={[styles.categoryBadgeText, { color: accentColor }]} numberOfLines={1}>
-              {isTax ? 'PAJAK' : 'BIAYA LAYANAN'}
-            </Text>
           </View>
 
-          {isDefault && (
-            <View style={styles.defaultBadge}>
-              <Sparkles size={11} color="#34d399" style={{ flexShrink: 0 }} />
-              <Text style={styles.defaultBadgeText} numberOfLines={1}>Default</Text>
-            </View>
-          )}
+          {/* Nilai Tarif: Tipografi tebal & jelas tanpa kontainer kotak berat */}
+          <View style={styles.rateWrapper}>
+            <Text style={[styles.rateText, { color: accentColor }]} numberOfLines={1}>
+              {rateDisplay}
+            </Text>
+          </View>
         </View>
 
-        {/* Nilai Tarif: Tipografi tebal & jelas tanpa kontainer kotak berat */}
-        <View style={styles.rateWrapper}>
-          <Text style={[styles.rateText, { color: accentColor }]} numberOfLines={1}>
-            {rateDisplay}
+        {/* Body: Nama Komponen & Deskripsi */}
+        <View style={styles.bodySection}>
+          <Text style={styles.itemName} numberOfLines={1}>
+            {item.name}
           </Text>
+          {item.description ? (
+            <Text style={styles.itemDescription} numberOfLines={2}>
+              {item.description}
+            </Text>
+          ) : null}
         </View>
-      </View>
 
-      {/* Body: Nama Komponen & Deskripsi */}
-      <View style={styles.bodySection}>
-        <Text style={styles.itemName} numberOfLines={1}>
-          {item.name}
-        </Text>
-        {item.description ? (
-          <Text style={styles.itemDescription} numberOfLines={2}>
-            {item.description}
-          </Text>
-        ) : null}
-      </View>
-
-      {/* Trigger Rule Badge: Baris metadata terintegrasi yang rapi */}
-      <View style={styles.ruleRow}>
-        <Text style={styles.ruleLabel}>Penerapan:</Text>
-        <View style={styles.ruleBadgeWrapper}>
-          {renderApplyToBadge()}
+        {/* Trigger Rule Badge: Baris metadata terintegrasi yang rapi */}
+        <View style={styles.ruleRow}>
+          <Text style={styles.ruleLabel}>Penerapan:</Text>
+          <View style={styles.ruleBadgeWrapper}>
+            {renderApplyToBadge()}
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
 
       {/* Dashed Divider */}
       <View style={styles.dashedDivider} />

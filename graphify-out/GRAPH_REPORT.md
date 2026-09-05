@@ -1,16 +1,16 @@
 # Graph Report - KasirKita  (2026-09-05)
 
 ## Corpus Check
-- 481 files · ~664,073 words
+- 481 files · ~664,283 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5232 nodes · 11775 edges · 349 communities (299 shown, 50 thin omitted)
+- 5232 nodes · 11775 edges · 351 communities (301 shown, 50 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 360 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `868a31c7`
+- Built from commit: `0979b8ba`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -294,6 +294,8 @@
 - react
 - react-native
 - @react-native-community/datetimepicker
+- checkRadialSpotlight
+- checkElementRadialSpotlightDOM
 
 ## God Nodes (most connected - your core abstractions)
 1. `react` - 79 edges
@@ -322,7 +324,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (349 total, 50 thin omitted)
+## Communities (351 total, 50 thin omitted)
 
 ### Community 0 - "live-browser.js"
 Cohesion: 0.03
@@ -381,8 +383,8 @@ Cohesion: 0.10
 Nodes (52): gatePlates(), heroReadings(), alignBuild(), arg(), bestShift(), buildReport(), compare(), DIRECTION_KINDS (+44 more)
 
 ### Community 14 - "detect-text.mjs"
-Cohesion: 0.08
-Nodes (46): blankAstroFrontmatterComments(), blankCommentsForMatchers(), blankCssComments(), blankCssLineComments(), blankCssLineCommentsInStyleBlocks(), blankHtmlAndCssCommentsOutsideScripts(), blankHtmlComments(), BLOCK_BRACE_PREFIX_KEYWORDS (+38 more)
+Cohesion: 0.09
+Nodes (43): blankAstroFrontmatterComments(), blankCommentsForMatchers(), blankCssComments(), blankCssLineComments(), blankCssLineCommentsInStyleBlocks(), blankHtmlAndCssCommentsOutsideScripts(), blankHtmlComments(), BLOCK_BRACE_PREFIX_KEYWORDS (+35 more)
 
 ### Community 15 - "HasFactory"
 Cohesion: 0.14
@@ -465,8 +467,8 @@ Cohesion: 0.14
 Nodes (37): assessCoverage(), buildColor(), CANONICAL_SECTIONS, collectBullets(), collectColorValues(), collectParagraphs(), detectFormat(), extractColors() (+29 more)
 
 ### Community 35 - "initGlobalBar"
-Cohesion: 0.20
-Nodes (17): beginEditPin(), buildAnnotationsForCapture(), buildPinElement(), cancelEditingPin(), clampPlaceholderSize(), finalizeEditingPin(), initAnnotOverlay(), localCoords() (+9 more)
+Cohesion: 0.09
+Nodes (34): averageRgb01(), beginEditPin(), buildAnnotationsForCapture(), buildPinElement(), cancelEditingPin(), captureChromeNodes(), captureElementFromRenderedAncestor(), captureElementToBlob() (+26 more)
 
 ### Community 36 - "build-phase.mjs"
 Cohesion: 0.11
@@ -490,7 +492,7 @@ Nodes (13): browserOpenCommand(), openSystemBrowser(), allowedOrigin(), esc(), i
 
 ### Community 41 - "detect-antipatterns-browser.js"
 Cohesion: 0.05
-Nodes (66): addBrowserFindings(), addVisualContrastFindings(), addVisualContrastResult(), analyzeVisualContrast(), browserColorsClose(), browserDesignSystemConfig(), browserHasDirectText(), browserPrimaryFont() (+58 more)
+Nodes (69): borderColorsFromStyle(), borderWidthsFromStyle(), browserColorsClose(), browserHasDirectText(), browserRadiusTokens(), browserSampleText(), buildSelectorSegment(), checkClippedOverflow() (+61 more)
 
 ### Community 42 - "staleness.mjs"
 Cohesion: 0.15
@@ -505,16 +507,16 @@ Cohesion: 0.13
 Nodes (34): arg(), artworkTouchesEdges(), autoRegions(), BUILD_DIR, energyOf(), flag(), GRID_PATH, gridToBox() (+26 more)
 
 ### Community 45 - "parseRgb"
-Cohesion: 0.11
-Nodes (38): checkElementAIPaletteDOM(), checkElementColors(), checkElementColorsDOM(), checkElementGlowDOM(), checkElementHoverContrast(), checkElementIconTile(), checkElementIconTileDOM(), checkHoverContrast() (+30 more)
+Cohesion: 0.10
+Nodes (36): checkBorders(), checkCreamPalette(), checkElementBorders(), checkElementBordersDOM(), checkElementColorsDOM(), checkElementHeroEyebrowDOM(), checkElementPseudoStripeDOM(), clamp01() (+28 more)
 
 ### Community 46 - "live-poll.mjs"
 Cohesion: 0.11
 Nodes (36): completionAckForAcceptResult(), completionTypeForAcceptResult(), PREVIEW_MODES_WITHOUT_SOURCE_MARKERS, acceptInstructions(), bootInstructions(), deferredWrapperInstructions(), generateInstructions(), insertScaffoldInstructions() (+28 more)
 
 ### Community 47 - "User"
-Cohesion: 0.08
-Nodes (56): checkColors(), checkElementAIPaletteDOM(), checkElementColors(), checkElementColorsDOM(), checkElementGlow(), checkElementGlowDOM(), checkElementHoverContrast(), checkElementIconTile() (+48 more)
+Cohesion: 0.09
+Nodes (51): checkColors(), checkElementAIPaletteDOM(), checkElementColors(), checkElementColorsDOM(), checkElementGlow(), checkElementGlowDOM(), checkElementHoverContrast(), checkElementIconTile() (+43 more)
 
 ### Community 48 - "reader.js"
 Cohesion: 0.17
@@ -537,8 +539,8 @@ Cohesion: 0.16
 Nodes (26): analyzeSourceHint(), buildCandidatesForOp(), buildContextHintsByRef(), buildManualEditEvidence(), collectSearchFiles(), countOps(), decodeBasicHtml(), escapeRegExp() (+18 more)
 
 ### Community 53 - "collectBrowserFindings"
-Cohesion: 0.08
-Nodes (37): browserFindingsFromMap(), checkBorders(), checkCreamPalette(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementBorders(), checkElementBordersDOM(), checkElementPseudoStripeDOM() (+29 more)
+Cohesion: 0.11
+Nodes (25): browserDesignSystemConfig(), browserFindingsFromMap(), browserPrimaryFont(), checkBrowserDesignSystemSources(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementTextOverflowDOM(), checkFirstViewportColumnOverflowDOM() (+17 more)
 
 ### Community 54 - "live-inject.mjs"
 Cohesion: 0.16
@@ -594,7 +596,7 @@ Nodes (19): args, cwd, pageUrlFilter, remaining, compactManualLogText(), summari
 
 ### Community 67 - "accept-css.mjs"
 Cohesion: 0.04
-Nodes (112): borderColorsFromStyle(), borderWidthsFromStyle(), checkBorders(), checkClippedOverflow(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementBorders(), checkElementBordersDOM() (+104 more)
+Nodes (107): borderColorsFromStyle(), borderWidthsFromStyle(), checkBorders(), checkClippedOverflow(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementBorders(), checkElementBordersDOM() (+99 more)
 
 ### Community 68 - "barPaletteForTheme"
 Cohesion: 0.19
@@ -657,8 +659,8 @@ Cohesion: 0.11
 Nodes (17): Approach, [Bug Fix] Implementation Plan, Changes Required, Context Links, Evidence, Executive Summary, Implementation Steps, Issue Analysis (+9 more)
 
 ### Community 83 - "checkTextOcclusionDOM"
-Cohesion: 0.11
-Nodes (22): borderColorsFromStyle(), borderWidthsFromStyle(), checkElementGptBorderShadow(), checkElementGptBorderShadowDOM(), checkElementOversizedH1(), checkElementOversizedH1DOM(), checkElementQuality(), checkGptThinBorderWideShadow() (+14 more)
+Cohesion: 0.16
+Nodes (25): applyOriginScopedAuth(), basicAuthHeader(), createBrowserDetector(), decodeUrlComponent(), detectUrl(), launchBrowser(), measureContentHiddenAfterReveal(), runVisualContrastFallback() (+17 more)
 
 ### Community 84 - "sampleCssBackground"
 Cohesion: 0.16
@@ -685,12 +687,12 @@ Cohesion: 0.25
 Nodes (14): coerceSlug(), listSnapshots(), main(), nowFilenameStamp(), parseFrontmatter(), readLatestSnapshot(), readLatestSnapshotAcrossTargets(), readLatestSnapshotMatching() (+6 more)
 
 ### Community 90 - "surface-briefs.mjs"
-Cohesion: 0.20
-Nodes (12): checkElementMotion(), checkElementMotionDOM(), checkLayout(), checkMotion(), checkPageLayout(), isCardLike(), isCardLikeDOM(), isCardLikeFromProps() (+4 more)
+Cohesion: 0.24
+Nodes (10): checkElementMotion(), checkElementMotionDOM(), checkLayout(), checkMotion(), checkPageLayout(), isCardLike(), isCardLikeDOM(), isCardLikeFromProps() (+2 more)
 
 ### Community 91 - "tag-strategy.mjs"
 Cohesion: 0.16
-Nodes (17): averageRgb01(), captureChromeNodes(), captureElementFromRenderedAncestor(), captureElementToBlob(), cssColorToRgb01(), dominantRgb01(), findBackdropAncestor(), findShaderProxyCaptureRoot() (+9 more)
+Nodes (16): addBrowserFindings(), addVisualContrastFindings(), addVisualContrastResult(), analyzeVisualContrast(), clearOverlays(), detachOverlay(), disconnectLazyVisualContrastObserver(), postExtensionError() (+8 more)
 
 ### Community 92 - "plans-kanban"
 Cohesion: 0.12
@@ -765,8 +767,8 @@ Cohesion: 0.15
 Nodes (12): BelongsTo, ProductUnitConversion, BelongsTo, HasMany, StockOpname, BelongsTo, StockOpnameItem, BelongsTo (+4 more)
 
 ### Community 112 - "index.mjs"
-Cohesion: 0.25
-Nodes (9): clamp01(), colorFunctionToRgb(), decodeSrgbChannel(), encodeSrgbChannel(), labToRgb(), lchToRgb(), linearSrgbToColor(), oklabToRgb() (+1 more)
+Cohesion: 0.24
+Nodes (14): checkElementColors(), checkElementGlowDOM(), checkElementHoverContrast(), checkHoverContrast(), compositeColorOver(), compositeGradientStops(), extractColorFunctionTokens(), isNoPaintColorValue() (+6 more)
 
 ### Community 113 - "pin.mjs"
 Cohesion: 0.23
@@ -877,8 +879,8 @@ Cohesion: 0.10
 Nodes (20): devDependencies, concurrently, laravel-vite-plugin, tailwindcss, @tailwindcss/vite, vite, concurrently, tailwindcss (+12 more)
 
 ### Community 141 - "initGlobalBar"
-Cohesion: 0.40
-Nodes (9): addRules(), applyInlineIgnores(), getSet(), hasDirectives(), isInlineIgnored(), normalizeRule(), parseInlineIgnores(), parseRuleList() (+1 more)
+Cohesion: 0.47
+Nodes (6): clippedByInset(), clippedByRect(), expandBoxShorthand(), firstMetricLengthPx(), isScreenReaderOnlyTextStyle(), metricLengthPx()
 
 ### Community 142 - "package.json"
 Cohesion: 0.33
@@ -981,8 +983,8 @@ Cohesion: 0.60
 Nodes (3): fetch_docs(), search_library(), context7.sh script
 
 ### Community 169 - "doctor.md"
-Cohesion: 0.08
-Nodes (49): mergeDesignSystemFindings(), checkPageTypography(), applyOriginScopedAuth(), basicAuthHeader(), createBrowserDetector(), decodeUrlComponent(), detectUrl(), launchBrowser() (+41 more)
+Cohesion: 0.07
+Nodes (41): mergeDesignSystemFindings(), checkPageTypography(), firstOverusedGoogleFont(), runTextContentAnalyzers(), checkStaticPageTypography(), detectHtml(), STATIC_ELEMENT_RULES, checkCreamPalette() (+33 more)
 
 ### Community 170 - "source-lock.mjs"
 Cohesion: 0.40
@@ -1150,7 +1152,7 @@ Nodes (9): 1. Layar Daftar Master Pemasok (`SupplierManagementScreen.js`), 2. Fo
 
 ### Community 308 - "checkElementRadialSpotlightDOM"
 Cohesion: 0.09
-Nodes (41): buildHtmlPatternCorpora(), checkColors(), checkElementGlow(), checkElementRadialSpotlight(), checkElementRadialSpotlightDOM(), checkGlow(), checkHtmlPatterns(), checkRadialSpotlight() (+33 more)
+Nodes (42): buildHtmlPatternCorpora(), checkColors(), checkElementAIPaletteDOM(), checkElementGlow(), checkGlow(), checkHtmlPatterns(), checkRadialSpotlight(), collectCssCustomProps() (+34 more)
 
 ### Community 310 - "Modularisasi & Refactoring PosScreen KasirKita Mobile"
 Cohesion: 0.33
@@ -1238,7 +1240,15 @@ Nodes (5): After approval: the comp becomes a spec, Generate three compositional
 
 ### Community 345 - "checkHeroEyebrow"
 Cohesion: 0.11
-Nodes (23): checkElementHeroEyebrow(), checkElementHeroEyebrowDOM(), checkElementQualityDOM(), checkHeroEyebrow(), checkKickerAboveHeading(), checkKickerAboveHeadingDOM(), checkKickerAboveHeadingFromDoc(), checkNumberedSectionLabels() (+15 more)
+Nodes (26): checkElementHeroEyebrow(), checkElementIconTile(), checkElementIconTileDOM(), checkHeroEyebrow(), checkIconTile(), checkKickerAboveHeading(), checkKickerAboveHeadingDOM(), checkKickerAboveHeadingFromDoc() (+18 more)
+
+### Community 349 - "checkRadialSpotlight"
+Cohesion: 0.60
+Nodes (5): checkElementRadialSpotlight(), checkElementRadialSpotlightDOM(), checkRadialSpotlight(), elementGradientValue(), spotlightLabel()
+
+### Community 350 - "checkElementRadialSpotlightDOM"
+Cohesion: 0.67
+Nodes (4): checkElementRadialSpotlight(), checkElementRadialSpotlightDOM(), elementGradientValue(), spotlightLabel()
 
 ## Knowledge Gaps
 - **1104 isolated node(s):** `HERE`, `STATE_PATH`, `MOCKS_DIR`, `HERO_REPRO`, `GATES` (+1099 more)
@@ -1250,9 +1260,9 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `el()` connect `el` to `live-browser.js`, `design-system.mjs`, `accept-css.mjs`, `index.mjs`, `Request`, `doctor.md`, `detect-antipatterns-browser.js`, `applyEditing`, `parseRgb`, `collectBrowserFindings`, `checkHeroEyebrow`, `surface-briefs.mjs`, `insert-ui.mjs`, `svelte-ast.mjs`, `initPageChat`?**
   _High betweenness centrality (0.078) - this node is a cross-community bridge._
-- **Why does `v()` connect `modern-screenshot.umd.js` to `font-match.mjs`, `captureElementToBlob`, `design-parser.mjs`, `accept-css.mjs`, `live-browser.js`, `index.mjs`, `Request`, `applyEditing`, `App.jsx`, `checkElementRadialSpotlightDOM`, `collectBrowserFindings`, `css-cascade.mjs`, `TransactionItem.php`?**
+- **Why does `v()` connect `modern-screenshot.umd.js` to `font-match.mjs`, `captureElementToBlob`, `design-parser.mjs`, `accept-css.mjs`, `live-browser.js`, `index.mjs`, `Request`, `applyEditing`, `parseRgb`, `App.jsx`, `checkElementRadialSpotlightDOM`, `collectBrowserFindings`, `css-cascade.mjs`, `TransactionItem.php`?**
   _High betweenness centrality (0.051) - this node is a cross-community bridge._
-- **Why does `x()` connect `modern-screenshot.umd.js` to `font-match.mjs`, `build-phase.mjs`, `index.mjs`, `font-fingerprint.mjs`, `comp-spec.mjs`, `parseRgb`, `sampleCssBackground`, `tag-strategy.mjs`?**
+- **Why does `x()` connect `modern-screenshot.umd.js` to `font-match.mjs`, `initGlobalBar`, `build-phase.mjs`, `index.mjs`, `font-fingerprint.mjs`, `comp-spec.mjs`, `parseRgb`, `sampleCssBackground`?**
   _High betweenness centrality (0.038) - this node is a cross-community bridge._
 - **Are the 14 inferred relationships involving `User` (e.g. with `.login()` and `.destroy()`) actually correct?**
   _`User` has 14 INFERRED edges - model-reasoned connections that need verification._

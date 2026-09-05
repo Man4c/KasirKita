@@ -135,6 +135,7 @@ export default function TaxFormModal({
   const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [selectedPresetId, setSelectedPresetId] = useState(null);
 
   // Reset or fill form on modal open
   useEffect(() => {
@@ -167,11 +168,13 @@ export default function TaxFormModal({
       setIsActive(true);
       setDescription('');
     }
+    setSelectedPresetId(null);
     setErrors({});
   }, [taxAndFee, visible]);
 
   // Handle Preset Click
   const handleApplyPreset = (preset) => {
+    setSelectedPresetId(preset.id);
     setName(preset.name);
     setIsTax(preset.is_tax);
     setType(preset.type);
@@ -381,21 +384,38 @@ export default function TaxFormModal({
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.presetChipsList}
                 >
-                  {PRESET_TEMPLATES.map((preset) => (
-                    <TouchableOpacity
-                      key={preset.id}
-                      style={styles.presetChip}
-                      onPress={() => handleApplyPreset(preset)}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={styles.presetChipLabel}>{preset.label}</Text>
-                      <View style={[styles.presetBadge, { backgroundColor: `${preset.badgeColor}22` }]}>
-                        <Text style={[styles.presetBadgeText, { color: preset.badgeColor }]}>
-                          {preset.badge}
+                  {PRESET_TEMPLATES.map((preset) => {
+                    const isSelected = selectedPresetId === preset.id;
+                    return (
+                      <TouchableOpacity
+                        key={preset.id}
+                        style={[
+                          styles.presetChip,
+                          isSelected && {
+                            borderColor: preset.badgeColor,
+                            backgroundColor: `${preset.badgeColor}1c`,
+                          },
+                        ]}
+                        onPress={() => handleApplyPreset(preset)}
+                        activeOpacity={0.7}
+                        hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
+                      >
+                        <Text
+                          style={[
+                            styles.presetChipLabel,
+                            isSelected && { color: '#ffffff', fontFamily: 'Poppins_600SemiBold' },
+                          ]}
+                        >
+                          {preset.label}
                         </Text>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
+                        <View style={[styles.presetBadge, { backgroundColor: `${preset.badgeColor}22` }]}>
+                          <Text style={[styles.presetBadgeText, { color: preset.badgeColor }]}>
+                            {preset.badge}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
                 </ScrollView>
               </View>
             )}

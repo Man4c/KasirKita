@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyempurnaan Akhir Layar Master Pajak & Biaya (`TaxCardItem.js`, `TaxManagementScreen.js`, `TaxFormModal.js`)**:
+  - Menyelesaikan temuan re-critique 37/40 melalui paket polesan akhir Impeccable (`adapt`, `polish`, `delight`):
+    1. *Tap-to-Edit Badan Kartu (`adapt`)*: Membungkus seluruh area header, nama, dan aturan kartu item dengan `TouchableOpacity` interaktif, memungkinkan kasir menyentuh bagian mana saja dari kartu untuk membuka modal edit instan tanpa harus membidik tombol kecil berukuran 32dp.
+    2. *Keyboard Dismiss on Scroll (`polish`)*: Menambahkan prop `keyboardDismissMode="on-drag"` dan `keyboardShouldPersistTaps="handled"` pada FlatList `TaxManagementScreen.js` agar keyboard pencarian otomatis tertutup saat pengguna menggulir daftar komponen.
+    3. *Visual Highlight Preset Chip (`delight`)*: Menambahkan state `selectedPresetId` dan styling border aksen serta background glow saat pengguna memilih salah satu template regulasi, memberikan konfirmasi visual mikro instan.
+    4. *Verifikasi & Kepatuhan Penuh*: Lolos verifikasi sintaks JS (`node -c`), detektor Impeccable (0 defect), dan kompilasi Expo web (2.347 modul).
+
 - **Transformasi Bottom Sheet Modal, Quick Presets & Live Rupiah Masking (`TaxFormModal.js`)**:
   - Menyelesaikan temuan critique [P1], [P2], dan [P3] melalui paket perbaikan komprehensif Impeccable (`adapt`, `delight`, `clarify`):
     1. *Mobile Bottom Sheet Ergonomics (`adapt`)*: Merefaktor modal dari centered dialog mengambang menjadi **Slide-up Bottom Sheet Modal** dengan visual drag handle, rounded top corners (20dp), backdrop semi-transparan, serta **Sticky Modal Footer** yang memisahkan tombol *Batal* dan *Simpan* di dasar layar agar selalu berada di zona jangkauan jempol satu tangan tanpa terhalang keyboard virtual.
