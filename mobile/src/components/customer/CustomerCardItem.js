@@ -305,17 +305,21 @@ const styles = StyleSheet.create({
   tierBadge: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
     flexShrink: 0,
+    minHeight: 24,
   },
   tierBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_700Bold',
     letterSpacing: 0.3,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusActiveBadge: {
     backgroundColor: 'rgba(52, 211, 153, 0.12)',
@@ -325,11 +329,16 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
+    minHeight: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusActiveBadgeText: {
     color: '#34d399',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusInactiveBadge: {
     backgroundColor: 'rgba(239, 68, 68, 0.15)',
@@ -339,11 +348,16 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
+    minHeight: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusInactiveBadgeText: {
     color: '#f87171',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   cardBody: {
     flexDirection: 'row',
@@ -370,6 +384,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_700Bold',
     letterSpacing: -0.2,
     marginBottom: 4,
+    includeFontPadding: false,
   },
   contactRow: {
     flexDirection: 'row',
@@ -381,7 +396,8 @@ const styles = StyleSheet.create({
   contactChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'center',
+    gap: 5,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
@@ -395,17 +411,23 @@ const styles = StyleSheet.create({
     color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   contactChipEmail: {
     color: '#d4d4d8',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   noContactText: {
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     fontStyle: 'italic',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   metaRow: {
     flexDirection: 'row',
@@ -418,6 +440,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     flex: 1,
+    includeFontPadding: false,
   },
   notesText: {
     color: '#a1a1aa',
@@ -425,6 +448,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     marginTop: 4,
     lineHeight: 16,
+    includeFontPadding: false,
   },
   metricsStrip: {
     flexDirection: 'row',
@@ -451,10 +475,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     flexShrink: 1,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statBold: {
     color: '#f4f4f5',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   salesStatBox: {
     flexDirection: 'row',
@@ -466,11 +494,15 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   salesValue: {
     color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionStrip: {
     flexDirection: 'row',
@@ -495,6 +527,8 @@ const styles = StyleSheet.create({
     color: '#34d399',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionBtn: {
     flex: 1,
@@ -513,6 +547,8 @@ const styles = StyleSheet.create({
     color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionBtnDelete: {
     width: 40,

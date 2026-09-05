@@ -595,18 +595,26 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   tabTextActive: {
     color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   tabTextActiveVip: {
     color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   tabTextActiveWholesale: {
     color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusChipsRow: {
     flexDirection: 'row',
@@ -624,6 +632,8 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusChip: {
     paddingHorizontal: 10,
@@ -644,10 +654,14 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusChipTextActive: {
     color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   centerBox: {
     flex: 1,
@@ -709,6 +723,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   fab: {
     position: 'absolute',
@@ -731,5 +747,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

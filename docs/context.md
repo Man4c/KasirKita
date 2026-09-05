@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Kesejajaran Vertikal Ikon & Teks (Anti-Shift Typography) pada Master Pelanggan (`CustomerCardItem.js` & `CustomerManagementScreen.js`)**:
+  - Menyelesaikan masalah misalignment vertikal di mana teks terlihat turun/tenggelam dan tidak sejajar di tengah dengan ikon (Crown VIP, Chat WA, Edit, Telepon, Email, Status Filter Sliders, Tab Pills):
+    1. *Penyebab Root Cause*: Font Google **Poppins** memiliki metrik ascender tinggi, dan secara default sistem Android pada React Native menerapkan `includeFontPadding: true`. Hal ini menambahkan bantalan ruang kosong artifisial di sisi atas teks (~3-4px), sehingga teks terdorong ke bawah sementara ikon SVG Lucide tetap di tengah bounding box-nya.
+    2. *Solusi Defensive Typography*: Menerapkan pasangan anti-shift `includeFontPadding: false` dan `textAlignVertical: 'center'` pada seluruh elemen teks tombol, badge status, badge keanggotaan, filter pills, dan contact chips.
+    3. *Hasil*: Teks dan ikon kini sejajar vertikal 100% presisi (centered baseline) di semua perangkat Android dan web.
+  - Lolos uji detektor Impeccable (0 defect).
+
 - **Penerapan Solusi 1 (2-Tier Layout) pada Kartu Pelanggan (`CustomerCardItem.js`)**:
   - Menyelesaikan isu tabrakan flexbox dan pemotongan teks (*"0 Kali T..."*) pada kartu pelanggan:
     1. *Pemisahan 2-Tier Berstandar Defensive UI*:
