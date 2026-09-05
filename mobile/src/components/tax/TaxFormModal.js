@@ -24,17 +24,94 @@ import {
   Trash2,
   Check,
   Sparkles,
+  Zap,
 } from 'lucide-react-native';
 import { taxService } from '../../services/taxService';
 import { showAlert } from '../../utils/alert';
 
 /**
- * Helper format Rupiah
+ * Helper format Rupiah display
  */
 function formatRp(value) {
   const num = parseFloat(value || 0);
   return 'Rp' + num.toLocaleString('id-ID');
 }
+
+/**
+ * Helper pemformatan ribuan angka input Rupiah
+ */
+function formatRupiahInput(val) {
+  const clean = String(val || '').replace(/\D/g, '');
+  if (!clean) return '';
+  return Number(clean).toLocaleString('id-ID');
+}
+
+/**
+ * Helper parse angka murni dari input Rupiah atau Persentase
+ */
+function parseNumberValue(val) {
+  if (typeof val === 'number') return val;
+  const clean = String(val || '').replace(/\./g, '').replace(/,/g, '.');
+  return parseFloat(clean) || 0;
+}
+
+/**
+ * Template Cepat Regulasi & Standar Bisnis Indonesia
+ */
+const PRESET_TEMPLATES = [
+  {
+    id: 'ppn_11',
+    label: '🏛️ PPN 11%',
+    badge: 'Nasional',
+    badgeColor: '#fbbf24',
+    name: 'PPN 11%',
+    is_tax: true,
+    type: 'PERCENTAGE',
+    value: '11',
+    apply_to: 'ALL',
+    is_default: true,
+    description: 'Pajak Pertambahan Nilai nasional sesuai regulasi perpajakan',
+  },
+  {
+    id: 'pb1_10',
+    label: '🍽️ PB1 Resto 10%',
+    badge: 'Resto & Kafe',
+    badgeColor: '#fb923c',
+    name: 'PB1 Restoran 10%',
+    is_tax: true,
+    type: 'PERCENTAGE',
+    value: '10',
+    apply_to: 'ALL',
+    is_default: true,
+    description: 'Pajak Barang & Jasa Tertentu (PBJT) restoran daerah',
+  },
+  {
+    id: 'bungkus_2000',
+    label: '📦 Biaya Bungkus',
+    badge: 'Takeaway',
+    badgeColor: '#60a5fa',
+    name: 'Biaya Kemasan Bungkus',
+    is_tax: false,
+    type: 'FIXED',
+    value: '2.000',
+    apply_to: 'TAKEAWAY_ONLY',
+    is_default: true,
+    description: 'Biaya wadah atau kemasan khusus pesanan bawa pulang',
+  },
+  {
+    id: 'service_5',
+    label: '🤝 Service 5%',
+    badge: 'Layanan',
+    badgeColor: '#34d399',
+    name: 'Biaya Layanan Toko',
+    is_tax: false,
+    type: 'PERCENTAGE',
+    value: '5',
+    apply_to: 'ALL',
+    is_default: true,
+    description: 'Biaya servis operasional dan pelayanan toko',
+  },
+];
 
 export default function TaxFormModal({
   visible,
@@ -64,8 +141,16 @@ export default function TaxFormModal({
     if (taxAndFee) {
       setName(taxAndFee.name || '');
       setIsTax(taxAndFee.is_tax !== undefined ? Boolean(taxAndFee.is_tax) : true);
-      setType(taxAndFee.type || 'PERCENTAGE');
-      setValue(taxAndFee.value !== undefined && taxAndFee.value !== null ? String(parseFloat(taxAndFee.value)) : '');
+      const feeType = taxAndFee.type || 'PERCENTAGE';
+      setType(feeType);
+
+      const rawVal = taxAndFee.value !== undefined && taxAndFee.value !== null ? parseFloat(taxAndFee.value) : '';
+      if (feeType === 'FIXED') {
+        setValue(formatRupiahInput(rawVal));
+      } else {
+        setValue(rawVal !== '' ? String(rawVal) : '');
+      }
+
       setApplyTo(taxAndFee.apply_to || 'ALL');
       setPaymentMethod(taxAndFee.payment_method || 'QRIS');
       setIsDefault(Boolean(taxAndFee.is_default));
@@ -85,9 +170,34 @@ export default function TaxFormModal({
     setErrors({});
   }, [taxAndFee, visible]);
 
+  // Handle Preset Click
+  const handleApplyPreset = (preset) => {
+    setName(preset.name);
+    setIsTax(preset.is_tax);
+    setType(preset.type);
+    setValue(preset.value);
+    setApplyTo(preset.apply_to);
+    setIsDefault(preset.is_default);
+    setDescription(preset.description);
+    setErrors({});
+  };
+
+  // Switch rate type with proper formatting
+  const handleTypeChange = (newType) => {
+    if (newType === type) return;
+    const currentNum = parseNumberValue(value);
+    setType(newType);
+    if (newType === 'FIXED') {
+      setValue(currentNum > 0 ? formatRupiahInput(currentNum) : '');
+    } else {
+      setValue(currentNum > 0 ? String(Math.min(currentNum, 100)) : '');
+    }
+    if (errors.value) setErrors((prev) => ({ ...prev, value: null }));
+  };
+
   // Live calculation preview on Rp100.000 simulation
   const previewCalculation = () => {
-    const numVal = parseFloat(value) || 0;
+    const numVal = parseNumberValue(value);
     if (type === 'PERCENTAGE') {
       const calc = (100000 * numVal) / 100;
       return `+${formatRp(calc)} (dari Rp100.000)`;
@@ -101,7 +211,7 @@ export default function TaxFormModal({
       errs.name = 'Nama komponen wajib diisi (contoh: PPN 11%)';
     }
 
-    const numVal = parseFloat(value);
+    const numVal = parseNumberValue(value);
     if (!value || isNaN(numVal) || numVal < 0) {
       errs.value = 'Nilai tarif harus berupa angka positif (min. 0)';
     } else if (type === 'PERCENTAGE' && numVal > 100) {
@@ -125,7 +235,7 @@ export default function TaxFormModal({
         name: name.trim(),
         is_tax: isTax,
         type: type,
-        value: parseFloat(value) || 0,
+        value: parseNumberValue(value),
         apply_to: applyTo,
         payment_method: applyTo === 'SPECIFIC_PAYMENT' ? paymentMethod : null,
         is_default: isDefault,
@@ -202,16 +312,31 @@ export default function TaxFormModal({
   if (!visible) return null;
 
   return (
-    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.modalOverlay}
       >
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={styles.modalContent}>
+          {/* Drag Handle Bar (Mobile Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Modal Header */}
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
-              <View style={[styles.iconCircle, { borderColor: isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(96, 165, 250, 0.4)' }]}>
+              <View
+                style={[
+                  styles.iconCircle,
+                  { borderColor: isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(96, 165, 250, 0.4)' },
+                ]}
+              >
                 {isTax ? (
                   <ReceiptText size={20} color="#fbbf24" />
                 ) : (
@@ -236,7 +361,45 @@ export default function TaxFormModal({
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.formScroll} showsVerticalScrollIndicator={false}>
+          {/* Form Scrollable Body */}
+          <ScrollView
+            style={styles.formScroll}
+            contentContainerStyle={styles.formScrollContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            {/* Quick Preset Chips Regulasi Indonesia (Khusus Create Mode) */}
+            {!isEditMode && (
+              <View style={styles.presetSection}>
+                <View style={styles.presetHeader}>
+                  <Zap size={14} color="#fbbf24" style={{ flexShrink: 0 }} />
+                  <Text style={styles.presetTitle}>Template Cepat Regulasi</Text>
+                  <Text style={styles.presetSubtitle}>1-ketuk untuk isi otomatis</Text>
+                </View>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.presetChipsList}
+                >
+                  {PRESET_TEMPLATES.map((preset) => (
+                    <TouchableOpacity
+                      key={preset.id}
+                      style={styles.presetChip}
+                      onPress={() => handleApplyPreset(preset)}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.presetChipLabel}>{preset.label}</Text>
+                      <View style={[styles.presetBadge, { backgroundColor: `${preset.badgeColor}22` }]}>
+                        <Text style={[styles.presetBadgeText, { color: preset.badgeColor }]}>
+                          {preset.badge}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
+
             {/* 1. Klasifikasi Jenis Komponen */}
             <View style={styles.fieldGroup}>
               <Text style={styles.label}>
@@ -275,7 +438,7 @@ export default function TaxFormModal({
               </View>
               <TextInput
                 style={[styles.input, errors.name && styles.inputError]}
-                placeholder={isTax ? 'Misal: PPN 11%, PB1 Resto 10%' : 'Misal: Service Charge 5%, Kantong Kresek'}
+                placeholder={isTax ? 'Misal: PPN 11%, PB1 Resto 10%' : 'Misal: Service Charge 5%, Biaya Bungkus'}
                 placeholderTextColor="#71717a"
                 value={name}
                 onChangeText={(val) => {
@@ -292,7 +455,7 @@ export default function TaxFormModal({
               <View style={styles.typeSelectorRow}>
                 <TouchableOpacity
                   style={[styles.typeOptionBtn, type === 'PERCENTAGE' && styles.typeOptionBtnRateActive]}
-                  onPress={() => setType('PERCENTAGE')}
+                  onPress={() => handleTypeChange('PERCENTAGE')}
                   activeOpacity={0.7}
                 >
                   <Percent size={14} color={type === 'PERCENTAGE' ? '#09090b' : '#a1a1aa'} />
@@ -303,7 +466,7 @@ export default function TaxFormModal({
 
                 <TouchableOpacity
                   style={[styles.typeOptionBtn, type === 'FIXED' && styles.typeOptionBtnRateActive]}
-                  onPress={() => setType('FIXED')}
+                  onPress={() => handleTypeChange('FIXED')}
                   activeOpacity={0.7}
                 >
                   <Coins size={14} color={type === 'FIXED' ? '#09090b' : '#a1a1aa'} />
@@ -324,14 +487,18 @@ export default function TaxFormModal({
               </View>
               <TextInput
                 style={[styles.input, errors.value && styles.inputError]}
-                placeholder={type === 'PERCENTAGE' ? 'Misal: 11' : 'Misal: 2000'}
+                placeholder={type === 'PERCENTAGE' ? 'Misal: 11' : 'Misal: 2.000'}
                 placeholderTextColor="#71717a"
                 value={value}
                 onChangeText={(val) => {
-                  setValue(val.replace(/[^0-9.]/g, ''));
+                  if (type === 'FIXED') {
+                    setValue(formatRupiahInput(val));
+                  } else {
+                    setValue(val.replace(/[^0-9.]/g, ''));
+                  }
                   if (errors.value) setErrors((prev) => ({ ...prev, value: null }));
                 }}
-                keyboardType="numeric"
+                keyboardType={type === 'FIXED' ? 'number-pad' : 'decimal-pad'}
               />
               {errors.value && <Text style={styles.errorText}>{errors.value}</Text>}
 
@@ -481,7 +648,7 @@ export default function TaxFormModal({
             <View style={{ height: 16 }} />
           </ScrollView>
 
-          {/* Modal Footer: Action Buttons */}
+          {/* Sticky Modal Footer: Action Buttons (Selalu terlihat di zona nyaman jempol) */}
           <View style={styles.modalFooter}>
             <TouchableOpacity
               style={styles.cancelButton}
@@ -520,31 +687,44 @@ export default function TaxFormModal({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'flex-end',
+  },
+  backdropTouchable: {
+    flex: 1,
   },
   modalContent: {
     backgroundColor: '#18181b',
-    borderRadius: 16,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
+    borderBottomWidth: 0,
     borderColor: '#27272a',
     width: '100%',
-    maxWidth: 520,
-    maxHeight: '90%',
-    padding: 16,
+    maxHeight: '92%',
+    paddingTop: 8,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 12,
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 16,
+    paddingHorizontal: 18,
+    paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
@@ -583,9 +763,9 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
@@ -594,7 +774,67 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   formScroll: {
-    paddingVertical: 12,
+    maxHeight: '100%',
+  },
+  formScrollContent: {
+    paddingHorizontal: 18,
+    paddingTop: 14,
+    paddingBottom: 24,
+  },
+  presetSection: {
+    backgroundColor: '#141417',
+    borderWidth: 1,
+    borderColor: '#27272a',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 16,
+  },
+  presetHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 10,
+  },
+  presetTitle: {
+    color: '#f4f4f5',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  presetSubtitle: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    marginLeft: 'auto',
+  },
+  presetChipsList: {
+    flexDirection: 'row',
+    gap: 8,
+    paddingRight: 8,
+  },
+  presetChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+  },
+  presetChipLabel: {
+    color: '#f4f4f5',
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+  },
+  presetBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  presetBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
   },
   fieldGroup: {
     marginBottom: 14,
@@ -697,7 +937,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#18181b',
+    backgroundColor: '#141417',
     borderWidth: 1,
     borderColor: '#27272a',
     borderRadius: 8,
@@ -809,7 +1049,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingVertical: 11,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     gap: 6,
   },
@@ -822,15 +1063,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    paddingTop: 14,
+    paddingHorizontal: 18,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
     borderTopWidth: 1,
     borderTopColor: '#27272a',
+    backgroundColor: '#18181b',
   },
   cancelButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 11,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     backgroundColor: '#27272a',
     borderWidth: 1,
@@ -847,7 +1092,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fbbf24',
-    paddingVertical: 11,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     gap: 6,
   },

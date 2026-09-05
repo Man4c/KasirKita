@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Transformasi Bottom Sheet Modal, Quick Presets & Live Rupiah Masking (`TaxFormModal.js`)**:
+  - Menyelesaikan temuan critique [P1], [P2], dan [P3] melalui paket perbaikan komprehensif Impeccable (`adapt`, `delight`, `clarify`):
+    1. *Mobile Bottom Sheet Ergonomics (`adapt`)*: Merefaktor modal dari centered dialog mengambang menjadi **Slide-up Bottom Sheet Modal** dengan visual drag handle, rounded top corners (20dp), backdrop semi-transparan, serta **Sticky Modal Footer** yang memisahkan tombol *Batal* dan *Simpan* di dasar layar agar selalu berada di zona jangkauan jempol satu tangan tanpa terhalang keyboard virtual.
+    2. *Quick Preset Chips Regulasi Indonesia (`delight`)*: Menambahkan deretan chip 1-ketukan di atas formulir untuk mode create (`PPN 11%`, `PB1 Resto 10%`, `Biaya Bungkus Rp2.000`, `Service Charge 5%`) yang langsung mengisi nama, kategori, skema format, nilai tarif, dan aturan pemicu transaksi secara instan.
+    3. *Live Masking Format Ribuan Rupiah (`clarify`)*: Menambahkan auto-masking pemisah ribuan saat pengguna mengetik nominal tetap (misal: `2000` $\rightarrow$ `2.000`) untuk mencegah kesalahan saltik nol (*typo fat-finger*).
+    4. *Touch Target & Kepatuhan WCAG*: Memperbesar tombol aksi footer menjadi `minHeight: 44dp`, tombol close `36x36 dp` (+ hitSlop 8dp), seluruh teks $\ge 12$px, dan rasio kontras AAA.
+    5. *Verifikasi Multi-Platform*: Lolos verifikasi sintaks JS (`node -c`), detektor Impeccable (0 defect), dan kompilasi Expo web (2.347 modul).
+
 - **Perbaikan Kestabilan Angka Tab & Client-Side Filtering Master Pajak & Biaya (`TaxManagementScreen.js`)**:
   - Menyelesaikan masalah angka tab berubah saat berpindah filter (misal: saat memilih tab "Pajak", angka tab "Semua" berubah menjadi 2 bukannya 5, dan label "Biaya Layanan" terpotong):
     1. *Pemisahan Master Data & Filtered Items*: Mengubah pemanggilan `taxService.getTaxesAndFees()` untuk selalu mengambil seluruh data master toko ke state `allItems`, tanpa menyaring parameter kategori dan status di backend.
