@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {
   Search,
@@ -179,6 +180,20 @@ export default function PromoManagementScreen({ navigation }) {
     { key: 'expired', label: 'Kadaluarsa' },
   ];
 
+  // Memoized renderItem for FlatList performance
+  const renderPromoItem = useCallback(
+    ({ item }) => (
+      <PromoCardItem
+        item={item}
+        onEdit={handleEditPromo}
+        onDelete={handleDeletePromo}
+        onToggleStatus={handleToggleStatus}
+        userRole={user?.role}
+      />
+    ),
+    [handleEditPromo, handleDeletePromo, handleToggleStatus, user?.role]
+  );
+
   return (
     <View style={styles.root}>
       <View style={styles.container}>
@@ -322,16 +337,14 @@ export default function PromoManagementScreen({ navigation }) {
         <FlatList
           data={discounts}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <PromoCardItem
-              item={item}
-              onEdit={handleEditPromo}
-              onDelete={handleDeletePromo}
-              onToggleStatus={handleToggleStatus}
-              userRole={user?.role}
-            />
-          )}
+          renderItem={renderPromoItem}
           contentContainerStyle={styles.listContent}
+          initialNumToRender={8}
+          maxToRenderPerBatch={8}
+          windowSize={5}
+          updateCellsBatchingPeriod={50}
+          removeClippedSubviews={Platform.OS === 'android'}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

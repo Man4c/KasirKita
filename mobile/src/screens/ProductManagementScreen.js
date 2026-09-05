@@ -388,6 +388,11 @@ export default function ProductManagementScreen({
             renderItem={renderProductItem}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
+            initialNumToRender={8}
+            maxToRenderPerBatch={8}
+            windowSize={5}
+            updateCellsBatchingPeriod={50}
+            removeClippedSubviews={Platform.OS === 'android'}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}

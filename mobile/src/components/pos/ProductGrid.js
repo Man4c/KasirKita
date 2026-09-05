@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import { Search, X, PackageSearch, RotateCcw, ScanBarcode } from 'lucide-react-native';
 
@@ -26,7 +27,71 @@ export default function ProductGrid({
   formatRp,
   onOpenBarcodeScanner,
 }) {
-  const selectedCatObj = categories.find((c) => c.id === selectedCat);
+  const renderProductGridItem = useCallback(
+    ({ item }) => {
+      const inCart = cart.find((i) => i.product.id === item.id);
+      const stockNum = Number(item.stock || 0);
+      const stockDisplay = Number.isInteger(stockNum) ? stockNum : stockNum.toFixed(1);
+      const minStockNum = Number(item.min_stock || 0);
+      const isOutOfStock = stockNum <= 0;
+      const isLowStock = stockNum <= minStockNum;
+      const unitSymbol = item.unitSymbol || item.base_unit?.symbol || item.baseUnit?.symbol || 'pcs';
+
+      return (
+        <TouchableOpacity
+          style={[
+            styles.productCard,
+            isLandscape && styles.productCardLandscape,
+            compact && styles.productCardCompactLandscape,
+            isOutOfStock && styles.productOutOfStock,
+          ]}
+          onPress={() => !isOutOfStock && onAddToCart(item)}
+          disabled={isOutOfStock}
+          activeOpacity={0.7}
+        >
+          {inCart && (
+            <View style={[styles.floatingBadge, compact && styles.floatingBadgeCompact]}>
+              <Text style={styles.floatingBadgeText}>
+                {inCart.quantity} {unitSymbol}
+              </Text>
+            </View>
+          )}
+
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardCategory} numberOfLines={1} ellipsizeMode="tail">
+              {item.category?.name || 'Umum'}
+            </Text>
+          </View>
+
+          <Text
+            style={[
+              styles.cardTitle,
+              isLandscape && styles.cardTitleLandscape,
+              compact && styles.cardTitleCompactLandscape,
+            ]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {item.name}
+          </Text>
+
+          <View style={styles.cardFooter}>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 2, flexShrink: 0 }}>
+              <Text style={styles.cardPrice}>{formatRp(item.price)}</Text>
+              <Text style={styles.cardPriceUnit}>/{unitSymbol}</Text>
+            </View>
+            <Text
+              style={[styles.cardStock, isLowStock && styles.cardStockLow]}
+              numberOfLines={1}
+            >
+              {stockDisplay} {unitSymbol}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    },
+    [cart, isLandscape, compact, onAddToCart, formatRp]
+  );
 
   return (
     <View style={[styles.catalogCol, isLandscape && styles.landscapeCatalogCol]}>
@@ -218,68 +283,13 @@ export default function ProductGrid({
               )}
             </View>
           }
-          renderItem={({ item }) => {
-            const inCart = cart.find((i) => i.product.id === item.id);
-            const stockNum = Number(item.stock || 0);
-            const stockDisplay = Number.isInteger(stockNum) ? stockNum : stockNum.toFixed(1);
-            const minStockNum = Number(item.min_stock || 0);
-            const isOutOfStock = stockNum <= 0;
-            const isLowStock = stockNum <= minStockNum;
-            const unitSymbol = item.unitSymbol || item.base_unit?.symbol || item.baseUnit?.symbol || 'pcs';
-
-            return (
-              <TouchableOpacity
-                style={[
-                  styles.productCard,
-                  isLandscape && styles.productCardLandscape,
-                  compact && styles.productCardCompactLandscape,
-                  isOutOfStock && styles.productOutOfStock,
-                ]}
-                onPress={() => !isOutOfStock && onAddToCart(item)}
-                disabled={isOutOfStock}
-                activeOpacity={0.7}
-              >
-                {inCart && (
-                  <View style={[styles.floatingBadge, compact && styles.floatingBadgeCompact]}>
-                    <Text style={styles.floatingBadgeText}>
-                      {inCart.quantity} {unitSymbol}
-                    </Text>
-                  </View>
-                )}
-
-                <View style={styles.cardHeader}>
-                  <Text style={styles.cardCategory} numberOfLines={1} ellipsizeMode="tail">
-                    {item.category?.name || 'Umum'}
-                  </Text>
-                </View>
-
-                <Text
-                  style={[
-                    styles.cardTitle,
-                    isLandscape && styles.cardTitleLandscape,
-                    compact && styles.cardTitleCompactLandscape,
-                  ]}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {item.name}
-                </Text>
-
-                <View style={styles.cardFooter}>
-                  <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 2, flexShrink: 0 }}>
-                    <Text style={styles.cardPrice}>{formatRp(item.price)}</Text>
-                    <Text style={styles.cardPriceUnit}>/{unitSymbol}</Text>
-                  </View>
-                  <Text
-                    style={[styles.cardStock, isLowStock && styles.cardStockLow]}
-                    numberOfLines={1}
-                  >
-                    {stockDisplay} {unitSymbol}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
+          renderItem={renderProductGridItem}
+          initialNumToRender={8}
+          maxToRenderPerBatch={8}
+          windowSize={5}
+          updateCellsBatchingPeriod={50}
+          removeClippedSubviews={Platform.OS === 'android'}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>

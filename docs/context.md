@@ -20,6 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Optimasi Virtualisasi Standar FlatList & Pencegahan Warning Performa (`PromoManagementScreen.js`, `ProductManagementScreen.js`, `CategoryManagementScreen.js`, `UnitManagementScreen.js`, `ProductGrid.js`)**:
+  - Mengatasi warning performa development bawaan React Native `VirtualizedList: You have a large list that is slow to update`:
+    1. *Parameter Virtualisasi Standar*: Menambahkan konfigurasi efisien pada seluruh FlatList:
+       - `initialNumToRender={8-10}` (hanya merender item yang muat di layar saat pertama buka)
+       - `maxToRenderPerBatch={8-10}` (membatasi item yang dirender per batch scroll)
+       - `windowSize={5}` (mengurangi konsumsi memori dengan hanya me-retain 5x viewport)
+       - `updateCellsBatchingPeriod={50}` (menjeda batch rendering agar UI thread tetap 60fps)
+       - `removeClippedSubviews={Platform.OS === 'android'}` (mencopot view native di luar viewport di Android)
+    2. *Memoization Callback `renderItem`*: Mengonversi seluruh renderItem inline di `PromoManagementScreen` dan `ProductGrid` menjadi `useCallback` memoized agar tidak memicu re-instansiasi komponen kartu yang tidak perlu saat state parent berubah.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Perbaikan Tanggal Tidak Muncul pada DatePicker Promo (`PromoFormModal.js`, `@react-native-community/datetimepicker`)**:
   - Menyelesaikan bug di mana tanggal yang dipilih pengguna di modal native Android tidak masuk ke field formulir setelah menekan "OK":
     1. *Penyebab Root Cause*: Signature callback resmi library `@react-native-community/datetimepicker` adalah `onValueChange(event, date)` (atau `onChange(event, date)`), dengan objek event sebagai parameter pertama dan objek `Date` sebagai parameter kedua. Handler sebelumnya hanya menerima 1 parameter (`selectedDate`), sehingga menerima objek event `{ nativeEvent: { timestamp, ... } }`. Saat diparsing oleh `new Date(...)`, objek tersebut menjadi `Invalid Date` dan menghasilkan string kosong.

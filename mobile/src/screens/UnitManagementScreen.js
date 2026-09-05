@@ -8,6 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import {
   Search,
@@ -264,6 +265,11 @@ export default function UnitManagementScreen({ navigation }) {
             renderItem={renderItem}
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            updateCellsBatchingPeriod={50}
+            removeClippedSubviews={Platform.OS === 'android'}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
