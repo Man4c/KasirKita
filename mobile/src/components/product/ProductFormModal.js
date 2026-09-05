@@ -229,6 +229,14 @@ export default function ProductFormModal({
             <View style={styles.formGroup}>
               <Text style={styles.fieldLabel}>Kategori</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pickerRow}>
+                <TouchableOpacity
+                  style={[styles.pickerChip, !categoryId && styles.pickerChipActive]}
+                  onPress={() => setCategoryId('')}
+                >
+                  <Text style={[styles.pickerChipText, !categoryId && styles.pickerChipTextActive]}>
+                    Tanpa Kategori
+                  </Text>
+                </TouchableOpacity>
                 {categories.map((c) => {
                   const isSelected = categoryId === c.id;
                   return (

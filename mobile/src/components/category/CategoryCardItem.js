@@ -108,7 +108,7 @@ const CategoryCardItem = React.memo(function CategoryCardItem({
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.deleteBtn, hasProducts && styles.deleteBtnDisabled]}
+              style={styles.deleteBtn}
               activeOpacity={0.7}
               onPress={(e) => {
                 e?.stopPropagation?.();
@@ -118,10 +118,10 @@ const CategoryCardItem = React.memo(function CategoryCardItem({
             >
               <Trash2
                 size={14}
-                color={hasProducts ? '#a1a1aa' : '#f87171'}
+                color="#f87171"
                 style={{ flexShrink: 0 }}
               />
-              <Text style={[styles.deleteBtnText, hasProducts && styles.deleteBtnTextDisabled]}>
+              <Text style={styles.deleteBtnText}>
                 Hapus
               </Text>
             </TouchableOpacity>

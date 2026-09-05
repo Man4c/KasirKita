@@ -288,7 +288,11 @@ export default function ProductManagementScreen({
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={[{ id: null, name: 'Semua Kategori' }, ...categories]}
+            data={[
+              { id: null, name: 'Semua Kategori' },
+              { id: 'uncategorized', name: 'Tanpa Kategori' },
+              ...categories,
+            ]}
             keyExtractor={(item) => String(item.id || 'all')}
             contentContainerStyle={styles.categoryChipList}
             renderItem={({ item }) => {

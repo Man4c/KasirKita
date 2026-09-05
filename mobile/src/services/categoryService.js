@@ -134,11 +134,16 @@ export const categoryService = {
    * Delete a category.
    *
    * @param {string|number} id - Category ID
+   * @param {Object} options - Optional { action: 'reassign'|'uncategorize', target_category_id: string }
    * @returns {Promise<boolean>}
    */
-  async deleteCategory(id) {
+  async deleteCategory(id, options = {}) {
     try {
-      await api.delete(`/categories/${id}`);
+      const config = {};
+      if (options && (options.action || options.target_category_id)) {
+        config.data = options;
+      }
+      await api.delete(`/categories/${id}`, config);
       await offlineStorage.removeCachedCategory(id);
       return true;
     } catch (err) {
@@ -147,6 +152,7 @@ export const categoryService = {
         'Gagal menghapus kategori.';
       const error = new Error(message);
       error.status = err.response?.status;
+      error.data = err.response?.data;
       throw error;
     }
   },

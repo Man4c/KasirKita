@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Solusi Hapus Kategori Berisi Produk (Reassign/Uncategorize) & Filter "Tanpa Kategori" di Master Produk**:
+  - Menyelesaikan masalah penghapusan kategori yang masih memiliki banyak produk (eliminasi kebutuhan hapus/edit produk manual satu per satu):
+    1. *Backend Support (`CategoryController.php`)*: Memperbarui endpoint `DELETE /api/categories/{id}` untuk mendukung parameter `action: 'reassign'` (memindahkan seluruh produk ke `target_category_id`) dan `action: 'uncategorize'` (mengubah seluruh produk menjadi `category_id = null`).
+    2. *Backend Product Filter (`ProductController.php`)*: Mendukung query filter `category_id=uncategorized` / `category_id=null` untuk memfilter produk yang tidak memiliki kategori.
+    3. *Native Slide-Up Bottom Sheet Modal (`CategoryDeleteModal.js`)*: Menghadirkan bottom sheet modern saat menekan tombol Hapus pada kategori berisi produk. Menyajikan pilihan kartu radio interaktif: *Pindahkan ke Kategori Lain* (dengan chips kategori tujuan) atau *Jadikan "Tanpa Kategori"*, tombol Batal dan tombol Eksekusi Rose/Red 44dp.
+    4. *Master Kategori Interaktif (`CategoryCardItem.js` & `CategoryManagementScreen.js`)*: Mengaktifkan tombol Hapus pada seluruh kategori. Jika kategori kosong langsung konfirmasi standar; jika berisi produk, otomatis memicu `CategoryDeleteModal`.
+    5. *Filter & Form Master Produk (`ProductManagementScreen.js` & `ProductFormModal.js`)*: Menambahkan chip filter `[Tanpa Kategori]` tepat setelah `[Semua Kategori]`, serta opsi `Tanpa Kategori` di selector kategori form produk.
+    6. *Filter POS Kasir (`ProductGrid.js` & `PosScreen.js`)*: Menambahkan chip filter `[Tanpa Kategori]` di katalog kasir POS agar kasir tetap dapat memfilter produk tanpa kategori dengan cepat.
+  - Lolos uji detektor Impeccable (0 defect) dan kompatibilitas sintaks PHP & JavaScript penuh.
+
 - **Penyempurnaan Tata Letak & Ergonomi Master Pengguna & Staf (`UserCardItem.js`, `UserManagementScreen.js`, `UserFormModal.js`, `ResetPasswordModal.js`) Pasca-Critique**:
   - Menyelesaikan seluruh isu prioritas P0-P3 dari hasil sesi critique:
     1. *Pemberantasan Flex Collision Header Kartu (P0)*: Memindahkan pill Omset keluar dari header ke baris metrik terpadu, menyederhanakan teks role menjadi `OWNER` / `KASIR`, serta menata header bersih 2-sisi (`[OWNER / KASIR] + [Anda]` di kiri, `[Aktif / Nonaktif]` di kanan). Badge tidak akan pernah saling tindih atau terpotong pada lebar layar berapa pun.

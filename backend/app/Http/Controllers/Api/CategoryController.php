@@ -96,7 +96,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified category.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(Request $request, string $id): JsonResponse
     {
         $category = Category::withCount('products')->find($id);
 
@@ -105,7 +105,38 @@ class CategoryController extends Controller
         }
 
         if ($category->products_count > 0) {
-            return $this->errorResponse('Kategori tidak dapat dihapus karena masih memiliki produk terkait.', 422);
+            $action = $request->input('action');
+
+            if ($action === 'reassign') {
+                $targetCategoryId = $request->input('target_category_id');
+                if (! $targetCategoryId) {
+                    return $this->errorResponse('Pilih kategori tujuan pemindahan produk.', 422);
+                }
+
+                if ($targetCategoryId === $category->id) {
+                    return $this->errorResponse('Kategori tujuan tidak boleh sama dengan kategori yang akan dihapus.', 422);
+                }
+
+                $targetCategory = Category::find($targetCategoryId);
+                if (! $targetCategory) {
+                    return $this->errorResponse('Kategori tujuan tidak ditemukan.', 404);
+                }
+
+                // Pindahkan seluruh produk ke kategori tujuan
+                $category->products()->update(['category_id' => $targetCategoryId]);
+            } elseif ($action === 'uncategorize') {
+                // Lepaskan seluruh produk menjadi tanpa kategori
+                $category->products()->update(['category_id' => null]);
+            } else {
+                return $this->errorResponse(
+                    "Kategori \"{$category->name}\" masih menaungi {$category->products_count} produk. Harap tentukan tindakan pemindahan produk.",
+                    422,
+                    [
+                        'products_count' => $category->products_count,
+                        'requires_action' => true,
+                    ]
+                );
+            }
         }
 
         $category->delete();

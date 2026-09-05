@@ -193,6 +193,20 @@ export default function ProductGrid({
               Semua
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.catChip, styles.catChipCompact, selectedCat === 'UNCATEGORIZED' && styles.catChipActive]}
+            onPress={() => onSelectCat('UNCATEGORIZED')}
+          >
+            <Text
+              style={[
+                styles.catChipText,
+                styles.catChipTextCompact,
+                selectedCat === 'UNCATEGORIZED' && styles.catChipTextActive,
+              ]}
+            >
+              Tanpa Kategori
+            </Text>
+          </TouchableOpacity>
           {categories.map((c) => (
             <TouchableOpacity
               key={c.id}

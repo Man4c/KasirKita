@@ -43,9 +43,13 @@ class ProductController extends Controller
             });
         }
 
-        // Filter by category
+        // Filter by category (supports specific ID, or 'uncategorized' / 'null')
         if ($categoryId = $request->query('category_id')) {
-            $query->where('category_id', $categoryId);
+            if ($categoryId === 'uncategorized' || $categoryId === 'null') {
+                $query->whereNull('category_id');
+            } else {
+                $query->where('category_id', $categoryId);
+            }
         }
 
         // Filter by active status

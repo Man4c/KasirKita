@@ -25,6 +25,7 @@ import { categoryService } from '../services/categoryService';
 import { useAuth } from '../context/AuthContext';
 import CategoryCardItem from '../components/category/CategoryCardItem';
 import CategoryFormModal from '../components/category/CategoryFormModal';
+import CategoryDeleteModal from '../components/category/CategoryDeleteModal';
 import { showAlert } from '../utils/alert';
 
 export default function CategoryManagementScreen({ navigation }) {
@@ -40,6 +41,9 @@ export default function CategoryManagementScreen({ navigation }) {
   // Modals
   const [formModalVisible, setFormModalVisible] = useState(false);
   const [selectedCategoryForEdit, setSelectedCategoryForEdit] = useState(null);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   // Filters
   const [search, setSearch] = useState('');
@@ -97,17 +101,17 @@ export default function CategoryManagementScreen({ navigation }) {
     setFormModalVisible(true);
   }, []);
 
-  // Delete Category confirmation
+  // Delete Category handler
   const handleDeleteCategory = useCallback((cat) => {
     const count = Number(cat.products_count || 0);
     if (count > 0) {
-      showAlert(
-        'Kategori Tidak Dapat Dihapus',
-        `Kategori "${cat.name}" masih menaungi ${count} produk. Harap pindahkan atau kosongkan produk terlebih dahulu sebelum menghapus kategori ini.`
-      );
+      // Jika kategori memiliki produk, buka CategoryDeleteModal (Reassign / Uncategorize)
+      setCategoryToDelete(cat);
+      setDeleteModalVisible(true);
       return;
     }
 
+    // Jika 0 produk, konfirmasi hapus langsung standar
     showAlert(
       'Hapus Kategori',
       `Apakah Anda yakin ingin menghapus kategori "${cat.name}"? Tindakan ini tidak dapat dibatalkan.`,
@@ -129,6 +133,36 @@ export default function CategoryManagementScreen({ navigation }) {
       ]
     );
   }, []);
+
+  // Confirm delete with reassign / uncategorize action
+  const handleConfirmDeleteWithProducts = async (payload) => {
+    if (!categoryToDelete) return;
+    try {
+      setDeleting(true);
+      await categoryService.deleteCategory(categoryToDelete.id, payload);
+      setCategories((prev) => prev.filter((c) => c.id !== categoryToDelete.id));
+      setDeleteModalVisible(false);
+      setCategoryToDelete(null);
+
+      if (payload.action === 'reassign') {
+        showAlert(
+          'Berhasil',
+          `Kategori "${categoryToDelete.name}" telah dihapus dan seluruh produk telah dialihkan.`
+        );
+        // Refresh categories to update product counts of target category
+        loadCategories(false);
+      } else {
+        showAlert(
+          'Berhasil',
+          `Kategori "${categoryToDelete.name}" telah dihapus. Produk kini berstatus "Tanpa Kategori".`
+        );
+      }
+    } catch (err) {
+      showAlert('Gagal Menghapus', err.message || 'Terjadi kesalahan saat menghapus kategori.');
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   // Modal save success callback
   const handleFormSuccess = (savedCategory, isEditMode) => {
@@ -302,6 +336,21 @@ export default function CategoryManagementScreen({ navigation }) {
           category={selectedCategoryForEdit}
           onClose={() => setFormModalVisible(false)}
           onSuccess={handleFormSuccess}
+        />
+      )}
+
+      {/* Modal Konfirmasi Hapus Kategori Berisi Produk */}
+      {deleteModalVisible && (
+        <CategoryDeleteModal
+          visible={deleteModalVisible}
+          category={categoryToDelete}
+          allCategories={categories}
+          onClose={() => {
+            setDeleteModalVisible(false);
+            setCategoryToDelete(null);
+          }}
+          onConfirm={handleConfirmDeleteWithProducts}
+          loading={deleting}
         />
       )}
     </View>

@@ -62,9 +62,13 @@ export const productService = {
           );
         }
         if (params.category_id) {
-          localProducts = localProducts.filter(
-            (p) => p.category_id === params.category_id
-          );
+          if (params.category_id === 'uncategorized' || params.category_id === 'null') {
+            localProducts = localProducts.filter((p) => !p.category_id);
+          } else {
+            localProducts = localProducts.filter(
+              (p) => String(p.category_id) === String(params.category_id)
+            );
+          }
         }
         if (params.low_stock === true || params.low_stock === 'true') {
           localProducts = localProducts.filter(

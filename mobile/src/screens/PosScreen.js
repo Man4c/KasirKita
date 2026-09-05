@@ -425,7 +425,9 @@ export default function PosScreen({
   const filteredProducts = useMemo(() => {
     const s = search.toLowerCase().trim();
     return products.filter((p) => {
-      const matchCat = selectedCat === 'ALL' || p.category_id === selectedCat;
+      const matchCat =
+        selectedCat === 'ALL' ||
+        (selectedCat === 'UNCATEGORIZED' ? !p.category_id : p.category_id === selectedCat);
       if (!matchCat) return false;
       if (!s) return true;
 
