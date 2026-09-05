@@ -317,6 +317,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0.4,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   roleBadgeTextOwner: {
     color: '#fb7185',
@@ -332,11 +334,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   selfBadgeText: {
     color: '#60a5fa',
     fontSize: 12,
     fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusActiveBadge: {
     backgroundColor: 'rgba(52, 211, 153, 0.12)',
@@ -346,11 +352,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusActiveBadgeText: {
     color: '#34d399',
     fontSize: 12,
     fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusInactiveBadge: {
     backgroundColor: 'rgba(113, 113, 122, 0.15)',
@@ -360,11 +370,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusInactiveBadgeText: {
     color: '#a1a1aa',
     fontSize: 12,
     fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   salesBadge: {
     flexDirection: 'row',
@@ -486,10 +500,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#a1a1aa',
     flexShrink: 1,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statBold: {
     color: '#f4f4f5',
     fontWeight: '700',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   salesStatBox: {
     flexDirection: 'row',
@@ -520,6 +538,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusToggleBtn: {
     flex: 1,
@@ -542,11 +562,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: '#fbbf24',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusToggleBtnTextActive: {
     fontSize: 12,
     fontWeight: '600',
     color: '#34d399',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionBtnDelete: {
     width: 40,

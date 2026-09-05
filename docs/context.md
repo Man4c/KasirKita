@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penetapan Standar Aturan "The Anti-Shift Typography Rule" di `AGENTS.md` & Harmonisasi Global**:
+  - Melembagakan aturan ke-4 pada Standar Ketahanan Layout (*Defensive UI Craft*) di `AGENTS.md`:
+    1. *The Anti-Shift Typography Rule*: Seluruh elemen teks pada React Native (khususnya font Poppins di Android) yang berdampingan dengan ikon SVG (baris horizontal flex) atau berada di dalam tombol (button), badge, chip, dan filter pill WAJIB menyertakan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada StyleSheet-nya.
+    2. *Pencegahan Regresi Jangka Panjang*: Setiap AI agent atau developer yang mengedit atau membuat komponen UI baru terikat secara mutlak oleh aturan ini.
+    3. *Audit & Penerapan Serentak*: Diimplementasikan langsung pada seluruh komponen kartu master (`CustomerCardItem.js`, `CustomerManagementScreen.js`, `UserCardItem.js`, dan `SupplierCardItem.js`).
+  - Lolos uji detektor Impeccable (0 defect).
+
 - **Perbaikan Kesejajaran Vertikal Ikon & Teks (Anti-Shift Typography) pada Master Pelanggan (`CustomerCardItem.js` & `CustomerManagementScreen.js`)**:
   - Menyelesaikan masalah misalignment vertikal di mana teks terlihat turun/tenggelam dan tidak sejajar di tengah dengan ikon (Crown VIP, Chat WA, Edit, Telepon, Email, Status Filter Sliders, Tab Pills):
     1. *Penyebab Root Cause*: Font Google **Poppins** memiliki metrik ascender tinggi, dan secara default sistem Android pada React Native menerapkan `includeFontPadding: true`. Hal ini menambahkan bantalan ruang kosong artifisial di sisi atas teks (~3-4px), sehingga teks terdorong ke bawah sementara ikon SVG Lucide tetap di tengah bounding box-nya.

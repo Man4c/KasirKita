@@ -368,6 +368,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0.4,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusActiveBadge: {
     backgroundColor: 'rgba(52, 211, 153, 0.12)',
@@ -377,11 +379,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusActiveBadgeText: {
     color: '#34d399',
     fontSize: 12,
     fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusInactiveBadge: {
     backgroundColor: 'rgba(161, 161, 170, 0.12)',
@@ -391,11 +397,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusInactiveBadgeText: {
     color: '#a1a1aa',
     fontSize: 12,
     fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   spentBadge: {
     flexDirection: 'row',
@@ -599,10 +609,14 @@ const styles = StyleSheet.create({
   statText: {
     color: '#a1a1aa',
     fontSize: 12,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statBold: {
     color: '#f4f4f5',
     fontWeight: '700',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionGroup: {
     flexDirection: 'row',
@@ -613,6 +627,7 @@ const styles = StyleSheet.create({
   waBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
     backgroundColor: 'rgba(52, 211, 153, 0.12)',
     borderColor: 'rgba(52, 211, 153, 0.3)',
@@ -626,10 +641,13 @@ const styles = StyleSheet.create({
     color: '#34d399',
     fontSize: 12,
     fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
     backgroundColor: '#27272a',
     paddingHorizontal: 12,
@@ -641,6 +659,8 @@ const styles = StyleSheet.create({
     color: '#f4f4f5',
     fontSize: 12,
     fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionBtnDelete: {
     backgroundColor: 'rgba(239, 68, 68, 0.12)',
