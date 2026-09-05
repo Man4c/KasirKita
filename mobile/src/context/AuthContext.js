@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { setOnUnauthorizedHandler } from '../services/api';
 import { storage } from '../services/storage';
 
 const AuthContext = createContext(null);
@@ -8,6 +8,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Listen for 401 Unauthorized globally from API calls
+    setOnUnauthorizedHandler(() => {
+      setUser(null);
+      setToken(null);
+    });
+
+    return () => {
+      setOnUnauthorizedHandler(null);
+    };
+  }, []);
 
   useEffect(() => {
     const loadSession = async () => {

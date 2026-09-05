@@ -103,12 +103,21 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let onUnauthorizedHandler = null;
+
+export const setOnUnauthorizedHandler = (handler) => {
+  onUnauthorizedHandler = handler;
+};
+
 // Response Interceptor: 401 Handler
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response && error.response.status === 401) {
       await storage.clearAll();
+      if (typeof onUnauthorizedHandler === 'function') {
+        onUnauthorizedHandler();
+      }
     }
     return Promise.reject(error);
   }

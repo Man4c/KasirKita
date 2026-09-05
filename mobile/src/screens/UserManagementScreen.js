@@ -269,7 +269,7 @@ export default function UserManagementScreen({ navigation }) {
 
             <View style={styles.screenTitleContainer}>
               <Text style={styles.screenTitle} numberOfLines={1}>
-                Master Pengguna & Staf
+                Master Pengguna
               </Text>
               <Text style={styles.screenSubtitle} numberOfLines={1}>
                 {totalUsers} staf ({activeCount} aktif) • Total Omset: {formatRp(totalAllSales)}
@@ -400,15 +400,15 @@ export default function UserManagementScreen({ navigation }) {
                   {debouncedSearch
                     ? 'Pengguna Tidak Ditemukan'
                     : roleFilter !== 'ALL'
-                    ? 'Tidak Ada Pengguna di Tab Ini'
-                    : 'Belum Ada Staf Kasir'}
+                      ? 'Tidak Ada Pengguna di Tab Ini'
+                      : 'Belum Ada Staf Kasir'}
                 </Text>
                 <Text style={styles.emptySubtitle}>
                   {debouncedSearch
                     ? `Tidak ada akun yang cocok dengan kata kunci "${debouncedSearch}". Periksa ejaan nama atau alamat email.`
                     : roleFilter !== 'ALL'
-                    ? 'Tidak ada akun staf atau pengguna yang sesuai dengan filter yang Anda pilih.'
-                    : 'Daftarkan kasir pertama Anda agar staf dapat memproses transaksi kasir dengan akun login mereka sendiri.'}
+                      ? 'Tidak ada akun staf atau pengguna yang sesuai dengan filter yang Anda pilih.'
+                      : 'Daftarkan kasir pertama Anda agar staf dapat memproses transaksi kasir dengan akun login mereka sendiri.'}
                 </Text>
 
                 {isOwner && !debouncedSearch && roleFilter === 'ALL' && (
