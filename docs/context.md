@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Pemilih Tanggal Kalender Interaktif pada Form Modal Promo (`PromoFormModal.js`, `@react-native-community/datetimepicker`)**:
+  - Menggantikan input teks manual format `YYYY-MM-DD` yang merepotkan dan rawan salah ketik dengan modal kalender interaktif:
+    1. *Library Instalasi*: Mengintegrasikan modul resmi Expo SDK 57 `@react-native-community/datetimepicker` yang didukung penuh di Android, iOS, dan Web.
+    2. *Komponen Input Touchable*: Input tanggal *"Mulai Berlaku"* dan *"Selesai Berlaku"* kini berupa kotak interaktif berikon kalender (`Calendar`), menampilkan placeholder *"Pilih Tanggal"* saat kosong atau tanggal terpilih (`YYYY-MM-DD`), dan tombol clear `X` saat ingin mengosongkan batas tanggal.
+    3. *Pengalaman Pengguna (UX) Modern*: Mengetuk kotak membuka dialog kalender native yang mudah digunakan pengguna tanpa perlu mengetik manual angka dan tanda hubung satu per satu.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Penyejajaran Vertikal Menyeluruh Badges, Pills, dan Metrics Box (`ProductManagementScreen.js`, `PromoManagementScreen.js`, `TransactionHistoryScreen.js`, `ProductCardItem.js`, `CategoryCardItem.js`, `UnitCardItem.js`, `PromoCardItem.js`, `ProductGrid.js`, `LandscapeRegisterPanel.js`)**:
   - Menyelesaikan masalah teks dan ikon yang tidak tepat di tengah (*off-center / bottom-heavy*) pada seluruh badge status, filter chips, pill opsi, dan kotak metrik di layar Android:
     1. *Kartu Produk & Riwayat Transaksi*:

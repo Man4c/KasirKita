@@ -22,6 +22,7 @@ import {
   Trash2,
   Check,
 } from 'lucide-react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { discountService } from '../../services/discountService';
 import { showAlert } from '../../utils/alert';
 
@@ -66,6 +67,31 @@ export default function PromoFormModal({
   const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [errors, setErrors] = useState({});
+
+  // Date Picker state: null | 'start' | 'end'
+  const [activePicker, setActivePicker] = useState(null);
+
+  const handleDateChange = (event, selectedDate) => {
+    // Android dismisses automatically; iOS keeps modal open until confirmed
+    const currentTarget = activePicker;
+    if (Platform.OS === 'android') {
+      setActivePicker(null);
+    }
+    if (event?.type === 'dismissed' || !selectedDate) {
+      setActivePicker(null);
+      return;
+    }
+    const formatted = toDateInputString(selectedDate);
+    if (currentTarget === 'start') {
+      setStartDate(formatted);
+    } else if (currentTarget === 'end') {
+      setEndDate(formatted);
+      if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: null }));
+    }
+    if (Platform.OS === 'ios') {
+      setActivePicker(null);
+    }
+  };
 
   // Reset or fill form on modal open
   useEffect(() => {
@@ -381,34 +407,86 @@ export default function PromoFormModal({
               )}
             </View>
 
-            {/* Field 2 Kolom: Tanggal Mulai & Tanggal Selesai */}
+            {/* Field 2 Kolom: Tanggal Mulai & Tanggal Selesai (Interactive Date Pickers) */}
             <View style={styles.twoColRow}>
               <View style={styles.halfCol}>
                 <Text style={styles.label}>Mulai Berlaku</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#a1a1aa"
-                  value={startDate}
-                  onChangeText={setStartDate}
-                />
+                <TouchableOpacity
+                  style={[styles.datePickerTrigger, startDate && styles.datePickerTriggerFilled]}
+                  onPress={() => setActivePicker('start')}
+                  activeOpacity={0.75}
+                >
+                  <Calendar size={15} color={startDate ? '#fb7185' : '#a1a1aa'} style={{ flexShrink: 0 }} />
+                  <Text
+                    style={[styles.datePickerText, !startDate && styles.datePickerPlaceholder]}
+                    numberOfLines={1}
+                  >
+                    {startDate || 'Pilih Tanggal'}
+                  </Text>
+                  {Boolean(startDate) && (
+                    <TouchableOpacity
+                      onPress={() => setStartDate('')}
+                      hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                      style={styles.dateClearBtn}
+                    >
+                      <X size={13} color="#a1a1aa" />
+                    </TouchableOpacity>
+                  )}
+                </TouchableOpacity>
               </View>
 
               <View style={styles.halfCol}>
                 <Text style={styles.label}>Selesai Berlaku</Text>
-                <TextInput
-                  style={[styles.input, errors.endDate && styles.inputError]}
-                  placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#a1a1aa"
-                  value={endDate}
-                  onChangeText={(val) => {
-                    setEndDate(val);
-                    if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: null }));
-                  }}
-                />
+                <TouchableOpacity
+                  style={[
+                    styles.datePickerTrigger,
+                    endDate && styles.datePickerTriggerFilled,
+                    errors.endDate && styles.inputError,
+                  ]}
+                  onPress={() => setActivePicker('end')}
+                  activeOpacity={0.75}
+                >
+                  <Calendar size={15} color={endDate ? '#fb7185' : '#a1a1aa'} style={{ flexShrink: 0 }} />
+                  <Text
+                    style={[styles.datePickerText, !endDate && styles.datePickerPlaceholder]}
+                    numberOfLines={1}
+                  >
+                    {endDate || 'Pilih Tanggal'}
+                  </Text>
+                  {Boolean(endDate) && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setEndDate('');
+                        if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: null }));
+                      }}
+                      hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                      style={styles.dateClearBtn}
+                    >
+                      <X size={13} color="#a1a1aa" />
+                    </TouchableOpacity>
+                  )}
+                </TouchableOpacity>
               </View>
             </View>
             {errors.endDate && <Text style={styles.errorText}>{errors.endDate}</Text>}
+
+            {/* Native / Web DatePicker Component */}
+            {activePicker && (
+              <DateTimePicker
+                value={
+                  activePicker === 'start'
+                    ? startDate
+                      ? new Date(startDate)
+                      : new Date()
+                    : endDate
+                    ? new Date(endDate)
+                    : new Date()
+                }
+                mode="date"
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={handleDateChange}
+              />
+            )}
 
             {/* Field: Batas Kuota */}
             <View style={styles.fieldGroup}>
@@ -632,6 +710,38 @@ const styles = StyleSheet.create({
     color: '#f4f4f5',
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
+  },
+  datePickerTrigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#121215',
+    borderWidth: 1,
+    borderColor: '#27272a',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    height: 44,
+    gap: 8,
+  },
+  datePickerTriggerFilled: {
+    borderColor: '#3f3f46',
+    backgroundColor: '#18181b',
+  },
+  datePickerText: {
+    flex: 1,
+    color: '#f4f4f5',
+    fontSize: 12,
+    fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  datePickerPlaceholder: {
+    color: '#71717a',
+    fontFamily: 'Poppins_400Regular',
+  },
+  dateClearBtn: {
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   codeInput: {
     fontFamily: 'Poppins_700Bold',
