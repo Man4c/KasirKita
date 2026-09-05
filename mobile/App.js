@@ -66,8 +66,14 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
     styleEl.id = styleId;
     styleEl.textContent = `
       html, body {
+        background-color: #09090b !important;
+        margin: 0 !important;
+        padding: 0 !important;
         transition: none !important;
         transition-property: none !important;
+      }
+      #root {
+        background-color: #09090b !important;
       }
       *, *::before, *::after {
         transition-property: opacity, transform, background-color, border-color, color, box-shadow !important;
