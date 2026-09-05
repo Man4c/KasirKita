@@ -327,8 +327,6 @@
   "325": "expo-image-picker",
   "326": "expo-secure-store",
   "327": "expo-status-bar",
-  "328": "Generate Report",
-  "329": "BORDER_SAFE_TAGS",
   "330": "@react-native-async-storage/async-storage",
   "331": "react-native-safe-area-context",
   "332": "react-native-svg",
@@ -341,13 +339,10 @@
   "339": "constants.mjs",
   "340": "barcode-detector",
   "341": "TransactionHistoryScreen.js",
-  "342": "syncEditBadgeHitProxies",
   "343": "normalizeGitHubEvent",
   "344": "Visualize: Direction Comps & Asset Production",
   "345": "checkHeroEyebrow",
   "346": "react",
   "347": "react-native",
-  "348": "@react-native-community/datetimepicker",
-  "349": "UserFactory",
-  "350": "Adaptation Strategies"
+  "348": "@react-native-community/datetimepicker"
 }

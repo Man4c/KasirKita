@@ -1,7 +1,7 @@
 ---
 title: Master Pemasok & Distributor di Mobile
 description: Perancangan dan implementasi modul manajemen Master Pemasok (Supplier & Distributor) pada aplikasi Mobile (React Native), mencakup ringkasan metrik total pengeluaran kulakan dan frekuensi pasokan barang, pencarian nama distributor/sales, informasi rekening bank transfer untuk restock, formulir modal tambah/edit supplier, tombol aksi hub dashboard, serta integrasi kontak darurat pasokan barang.
-status: pending
+status: completed
 priority: P2
 effort: 5h
 tags: [mobile, master-pemasok, supplier, procurement, inventory, bank-account, rbac]
@@ -88,7 +88,7 @@ mobile/src/
 | 3 | **Komponen Kartu & Layar Utama (`SupplierCardItem.js` & `SupplierManagementScreen.js`)**: Pembuatan kartu supplier dengan badge oranye, info rekening bank (copyable), metrik total pasokan/belanja, aksi panggilan telepon langsung, dan FlatList tervirtualisasi. | completed |
 | 4 | **Modal Formulir Tambah/Edit (`SupplierFormModal.js`)**: Pembuatan modal interaktif penambahan/pengeditan data distributor, contact person, rekening bank transfer, catatan tempo pembayaran, dan tombol hapus aman. | completed |
 | 5 | **Integrasi Navigasi Hub Menu & Proteksi RBAC**: Menghubungkan tile Pemasok di `DashboardActionHub.js`, registrasi rute di `App.js` dengan proteksi peran khusus Owner, dan aksi kembali ke Dashboard. | completed |
-| 6 | **Audit Kualitas, Defensive UI Check, & Uji Coba Multi-Platform**: Audit linter (`node detect.mjs`), uji ekspor Web (`npx expo export --platform web`), verifikasi kepatuhan WCAG readability floor (min. 12px), dan verifikasi sinkronisasi offline-first. | pending |
+| 6 | **Audit Kualitas, Defensive UI Check, & Uji Coba Multi-Platform**: Audit linter (`node detect.mjs`), uji ekspor Web (`npx expo export --platform web`), verifikasi kepatuhan WCAG readability floor (min. 12px), dan verifikasi sinkronisasi offline-first. | completed |
 
 ---
 

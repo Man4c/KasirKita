@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788592948.3004992,
-    "ast_hash": "7311dfc2a6d2b24109c6a02525575577",
+    "mtime": 1788594097.511863,
+    "ast_hash": "eecc75f56334e8d82b5a8a7e07c64188",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788592687.342721,
-    "ast_hash": "35c202d01a2113c24267ed5db5c665e5",
+    "mtime": 1788593981.0987415,
+    "ast_hash": "1ef95198d945396cffc7b244faa04b64",
     "semantic_hash": ""
   },
   "mobile/app.json": {
@@ -1390,8 +1390,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {
-    "mtime": 1788592665.4380002,
-    "ast_hash": "4c78454325cacb1cd220e666012c9ffa",
+    "mtime": 1788593965.0696034,
+    "ast_hash": "a6da019d17d88b3ba99db63c9af5b7b8",
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
@@ -2130,8 +2130,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/offlineStorage.js": {
-    "mtime": 1788591914.4575794,
-    "ast_hash": "849455e2e1cfa3907c5df702f716add7",
+    "mtime": 1788593619.6751072,
+    "ast_hash": "9e9c9d54b573da0c63af169fcb5a4b1d",
     "semantic_hash": ""
   },
   "mobile/src/services/syncManager.js": {
@@ -2315,8 +2315,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/dashboard/DashboardActionHub.js": {
-    "mtime": 1788592651.853786,
-    "ast_hash": "c49f76a4aeccebb5ce5a8d69d2b2a148",
+    "mtime": 1788593957.673962,
+    "ast_hash": "b4527cb0adfabd702bb0ca5471361bbd",
     "semantic_hash": ""
   },
   "mobile/src/components/product/ProductBarcodeScannerModal.js": {
@@ -2482,6 +2482,36 @@
   "mobile/src/screens/TaxManagementScreen.js": {
     "mtime": 1788592225.439451,
     "ast_hash": "dc7a06fc961d72b29b9dc89146e21e9d",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/customer/CustomerCardItem.js": {
+    "mtime": 1788593710.7855268,
+    "ast_hash": "d1382ffa76ac1b2eaf463e7a02796a89",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/customer/CustomerFormModal.js": {
+    "mtime": 1788593826.622072,
+    "ast_hash": "8350dc3b3e9f360d3396c3405cb09f34",
+    "semantic_hash": ""
+  },
+  "mobile/src/screens/CustomerManagementScreen.js": {
+    "mtime": 1788593875.2444334,
+    "ast_hash": "90454bf8b30b645df7906b2375df7fc9",
+    "semantic_hash": ""
+  },
+  "mobile/src/services/customerService.js": {
+    "mtime": 1788593632.0753624,
+    "ast_hash": "434647a155b9567943f63b39b762d143",
+    "semantic_hash": ""
+  },
+  "plans/260905-30-mobile-master-pelanggan/plan.md": {
+    "mtime": 1788594093.825922,
+    "ast_hash": "975d9b5d5432bed4ba87d80223487013",
+    "semantic_hash": ""
+  },
+  "plans/260905-31-mobile-master-pemasok/plan.md": {
+    "mtime": 1788593468.0856237,
+    "ast_hash": "33b839325362105577bd2bb6c3c6a1fb",
     "semantic_hash": ""
   }
 }
