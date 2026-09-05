@@ -81,7 +81,7 @@ mobile/
 
 | Phase | Task Description | Status |
 |---|---|:---:|
-| **Phase 1: API Service & State** | Pembuatan `userService.js` mengintegrasikan endpoint backend `/api/users` (list, create, update, delete, reset-password, toggle-status). | `todo` |
+| **Phase 1: API Service & State** | Pembuatan `userService.js` mengintegrasikan endpoint backend `/api/users` (list, create, update, delete, reset-password, toggle-status). | `done` |
 | **Phase 2: UserCardItem Component** | Desain kartu staf dengan Tap-to-Edit, avatar inisial, badge role, metric performa, flexbox pairing defense, dan touch target >= 44dp. | `todo` |
 | **Phase 3: Native Bottom Sheets** | Pembuatan `UserFormModal.js` (tambah/edit staf) dan `ResetPasswordModal.js` dengan animasi slide, backdrop dismiss, drag handle, dan sticky footer. | `todo` |
 | **Phase 4: Main Screen & Filter** | Pembuatan `UserManagementScreen.js` dengan header standar KasirKita, tab filter role, search input, list refreshable, empty state, dan Extended FAB. | `todo` |

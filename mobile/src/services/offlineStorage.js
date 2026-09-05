@@ -6,6 +6,7 @@ const KEYS = {
   UNITS: 'kasirkita_offline_units',
   CUSTOMERS: 'kasirkita_offline_customers',
   SUPPLIERS: 'kasirkita_offline_suppliers',
+  USERS: 'kasirkita_offline_users',
   PROMOS: 'kasirkita_offline_promos',
   TAXES_FEES: 'kasirkita_offline_taxes_fees',
   QUEUE: 'kasirkita_offline_transaction_queue',
@@ -327,6 +328,69 @@ export const offlineStorage = {
       return true;
     } catch (err) {
       console.warn('Gagal menghapus pemasok dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Cache users/staff list locally for offline access.
+   */
+  async cacheUsers(users) {
+    if (!Array.isArray(users)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.USERS, JSON.stringify(users));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache pengguna:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached users/staff list.
+   */
+  async getCachedUsers() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.USERS);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  },
+
+  /**
+   * Insert or update a single user in local cache.
+   */
+  async upsertCachedUser(user) {
+    if (!user || !user.id) return false;
+    try {
+      const users = await this.getCachedUsers();
+      const index = users.findIndex((u) => String(u.id) === String(user.id));
+      if (index >= 0) {
+        users[index] = { ...users[index], ...user };
+      } else {
+        users.unshift(user);
+      }
+      await AsyncStorage.setItem(KEYS.USERS, JSON.stringify(users));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache pengguna lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single user from local cache.
+   */
+  async removeCachedUser(userId) {
+    if (!userId) return false;
+    try {
+      let users = await this.getCachedUsers();
+      users = users.filter((u) => String(u.id) !== String(userId));
+      await AsyncStorage.setItem(KEYS.USERS, JSON.stringify(users));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus pengguna dari cache lokal:', err.message);
       return false;
     }
   },

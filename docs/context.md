@@ -27,6 +27,7 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     3. *Tap-to-Edit Kartu & Standar Impeccable*: Seluruh badan `UserCardItem.js` dapat diketuk langsung untuk edit cepat, dilengkapi avatar inisial, badge role, performa kasir (jumlah transaksi & omset), dan touch target $\ge 44$dp.
     4. *Extended Pill FAB*: Tombol mengambang ergonomis `[+] Tambah Staf`.
     5. *Integrasi Navigasi*: Registrasi rute `user_management` di `App.js` serta launcher tile di `DashboardActionHub.js` dan `SettingsScreen.js`.
+  - **Phase 1 Selesai**: Pembuatan `userService.js` dengan integrasi endpoint `/api/users` (getUsers, getUserDetail, createUser, updateUser, deleteUser, resetPassword, toggleStatus), cache sinkronisasi offline di `offlineStorage.js` (`KEYS.USERS`, `cacheUsers`, `getCachedUsers`, `upsertCachedUser`, `removeCachedUser`), dan penanganan proteksi RBAC serta self-lockout.
 
 - **Transformasi Native Bottom Sheet Modal & Peningkatan Touch Target pada Struk Transaksi Penjualan & Riwayat (`PosReceiptModal.js`, `RecentTransactionsSection.js`, `TransactionCardItem.js`)**:
   - Menyelaraskan tampilan modal struk transaksi belanja yang dipicu dari section 10 transaksi penjualan terakhir di Dashboard (`DashboardScreen.js`) dan layar Riwayat Transaksi (`TransactionHistoryScreen.js`):
