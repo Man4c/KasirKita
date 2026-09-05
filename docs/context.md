@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 5 Master Pemasok & Distributor di Mobile (Navigasi Hub & Proteksi RBAC, Plan #31)**:
+  - Mengintegrasikan launcher menu dashboard dan navigasi RBAC Owner:
+    1. *Dashboard Action Hub (`mobile/src/components/dashboard/DashboardActionHub.js`)*: Menghubungkan tile Master Pemasok (`supplier`) ke handler `handleMasterSupplier` dengan prop callback `onOpenMasterSupplier`.
+    2. *Integrasi Dashboard Screen (`mobile/src/screens/DashboardScreen.js`)*: Meneruskan callback `navigation.navigate('supplier_management')` ke `DashboardActionHub`.
+    3. *Registrasi Rute Aplikasi (`mobile/App.js`)*: Mengimpor `SupplierManagementScreen`, mendaftarkan rute `supplier_management` dengan proteksi peran Owner (`user?.role === 'owner'`), serta menyediakan navigasi kembali ke `dashboard`.
+    4. *Audit Defensive Craft & Linter*: Seluruh file lulus audit linter `detect.mjs` (0 defect) dan verifikasi sintaks JS (`node -c`). Phase 5 Plan #31 berstatus `completed`.
+
 - **Implementasi Phase 4 Master Pemasok & Distributor di Mobile (`SupplierFormModal.js`, Plan #31)**:
   - Menyelesaikan formulir modal pendaftaran dan pengeditan distributor (`mobile/src/components/supplier/SupplierFormModal.js`):
     1. *Informasi Perusahaan & Kontak*: Input nama perusahaan/distributor (wajib), nama PIC / sales area, nomor telepon/WhatsApp numerik (min. 8 digit), email perusahaan, dan alamat kantor/gudang penyimpanan.

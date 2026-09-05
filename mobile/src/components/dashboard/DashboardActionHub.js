@@ -28,6 +28,7 @@ export default function DashboardActionHub({
   onOpenMasterPromo,
   onOpenMasterTax,
   onOpenMasterCustomer,
+  onOpenMasterSupplier,
 }) {
   const lowStock = Number(inv?.low_stock_count || 0);
   const totalSku = Number(inv?.total_items || 0);
@@ -94,6 +95,17 @@ export default function DashboardActionHub({
       showAlert(
         'Master Pelanggan',
         'Data kontak pelanggan tetap, riwayat belanja member, dan tier loyalitas.'
+      );
+    }
+  };
+
+  const handleMasterSupplier = () => {
+    if (onOpenMasterSupplier) {
+      onOpenMasterSupplier();
+    } else {
+      showAlert(
+        'Master Pemasok',
+        'Daftar kontak distributor/supplier untuk pencatatan restock pasokan barang.'
       );
     }
   };
@@ -167,11 +179,7 @@ export default function DashboardActionHub({
       color: '#fb923c',
       bgColor: 'rgba(251, 146, 60, 0.16)',
       badge: null,
-      onPress: () =>
-        handleMasterAction(
-          'Master Pemasok',
-          'Daftar kontak distributor/supplier untuk pencatatan restock pasokan barang.'
-        ),
+      onPress: handleMasterSupplier,
     },
   ];
 

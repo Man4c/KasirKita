@@ -34,6 +34,7 @@ import UnitManagementScreen from './src/screens/UnitManagementScreen';
 import PromoManagementScreen from './src/screens/PromoManagementScreen';
 import TaxManagementScreen from './src/screens/TaxManagementScreen';
 import CustomerManagementScreen from './src/screens/CustomerManagementScreen';
+import SupplierManagementScreen from './src/screens/SupplierManagementScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
 
@@ -271,6 +272,13 @@ function MainApp() {
           />
         ) : activeTab === 'customer_management' && user?.role === 'owner' ? (
           <CustomerManagementScreen
+            navigation={{
+              goBack: () => handleTabChange('dashboard'),
+              navigate: handleTabChange,
+            }}
+          />
+        ) : activeTab === 'supplier_management' && user?.role === 'owner' ? (
+          <SupplierManagementScreen
             navigation={{
               goBack: () => handleTabChange('dashboard'),
               navigate: handleTabChange,
