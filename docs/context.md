@@ -79,6 +79,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     2. *Memoization Callback `renderItem`*: Mengonversi seluruh renderItem inline di `PromoManagementScreen` dan `ProductGrid` menjadi `useCallback` memoized agar tidak memicu re-instansiasi komponen kartu yang tidak perlu saat state parent berubah.
   - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
 
+- **Eliminasi Celah Garis Putih di Sisi Kanan/Bawah Tampilan Mobile (`public/index.html`, `App.js`)**:
+  - Menyelesaikan masalah garis putih tipis (*white borders / gaps*) yang kadang muncul di sebelah kanan atau bawah pada mode simulasi HP (misal Pixel 7, Galaxy A51):
+    1. *Penyebab Root Cause*: Pada browser web, elemen `html` dan `body` memiliki background default bawaan browser berwarna putih (`#ffffff`). Ketika Chrome DevTools menggunakan fitur *"Fit to window"* dengan scaling zoom tertentu (misal 72%, 83%) atau viewport dengan lebar pecahan piksel (*subpixel rendering*), terjadi pembulatan matematika antara canvas devtools dan kontainer aplikasi KasirKita. Selisih pecahan piksel ($0.5-1$ px) tersebut membuat warna putih `html/body` di belakang aplikasi bocor ke permukaan.
+    2. *Enforced Dark Base Background*: Menambahkan `public/index.html` dan runtime CSS di `App.js` dengan `background-color: #09090b !important`, `margin: 0 !important`, `padding: 0 !important` pada `html`, `body`, dan `#root`. Dengan latar belakang dasar yang serasi dengan tema gelap aplikasi, seluruh sisa pecahan subpixel otomatis terserap sempurna dan garis putih hilang 100%.
+  - Lolos verifikasi build Expo Web (`npx expo export --platform web`).
+
 - **Perbaikan Tanggal Tidak Muncul pada DatePicker Promo (`PromoFormModal.js`, `@react-native-community/datetimepicker`)**:
   - Menyelesaikan bug di mana tanggal yang dipilih pengguna di modal native Android tidak masuk ke field formulir setelah menekan "OK":
     1. *Penyebab Root Cause*: Signature callback resmi library `@react-native-community/datetimepicker` adalah `onValueChange(event, date)` (atau `onChange(event, date)`), dengan objek event sebagai parameter pertama dan objek `Date` sebagai parameter kedua. Handler sebelumnya hanya menerima 1 parameter (`selectedDate`), sehingga menerima objek event `{ nativeEvent: { timestamp, ... } }`. Saat diparsing oleh `new Date(...)`, objek tersebut menjadi `Invalid Date` dan menghasilkan string kosong.
