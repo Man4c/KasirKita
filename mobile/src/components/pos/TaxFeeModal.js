@@ -24,12 +24,14 @@ export default function TaxFeeModal({
         <View style={[styles.customerPickerSheet, isLandscape && styles.customerPickerSheetLandscape]}>
           {/* Header */}
           <View style={styles.modalHeader}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Percent size={20} color="#fb7185" />
+            <View style={styles.modalHeaderTitleBox}>
+              <View style={styles.modalIconBox}>
+                <Percent size={18} color="#fbbf24" />
+              </View>
               <Text style={styles.modalTitle}>Pilih Tarif Pajak</Text>
             </View>
-            <TouchableOpacity onPress={onClose} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-              <X size={20} color="#d4d4d8" />
+            <TouchableOpacity onPress={onClose} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} style={styles.closeBtn}>
+              <X size={18} color="#d4d4d8" />
             </TouchableOpacity>
           </View>
 
@@ -41,8 +43,8 @@ export default function TaxFeeModal({
               activeOpacity={0.7}
             >
               <View style={styles.customerOptionInfo}>
-                <Text style={styles.customerOptionName}>Tanpa Pajak (0%)</Text>
-                <Text style={styles.customerOptionSub}>Tidak mengenakan pajak pada transaksi ini</Text>
+                <Text style={styles.customerOptionName} numberOfLines={1}>Tanpa Pajak (0%)</Text>
+                <Text style={styles.customerOptionSub} numberOfLines={2}>Tidak mengenakan pajak pada transaksi ini</Text>
               </View>
               {selectedTaxId === '' ? (
                 <View style={[styles.taxOptionBadge, styles.taxOptionBadgeActive]}>
@@ -68,12 +70,12 @@ export default function TaxFeeModal({
                 >
                   <View style={styles.customerOptionInfo}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                      <Text style={styles.customerOptionName}>{tax.name}</Text>
-                      <View style={styles.membershipBadgeSmall}>
-                        <Text style={styles.membershipBadgeSmallText}>{rateDisplay}</Text>
+                      <Text style={styles.customerOptionName} numberOfLines={1}>{tax.name}</Text>
+                      <View style={styles.taxBadgeSmall}>
+                        <Text style={styles.taxBadgeSmallText}>{rateDisplay}</Text>
                       </View>
                     </View>
-                    <Text style={styles.customerOptionSub}>
+                    <Text style={styles.customerOptionSub} numberOfLines={2}>
                       {tax.description || `${rateDisplay} dari subtotal belanja`}
                     </Text>
                   </View>
@@ -130,10 +132,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
+  modalHeaderTitleBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flex: 1,
+    minWidth: 0,
+  },
+  modalIconBox: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: 'rgba(251, 191, 36, 0.16)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
   modalTitle: {
     color: '#ffffff',
     fontSize: 16,
     fontFamily: 'Poppins_700Bold',
+    flex: 1,
   },
   taxOptionCard: {
     flexDirection: 'row',
@@ -144,14 +174,15 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'transparent',
+    borderColor: '#3f3f46',
   },
   taxOptionCardActive: {
-    borderColor: '#e11d48',
-    backgroundColor: '#26141a',
+    borderColor: '#fbbf24',
+    backgroundColor: 'rgba(251, 191, 36, 0.08)',
   },
   customerOptionInfo: {
     flex: 1,
+    minWidth: 0,
     marginRight: 10,
   },
   customerOptionName: {
@@ -165,27 +196,29 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     marginTop: 2,
   },
-  membershipBadgeSmall: {
-    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+  taxBadgeSmall: {
+    backgroundColor: 'rgba(251, 191, 36, 0.15)',
     paddingHorizontal: 6,
     paddingVertical: 1,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: 'rgba(225, 29, 72, 0.3)',
+    borderColor: 'rgba(251, 191, 36, 0.3)',
+    flexShrink: 0,
   },
-  membershipBadgeSmallText: {
-    color: '#fb7185',
+  taxBadgeSmallText: {
+    color: '#fbbf24',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
   taxOptionBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
     borderRadius: 8,
     backgroundColor: '#3f3f46',
+    flexShrink: 0,
   },
   taxOptionBadgeActive: {
-    backgroundColor: '#e11d48',
+    backgroundColor: '#fbbf24',
   },
   taxOptionBadgeTextInactive: {
     color: '#d4d4d8',
@@ -193,8 +226,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   taxOptionBadgeTextActive: {
-    color: '#ffffff',
+    color: '#09090b',
     fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_700Bold',
   },
 });

@@ -247,6 +247,11 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
             navigation.navigate('promo_management');
           }
         }}
+        onOpenMasterTax={() => {
+          if (navigation?.navigate) {
+            navigation.navigate('tax_management');
+          }
+        }}
       />
 
       {/* 7-Day Sales Trend Interactive Chart */}

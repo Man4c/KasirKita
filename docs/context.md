@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 5 Master Pajak & Biaya Layanan di Mobile (Navigasi Hub & POS Sync, Plan #29)**:
+  - Mengintegrasikan launcher menu, navigasi RBAC Owner, dan sinkronisasi kasir POS:
+    1. *Dashboard Action Hub (`mobile/src/components/dashboard/DashboardActionHub.js`)*: Menghubungkan tile Master Pajak (`tax_fee`) ke handler `handleMasterTax` dengan prop callback `onOpenMasterTax`.
+    2. *Integrasi Dashboard Screen (`mobile/src/screens/DashboardScreen.js`)*: Meneruskan callback `navigation.navigate('tax_management')` ke `DashboardActionHub`.
+    3. *Registrasi Rute Aplikasi (`mobile/App.js`)*: Mengimpor `TaxManagementScreen`, mendaftarkan rute `tax_management` dengan proteksi peran Owner (`user?.role === 'owner'`), serta menyediakan navigasi kembali ke `dashboard`.
+    4. *Penyempurnaan Modal Pajak POS (`mobile/src/components/pos/TaxFeeModal.js`)*: Menerapkan Defensive UI Impeccable pada modal pemilihan pajak kasir, menyelaraskan palet warna Amber Pajak (`#fbbf24`), flexbox pairing (`min-w-0 truncate`), tombol close terproteksi, serta memastikan keterbacaan label/badge $\ge 12$px.
+    5. *Audit Defensive Craft & Linter*: Seluruh file lulus audit linter `detect.mjs` (0 defect) dan verifikasi sintaks JS (`node -c`). Phase 5 berstatus `completed`.
+
 - **Implementasi Phase 4 Master Pajak & Biaya Layanan di Mobile (`TaxFormModal.js`, Plan #29)**:
   - Menyelesaikan formulir modal interaktif penambahan & pengeditan komponen pajak/biaya (`mobile/src/components/tax/TaxFormModal.js`):
     1. *Klasifikasi Komponen*: Tab pemilih Pajak (`is_tax: true`) vs Biaya Layanan (`is_tax: false`) dengan penyesuaian label dinamis.
