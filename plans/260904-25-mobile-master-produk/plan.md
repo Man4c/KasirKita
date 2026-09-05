@@ -1,7 +1,7 @@
 ---
 title: Master Produk & Inventaris di Mobile
 description: Perancangan dan implementasi layar manajemen Master Produk pada aplikasi Mobile (React Native), mencakup katalog master produk, formulir tambah/edit produk, scan barcode kemasan fisik via kamera, penyesuaian stok cepat, dan sinkronisasi real-time dengan katalog kasir POS.
-status: pending
+status: completed
 priority: P1
 effort: 10h
 tags: [mobile, master-produk, inventory, product-management, camera-scanner, offline-first, rbac]
