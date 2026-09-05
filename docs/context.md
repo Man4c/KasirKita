@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Eliminasi Font-Display FOIT & Pengujian Cache Produksi (`mobile/App.js`)**:
+  - Menyelesaikan audit detail Lighthouse (analisis Treemap bundle 469 KiB dan Network Dependency Tree):
+    1. *Eliminasi Peringatan Font-Display*: Menerapkan konfigurasi font map web dengan `{ uri: Poppins_xxx, display: 'swap' }` pada hook `useFonts` di `App.js`. Ini memastikan `@expo-font` menginjeksi aturan CSS `@font-face` dengan `font-display: swap` untuk seluruh varian Poppins (400, 500, 600, 700), menghilangkan potensi Flash of Invisible Text (FOIT) dan menghapus temuan Lighthouse *Font display (Est savings 10ms)*.
+    2. *Analisis LCP Cold Start vs Warm Cache*:
+       - Lighthouse Mobile menyimulasikan koneksi 4G lambat + CPU 4x throttling. Pada tab incognito pertama (*cold start*), data omzet baru selesai di-fetch setelah 3.4 detik sehingga angka omzet berubah di detik ke-5.76.
+       - Dengan arsitektur cache lokal `offlineStorage`, saat pengguna membuka kembali halaman (atau me-refresh audit di tab yang sama), seluruh angka nominal ter-render seketika bersama FCP di detik ke-2.3 tanpa memicu kandidat LCP susulan.
+  - Lolos uji build `npx expo export --platform web`.
+
 - **Optimasi LCP Dashboard & Instant Shell Render (`DashboardScreen.js`)**:
   - Menganalisis hasil Lighthouse produksi kedua (skor meningkat ke **57**, Accessibility **95**, Best Practices **100**, SEO **90**, Speed Index **2.3s**, CLS **0.084**):
     1. *Identifikasi Hambatan LCP 5.8s*: Pada kondisi cold start / tab incognito baru dengan cache kosong, `DashboardScreen` sebelumnya merender tampilan layar penuh `centerBox` dengan spinner teks `Memuat ringkasan toko...` sampai ketiga request backend (`/finance/dashboard`, `/finance/trends`, `/pos/transactions`) selesai di-download. Ini menunda Largest Contentful Paint hingga detik ke-5.8.

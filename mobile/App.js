@@ -346,12 +346,21 @@ function MainApp() {
 }
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
-  });
+  const fontMap = Platform.OS === 'web'
+    ? {
+        Poppins_400Regular: { uri: Poppins_400Regular, display: 'swap' },
+        Poppins_500Medium: { uri: Poppins_500Medium, display: 'swap' },
+        Poppins_600SemiBold: { uri: Poppins_600SemiBold, display: 'swap' },
+        Poppins_700Bold: { uri: Poppins_700Bold, display: 'swap' },
+      }
+    : {
+        Poppins_400Regular,
+        Poppins_500Medium,
+        Poppins_600SemiBold,
+        Poppins_700Bold,
+      };
+
+  const [fontsLoaded] = useFonts(fontMap);
 
   // On web, allow instant paint with system fallback fonts and font-display: swap.
   // Only block initial render on native mobile (iOS/Android) where font assets are loaded synchronously/locally.
