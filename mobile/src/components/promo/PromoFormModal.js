@@ -70,24 +70,58 @@ export default function PromoFormModal({
 
   // Date Picker state: null | 'start' | 'end'
   const [activePicker, setActivePicker] = useState(null);
+  const activePickerRef = React.useRef(null);
 
-  const handleDateValueChange = (selectedDate) => {
-    if (!selectedDate) {
-      setActivePicker(null);
-      return;
-    }
-    const formatted = toDateInputString(selectedDate);
-    if (activePicker === 'start') {
-      setStartDate(formatted);
-    } else if (activePicker === 'end') {
-      setEndDate(formatted);
-      if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: null }));
-    }
+  const openPicker = (type) => {
+    activePickerRef.current = type;
+    setActivePicker(type);
+  };
+
+  const closePicker = () => {
+    activePickerRef.current = null;
     setActivePicker(null);
   };
 
+  const handleDateValueChange = (eventOrDate, maybeDate) => {
+    const target = activePickerRef.current || activePicker;
+    closePicker();
+
+    // DateTimePicker callback signature:
+    // onValueChange(event, date) on Android/iOS
+    // or onChange(event, date) where date can be in 2nd param, or 1st param if directly passed,
+    // or extractable via event.nativeEvent.timestamp.
+    let dateObj = null;
+    if (maybeDate instanceof Date && !isNaN(maybeDate.getTime())) {
+      dateObj = maybeDate;
+    } else if (eventOrDate instanceof Date && !isNaN(eventOrDate.getTime())) {
+      dateObj = eventOrDate;
+    } else if (eventOrDate?.nativeEvent?.timestamp) {
+      const parsed = new Date(eventOrDate.nativeEvent.timestamp);
+      if (!isNaN(parsed.getTime())) {
+        dateObj = parsed;
+      }
+    } else if (typeof eventOrDate === 'number' || typeof eventOrDate === 'string') {
+      const parsed = new Date(eventOrDate);
+      if (!isNaN(parsed.getTime())) {
+        dateObj = parsed;
+      }
+    }
+
+    if (!dateObj) return;
+
+    const formatted = toDateInputString(dateObj);
+    if (!formatted) return;
+
+    if (target === 'start') {
+      setStartDate(formatted);
+    } else if (target === 'end') {
+      setEndDate(formatted);
+      if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: null }));
+    }
+  };
+
   const handleDateDismiss = () => {
-    setActivePicker(null);
+    closePicker();
   };
 
   // Reset or fill form on modal open
@@ -410,7 +444,7 @@ export default function PromoFormModal({
                 <Text style={styles.label}>Mulai Berlaku</Text>
                 <TouchableOpacity
                   style={[styles.datePickerTrigger, startDate && styles.datePickerTriggerFilled]}
-                  onPress={() => setActivePicker('start')}
+                  onPress={() => openPicker('start')}
                   activeOpacity={0.75}
                 >
                   <Calendar size={15} color={startDate ? '#fb7185' : '#a1a1aa'} style={{ flexShrink: 0 }} />
@@ -440,7 +474,7 @@ export default function PromoFormModal({
                     endDate && styles.datePickerTriggerFilled,
                     errors.endDate && styles.inputError,
                   ]}
-                  onPress={() => setActivePicker('end')}
+                  onPress={() => openPicker('end')}
                   activeOpacity={0.75}
                 >
                   <Calendar size={15} color={endDate ? '#fb7185' : '#a1a1aa'} style={{ flexShrink: 0 }} />
@@ -482,6 +516,7 @@ export default function PromoFormModal({
                 mode="date"
                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                 onValueChange={handleDateValueChange}
+                onChange={handleDateValueChange}
                 onDismiss={handleDateDismiss}
               />
             )}

@@ -20,11 +20,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Implementasi Pemilih Tanggal Kalender Interaktif pada Form Modal Promo (`PromoFormModal.js`, `@react-native-community/datetimepicker`)**:
-  - Menggantikan input teks manual format `YYYY-MM-DD` yang merepotkan dan rawan salah ketik dengan modal kalender interaktif:
-    1. *Library Instalasi*: Mengintegrasikan modul resmi Expo SDK 57 `@react-native-community/datetimepicker` yang didukung penuh di Android, iOS, dan Web.
-    2. *Komponen Input Touchable*: Input tanggal *"Mulai Berlaku"* dan *"Selesai Berlaku"* kini berupa kotak interaktif berikon kalender (`Calendar`), menampilkan placeholder *"Pilih Tanggal"* saat kosong atau tanggal terpilih (`YYYY-MM-DD`), dan tombol clear `X` saat ingin mengosongkan batas tanggal.
-    3. *Pengalaman Pengguna (UX) Modern*: Mengetuk kotak membuka dialog kalender native yang mudah digunakan pengguna tanpa perlu mengetik manual angka dan tanda hubung satu per satu.
+- **Perbaikan Tanggal Tidak Muncul pada DatePicker Promo (`PromoFormModal.js`, `@react-native-community/datetimepicker`)**:
+  - Menyelesaikan bug di mana tanggal yang dipilih pengguna di modal native Android tidak masuk ke field formulir setelah menekan "OK":
+    1. *Penyebab Root Cause*: Signature callback resmi library `@react-native-community/datetimepicker` adalah `onValueChange(event, date)` (atau `onChange(event, date)`), dengan objek event sebagai parameter pertama dan objek `Date` sebagai parameter kedua. Handler sebelumnya hanya menerima 1 parameter (`selectedDate`), sehingga menerima objek event `{ nativeEvent: { timestamp, ... } }`. Saat diparsing oleh `new Date(...)`, objek tersebut menjadi `Invalid Date` dan menghasilkan string kosong.
+    2. *Penyimpanan Target Aktif (`activePickerRef`)*: Menggunakan ref untuk menyimpan target picker (`'start'` atau `'end'`) secara stabil agar tidak hilang karena timing penutupan dialog.
+    3. *Parsing Multi-Format Fleksibel*: Handler diperbarui untuk mendukung parameter kedua (`maybeDate`), parameter pertama (`eventOrDate`), ekstraksi langsung `eventOrDate?.nativeEvent?.timestamp`, serta fallback kompatibilitas ke prop `onChange` dan `onValueChange`.
   - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
 
 - **Penyejajaran Vertikal Menyeluruh Badges, Pills, dan Metrics Box (`ProductManagementScreen.js`, `PromoManagementScreen.js`, `TransactionHistoryScreen.js`, `ProductCardItem.js`, `CategoryCardItem.js`, `UnitCardItem.js`, `PromoCardItem.js`, `ProductGrid.js`, `LandscapeRegisterPanel.js`)**:
