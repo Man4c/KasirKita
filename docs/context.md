@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyempurnaan Tata Letak & Ergonomi Master Pengguna & Staf (`UserCardItem.js`, `UserManagementScreen.js`, `UserFormModal.js`, `ResetPasswordModal.js`) Pasca-Critique**:
+  - Menyelesaikan seluruh isu prioritas P0-P3 dari hasil sesi critique:
+    1. *Pemberantasan Flex Collision Header Kartu (P0)*: Memindahkan pill Omset keluar dari header ke baris metrik terpadu, menyederhanakan teks role menjadi `OWNER` / `KASIR`, serta menata header bersih 2-sisi (`[OWNER / KASIR] + [Anda]` di kiri, `[Aktif / Nonaktif]` di kanan). Badge tidak akan pernah saling tindih atau terpotong pada lebar layar berapa pun.
+    2. *Pemberantasan Data Clipping Transaksi Kasir (P1 & P3)*: Menggabungkan metrik penjualan kasir ke dalam **Unified Performance Metrics Strip** di tengah kartu (`{txCount} Transaksi • Omset {formatRp(sales)}`), memberikan ruang lapang 100% tanpa kompresi desakan tombol.
+    3. *Peningkatan Ergonomi & Zona Aman Aksi Kartu (P2)*: Menata baris aksi di strip terpisah di bawah kartu dengan tombol `Reset PIN` (flex: 1, minHeight: 40dp), tombol status `Bekukan / Aktifkan` (flex: 1, minHeight: 40dp), dan tombol `Hapus` terlindungi dengan hitSlop aman.
+    4. *Peningkatan Touch Target Global*: Menaikkan ukuran tombol kembali (`backBtn`) dan `headerIconBtn` di `UserManagementScreen.js` menjadi 40dp, tinggi search box 44dp, filter pill 38dp, serta tombol `closeBtn` pada kedua modal menjadi 40dp (WCAG 2.5.5 touch target compliant).
+  - Lolos uji detektor Impeccable (0 defect) dan kompatibilitas sintaks penuh.
+
 - **Perancangan Modul Master Pengguna & Staf Kasir Mobile (React Native) (`plans/260905-32-mobile-master-pengguna/plan.md`)**:
   - Menyusun rencana implementasi modular untuk manajemen pengguna/kasir di aplikasi mobile yang terintegrasi dengan backend `/api/users`:
     1. *Role-Based Access Control (RBAC)*: Akses terbatas hanya untuk `owner`, dengan perlindungan *self-deletion* dan *self-deactivation* guard pada akun owner yang sedang login.

@@ -486,9 +486,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   backBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 9,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',
@@ -512,9 +512,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   headerIconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 9,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#27272a',
-    height: 42,
+    height: 44,
     paddingHorizontal: 12,
   },
   searchIcon: {
@@ -564,7 +564,7 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   clearSearchBtn: {
-    padding: 4,
+    padding: 6,
     flexShrink: 0,
   },
   filterRow: {
@@ -574,8 +574,8 @@ const styles = StyleSheet.create({
   },
   filterPill: {
     flex: 1,
-    height: 34,
-    borderRadius: 8,
+    height: 38,
+    borderRadius: 9,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',

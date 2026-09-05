@@ -301,9 +301,14 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   closeBtn: {
-    padding: 6,
-    borderRadius: 8,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalBody: {
     paddingHorizontal: 18,

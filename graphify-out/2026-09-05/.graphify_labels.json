@@ -347,5 +347,7 @@
   "345": "checkHeroEyebrow",
   "346": "react",
   "347": "react-native",
-  "348": "@react-native-community/datetimepicker"
+  "348": "@react-native-community/datetimepicker",
+  "349": "checkRadialSpotlight",
+  "350": "checkElementRadialSpotlightDOM"
 }

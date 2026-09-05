@@ -86,7 +86,7 @@ const UserCardItem = React.memo(function UserCardItem({
       onPress={() => onEdit(item)}
       activeOpacity={0.88}
     >
-      {/* Top Header: Role Badge, Status Badge & Self Tag */}
+      {/* Top Header: Role Badge, Self Tag & Status Badge (Clean 2-Sided Layout) */}
       <View style={styles.cardHeader}>
         <View style={styles.headerLeft}>
           <View style={[styles.roleBadge, isOwner ? styles.roleBadgeOwner : styles.roleBadgeCashier]}>
@@ -100,8 +100,9 @@ const UserCardItem = React.memo(function UserCardItem({
                 styles.roleBadgeText,
                 isOwner ? styles.roleBadgeTextOwner : styles.roleBadgeTextCashier,
               ]}
+              numberOfLines={1}
             >
-              {isOwner ? 'PEMILIK (OWNER)' : 'KASIR'}
+              {isOwner ? 'OWNER' : 'KASIR'}
             </Text>
           </View>
 
@@ -110,7 +111,10 @@ const UserCardItem = React.memo(function UserCardItem({
               <Text style={styles.selfBadgeText}>Anda</Text>
             </View>
           )}
+        </View>
 
+        {/* Right Status Badge */}
+        <View style={styles.headerRight}>
           {isInactive ? (
             <View style={styles.statusInactiveBadge}>
               <Text style={styles.statusInactiveBadgeText}>Nonaktif</Text>
@@ -120,12 +124,6 @@ const UserCardItem = React.memo(function UserCardItem({
               <Text style={styles.statusActiveBadgeText}>Aktif</Text>
             </View>
           )}
-        </View>
-
-        {/* Total Sales Omset Pill */}
-        <View style={styles.salesBadge}>
-          <Text style={styles.salesLabel}>Omset:</Text>
-          <Text style={styles.salesValue}>{formatRp(totalSales)}</Text>
         </View>
       </View>
 
@@ -172,7 +170,7 @@ const UserCardItem = React.memo(function UserCardItem({
         </View>
       </View>
 
-      {/* Metrics Strip & Action Buttons */}
+      {/* Unified Performance Metrics Strip: Transaksi + Omset */}
       <View style={styles.metricsStrip}>
         <View style={styles.statBox}>
           <ShoppingBag size={13} color="#a1a1aa" style={{ flexShrink: 0 }} />
@@ -181,62 +179,68 @@ const UserCardItem = React.memo(function UserCardItem({
           </Text>
         </View>
 
-        {/* Action Buttons Group */}
-        <View style={styles.actionGroup}>
-          {/* Reset Password Action */}
+        <View style={styles.salesStatBox}>
+          <Text style={styles.salesLabel}>Omset:</Text>
+          <Text style={styles.salesValue} numberOfLines={1}>{formatRp(totalSales)}</Text>
+        </View>
+      </View>
+
+      {/* Ergonomic Action Buttons Strip */}
+      <View style={styles.actionStrip}>
+        {/* Reset PIN Action */}
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={(e) => {
+            e?.stopPropagation?.();
+            onResetPassword(item);
+          }}
+          activeOpacity={0.75}
+          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+        >
+          <KeyRound size={14} color="#f4f4f5" style={{ flexShrink: 0 }} />
+          <Text style={styles.actionBtnText}>Reset PIN</Text>
+        </TouchableOpacity>
+
+        {/* Toggle Active Status (Forbidden on self) */}
+        {!isSelf && (
           <TouchableOpacity
-            style={styles.actionBtn}
+            style={[styles.statusToggleBtn, isInactive && styles.statusToggleBtnInactive]}
             onPress={(e) => {
               e?.stopPropagation?.();
-              onResetPassword(item);
+              onToggleStatus(item);
             }}
             activeOpacity={0.75}
-            hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+            hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
           >
-            <KeyRound size={13} color="#f4f4f5" />
-            <Text style={styles.actionBtnText}>Reset PIN</Text>
+            {isInactive ? (
+              <>
+                <CheckCircle2 size={14} color="#34d399" style={{ flexShrink: 0 }} />
+                <Text style={styles.statusToggleBtnTextActive}>Aktifkan</Text>
+              </>
+            ) : (
+              <>
+                <XCircle size={14} color="#fbbf24" style={{ flexShrink: 0 }} />
+                <Text style={styles.statusToggleBtnTextDeactivate}>Bekukan</Text>
+              </>
+            )}
           </TouchableOpacity>
+        )}
 
-          {/* Toggle Active Status (Forbidden on self) */}
-          {!isSelf && (
-            <TouchableOpacity
-              style={[styles.statusToggleBtn, isInactive && styles.statusToggleBtnInactive]}
-              onPress={(e) => {
-                e?.stopPropagation?.();
-                onToggleStatus(item);
-              }}
-              activeOpacity={0.75}
-              hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
-            >
-              {isInactive ? (
-                <>
-                  <CheckCircle2 size={13} color="#34d399" />
-                  <Text style={styles.statusToggleBtnTextActive}>Aktifkan</Text>
-                </>
-              ) : (
-                <>
-                  <XCircle size={13} color="#fbbf24" />
-                  <Text style={styles.statusToggleBtnTextDeactivate}>Bekukan</Text>
-                </>
-              )}
-            </TouchableOpacity>
-          )}
-
-          {/* Delete Action (Forbidden on self) */}
-          {!isSelf && (
-            <TouchableOpacity
-              style={[styles.actionBtn, styles.actionBtnDelete]}
-              onPress={(e) => {
-                e?.stopPropagation?.();
-                onDelete(item);
-              }}
-              activeOpacity={0.75}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Trash2 size={14} color="#f87171" />
-            </TouchableOpacity>
-          )}
-        </View>
+        {/* Delete Action (Forbidden on self) */}
+        {!isSelf && (
+          <TouchableOpacity
+            style={styles.actionBtnDelete}
+            onPress={(e) => {
+              e?.stopPropagation?.();
+              onDelete(item);
+            }}
+            activeOpacity={0.75}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityLabel="Hapus Akun Staf"
+          >
+            <Trash2 size={15} color="#f87171" />
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -285,6 +289,11 @@ const styles = StyleSheet.create({
     gap: 6,
     flexShrink: 1,
     minWidth: 0,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 0,
   },
   roleBadge: {
     flexDirection: 'row',
@@ -457,9 +466,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#27272a',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    backgroundColor: '#202024',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    marginBottom: 10,
     gap: 8,
   },
   statBox: {
@@ -478,19 +491,27 @@ const styles = StyleSheet.create({
     color: '#f4f4f5',
     fontWeight: '700',
   },
-  actionGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    flexShrink: 0,
-  },
-  actionBtn: {
+  salesStatBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    height: 34,
-    paddingHorizontal: 10,
-    borderRadius: 8,
+    flexShrink: 0,
+  },
+  actionStrip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingTop: 2,
+  },
+  actionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    minHeight: 40,
+    paddingHorizontal: 12,
+    borderRadius: 9,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
@@ -501,12 +522,14 @@ const styles = StyleSheet.create({
     color: '#f4f4f5',
   },
   statusToggleBtn: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    height: 34,
-    paddingHorizontal: 9,
-    borderRadius: 8,
+    justifyContent: 'center',
+    gap: 6,
+    minHeight: 40,
+    paddingHorizontal: 12,
+    borderRadius: 9,
     backgroundColor: 'rgba(251, 191, 36, 0.08)',
     borderWidth: 1,
     borderColor: 'rgba(251, 191, 36, 0.3)',
@@ -526,11 +549,15 @@ const styles = StyleSheet.create({
     color: '#34d399',
   },
   actionBtnDelete: {
-    width: 34,
+    width: 40,
+    minHeight: 40,
     paddingHorizontal: 0,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 9,
     backgroundColor: 'rgba(248, 113, 113, 0.08)',
+    borderWidth: 1,
     borderColor: 'rgba(248, 113, 113, 0.25)',
+    flexShrink: 0,
   },
 });
