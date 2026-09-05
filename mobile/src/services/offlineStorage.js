@@ -332,6 +332,69 @@ export const offlineStorage = {
   },
 
   /**
+   * Cache taxes and fees list locally for tax management and POS checkout.
+   */
+  async cacheTaxesAndFees(taxesAndFees) {
+    if (!Array.isArray(taxesAndFees)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.TAXES_FEES, JSON.stringify(taxesAndFees));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache pajak dan biaya:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached taxes and fees list.
+   */
+  async getCachedTaxesAndFees() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.TAXES_FEES);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  },
+
+  /**
+   * Insert or update a single tax or fee in local cache.
+   */
+  async upsertCachedTaxAndFee(item) {
+    if (!item || !item.id) return false;
+    try {
+      const items = await this.getCachedTaxesAndFees();
+      const index = items.findIndex((i) => i.id === item.id);
+      if (index >= 0) {
+        items[index] = { ...items[index], ...item };
+      } else {
+        items.unshift(item);
+      }
+      await AsyncStorage.setItem(KEYS.TAXES_FEES, JSON.stringify(items));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache pajak/biaya lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single tax or fee from local cache.
+   */
+  async removeCachedTaxAndFee(itemId) {
+    if (!itemId) return false;
+    try {
+      let items = await this.getCachedTaxesAndFees();
+      items = items.filter((i) => String(i.id) !== String(itemId));
+      await AsyncStorage.setItem(KEYS.TAXES_FEES, JSON.stringify(items));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus pajak/biaya dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
    * Enqueue an offline transaction.
    * Assigns an offline ID, temporary offline invoice, and deducts local stock.
    */

@@ -20,13 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Perancangan Modul Master Pajak & Biaya Layanan di Mobile (`plans/260905-29-mobile-master-pajak-dan-biaya/plan.md`)**:
-  - Menyusun dokumen rencana komprehensif untuk implementasi Master Pajak & Biaya Layanan pada aplikasi Mobile React Native:
-    1. *Kebutuhan Pengguna & Fitur*: Pengelolaan komponen Pajak (PPN/PB1 Resto) dan Biaya Layanan (Service Charge, Kemasan/Plastik, Admin Payment) langsung dari genggaman smartphone tanpa harus membuka Web Dashboard.
-    2. *Arsitektur Komponen*: `TaxManagementScreen.js` (layar utama dengan segmented tabs & metric summary), `TaxCardItem.js` (kartu item dengan badge kontras, indikator tarif, dan saklar toggle status instan), `TaxFormModal.js` (modal form dengan live preview kalkulasi tagihan Rp100.000), dan `taxService.js` (koneksi API `/api/taxes-and-fees` dengan fallback cache `offlineStorage.js`).
-    3. *Integrasi Reaktif POS & Hub*: Mengarahkan peluncur tile `Pajak` di `DashboardActionHub.js` ke rute internal `tax_management` dan sinkronisasi reaktif ke modal pemilih pajak kasir `TaxFeeModal.js`.
-    4. *Standar Kualitas Defensive UI*: Kepatuhan penuh terhadap Flexbox Pairing Rule, Readability Floor (min. 12px), dan Data Table/Pill Protection (`whitespace-nowrap`).
-  - Terdaftar dalam kanban dengan status `pending` siap eksekusi.
+- **Implementasi Phase 1 & 2 Master Pajak & Biaya Layanan di Mobile (`taxService.js`, `offlineStorage.js`, Plan #29)**:
+  - Menyelesaikan pemetaan kontrak backend dan modul service mobile:
+    1. *Pemetaan Kontrak API*: Endpoint `/api/taxes-and-fees` terverifikasi mencakup CRUD, query filter (`search`, `type`, `is_tax`, `apply_to`, `is_active`), dan toggle status instan (`/api/taxes-and-fees/{id}/toggle-status`).
+    2. *Mobile Service (`mobile/src/services/taxService.js`)*: Modul wrapper API lengkap dengan penanganan error validasi 422, otorisasi RBAC role Owner/Manager (403), serta fallback otomatis ke snapshot lokal saat offline.
+    3. *Penyimpanan Offline (`mobile/src/services/offlineStorage.js`)*: Menambahkan method `cacheTaxesAndFees`, `getCachedTaxesAndFees`, `upsertCachedTaxAndFee`, dan `removeCachedTaxAndFee` menggunakan key storage `@kasirkita_offline_taxes_fees`.
+  - Berhasil lulus verifikasi sintaks JS Node.js (`node -c`). Phase 1 & Phase 2 berstatus `completed`.
 
 - **Eliminasi Font-Display FOIT & Pengujian Cache Produksi (`mobile/App.js`)**:
   - Menyelesaikan audit detail Lighthouse (analisis Treemap bundle 469 KiB dan Network Dependency Tree):
