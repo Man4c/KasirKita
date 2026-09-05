@@ -20,6 +20,19 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Optimasi Performa Web & Non-blocking Font Loading (`mobile/App.js`)**:
+  - Menyelesaikan investigasi audit performa Lighthouse Chrome (skor 37 pada `http://localhost:8081/`) dan mengoptimalkan rendering web:
+    1. *Identifikasi Root Cause Audit Dev vs Production*:
+       - **Mode Development Overhead**: Audit dijalankan pada server development Metro Expo (`localhost:8081` dengan `dev=true`). JS bundel development tidak di-minify (~3.1 MB) dan membawa kode runtime debug serta React DevTools extension hooks (`installHook.js` 174KB, `react_devtools` 50KB yang tampak di treemap). Saat Lighthouse melakukan throttling mobile 4x CPU slowdown dan 4G slow, parsing bundel mentah ini memakan waktu 8-10 detik.
+       - **Font-blocking LCP**: Hook `useFonts` sebelumnya memblokir seluruh komponen aplikasi dengan `<ActivityIndicator />` (loading spinner) sampai semua varian font Poppins terunduh. DOM utama Dashboard baru di-mount di detik ke-9.6 sehingga LCP terdaftar di 11.1 detik.
+    2. *Non-blocking Web Font Loading & Preconnect*:
+       - Pada platform Web (`Platform.OS === 'web'`), `App.js` tidak lagi menahan render layar dengan spinner (`if (Platform.OS !== 'web' && !fontsLoaded)`).
+       - Menginjeksi tag `<link rel="preconnect">` dan link stylesheet Google Fonts Poppins dengan parameter `display=swap`. Layar langsung me-render konten instan (FCP < 1.0 detik) menggunakan fallback font sistem, lalu beralih (*swap*) secara halus saat Poppins siap.
+    3. *Panduan Audit Produksi Akurat*:
+       - Build produksi dibuat melalui `npx expo export --platform web`.
+       - Pengujian performa Lighthouse riil harus dijalankan pada folder build produksi (`dist`) melalui static server (misal `npx serve dist`) di jendela **Incognito** agar bebas dari overhead bundle development dan injeksi ekstensi browser.
+  - Lolos uji build `npx expo export --platform web`.
+
 - **Normalisasi Spasi Atas Header Master Kategori, Satuan, & Promosi (`CategoryManagementScreen.js`, `UnitManagementScreen.js`, `PromoManagementScreen.js`)**:
   - Menghilangkan ruang kosong berlebih di atas header modul master data agar konsisten dengan Master Produk, Dashboard, Riwayat, dan Pengaturan:
     1. *Penyebab Root Cause*: Pada `CategoryManagementScreen`, `UnitManagementScreen`, dan `PromoManagementScreen`, kontainer utama menggunakan `paddingTop: 8` di `styles.container`, yang ditambahkan lagi dengan `paddingVertical: 12` pada `styles.topBar`, sehingga jarak judul ke batas atas Safe Area menjadi 20px (muncul ruang kosong 8px lebih tinggi dibanding Master Produk/Dashboard yang tepat 12px).

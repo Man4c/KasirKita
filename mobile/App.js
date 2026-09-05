@@ -75,6 +75,26 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
     `;
     document.head.appendChild(styleEl);
   }
+
+  const fontLinkId = 'google-font-poppins';
+  if (!document.getElementById(fontLinkId)) {
+    const preconnect1 = originalCreateElement('link');
+    preconnect1.rel = 'preconnect';
+    preconnect1.href = 'https://fonts.googleapis.com';
+    document.head.appendChild(preconnect1);
+
+    const preconnect2 = originalCreateElement('link');
+    preconnect2.rel = 'preconnect';
+    preconnect2.href = 'https://fonts.gstatic.com';
+    preconnect2.crossOrigin = 'anonymous';
+    document.head.appendChild(preconnect2);
+
+    const fontEl = originalCreateElement('link');
+    fontEl.id = fontLinkId;
+    fontEl.rel = 'stylesheet';
+    fontEl.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap';
+    document.head.appendChild(fontEl);
+  }
 }
 
 function MainApp() {
@@ -333,7 +353,9 @@ export default function App() {
     Poppins_700Bold,
   });
 
-  if (!fontsLoaded) {
+  // On web, allow instant paint with system fallback fonts and font-display: swap.
+  // Only block initial render on native mobile (iOS/Android) where font assets are loaded synchronously/locally.
+  if (Platform.OS !== 'web' && !fontsLoaded) {
     return (
       <View style={styles.center}>
         <ActivityIndicator color="#e11d48" size="large" />
