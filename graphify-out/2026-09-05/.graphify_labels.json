@@ -328,7 +328,7 @@
   "326": "expo-secure-store",
   "327": "expo-status-bar",
   "328": "lucide-react-native",
-  "329": "react-dom",
+  "329": "checkElementRadialSpotlightDOM",
   "330": "@react-native-async-storage/async-storage",
   "331": "react-native-safe-area-context",
   "332": "react-native-svg",
@@ -339,5 +339,13 @@
   "337": "checkElementGptBorderShadowDOM",
   "338": "Impeccable Documenter",
   "339": "constants.mjs",
-  "340": "barcode-detector"
+  "340": "barcode-detector",
+  "341": "TransactionHistoryScreen.js",
+  "342": "syncEditBadgeHitProxies",
+  "343": "bolder.md",
+  "344": "UserFactory",
+  "345": "checkHeroEyebrow",
+  "346": "react",
+  "347": "react-native",
+  "348": "@react-native-community/datetimepicker"
 }
