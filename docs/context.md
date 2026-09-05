@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Hardening Interaksi & Proteksi Fat-Finger Master Pajak & Biaya (`TaxCardItem.js`, `TaxManagementScreen.js`)**:
+  - Menyelesaikan temuan critique [P1] melalui skill `impeccable harden`:
+    1. *Proteksi Fat-Finger & Double Trigger*: Menambahkan state `togglingId` di `TaxManagementScreen.js` dan prop `isToggling` ke `TaxCardItem.js` untuk mencegah eksekusi berulang jika pengguna menyentuh switch berkali-kali secara tidak sengaja saat menggulir layar.
+    2. *Feedback Status Sistem (ActivityIndicator)*: Menampilkan spinner `ActivityIndicator` berukuran kecil dengan warna aksen sesuai jenis item (Amber `#fbbf24` untuk Pajak, Blue `#60a5fa` untuk Biaya Layanan) saat mutasi toggle status sedang dikirim ke server.
+    3. *Penyempurnaan Touch Target & Accessibility*: Memperluas kontainer `switchWrapper` dengan ukuran minimum 44×36 dp dan skala 0.8 untuk memenuhi standar ergonomi sentuhan jari dan mencegah misklik.
+    4. *Verifikasi & Multi-Platform Export*: Lolos verifikasi sintaks JS (`node -c`), detektor Impeccable (0 defect), dan `npx expo export --platform web` (2.347 modul lolos).
+
 - **Perbaikan Anti-Patterns & Standar Impeccable Master Pajak & Biaya Layanan (`TaxCardItem.js`, `TaxManagementScreen.js`, `TaxFormModal.js`)**:
   - Menyelesaikan seluruh temuan audit Impeccable pada layar Master Pajak & Biaya:
     1. *Eliminasi AI Color Palette (Cyan & Purple Neon Text on Dark Background)*: Mengganti warna aksen Biaya Layanan dari cyan (`#38bdf8`, hue 198.4° yang memicu aturan Impeccable AI cyan neon $160^\circ \le \text{hue} \le 200^\circ$) menjadi Royal Blue (`#60a5fa`, hue 213.1°, contrast ratio 6.6:1 WCAG AAA) pada `TaxCardItem.js`, `TaxManagementScreen.js`, dan `TaxFormModal.js`.

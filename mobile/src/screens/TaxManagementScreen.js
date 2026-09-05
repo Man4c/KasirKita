@@ -38,7 +38,7 @@ export default function TaxManagementScreen({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
 
-  // Modals
+  const [togglingId, setTogglingId] = useState(null);
   const [formModalVisible, setFormModalVisible] = useState(false);
   const [selectedItemForEdit, setSelectedItemForEdit] = useState(null);
 
@@ -102,10 +102,13 @@ export default function TaxManagementScreen({ navigation }) {
     setFormModalVisible(true);
   }, []);
 
-  // Toggle Active Status with optimistic UI
+  // Toggle Active Status with optimistic UI and loading protection
   const handleToggleStatus = useCallback(async (item) => {
+    if (togglingId === item.id) return; // Prevent double-trigger
     const originalState = item.is_active;
     const newStatus = !originalState;
+
+    setTogglingId(item.id);
 
     // Optimistic update
     setItems((prev) =>
@@ -123,8 +126,10 @@ export default function TaxManagementScreen({ navigation }) {
         prev.map((i) => (i.id === item.id ? { ...i, is_active: originalState } : i))
       );
       showAlert('Gagal Mengubah Status', err.message || 'Terjadi kesalahan saat mengubah status.');
+    } finally {
+      setTogglingId(null);
     }
-  }, []);
+  }, [togglingId]);
 
   // Delete item confirmation
   const handleDeleteItem = useCallback((item) => {
@@ -190,10 +195,11 @@ export default function TaxManagementScreen({ navigation }) {
         onEdit={handleEditItem}
         onDelete={handleDeleteItem}
         onToggleStatus={handleToggleStatus}
+        isToggling={togglingId === item.id}
         userRole={user?.role}
       />
     ),
-    [handleEditItem, handleDeleteItem, handleToggleStatus, user?.role]
+    [handleEditItem, handleDeleteItem, handleToggleStatus, togglingId, user?.role]
   );
 
   return (

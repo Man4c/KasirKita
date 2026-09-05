@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Switch,
+  ActivityIndicator,
 } from 'react-native';
 import {
   ReceiptText,
@@ -41,6 +42,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
   onEdit,
   onDelete,
   onToggleStatus,
+  isToggling = false,
   userRole = 'owner',
 }) {
   const isOwner = userRole === 'owner';
@@ -163,16 +165,25 @@ const TaxCardItem = React.memo(function TaxCardItem({
             </View>
           )}
 
-          {/* Toggle Switch Aktif/Nonaktif Cepat */}
+          {/* Toggle Switch Aktif/Nonaktif Cepat dengan Feedback Loading & Touch Target Terproteksi */}
           {isOwner && onToggleStatus && (
             <View style={styles.switchWrapper}>
-              <Switch
-                value={Boolean(item.is_active)}
-                onValueChange={() => onToggleStatus(item)}
-                trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#60a5fa' }}
-                thumbColor={item.is_active ? '#ffffff' : '#a1a1aa'}
-                style={{ transform: [{ scaleX: 0.75 }, { scaleY: 0.75 }] }}
-              />
+              {isToggling ? (
+                <ActivityIndicator
+                  size="small"
+                  color={isTax ? '#fbbf24' : '#60a5fa'}
+                  style={styles.switchLoading}
+                />
+              ) : (
+                <Switch
+                  value={Boolean(item.is_active)}
+                  onValueChange={() => onToggleStatus(item)}
+                  disabled={isToggling}
+                  trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#60a5fa' }}
+                  thumbColor={item.is_active ? '#ffffff' : '#a1a1aa'}
+                  style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+                />
+              )}
             </View>
           )}
         </View>
@@ -459,7 +470,15 @@ const styles = StyleSheet.create({
   switchWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
+    minWidth: 44,
+    height: 36,
     flexShrink: 0,
+  },
+  switchLoading: {
+    width: 36,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   actionBtnGroup: {
     flexDirection: 'row',
