@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Normalisasi Spasi Atas Header Master Kategori, Satuan, & Promosi (`CategoryManagementScreen.js`, `UnitManagementScreen.js`, `PromoManagementScreen.js`)**:
+  - Menghilangkan ruang kosong berlebih di atas header modul master data agar konsisten dengan Master Produk, Dashboard, Riwayat, dan Pengaturan:
+    1. *Penyebab Root Cause*: Pada `CategoryManagementScreen`, `UnitManagementScreen`, dan `PromoManagementScreen`, kontainer utama menggunakan `paddingTop: 8` di `styles.container`, yang ditambahkan lagi dengan `paddingVertical: 12` pada `styles.topBar`, sehingga jarak judul ke batas atas Safe Area menjadi 20px (muncul ruang kosong 8px lebih tinggi dibanding Master Produk/Dashboard yang tepat 12px).
+    2. *Penyelarasan Presisi*: Menghapus `paddingTop: 8` dari `styles.container` pada ketiga file tersebut sehingga `paddingHorizontal: 16` dan `paddingVertical: 12` pada bar header kini 100% seragam dan konsisten persis seperti `ProductManagementScreen` dan `DashboardScreen`.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Refaktorisasi Modular Layar Riwayat Transaksi (`TransactionHistoryScreen.js`, `mobile/src/components/history/`)**:
   - Mengubah arsitektur monolitik `TransactionHistoryScreen.js` (dari ~929 baris menjadi ~280 baris terstruktur), menyelaraskannya dengan pola modular `PosScreen`, `DashboardScreen`, dan `SettingsScreen`:
     1. *Pemisahan Sub-komponen Terfokus (`mobile/src/components/history/`)*:
