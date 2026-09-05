@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 3 Master Pelanggan & Keanggotaan di Mobile (`CustomerCardItem.js`, `CustomerManagementScreen.js`, Plan #30)**:
+  - Mengimplementasikan komponen visual kartu item dan layar utama berstandar Defensive UI Impeccable:
+    1. *Kartu Item Pelanggan (`CustomerCardItem.js`)*: Desain dengan badge membership kontras (VIP: Amber Gold `#fbbf24`, WHOLESALE: Sky Blue `#38bdf8`, REGULAR: Teal `#2dd4bf`), avatar tier, kontak telepon/email, alamat pengiriman, indikator frekuensi transaksi & total akumulasi belanja, serta aksi cepat chat WhatsApp (`Linking.openURL`), panggilan telepon, tombol Edit, dan Hapus aman.
+    2. *Layar Utama (`CustomerManagementScreen.js`)*: 3 kartu metrik ringkasan (Total Pelanggan, Member VIP, Member Grosir), pencarian debounced 350ms, segmented filter tabs (*Semua*, *VIP*, *Grosir*, *Reguler*), filter chip status (*Semua*, *Aktif*, *Nonaktif*), FlatList tervirtualisasi, mode offline banner, dan FAB Tambah.
+    3. *Kepatuhan Impeccable & Defensive UI*: Flexbox pairing (`min-w-0 truncate` vs `shrink-0 whitespace-nowrap`), readability floor ($\ge 12$px), serta lolos audit linter `detect.mjs` (0 defect). Phase 3 Plan #30 berstatus `completed`.
+
 - **Implementasi Phase 1 & 2 Master Pelanggan & Keanggotaan di Mobile (`customerService.js`, `offlineStorage.js`, Plan #30)**:
   - Menyelesaikan pemetaan kontrak backend dan modul service mobile:
     1. *Pemetaan Kontrak API*: Endpoint `/api/customers` terverifikasi mencakup paginasi 15 item, pencarian `search` (nama, phone, email), filter `membership_type` (`REGULAR`, `VIP`, `WHOLESALE`), filter `is_active`, parameter `all=true` untuk POS dropdown, CRUD lengkap, serta riwayat transaksi `/api/customers/{id}/transactions`.
