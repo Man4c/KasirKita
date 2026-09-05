@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Anti-Patterns & Standar Impeccable Master Pajak & Biaya Layanan (`TaxCardItem.js`, `TaxManagementScreen.js`, `TaxFormModal.js`)**:
+  - Menyelesaikan temuan audit Impeccable pada layar Master Pajak & Biaya:
+    1. *Eliminasi AI Color Palette*: Menghapus warna ungu neon (`#c084fc` / `rgba(192, 132, 252, ...)`) pada Biaya Layanan dan menggantinya dengan Sky Blue (`#38bdf8`), warna solid dan harmonis dengan design system KasirKita.
+    2. *Perbaikan Kontras Ekstrem (Low Contrast Text)*: Mengganti background transparan `rgba(...)` yang menyebabkan kegagalan kontras teks (1.0:1) dengan kontainer gelap solid (`#202024`) berborder aksen halus. Menghasilkan rasio kontras AAA (> 9:1) pada badge kategori, badge default, pill aturan penerapan, dan pill status.
+    3. *Penajaman Typographic Hierarchy (Flat Type Hierarchy)*: Mengeliminasi ukuran font intermediate yang berdekatan (15px dan 22px), menyusun hierarki skala 4 level tegas: Hero Metric (24px Bold), Header Title (20px Bold), Card Title/Rate (16px SemiBold), Body/Description (13px Regular), dan Badges/Metadata (12px SemiBold).
+    4. *Verifikasi & Build*: Lolos verifikasi sintaks JS (`node -c`), lolos linter `detect.mjs` (0 defect), dan berhasil ekspor Expo Web (`npx expo export --platform web`) 2.347 modul dalam 2,0 detik.
+
 - **Penyelesaian Penuh Master Pemasok & Distributor di Mobile (Phase 6 Audit & Multi-Platform Build, Plan #31 100% Selesai)**:
   - Menyelesaikan seluruh audit kualitas, kepatuhan WCAG, dan pengujian build multi-platform:
     1. *Audit Defensive UI & Craft Floor*: Seluruh komponen (`SupplierCardItem.js`, `SupplierManagementScreen.js`, `SupplierFormModal.js`) mematuhi aturan The Flexbox Pairing Rule (`min-w-0 truncate` vs `shrink-0 whitespace-nowrap`), The Readability Floor Rule ($\ge 12$px), dan Touch Target ($\ge 44 \times 44$ dp).

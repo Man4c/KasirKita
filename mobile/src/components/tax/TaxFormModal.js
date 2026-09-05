@@ -211,11 +211,11 @@ export default function TaxFormModal({
           {/* Modal Header */}
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
-              <View style={[styles.iconCircle, { borderColor: isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(192, 132, 252, 0.4)' }]}>
+              <View style={[styles.iconCircle, { borderColor: isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(56, 189, 248, 0.4)' }]}>
                 {isTax ? (
                   <ReceiptText size={20} color="#fbbf24" />
                 ) : (
-                  <Coins size={20} color="#c084fc" />
+                  <Coins size={20} color="#38bdf8" />
                 )}
               </View>
               <View style={styles.headerTextContainer}>
@@ -259,7 +259,7 @@ export default function TaxFormModal({
                   onPress={() => setIsTax(false)}
                   activeOpacity={0.7}
                 >
-                  <Coins size={15} color={!isTax ? '#c084fc' : '#a1a1aa'} />
+                  <Coins size={15} color={!isTax ? '#38bdf8' : '#a1a1aa'} />
                   <Text style={[styles.typeOptionText, !isTax && styles.typeOptionTextFeeActive]}>
                     Biaya Layanan
                   </Text>
@@ -436,7 +436,7 @@ export default function TaxFormModal({
                 <Switch
                   value={isActive}
                   onValueChange={setIsActive}
-                  trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#c084fc' }}
+                  trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#38bdf8' }}
                   thumbColor={isActive ? '#ffffff' : '#a1a1aa'}
                 />
               </View>
@@ -664,11 +664,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   typeOptionBtnFeeActive: {
-    backgroundColor: '#581c8722',
-    borderColor: '#c084fc',
+    backgroundColor: '#0284c722',
+    borderColor: '#38bdf8',
   },
   typeOptionTextFeeActive: {
-    color: '#c084fc',
+    color: '#38bdf8',
     fontFamily: 'Poppins_600SemiBold',
   },
   typeOptionBtnRateActive: {

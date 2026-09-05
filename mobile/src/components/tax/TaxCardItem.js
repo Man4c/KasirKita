@@ -52,10 +52,9 @@ const TaxCardItem = React.memo(function TaxCardItem({
   const isPercentage = item.type === 'PERCENTAGE';
   const rateDisplay = isPercentage ? `${parseFloat(item.value)}%` : formatRp(item.value);
 
-  // Theme Colors
-  const accentColor = isTax ? '#fbbf24' : '#c084fc';
-  const accentBg = isTax ? 'rgba(251, 191, 36, 0.12)' : 'rgba(192, 132, 252, 0.12)';
-  const accentBorder = isTax ? 'rgba(251, 191, 36, 0.3)' : 'rgba(192, 132, 252, 0.3)';
+  // Theme Colors (Pajak: Amber #fbbf24, Biaya Layanan: Sky Blue #38bdf8)
+  const accentColor = isTax ? '#fbbf24' : '#38bdf8';
+  const accentBorder = isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(56, 189, 248, 0.4)';
 
   // Apply To Badge Renderer
   const renderApplyToBadge = () => {
@@ -87,7 +86,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
       default:
         return (
           <View style={styles.applyBadgeManual}>
-            <Package size={12} color="#c084fc" style={{ flexShrink: 0 }} />
+            <Package size={12} color="#38bdf8" style={{ flexShrink: 0 }} />
             <Text style={styles.applyBadgeTextManual} numberOfLines={1}>Pilihan Kasir</Text>
           </View>
         );
@@ -99,7 +98,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
       {/* Top Header: Badge Kategori (Pajak/Biaya) & Nilai Tarif */}
       <View style={styles.cardHeader}>
         <View style={styles.leftBadgeGroup}>
-          <View style={[styles.categoryBadge, { backgroundColor: accentBg, borderColor: accentBorder }]}>
+          <View style={[styles.categoryBadge, { borderColor: accentBorder }]}>
             {isTax ? (
               <ReceiptText size={14} color={accentColor} style={{ flexShrink: 0 }} />
             ) : (
@@ -170,7 +169,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
               <Switch
                 value={Boolean(item.is_active)}
                 onValueChange={() => onToggleStatus(item)}
-                trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#c084fc' }}
+                trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#38bdf8' }}
                 thumbColor={item.is_active ? '#ffffff' : '#a1a1aa'}
                 style={{ transform: [{ scaleX: 0.75 }, { scaleY: 0.75 }] }}
               />
@@ -246,6 +245,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#202024',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -264,9 +264,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    backgroundColor: '#202024',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderColor: 'rgba(52, 211, 153, 0.35)',
     borderRadius: 6,
     paddingHorizontal: 8,
     height: 24,
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   rateBox: {
-    backgroundColor: '#202023',
+    backgroundColor: '#202024',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   rateText: {
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Poppins_700Bold',
     includeFontPadding: false,
     textAlignVertical: 'center',
@@ -301,15 +301,15 @@ const styles = StyleSheet.create({
   },
   itemName: {
     color: '#f4f4f5',
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
-    marginBottom: 2,
+    marginBottom: 3,
   },
   itemDescription: {
     color: '#a1a1aa',
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: 'Poppins_400Regular',
-    lineHeight: 18,
+    lineHeight: 19,
   },
   ruleSection: {
     flexDirection: 'row',
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#27272a',
+    backgroundColor: '#202024',
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -352,12 +352,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+    backgroundColor: '#202024',
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
+    borderColor: 'rgba(251, 191, 36, 0.35)',
   },
   applyBadgeTextPayment: {
     color: '#fbbf24',
@@ -368,12 +368,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(56, 189, 248, 0.15)',
+    backgroundColor: '#202024',
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.3)',
+    borderColor: 'rgba(56, 189, 248, 0.35)',
   },
   applyBadgeTextTakeaway: {
     color: '#38bdf8',
@@ -384,15 +384,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(192, 132, 252, 0.15)',
+    backgroundColor: '#202024',
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderWidth: 1,
-    borderColor: 'rgba(192, 132, 252, 0.3)',
+    borderColor: 'rgba(56, 189, 248, 0.35)',
   },
   applyBadgeTextManual: {
-    color: '#c084fc',
+    color: '#38bdf8',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
   },
@@ -420,9 +420,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#27272a',
+    backgroundColor: '#202024',
     borderWidth: 1,
-    borderColor: '#3f3f46',
+    borderColor: 'rgba(52, 211, 153, 0.35)',
     paddingHorizontal: 8,
     height: 26,
     borderRadius: 6,
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#27272a',
+    backgroundColor: '#202024',
     borderWidth: 1,
     borderColor: '#3f3f46',
     paddingHorizontal: 8,

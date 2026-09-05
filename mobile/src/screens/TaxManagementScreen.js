@@ -252,7 +252,7 @@ export default function TaxManagementScreen({ navigation }) {
         {/* Summary Metrics Cards */}
         <View style={styles.metricsRow}>
           <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: 'rgba(251, 191, 36, 0.15)', borderColor: 'rgba(251, 191, 36, 0.3)' }]}>
+            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(251, 191, 36, 0.4)' }]}>
               <ReceiptText size={14} color="#fbbf24" />
             </View>
             <Text style={[styles.metricVal, { color: '#fbbf24' }]}>{taxCount}</Text>
@@ -260,15 +260,15 @@ export default function TaxManagementScreen({ navigation }) {
           </View>
 
           <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: 'rgba(192, 132, 252, 0.15)', borderColor: 'rgba(192, 132, 252, 0.3)' }]}>
-              <Coins size={14} color="#c084fc" />
+            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(56, 189, 248, 0.4)' }]}>
+              <Coins size={14} color="#38bdf8" />
             </View>
-            <Text style={[styles.metricVal, { color: '#c084fc' }]}>{feeCount}</Text>
+            <Text style={[styles.metricVal, { color: '#38bdf8' }]}>{feeCount}</Text>
             <Text style={styles.metricLabel}>Biaya Layanan</Text>
           </View>
 
           <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
+            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(52, 211, 153, 0.4)' }]}>
               <CheckCircle2 size={14} color="#34d399" />
             </View>
             <Text style={[styles.metricVal, { color: '#34d399' }]}>{activeCount}</Text>
@@ -476,8 +476,9 @@ const styles = StyleSheet.create({
   },
   screenSubtitle: {
     color: '#a1a1aa',
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: 'Poppins_400Regular',
+    marginTop: 1,
   },
   headerIconBtn: {
     width: 36,
@@ -535,7 +536,7 @@ const styles = StyleSheet.create({
   },
   metricVal: {
     color: '#f4f4f5',
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: 'Poppins_700Bold',
   },
   metricLabel: {
@@ -625,7 +626,8 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
   },
   filterPillActive: {
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#202024',
+    borderWidth: 1,
     borderColor: '#fbbf24',
   },
   filterPillText: {
@@ -637,8 +639,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   filterPillTextActive: {
-    color: '#09090b',
-    fontFamily: 'Poppins_700Bold',
+    color: '#fbbf24',
+    fontFamily: 'Poppins_600SemiBold',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -677,17 +679,17 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     color: '#f4f4f5',
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
     marginBottom: 6,
     textAlign: 'center',
   },
   emptyDesc: {
     color: '#a1a1aa',
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: 19,
     marginBottom: 20,
   },
   emptyActionBtn: {
