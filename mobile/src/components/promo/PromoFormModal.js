@@ -71,26 +71,23 @@ export default function PromoFormModal({
   // Date Picker state: null | 'start' | 'end'
   const [activePicker, setActivePicker] = useState(null);
 
-  const handleDateChange = (event, selectedDate) => {
-    // Android dismisses automatically; iOS keeps modal open until confirmed
-    const currentTarget = activePicker;
-    if (Platform.OS === 'android') {
-      setActivePicker(null);
-    }
-    if (event?.type === 'dismissed' || !selectedDate) {
+  const handleDateValueChange = (selectedDate) => {
+    if (!selectedDate) {
       setActivePicker(null);
       return;
     }
     const formatted = toDateInputString(selectedDate);
-    if (currentTarget === 'start') {
+    if (activePicker === 'start') {
       setStartDate(formatted);
-    } else if (currentTarget === 'end') {
+    } else if (activePicker === 'end') {
       setEndDate(formatted);
       if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: null }));
     }
-    if (Platform.OS === 'ios') {
-      setActivePicker(null);
-    }
+    setActivePicker(null);
+  };
+
+  const handleDateDismiss = () => {
+    setActivePicker(null);
   };
 
   // Reset or fill form on modal open
@@ -484,7 +481,8 @@ export default function PromoFormModal({
                 }
                 mode="date"
                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                onChange={handleDateChange}
+                onValueChange={handleDateValueChange}
+                onDismiss={handleDateDismiss}
               />
             )}
 
