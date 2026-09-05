@@ -117,7 +117,7 @@ mobile/src/
 | 3 | **Komponen Kartu & Layar Utama (`TaxCardItem.js` & `TaxManagementScreen.js`)**: Implementasi layar master pajak & biaya dengan FlatList tervirtualisasi, segmented tab (Semua, Pajak, Biaya Layanan), filter status aktif, kartu item dengan badge visual cerah (Amber & Purple), dan saklar toggle status instan. | completed |
 | 4 | **Modal Formulir Tambah/Edit (`TaxFormModal.js`)**: Pembuatan formulir modal interaktif dengan selector tipe komponen (Pajak vs Biaya), selector skema tarif (Persen vs Rupiah), aturan trigger (*apply_to*), switch default, live preview kalkulasi transaksi Rp100.000, dan tombol hapus aman. | completed |
 | 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi Kasir POS**: Menghubungkan peluncur di `DashboardActionHub.js`, rute di `App.js` dengan proteksi Role Owner, serta sinkronisasi reaktif ke modal pemilihan pajak kasir (`TaxFeeModal.js`) dan hook checkout (`useCheckoutState.js`). | completed |
-| 6 | **Audit Kualitas, Defensive UI Check, & Uji Coba Multi-Platform**: Menjalankan pengecekan linter (`node detect.mjs`), pengujian rendering Web (`npx expo export --platform web`), verifikasi kepatuhan WCAG readability floor (min. 12px), dan verifikasi sinkronisasi offline-first. | pending |
+| 6 | **Audit Kualitas, Defensive UI Check, & Uji Coba Multi-Platform**: Menjalankan pengecekan linter (`node detect.mjs`), pengujian rendering Web (`npx expo export --platform web`), verifikasi kepatuhan WCAG readability floor (min. 12px), dan verifikasi sinkronisasi offline-first. | completed |
 
 ---
 
