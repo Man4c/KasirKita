@@ -65,9 +65,9 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
     TierIcon = Crown;
     tierLabel = 'MEMBER VIP';
   } else if (isWholesale) {
-    tierColor = '#38bdf8'; // Sky Blue
-    tierBg = 'rgba(56, 189, 248, 0.14)';
-    tierBorder = 'rgba(56, 189, 248, 0.35)';
+    tierColor = '#60a5fa'; // Blue 400
+    tierBg = 'rgba(96, 165, 250, 0.12)';
+    tierBorder = 'rgba(96, 165, 250, 0.35)';
     TierIcon = Building2;
     tierLabel = 'MEMBER GROSIR';
   }

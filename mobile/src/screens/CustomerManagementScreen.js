@@ -621,7 +621,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   statusChipPrefixText: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
   },
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   listContent: {
-    paddingBottom: 110,
+    paddingBottom: 125,
   },
   emptyContainer: {
     alignItems: 'center',
