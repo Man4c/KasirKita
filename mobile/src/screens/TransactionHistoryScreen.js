@@ -549,7 +549,9 @@ const styles = StyleSheet.create({
   },
   filterChip: {
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 8,
     backgroundColor: '#18181b',
     borderWidth: 1,
@@ -563,10 +565,14 @@ const styles = StyleSheet.create({
     color: '#d4d4d8',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   filterChipTextActive: {
     color: '#ffffff',
     fontFamily: 'Poppins_700Bold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   offlineBanner: {
     flexDirection: 'row',
@@ -598,25 +604,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
+  queueBannerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flex: 1,
+  },
   queueBannerText: {
     color: '#bae6fd',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     flex: 1,
   },
-  listContent: {
+  syncNowBtn: {
+    backgroundColor: '#0284c7',
+    paddingHorizontal: 10,
+    height: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
+    flexShrink: 0,
+  },
+  syncNowBtnText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  cardList: {
     paddingHorizontal: 16,
-    paddingBottom: 24,
+    paddingBottom: 40,
     gap: 10,
   },
   txCard: {
     backgroundColor: '#18181b',
-    borderColor: '#27272a',
     borderWidth: 1,
-    borderRadius: 14,
-    padding: 14,
+    borderColor: '#27272a',
+    borderRadius: 12,
+    padding: 12,
   },
-  txCardOfflinePending: {
+  txCardPending: {
     borderColor: '#b45309',
     backgroundColor: '#1a1612',
   },
@@ -640,7 +668,9 @@ const styles = StyleSheet.create({
   },
   statusBadge: {
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 6,
   },
   statusBadgeSuccess: {
@@ -653,10 +683,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(245, 158, 11, 0.18)',
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 4,
   },
   statusBadgeText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusTextSuccess: {
     color: '#34d399',
@@ -695,16 +728,19 @@ const styles = StyleSheet.create({
   methodBadge: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
     backgroundColor: '#27272a',
     paddingHorizontal: 8,
-    paddingVertical: 3,
+    height: 24,
     borderRadius: 6,
   },
   methodBadgeText: {
     color: '#d4d4d8',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   totalAmountText: {
     color: '#fb7185',

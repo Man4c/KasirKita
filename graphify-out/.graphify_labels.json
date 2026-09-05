@@ -317,6 +317,7 @@
   "315": "Operate mode depth (and Read notes)",
   "316": "Cloud Sync Preferences & Local Data Backup-Restore",
   "317": "updateBarContent",
+  "318": "bolder.md",
   "319": "applyEditing",
   "320": "onAnnotDown",
   "321": "expo-audio",
@@ -338,6 +339,5 @@
   "337": "checkElementGptBorderShadowDOM",
   "338": "Impeccable Documenter",
   "339": "constants.mjs",
-  "341": "UserFactory",
-  "342": "expo"
+  "340": "barcode-detector"
 }

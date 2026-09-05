@@ -541,17 +541,18 @@ const styles = StyleSheet.create({
   regQuickPill: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 4,
     backgroundColor: '#27272a',
     paddingHorizontal: 8,
-    paddingVertical: 4,
+    height: 28,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: '#3f3f46',
   },
   regQuickPillCompact: {
     paddingHorizontal: 6,
-    paddingVertical: 2,
+    height: 24,
   },
   regQuickPillActive: {
     borderColor: '#e11d48',
@@ -565,14 +566,20 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   regQuickPillTextActive: {
     color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   regQuickPillPromoTextActive: {
     color: '#34d399',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   regSummaryBox: {
     backgroundColor: '#27272a',
