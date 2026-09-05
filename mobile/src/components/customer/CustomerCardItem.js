@@ -128,17 +128,15 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
               <TierIcon size={12} color={tierColor} style={{ flexShrink: 0 }} />
               <Text style={[styles.tierBadgeText, { color: tierColor }]}>{tierLabel}</Text>
             </View>
-            {isInactive && (
+            {isInactive ? (
               <View style={styles.statusInactiveBadge}>
                 <Text style={styles.statusInactiveBadgeText}>Nonaktif</Text>
               </View>
+            ) : (
+              <View style={styles.statusActiveBadge}>
+                <Text style={styles.statusActiveBadgeText}>Aktif</Text>
+              </View>
             )}
-          </View>
-
-          {/* Aggregated Total Spent Pill */}
-          <View style={styles.spentBadge}>
-            <Text style={styles.spentLabel}>Total Belanja:</Text>
-            <Text style={styles.spentValue}>{formatRp(totalSpent)}</Text>
           </View>
         </View>
 
@@ -201,53 +199,61 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
         </View>
       </TouchableOpacity>
 
-      {/* Metrics Strip: Frekuensi Transaksi & Aksi Kontak Cepat */}
+      {/* Tier 1: Unified Performance Metrics Strip: Transaksi + Total Belanja */}
       <View style={styles.metricsStrip}>
         <View style={styles.statBox}>
           <ShoppingBag size={13} color="#a1a1aa" style={{ flexShrink: 0 }} />
           <Text style={styles.statText} numberOfLines={1}>
-            <Text style={styles.statBold}>{txCount}</Text> Kali Transaksi
+            <Text style={styles.statBold}>{txCount}</Text> Transaksi
           </Text>
         </View>
 
-        {/* Action Buttons: WhatsApp Direct, Edit, Delete */}
-        <View style={styles.actionGroup}>
+        <View style={styles.salesStatBox}>
+          <Text style={styles.salesLabel}>Total Belanja:</Text>
+          <Text style={styles.salesValue} numberOfLines={1}>{formatRp(totalSpent)}</Text>
+        </View>
+      </View>
+
+      {/* Tier 2: Ergonomic Action Buttons Strip */}
+      {(Boolean(item.phone) || isOwner) && (
+        <View style={styles.actionStrip}>
           {Boolean(item.phone) && (
             <TouchableOpacity
               style={styles.waBtn}
               onPress={handleOpenWhatsApp}
-              activeOpacity={0.7}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              activeOpacity={0.75}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
             >
-              <MessageCircle size={14} color="#34d399" />
+              <MessageCircle size={14} color="#34d399" style={{ flexShrink: 0 }} />
               <Text style={styles.waBtnText}>Chat WA</Text>
             </TouchableOpacity>
           )}
 
           {isOwner && (
-            <>
-              <TouchableOpacity
-                style={styles.actionBtn}
-                onPress={() => onEdit(item)}
-                activeOpacity={0.7}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <Edit3 size={14} color="#d4d4d8" />
-                <Text style={styles.actionBtnEditText}>Edit</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionBtn}
+              onPress={() => onEdit(item)}
+              activeOpacity={0.75}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+            >
+              <Edit3 size={14} color="#f4f4f5" style={{ flexShrink: 0 }} />
+              <Text style={styles.actionBtnText}>Edit</Text>
+            </TouchableOpacity>
+          )}
 
-              <TouchableOpacity
-                style={[styles.actionBtn, styles.actionBtnDelete]}
-                onPress={() => onDelete(item)}
-                activeOpacity={0.7}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <Trash2 size={14} color="#f87171" />
-              </TouchableOpacity>
-            </>
+          {isOwner && (
+            <TouchableOpacity
+              style={styles.actionBtnDelete}
+              onPress={() => onDelete(item)}
+              activeOpacity={0.75}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              accessibilityLabel="Hapus Pelanggan"
+            >
+              <Trash2 size={15} color="#f87171" />
+            </TouchableOpacity>
           )}
         </View>
-      </View>
+      )}
     </View>
   );
 });
@@ -311,12 +317,26 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_700Bold',
     letterSpacing: 0.3,
   },
+  statusActiveBadge: {
+    backgroundColor: 'rgba(52, 211, 153, 0.12)',
+    borderColor: 'rgba(52, 211, 153, 0.3)',
+    borderWidth: 1,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 6,
+    flexShrink: 0,
+  },
+  statusActiveBadgeText: {
+    color: '#34d399',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
   statusInactiveBadge: {
     backgroundColor: 'rgba(239, 68, 68, 0.15)',
     borderWidth: 1,
     borderColor: 'rgba(239, 68, 68, 0.3)',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
     borderRadius: 6,
     flexShrink: 0,
   },
@@ -324,28 +344,6 @@ const styles = StyleSheet.create({
     color: '#f87171',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-  },
-  spentBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#27272a',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#3f3f46',
-    flexShrink: 0,
-  },
-  spentLabel: {
-    color: '#a1a1aa',
-    fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-  },
-  spentValue: {
-    color: '#f4f4f5',
-    fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
   },
   cardBody: {
     flexDirection: 'row',
@@ -432,44 +430,66 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#27272a',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    backgroundColor: '#202024',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#27272a',
+    marginBottom: 10,
     gap: 8,
   },
   statBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    flex: 1,
+    flexShrink: 1,
     minWidth: 0,
   },
   statText: {
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
+    flexShrink: 1,
   },
   statBold: {
     color: '#f4f4f5',
     fontFamily: 'Poppins_600SemiBold',
   },
-  actionGroup: {
+  salesStatBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
     flexShrink: 0,
   },
-  waBtn: {
+  salesLabel: {
+    color: '#a1a1aa',
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+  },
+  salesValue: {
+    color: '#f4f4f5',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  actionStrip: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
+    paddingTop: 2,
+  },
+  waBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
+    minHeight: 40,
+    paddingHorizontal: 12,
+    borderRadius: 9,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 8,
-    minHeight: 36,
   },
   waBtnText: {
     color: '#34d399',
@@ -477,25 +497,33 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   actionBtn: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
+    minHeight: 40,
+    paddingHorizontal: 12,
+    borderRadius: 9,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 8,
-    minHeight: 36,
   },
-  actionBtnDelete: {
-    borderColor: 'rgba(248, 113, 113, 0.3)',
-    backgroundColor: 'rgba(248, 113, 113, 0.1)',
-    paddingHorizontal: 12,
-  },
-  actionBtnEditText: {
+  actionBtnText: {
     color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+  },
+  actionBtnDelete: {
+    width: 40,
+    minHeight: 40,
+    paddingHorizontal: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 9,
+    backgroundColor: 'rgba(248, 113, 113, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(248, 113, 113, 0.25)',
+    flexShrink: 0,
   },
 });

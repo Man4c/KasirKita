@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penerapan Solusi 1 (2-Tier Layout) pada Kartu Pelanggan (`CustomerCardItem.js`)**:
+  - Menyelesaikan isu tabrakan flexbox dan pemotongan teks (*"0 Kali T..."*) pada kartu pelanggan:
+    1. *Pemisahan 2-Tier Berstandar Defensive UI*:
+       - **Tier 1 (Performance Metrics Strip)**: Menyatukan metrik frekuensi transaksi (`{txCount} Transaksi`) dan akumulasi belanja (`Total Belanja: Rp...`) pada container horizontal mandiri berlatar `#202024` dengan border `#27272a`. Kedua metrik kini memiliki lebar penuh sehingga teks tidak pernah lagi bertabrakan atau terpotong (`numberOfLines={1}`, `min-w-0`, `shrink-0`).
+       - **Tier 2 (Ergonomic Action Strip)**: Memindahkan grup tombol aksi (`Chat WA`, `Edit`, `Hapus`) ke baris bawah terpisah dengan touch target nyaman ($\ge 40\text{dp}$, `hitSlop={6-8}`).
+    2. *Penyederhanaan Header Kartu*: Header atas kini fokus menampilkan badge membership tier di sisi kiri dan badge status (`Aktif` / `Nonaktif`) di sisi kanan, selaras dengan konsistensi kartu pada `SupplierCardItem` dan `UserCardItem`.
+    3. *Kepatuhan Aksesibilitas WCAG*: Seluruh teks berukuran minimal 12px (mematuhi Readability Floor Rule), rasio kontras warna tombol dan metrik di atas 5:1.
+  - Lolos uji detektor Impeccable (0 defect).
+
 - **Penyelesaian Temuan Impeccable Master Pelanggan (`CustomerCardItem.js` & `CustomerManagementScreen.js`)**:
   - Menyelesaikan temuan live detector Impeccable pada screen master pelanggan:
     1. *Pemberantasan AI Color Palette (Cyan Neon Text)*: Mengganti warna teks badge member grosir dari cyan neon `#38bdf8` (`rgba(56, 189, 248...)`) menjadi warna natural blue-400 `#60a5fa` (`rgba(96, 165, 250...)`) yang selaras dengan palet identitas KasirKita.
