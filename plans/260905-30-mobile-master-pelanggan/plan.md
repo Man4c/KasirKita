@@ -82,8 +82,8 @@ mobile/src/
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/customers` (GET paginasi, pencarian nama/phone, filter membership, POST, PUT, DELETE), serta perancangan tata letak kartu profil member dengan standar defensive UI. | pending |
-| 2 | **Mobile API Service (`customerService.js`) & Caching Offline**: Implementasi modul API service terintegrasi validasi error 422, format nomor telepon Indonesia, dan sinkronisasi cache lokal offline (`offlineStorage.js`). | pending |
+| 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/customers` (GET paginasi, pencarian nama/phone, filter membership, POST, PUT, DELETE), serta perancangan tata letak kartu profil member dengan standar defensive UI. | completed |
+| 2 | **Mobile API Service (`customerService.js`) & Caching Offline**: Implementasi modul API service terintegrasi validasi error 422, format nomor telepon Indonesia, dan sinkronisasi cache lokal offline (`offlineStorage.js`). | completed |
 | 3 | **Komponen Kartu & Layar Utama (`CustomerCardItem.js` & `CustomerManagementScreen.js`)**: Pembuatan kartu pelanggan dengan badge membership VIP/Grosir, metrik total belanja, aksi cepat kontak WhatsApp, tab segmented, dan FlatList tervirtualisasi. | pending |
 | 4 | **Modal Formulir Tambah/Edit (`CustomerFormModal.js`)**: Pembuatan modal interaktif pendaftaran/edit member dengan selector tipe membership, validasi nomor HP unik, catatan khusus, dan tombol hapus aman. | pending |
 | 5 | **Integrasi Navigasi Hub Menu & Sinkronisasi Kasir POS**: Menghubungkan launcher di `DashboardActionHub.js`, registrasi rute di `App.js` dengan proteksi peran Owner/Manager, serta sinkronisasi reaktif ke Customer Picker di kasir POS. | pending |

@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 1 & 2 Master Pelanggan & Keanggotaan di Mobile (`customerService.js`, `offlineStorage.js`, Plan #30)**:
+  - Menyelesaikan pemetaan kontrak backend dan modul service mobile:
+    1. *Pemetaan Kontrak API*: Endpoint `/api/customers` terverifikasi mencakup paginasi 15 item, pencarian `search` (nama, phone, email), filter `membership_type` (`REGULAR`, `VIP`, `WHOLESALE`), filter `is_active`, parameter `all=true` untuk POS dropdown, CRUD lengkap, serta riwayat transaksi `/api/customers/{id}/transactions`.
+    2. *Mobile Service (`mobile/src/services/customerService.js`)*: Modul wrapper API lengkap dengan normalisasi data, penanganan validasi error 422 (termasuk deteksi pesan error nomor HP duplikat), serta fallback otomatis ke snapshot lokal saat offline.
+    3. *Penyimpanan Offline (`mobile/src/services/offlineStorage.js`)*: Menambahkan method `cacheCustomers`, `getCachedCustomers`, `upsertCachedCustomer`, dan `removeCachedCustomer` menggunakan key storage `@kasirkita_offline_customers`.
+  - Berhasil lulus verifikasi sintaks JS Node.js (`node -c`). Phase 1 & Phase 2 Plan #30 berstatus `completed`.
+
 - **Inisialisasi Rencana Kerja Plan #30 (Master Pelanggan Mobile) & Plan #31 (Master Pemasok Mobile)**:
   - Menyusun dua dokumen modul rencana kerja detail di folder `plans/`:
     1. *Plan #30 (`plans/260905-30-mobile-master-pelanggan/plan.md`)*: Screen Master Pelanggan & Keanggotaan (Customer & Membership) di Mobile, FlatList profil member, tab segmented level (VIP, Grosir, Reguler), metrik riwayat belanja dan kunjungan, tombol aksi WhatsApp chat/call, modal pendaftaran member baru, dan sinkronisasi Customer Picker POS.

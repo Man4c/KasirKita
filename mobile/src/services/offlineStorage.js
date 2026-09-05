@@ -205,6 +205,69 @@ export const offlineStorage = {
   },
 
   /**
+   * Cache customers list locally for customer management and POS checkout.
+   */
+  async cacheCustomers(customers) {
+    if (!Array.isArray(customers)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.CUSTOMERS, JSON.stringify(customers));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache pelanggan:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached customers list.
+   */
+  async getCachedCustomers() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.CUSTOMERS);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  },
+
+  /**
+   * Insert or update a single customer in local cache.
+   */
+  async upsertCachedCustomer(customer) {
+    if (!customer || !customer.id) return false;
+    try {
+      const customers = await this.getCachedCustomers();
+      const index = customers.findIndex((c) => c.id === customer.id);
+      if (index >= 0) {
+        customers[index] = { ...customers[index], ...customer };
+      } else {
+        customers.unshift(customer);
+      }
+      await AsyncStorage.setItem(KEYS.CUSTOMERS, JSON.stringify(customers));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache pelanggan lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single customer from local cache.
+   */
+  async removeCachedCustomer(customerId) {
+    if (!customerId) return false;
+    try {
+      let customers = await this.getCachedCustomers();
+      customers = customers.filter((c) => String(c.id) !== String(customerId));
+      await AsyncStorage.setItem(KEYS.CUSTOMERS, JSON.stringify(customers));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus pelanggan dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
    * Cache units list locally for unit picker.
    */
   async cacheUnits(units) {
