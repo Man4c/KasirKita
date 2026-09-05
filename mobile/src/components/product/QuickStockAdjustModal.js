@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   X,
@@ -119,8 +120,21 @@ export default function QuickStockAdjustModal({
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.backdrop}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.backdrop}
+      >
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={styles.card}>
+          {/* Drag Handle Bar (Mobile Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerLeft}>
@@ -132,17 +146,27 @@ export default function QuickStockAdjustModal({
                   Stok Masuk / Restock
                 </Text>
                 <Text style={styles.headerSubtitle} numberOfLines={1}>
-                  {product.name}
+                  {product?.name || ''}
                 </Text>
               </View>
             </View>
 
-            <TouchableOpacity style={styles.closeBtn} onPress={onClose} disabled={submitting}>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={onClose}
+              disabled={submitting}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
               <X size={18} color="#a1a1aa" />
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={styles.body}
+            contentContainerStyle={styles.bodyContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
             {/* Status Stok & HPP Saat Ini */}
             <View style={styles.currentStatsRow}>
               <View style={styles.statBox}>
@@ -267,7 +291,6 @@ export default function QuickStockAdjustModal({
               />
             </View>
 
-            <View style={{ height: 16 }} />
           </ScrollView>
 
           {/* Footer Action */}
@@ -288,7 +311,7 @@ export default function QuickStockAdjustModal({
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -299,14 +322,34 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     justifyContent: 'flex-end',
   },
+  backdropTouchable: {
+    flex: 1,
+  },
   card: {
     backgroundColor: '#18181b',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderWidth: 1,
+    borderBottomWidth: 0,
     borderColor: '#27272a',
+    width: '100%',
     maxHeight: '90%',
     paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 12,
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   header: {
     flexDirection: 'row',
@@ -344,16 +387,22 @@ const styles = StyleSheet.create({
     color: '#34d399',
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
     backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
   },
   body: {
+    maxHeight: '100%',
+  },
+  bodyContent: {
     paddingHorizontal: 16,
     paddingTop: 12,
+    paddingBottom: 24,
   },
   currentStatsRow: {
     flexDirection: 'row',
@@ -408,10 +457,13 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 9,
+    height: 44,
+    paddingVertical: 0,
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   simulationCard: {
     backgroundColor: 'rgba(56, 189, 248, 0.08)',
@@ -493,11 +545,14 @@ const styles = StyleSheet.create({
   },
   chip: {
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 7,
+    minHeight: 36,
     borderRadius: 8,
     backgroundColor: '#09090b',
     borderWidth: 1,
     borderColor: '#27272a',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   chipActive: {
     backgroundColor: 'rgba(52, 211, 153, 0.15)',
@@ -507,10 +562,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   chipTextActive: {
     color: '#34d399',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   footer: {
     flexDirection: 'row',
@@ -523,6 +582,7 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     flex: 1,
+    minHeight: 44,
     paddingVertical: 11,
     borderRadius: 10,
     backgroundColor: '#27272a',
@@ -533,9 +593,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   submitBtn: {
     flex: 2,
+    minHeight: 44,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -548,5 +611,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#09090b',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

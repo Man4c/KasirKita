@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Sentuh Luar Modal (Backdrop Dismiss) & Bottom Sheet Pattern pada Modal Produk (`ProductFormModal.js` & `QuickStockAdjustModal.js`)**:
+  - Menyelesaikan keluhan pengguna mengenai modal Tambah/Edit Produk yang belum bisa ditutup dengan menyentuh area luar/gelap di sekitar modal seperti halnya modal-modal lain:
+    1. *Penyebab Root Cause*: Pada `ProductFormModal.js` dan `QuickStockAdjustModal.js`, penampung overlay (`modalBackdrop` / `backdrop`) sebelumnya berstatus `<View>` statis tanpa area interaktif touchable, dan belum dibungkus oleh `<KeyboardAvoidingView>`. Akibatnya, sentuhan pengguna pada area latar di luar kartu modal tidak terdeteksi.
+    2. *Solusi Mobile Bottom Sheet*: Menambahkan komponen `<TouchableOpacity style={styles.backdropTouchable} activeOpacity={1} onPress={onClose} />` dengan `flex: 1` di atas kartu modal, membungkus modal dengan `<KeyboardAvoidingView>`, serta menyertakan *Drag Handle Bar* (`dragHandleContainer` / `dragHandle`) di bagian atas kartu untuk konsistensi visual bottom sheet modern di seluruh aplikasi.
+    3. *Penyelarasan Komponen Terkait*: Sekaligus melengkapi backdrop touchable dismiss pada modal penyesuaian stok kilat (`QuickStockAdjustModal.js`) dan modal pengaturan (`StoreIdentityModal.js`, `ChangePasswordModal.js`, `UserProfileModal.js`).
+    4. *Ketahanan Layout & Anti-Shift Typography*: Menambahkan `hitSlop` pada tombol close (36dp), menerapkan `minHeight: 44` pada tombol hapus dan aksi footer, merapikan touch target chip (minHeight 36dp), menetralkan font padding (`includeFontPadding: false`, `textAlignVertical: 'center'`), dan merapikan scrolling content dengan `contentContainerStyle`.
+  - Lolos uji detektor Impeccable (0 defect).
+
 - **Perbaikan Margin Layar & Kesejajaran Input Modal Promosi (`PromoFormModal.js`)**:
   - Menyelesaikan keluhan pengguna mengenai tampilan form modal Tambah/Ubah Promosi yang rapat/menempel ke pinggir layar tanpa celah samping, serta placeholder input yang tidak berada di tengah vertikal:
     1. *Penyebab Root Cause*: Komponen `<ScrollView>` di dalam modal promosi sebelumnya tidak memiliki properti `paddingHorizontal` (hanya `paddingVertical: 12` pada `styles.formScroll`), dan tidak mendefinisikan `contentContainerStyle`. Akibatnya, seluruh field input formulir (`Kode Kupon`, `Nama Promosi`, pilihan tombol skema diskon `% / Rp`, nominal diskon, dan batas kuota) terentang selebar 100% menabrak bingkai kiri dan kanan layar (0 margin), sementara header dan footer modal memiliki padding 16px.

@@ -11,6 +11,7 @@ import {
   Switch,
   Platform,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   X,
@@ -184,8 +185,21 @@ export default function ProductFormModal({
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.modalBackdrop}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.modalBackdrop}
+      >
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={styles.modalCard}>
+          {/* Drag Handle Bar (Mobile Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Header Modal */}
           <View style={styles.headerRow}>
             <View style={styles.headerLeft}>
@@ -202,13 +216,23 @@ export default function ProductFormModal({
               </View>
             </View>
 
-            <TouchableOpacity style={styles.closeBtn} onPress={onClose} disabled={saving || deleting}>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={onClose}
+              disabled={saving || deleting}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
               <X size={18} color="#a1a1aa" />
             </TouchableOpacity>
           </View>
 
           {/* Form Scrollable Body */}
-          <ScrollView style={styles.scrollBody} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={styles.scrollBody}
+            contentContainerStyle={styles.scrollBodyContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
             {/* Section 1: Identitas Produk */}
             <Text style={styles.sectionHeading}>Informasi Dasar</Text>
 
@@ -391,7 +415,6 @@ export default function ProductFormModal({
               </TouchableOpacity>
             )}
 
-            <View style={{ height: 20 }} />
           </ScrollView>
 
           {/* Footer Action Buttons */}
@@ -414,7 +437,7 @@ export default function ProductFormModal({
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
 
       {/* Barcode Scanner Camera Modal */}
       <ProductBarcodeScannerModal
@@ -432,14 +455,34 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     justifyContent: 'flex-end',
   },
+  backdropTouchable: {
+    flex: 1,
+  },
   modalCard: {
     backgroundColor: '#18181b',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderWidth: 1,
+    borderBottomWidth: 0,
     borderColor: '#27272a',
+    width: '100%',
     maxHeight: '90%',
     paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 12,
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   headerRow: {
     flexDirection: 'row',
@@ -486,17 +529,23 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
     backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   scrollBody: {
+    maxHeight: '100%',
+  },
+  scrollBodyContent: {
     paddingHorizontal: 16,
     paddingTop: 12,
+    paddingBottom: 24,
   },
   sectionHeading: {
     fontSize: 13,
@@ -542,11 +591,14 @@ const styles = StyleSheet.create({
   },
   pickerChip: {
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 7,
+    minHeight: 36,
     borderRadius: 8,
     backgroundColor: '#09090b',
     borderWidth: 1,
     borderColor: '#27272a',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   pickerChipActive: {
     backgroundColor: '#e11d48',
@@ -609,7 +661,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderColor: '#3f3f46',
     borderWidth: 1,
-    paddingVertical: 10,
+    minHeight: 44,
+    paddingVertical: 11,
     borderRadius: 10,
     marginTop: 6,
   },
