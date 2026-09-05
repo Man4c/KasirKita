@@ -28,6 +28,7 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     4. *Extended Pill FAB*: Tombol mengambang ergonomis `[+] Tambah Staf`.
     5. *Integrasi Navigasi*: Registrasi rute `user_management` di `App.js` serta launcher tile di `DashboardActionHub.js` dan `SettingsScreen.js`.
   - **Phase 1 Selesai**: Pembuatan `userService.js` dengan integrasi endpoint `/api/users` (getUsers, getUserDetail, createUser, updateUser, deleteUser, resetPassword, toggleStatus), cache sinkronisasi offline di `offlineStorage.js` (`KEYS.USERS`, `cacheUsers`, `getCachedUsers`, `upsertCachedUser`, `removeCachedUser`), dan penanganan proteksi RBAC serta self-lockout.
+  - **Phase 2 Selesai**: Pembuatan `UserCardItem.js` dengan desain Tap-to-Edit, avatar inisial, badge role (`PEMILIK (OWNER)` vs `KASIR`), tag khusus `Anda` untuk user login, counter transaksi & omset, tombol aksi Reset PIN, switch toggle status aktif/bekukan, serta tombol hapus dengan touch target $\ge 44$dp dan hitSlop protektif.
 
 - **Transformasi Native Bottom Sheet Modal & Peningkatan Touch Target pada Struk Transaksi Penjualan & Riwayat (`PosReceiptModal.js`, `RecentTransactionsSection.js`, `TransactionCardItem.js`)**:
   - Menyelaraskan tampilan modal struk transaksi belanja yang dipicu dari section 10 transaksi penjualan terakhir di Dashboard (`DashboardScreen.js`) dan layar Riwayat Transaksi (`TransactionHistoryScreen.js`):
