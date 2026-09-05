@@ -211,11 +211,11 @@ export default function TaxFormModal({
           {/* Modal Header */}
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
-              <View style={[styles.iconCircle, { borderColor: isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(56, 189, 248, 0.4)' }]}>
+              <View style={[styles.iconCircle, { borderColor: isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(96, 165, 250, 0.4)' }]}>
                 {isTax ? (
                   <ReceiptText size={20} color="#fbbf24" />
                 ) : (
-                  <Coins size={20} color="#38bdf8" />
+                  <Coins size={20} color="#60a5fa" />
                 )}
               </View>
               <View style={styles.headerTextContainer}>
@@ -259,7 +259,7 @@ export default function TaxFormModal({
                   onPress={() => setIsTax(false)}
                   activeOpacity={0.7}
                 >
-                  <Coins size={15} color={!isTax ? '#38bdf8' : '#a1a1aa'} />
+                  <Coins size={15} color={!isTax ? '#60a5fa' : '#a1a1aa'} />
                   <Text style={[styles.typeOptionText, !isTax && styles.typeOptionTextFeeActive]}>
                     Biaya Layanan
                   </Text>
@@ -436,7 +436,7 @@ export default function TaxFormModal({
                 <Switch
                   value={isActive}
                   onValueChange={setIsActive}
-                  trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#38bdf8' }}
+                  trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#60a5fa' }}
                   thumbColor={isActive ? '#ffffff' : '#a1a1aa'}
                 />
               </View>
@@ -665,10 +665,10 @@ const styles = StyleSheet.create({
   },
   typeOptionBtnFeeActive: {
     backgroundColor: '#0284c722',
-    borderColor: '#38bdf8',
+    borderColor: '#60a5fa',
   },
   typeOptionTextFeeActive: {
-    color: '#38bdf8',
+    color: '#60a5fa',
     fontFamily: 'Poppins_600SemiBold',
   },
   typeOptionBtnRateActive: {
@@ -681,7 +681,7 @@ const styles = StyleSheet.create({
   },
   typeOptionBtnActive: {
     backgroundColor: '#27272a',
-    borderColor: '#38bdf8',
+    borderColor: '#60a5fa',
   },
   typeOptionText: {
     color: '#a1a1aa',
@@ -690,7 +690,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   typeOptionTextActive: {
-    color: '#38bdf8',
+    color: '#60a5fa',
     fontFamily: 'Poppins_600SemiBold',
   },
   previewBox: {

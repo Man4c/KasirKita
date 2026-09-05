@@ -52,9 +52,9 @@ const TaxCardItem = React.memo(function TaxCardItem({
   const isPercentage = item.type === 'PERCENTAGE';
   const rateDisplay = isPercentage ? `${parseFloat(item.value)}%` : formatRp(item.value);
 
-  // Theme Colors (Pajak: Amber #fbbf24, Biaya Layanan: Sky Blue #38bdf8)
-  const accentColor = isTax ? '#fbbf24' : '#38bdf8';
-  const accentBorder = isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(56, 189, 248, 0.4)';
+  // Theme Colors (Pajak: Amber #fbbf24, Biaya Layanan: Blue #60a5fa)
+  const accentColor = isTax ? '#fbbf24' : '#60a5fa';
+  const accentBorder = isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(96, 165, 250, 0.4)';
 
   // Apply To Badge Renderer
   const renderApplyToBadge = () => {
@@ -78,7 +78,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
       case 'TAKEAWAY_ONLY':
         return (
           <View style={styles.applyBadgeTakeaway}>
-            <ShoppingBag size={12} color="#38bdf8" style={{ flexShrink: 0 }} />
+            <ShoppingBag size={12} color="#60a5fa" style={{ flexShrink: 0 }} />
             <Text style={styles.applyBadgeTextTakeaway} numberOfLines={1}>Bawa Pulang Saja</Text>
           </View>
         );
@@ -86,7 +86,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
       default:
         return (
           <View style={styles.applyBadgeManual}>
-            <Package size={12} color="#38bdf8" style={{ flexShrink: 0 }} />
+            <Package size={12} color="#60a5fa" style={{ flexShrink: 0 }} />
             <Text style={styles.applyBadgeTextManual} numberOfLines={1}>Pilihan Kasir</Text>
           </View>
         );
@@ -169,7 +169,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
               <Switch
                 value={Boolean(item.is_active)}
                 onValueChange={() => onToggleStatus(item)}
-                trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#38bdf8' }}
+                trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#60a5fa' }}
                 thumbColor={item.is_active ? '#ffffff' : '#a1a1aa'}
                 style={{ transform: [{ scaleX: 0.75 }, { scaleY: 0.75 }] }}
               />
@@ -373,10 +373,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.35)',
+    borderColor: 'rgba(96, 165, 250, 0.35)',
   },
   applyBadgeTextTakeaway: {
-    color: '#38bdf8',
+    color: '#60a5fa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
   },
@@ -389,10 +389,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.35)',
+    borderColor: 'rgba(96, 165, 250, 0.35)',
   },
   applyBadgeTextManual: {
-    color: '#38bdf8',
+    color: '#60a5fa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
   },

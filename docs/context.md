@@ -21,11 +21,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 ## Progress Terbaru
 
 - **Perbaikan Anti-Patterns & Standar Impeccable Master Pajak & Biaya Layanan (`TaxCardItem.js`, `TaxManagementScreen.js`, `TaxFormModal.js`)**:
-  - Menyelesaikan temuan audit Impeccable pada layar Master Pajak & Biaya:
-    1. *Eliminasi AI Color Palette*: Menghapus warna ungu neon (`#c084fc` / `rgba(192, 132, 252, ...)`) pada Biaya Layanan dan menggantinya dengan Sky Blue (`#38bdf8`), warna solid dan harmonis dengan design system KasirKita.
+  - Menyelesaikan seluruh temuan audit Impeccable pada layar Master Pajak & Biaya:
+    1. *Eliminasi AI Color Palette (Cyan & Purple Neon Text on Dark Background)*: Mengganti warna aksen Biaya Layanan dari cyan (`#38bdf8`, hue 198.4° yang memicu aturan Impeccable AI cyan neon $160^\circ \le \text{hue} \le 200^\circ$) menjadi Royal Blue (`#60a5fa`, hue 213.1°, contrast ratio 6.6:1 WCAG AAA) pada `TaxCardItem.js`, `TaxManagementScreen.js`, dan `TaxFormModal.js`.
     2. *Perbaikan Kontras Ekstrem (Low Contrast Text)*: Mengganti background transparan `rgba(...)` yang menyebabkan kegagalan kontras teks (1.0:1) dengan kontainer gelap solid (`#202024`) berborder aksen halus. Menghasilkan rasio kontras AAA (> 9:1) pada badge kategori, badge default, pill aturan penerapan, dan pill status.
     3. *Penajaman Typographic Hierarchy (Flat Type Hierarchy)*: Mengeliminasi ukuran font intermediate yang berdekatan (15px dan 22px), menyusun hierarki skala 4 level tegas: Hero Metric (24px Bold), Header Title (20px Bold), Card Title/Rate (16px SemiBold), Body/Description (13px Regular), dan Badges/Metadata (12px SemiBold).
-    4. *Verifikasi & Build*: Lolos verifikasi sintaks JS (`node -c`), lolos linter `detect.mjs` (0 defect), dan berhasil ekspor Expo Web (`npx expo export --platform web`) 2.347 modul dalam 2,0 detik.
+    4. *Verifikasi & Build*: Lolos verifikasi sintaks JS (`node -c`), lolos linter `detect.mjs` (0 defect), dan berhasil ekspor Expo Web (`npx expo export --platform web`) 2.347 modul dalam 1,9 detik.
 
 - **Penyelesaian Penuh Master Pemasok & Distributor di Mobile (Phase 6 Audit & Multi-Platform Build, Plan #31 100% Selesai)**:
   - Menyelesaikan seluruh audit kualitas, kepatuhan WCAG, dan pengujian build multi-platform:

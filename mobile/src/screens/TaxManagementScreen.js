@@ -260,10 +260,10 @@ export default function TaxManagementScreen({ navigation }) {
           </View>
 
           <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(56, 189, 248, 0.4)' }]}>
-              <Coins size={14} color="#38bdf8" />
+            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(96, 165, 250, 0.4)' }]}>
+              <Coins size={14} color="#60a5fa" />
             </View>
-            <Text style={[styles.metricVal, { color: '#38bdf8' }]}>{feeCount}</Text>
+            <Text style={[styles.metricVal, { color: '#60a5fa' }]}>{feeCount}</Text>
             <Text style={styles.metricLabel}>Biaya Layanan</Text>
           </View>
 
