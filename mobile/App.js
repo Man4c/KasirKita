@@ -587,12 +587,15 @@ const styles = StyleSheet.create({
     minWidth: 54,
     height: 30,
     borderRadius: 15,
+    overflow: 'hidden',
+    alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
   navIconPillActive: {
     backgroundColor: 'rgba(244, 63, 94, 0.16)',
+    borderRadius: 15,
+    overflow: 'hidden',
   },
   navText: {
     fontSize: 12,
