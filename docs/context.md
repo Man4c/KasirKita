@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Eksekusi Konfirmasi Hapus Data Master (`mobile/src/utils/alert.js`)**:
+  - Menyelesaikan bug tombol konfirmasi hapus (seperti pada Master Kategori, Pelanggan, Pajak, Satuan, Promosi) yang hanya memunculkan dialog info dengan tombol "OK" tunggal tanpa tombol "Ya, Hapus" / "Batal":
+    1. *Penyebab*: Fungsi pembantu [`showAlert.js`](file:///d:/Projects/KasirKita/mobile/src/utils/alert.js) sebelumnya hanya menerima parameter `(title, message)` dan mengabaikan parameter array `buttons`. Pada React Native Web/browser, `Alert.alert` terpanggil tanpa tombol pilihan atau hanya memunculkan modal OK bawaan browser, sehingga callback `onPress` untuk `categoryService.deleteCategory()` tidak pernah dapat dieksekusi oleh pengguna.
+    2. *Solusi*: Memperbarui `showAlert(title, message, buttons)` agar sepenuhnya mendukung parameter `buttons`:
+       - Di Web: Memetakan opsi konfirmasi ke `window.confirm` dengan memicu callback tombol konfirmasi (`onPress`) saat pengguna menekan "OK/Ya" atau tombol cancel saat "Batal".
+       - Di Native (Android/iOS): Meneruskan array `buttons` lengkap ke `Alert.alert(title, message, buttons)` sehingga dialog native menyajikan tombol `Batal` dan `Ya, Hapus` (destructive).
+  - Lolos uji detektor Impeccable (0 defect) dan commit tersimpan permanen.
+
 - **Penyelesaian Temuan Kualitas Impeccable (Text Overflow & Touch Target `CategoryFormModal.js`)**:
   - Menyelesaikan temuan Impeccable pada `http://localhost:8081/`:
     1. *Pemberantasan Text Overflow (103px)*: Pada header modal `CategoryFormModal.js`, teks subjudul `modalSubtitle` dan `modalTitle` kini dilengkapi `ellipsizeMode="tail"`, `flexShrink: 1`, dan container `justifyContent: 'center'`, menjamin tidak ada kebocoran lebar flexbox di browser engine mana pun saat compiling React Native Web.
