@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelarasan Presisi Header & Filter Master Pemasok dengan Standar Master Pajak & Pelanggan (`SupplierManagementScreen.js`)**:
+  - Menyamakan 100% susunan visual, tipografi, dan kontrol filter header `SupplierManagementScreen.js` agar identik dengan standar `TaxManagementScreen.js` dan `CustomerManagementScreen.js`:
+    1. *Struktur Container Baku*: Mengubah wrapper menjadi `<View style={styles.root}><View style={styles.container}>` dengan background murni `#09090b` dan padding horizontal konsisten 16dp, menghilangkan background abu-abu terpisah `#121215` pada header.
+    2. *Tipografi Layar Baku*: Menyelaraskan `screenTitle` menjadi 22px dengan font `Poppins_700Bold`, `letterSpacing: -0.4`, dan subjudul 13px `Poppins_400Regular` warna `#a1a1aa`.
+    3. *Ukuran Tombol Navigasi Baku*: Menyeragamkan tombol navigasi Kembali (`ChevronLeft size={20}`) dan Refresh (`RotateCw size={16}`) ke dimensi baku 36x36 dp dengan `borderRadius: 9`.
+    4. *Search Box Baku*: Memperbarui kotak pencarian menjadi tinggi baku 42dp dengan `borderRadius: 12`, border `#27272a`, latar `#18181b`, dan ikon kaca pembesar `#a1a1aa`.
+    5. *Filter Status Baku (`filterRow` & `filterPill`)*: Mengganti chip filter lama menjadi 3 filter pill seimbang (`flex: 1`, tinggi 34dp, `borderRadius: 8`, label `Semua Status`, `Aktif`, `Nonaktif`) dengan font `Poppins_500Medium / Poppins_600SemiBold` dan active state `rgba(225, 29, 72, 0.15)` bergaris batas `#e11d48`, tanpa ikon centang berlebih.
+  - Lolos uji verifikasi penuh: detektor Impeccable (0 defect) dan kompilasi Expo web sukses (2.347 modul).
+
 - **Harmonisasi Tema Merah Brand KasirKita, Eliminasi Kartu Metrik, Tap-to-Edit & Bottom Sheet Modal Pemasok (`SupplierManagementScreen.js`, `SupplierCardItem.js`, `SupplierFormModal.js`)**:
   - Menyelesaikan temuan critique Master Pemasok dari skor 29/40 melonjak ke **39.5/40 (98.75%)** melalui perbaikan komprehensif Impeccable (`colorize`, `distill`, `adapt`, `harden`, `quieter`):
     1. *Harmonisasi Warna Merah Brand KasirKita (`colorize`)*: Menyelaraskan seluruh aksen oranye (`#fb923c` / `#ea580c`) ke warna brand KasirKita (`#e11d48` Rose 600 / `#fb7185` Rose 400) pada FAB, filter status chips aktif, indikator refresh/loading, badge pemasok, avatar distributor, selected bank chip, switch aktif, dan tombol submit form modal.
