@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Temuan Impeccable Master Pengguna & Staf (`UserCardItem.js` & `UserManagementScreen.js`)**:
+  - Menyelesaikan temuan kualitas dan AI tell dari hasil audit Impeccable pada tampilan web/mobile:
+    1. *Pemberantasan Glowing Shadow AI Tell*: Mengganti colored box-shadow `#e11d48` (`rgba(225, 29, 72, 0.4)`) pada tombol aksi FAB Tambah Staf (`UserManagementScreen.js`) dan bottom button scanner (`PosBarcodeScannerView.js`) menjadi bayangan netral bernuansa kedalaman fisik nyata (`shadowColor: '#000000'`, `rgba(0, 0, 0, 0.4)`), menghilangkan kesan artifisial "neon glow" antipattern.
+    2. *Perbaikan Kontras Teks (WCAG AA Compliance)*: Mengubah warna teks `noPhoneText` (*"Tanpa kontak telepon"*) di `UserCardItem.js` dari `#71717a` (3.7:1) menjadi `#a1a1aa` (5.3:1) terhadap latar `#18181b` / `#121215`, melampaui batas rasio kontras standar WCAG AA (4.5:1).
+    3. *Audit Clip-Path Aset*: Mengonfirmasi bahwa seluruh komponen KasirKita menggunakan CSS/style standar tanpa organic curved clip-paths yang menurunkan performa render.
+  - Lolos uji detektor Impeccable (0 defect) dan commit tersimpan permanen via git.
+
 - **Implementasi Combo Soft Delete & Hapus Cerdas (Smart Reassign) pada Master Kategori & Satuan**:
   - Menyempurnakan arsitektur integritas data pada Master Kategori dan Master Satuan:
     1. *Database Migrasi Soft Delete (`2026_09_05_153720_add_soft_deletes_to_categories_and_units_tables.php`)*: Menambahkan kolom `deleted_at` pada tabel `categories` dan `units`.
