@@ -13,6 +13,7 @@ import {
   Percent,
   Users,
   Truck,
+  UserCheck,
   Sparkles,
   AlertTriangle,
 } from 'lucide-react-native';
@@ -29,6 +30,7 @@ export default function DashboardActionHub({
   onOpenMasterTax,
   onOpenMasterCustomer,
   onOpenMasterSupplier,
+  onOpenMasterUser,
 }) {
   const lowStock = Number(inv?.low_stock_count || 0);
   const totalSku = Number(inv?.total_items || 0);
@@ -110,6 +112,17 @@ export default function DashboardActionHub({
     }
   };
 
+  const handleMasterUser = () => {
+    if (onOpenMasterUser) {
+      onOpenMasterUser();
+    } else {
+      showAlert(
+        'Master Pengguna & Staf',
+        'Kelola akun kasir, manajer, reset password PIN, dan status hak akses staf toko.'
+      );
+    }
+  };
+
   const handleMasterAction = (title, description) => {
     showAlert(title, description);
   };
@@ -180,6 +193,15 @@ export default function DashboardActionHub({
       bgColor: 'rgba(251, 146, 60, 0.16)',
       badge: null,
       onPress: handleMasterSupplier,
+    },
+    {
+      id: 'user_staff',
+      name: 'Staf Kasir',
+      icon: UserCheck,
+      color: '#f43f5e',
+      bgColor: 'rgba(244, 63, 94, 0.16)',
+      badge: null,
+      onPress: handleMasterUser,
     },
   ];
 

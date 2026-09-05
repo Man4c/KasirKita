@@ -25,6 +25,7 @@ import {
   Shield,
   Activity,
   KeyRound,
+  UserCheck,
   MessageCircle,
   BookOpen,
   Info,
@@ -55,7 +56,7 @@ import appConfig from '../../app.json';
 
 const APP_VERSION = appConfig?.expo?.version || '1.3.0';
 
-export default function SettingsScreen({ isLandscape = false }) {
+export default function SettingsScreen({ isLandscape = false, navigation }) {
   const { user, logout, updateUser } = useAuth();
 
   // Settings State
@@ -443,6 +444,33 @@ export default function SettingsScreen({ isLandscape = false }) {
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
           </TouchableOpacity>
+
+          {/* Manajemen Staf & Kasir (Owner Only) */}
+          {user?.role === 'owner' && (
+            <>
+              <View style={styles.divider} />
+              <TouchableOpacity
+                style={styles.menuRow}
+                activeOpacity={0.7}
+                onPress={() => {
+                  if (navigation?.navigate) {
+                    navigation.navigate('user_management');
+                  } else {
+                    showAlert('Kelola Staf', 'Buka layar manajemen staf dari dashboard utama.');
+                  }
+                }}
+              >
+                <View style={[styles.menuIconBox, { backgroundColor: 'rgba(244, 63, 94, 0.12)' }]}>
+                  <UserCheck size={18} color="#f43f5e" />
+                </View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.menuTitle}>Kelola Staf & Kasir</Text>
+                  <Text style={styles.menuSubtitle}>Daftar akun, hak akses role, dan reset PIN staf</Text>
+                </View>
+                <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </View>
 

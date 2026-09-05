@@ -85,7 +85,7 @@ mobile/
 | **Phase 2: UserCardItem Component** | Desain kartu staf dengan Tap-to-Edit, avatar inisial, badge role, metric performa, flexbox pairing defense, dan touch target >= 44dp. | `done` |
 | **Phase 3: Native Bottom Sheets** | Pembuatan `UserFormModal.js` (tambah/edit staf) dan `ResetPasswordModal.js` dengan animasi slide, backdrop dismiss, drag handle, dan sticky footer. | `done` |
 | **Phase 4: Main Screen & Filter** | Pembuatan `UserManagementScreen.js` dengan header standar KasirKita, tab filter role, search input, list refreshable, empty state, dan Extended FAB. | `done` |
-| **Phase 5: Navigation & Action Hub** | Registrasi rute di `App.js`, penambahan tile di `DashboardActionHub.js` dan `SettingsScreen.js` dengan proteksi `user?.role === 'owner'`. | `todo` |
+| **Phase 5: Navigation & Action Hub** | Registrasi rute di `App.js`, penambahan tile di `DashboardActionHub.js` dan `SettingsScreen.js` dengan proteksi `user?.role === 'owner'`. | `done` |
 | **Phase 6: Impeccable Audit & QA** | Verifikasi kepatuhan terhadap The Readability Floor Rule (>= 12px), The Flexbox Pairing Rule, kontras warna, dan konfirmasi dialog. | `todo` |
 
 ---

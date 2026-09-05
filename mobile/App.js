@@ -35,6 +35,7 @@ import PromoManagementScreen from './src/screens/PromoManagementScreen';
 import TaxManagementScreen from './src/screens/TaxManagementScreen';
 import CustomerManagementScreen from './src/screens/CustomerManagementScreen';
 import SupplierManagementScreen from './src/screens/SupplierManagementScreen';
+import UserManagementScreen from './src/screens/UserManagementScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
 
@@ -284,10 +285,23 @@ function MainApp() {
               navigate: handleTabChange,
             }}
           />
+        ) : activeTab === 'user_management' && user?.role === 'owner' ? (
+          <UserManagementScreen
+            navigation={{
+              goBack: () => handleTabChange('dashboard'),
+              navigate: handleTabChange,
+            }}
+          />
         ) : activeTab === 'history' ? (
           <TransactionHistoryScreen isLandscape={false} />
         ) : activeTab === 'settings' ? (
-          <SettingsScreen isLandscape={false} />
+          <SettingsScreen
+            isLandscape={false}
+            navigation={{
+              goBack: () => handleTabChange('dashboard'),
+              navigate: handleTabChange,
+            }}
+          />
         ) : (
           <PosScreen
             isLandscape={false}

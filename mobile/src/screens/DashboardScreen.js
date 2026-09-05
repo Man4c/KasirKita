@@ -262,6 +262,11 @@ export default function DashboardScreen({ isLandscape = false, navigation }) {
             navigation.navigate('supplier_management');
           }
         }}
+        onOpenMasterUser={() => {
+          if (navigation?.navigate) {
+            navigation.navigate('user_management');
+          }
+        }}
       />
 
       {/* 7-Day Sales Trend Interactive Chart */}
