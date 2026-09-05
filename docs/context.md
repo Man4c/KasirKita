@@ -79,6 +79,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     2. *Memoization Callback `renderItem`*: Mengonversi seluruh renderItem inline di `PromoManagementScreen` dan `ProductGrid` menjadi `useCallback` memoized agar tidak memicu re-instansiasi komponen kartu yang tidak perlu saat state parent berubah.
   - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
 
+- **Penyempurnaan Pemilih Tanggal Kalender Visual di Web Dashboard (`Discounts.jsx`, `CashFlow.jsx`)**:
+  - Menyelesaikan masalah input tanggal web yang sebelumnya tampak seperti input manual teks format `mm/dd/yyyy`:
+    1. *Direct Popup Calendar GUI*: Menambahkan handler `onClick={(e) => e.target.showPicker?.()}` sehingga mengeklik di mana saja pada area input tanggal langsung memunculkan dialog kalender visual GUI browser secara instan tanpa perlu mengetik manual atau membidik ikon kecil kalender.
+    2. *Dark Theme Native Calendar*: Menambahkan atribut `style={{ colorScheme: 'dark' }}` agar popup dialog kalender browser dan ikon indikatornya otomatis bertema gelap dan cerah kontras pada latar belakang hitam/zinc-950.
+    3. *Tombol Hapus Tanggal*: Menyediakan aksi *"Hapus Tanggal"* ketika tanggal telah terisi, memudahkan pengguna mengosongkan tanggal kembali dengan satu klik.
+  - Lolos verifikasi build Vite (`npm run build` $\rightarrow$ 0 error).
+
 - **Penyederhanaan Skema Promosi & Progressive Disclosure Minimal Belanja (`PromoFormModal.js`, `Discounts.jsx`)**:
   - Menyelesaikan kebingungan mental model pada formulir promosi di mana sebelumnya terdapat 3 tombol skema (`Diskon %`, `Diskon Rp`, `Min. Belanja`) namun kolom minimal belanja tetap muncul di semua tipe:
     1. *Penyederhanaan Skema Diskon*: Selector tipe diskon disederhanakan menjadi 2 bentuk pemotong utama murni: `Diskon %` (`PERCENTAGE`) dan `Diskon Rp` (`FIXED`), menghilangkan tombol redundan `Min. Belanja`.
