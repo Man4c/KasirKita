@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   },
   noPhoneText: {
     fontSize: 12,
-    color: '#71717a',
+    color: '#a1a1aa',
     fontStyle: 'italic',
   },
   metricsStrip: {
