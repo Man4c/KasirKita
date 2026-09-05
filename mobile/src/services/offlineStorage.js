@@ -5,6 +5,7 @@ const KEYS = {
   CATEGORIES: 'kasirkita_offline_categories',
   UNITS: 'kasirkita_offline_units',
   CUSTOMERS: 'kasirkita_offline_customers',
+  SUPPLIERS: 'kasirkita_offline_suppliers',
   PROMOS: 'kasirkita_offline_promos',
   TAXES_FEES: 'kasirkita_offline_taxes_fees',
   QUEUE: 'kasirkita_offline_transaction_queue',
@@ -263,6 +264,69 @@ export const offlineStorage = {
       return true;
     } catch (err) {
       console.warn('Gagal menghapus pelanggan dari cache lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Cache suppliers list locally for supplier management and stock operation.
+   */
+  async cacheSuppliers(suppliers) {
+    if (!Array.isArray(suppliers)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(suppliers));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache pemasok:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached suppliers list.
+   */
+  async getCachedSuppliers() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.SUPPLIERS);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  },
+
+  /**
+   * Insert or update a single supplier in local cache.
+   */
+  async upsertCachedSupplier(supplier) {
+    if (!supplier || !supplier.id) return false;
+    try {
+      const suppliers = await this.getCachedSuppliers();
+      const index = suppliers.findIndex((s) => String(s.id) === String(supplier.id));
+      if (index >= 0) {
+        suppliers[index] = { ...suppliers[index], ...supplier };
+      } else {
+        suppliers.unshift(supplier);
+      }
+      await AsyncStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(suppliers));
+      return true;
+    } catch (err) {
+      console.warn('Gagal update cache pemasok lokal:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Remove a single supplier from local cache.
+   */
+  async removeCachedSupplier(supplierId) {
+    if (!supplierId) return false;
+    try {
+      let suppliers = await this.getCachedSuppliers();
+      suppliers = suppliers.filter((s) => String(s.id) !== String(supplierId));
+      await AsyncStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(suppliers));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menghapus pemasok dari cache lokal:', err.message);
       return false;
     }
   },

@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 1 & 2 Master Pemasok & Distributor di Mobile (`supplierService.js`, `offlineStorage.js`, Plan #31)**:
+  - Menyelesaikan pemetaan kontrak backend dan modul service mobile untuk distributor:
+    1. *Pemetaan Kontrak API & RBAC*: Endpoint `/api/suppliers` terverifikasi diproteksi middleware `role:owner`, mencakup paginasi 15 item, pencarian `search` (nama, contact person, phone, email), filter `is_active`, parameter `all=true`, agregasi metrik `restocks_count` & `total_purchases`, operasi CRUD lengkap, serta riwayat pasokan barang `/api/suppliers/{id}/history`.
+    2. *Mobile Service (`mobile/src/services/supplierService.js`)*: Modul wrapper API lengkap dengan normalisasi payload, penanganan validasi 422, proteksi hak akses Owner 403, serta mekanisme fallback offline lokal.
+    3. *Penyimpanan Offline (`mobile/src/services/offlineStorage.js`)*: Menambahkan key `@kasirkita_offline_suppliers` dan method `cacheSuppliers`, `getCachedSuppliers`, `upsertCachedSupplier`, dan `removeCachedSupplier`.
+  - Berhasil lulus verifikasi sintaks JS (`node -c`). Phase 1 & Phase 2 Plan #31 berstatus `completed`.
+
 - **Penyelesaian Penuh Master Pelanggan & Keanggotaan di Mobile (Phase 6 Audit & Multi-Platform Build, Plan #30 100% Selesai)**:
   - Menyelesaikan seluruh audit kualitas, kepatuhan WCAG, dan pengujian build multi-platform:
     1. *Audit Defensive UI & Craft Floor*: Seluruh komponen (`CustomerCardItem.js`, `CustomerManagementScreen.js`, `CustomerFormModal.js`) mematuhi aturan The Flexbox Pairing Rule (`min-w-0 truncate` vs `shrink-0 whitespace-nowrap`) dan The Readability Floor Rule ($\ge 12$px).
