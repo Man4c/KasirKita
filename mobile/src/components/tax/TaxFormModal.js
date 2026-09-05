@@ -63,7 +63,7 @@ const PRESET_TEMPLATES = [
     id: 'ppn_11',
     label: '🏛️ PPN 11%',
     badge: 'Nasional',
-    badgeColor: '#fbbf24',
+    badgeColor: '#fb7185',
     name: 'PPN 11%',
     is_tax: true,
     type: 'PERCENTAGE',
@@ -337,11 +337,11 @@ export default function TaxFormModal({
               <View
                 style={[
                   styles.iconCircle,
-                  { borderColor: isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(96, 165, 250, 0.4)' },
+                  { borderColor: isTax ? 'rgba(225, 29, 72, 0.4)' : 'rgba(96, 165, 250, 0.4)' },
                 ]}
               >
                 {isTax ? (
-                  <ReceiptText size={20} color="#fbbf24" />
+                  <ReceiptText size={20} color="#fb7185" />
                 ) : (
                   <Coins size={20} color="#60a5fa" />
                 )}
@@ -375,7 +375,7 @@ export default function TaxFormModal({
             {!isEditMode && (
               <View style={styles.presetSection}>
                 <View style={styles.presetHeader}>
-                  <Zap size={14} color="#fbbf24" style={{ flexShrink: 0 }} />
+                  <Zap size={14} color="#fb7185" style={{ flexShrink: 0 }} />
                   <Text style={styles.presetTitle}>Template Cepat Regulasi</Text>
                   <Text style={styles.presetSubtitle}>1-ketuk untuk isi otomatis</Text>
                 </View>
@@ -431,7 +431,7 @@ export default function TaxFormModal({
                   onPress={() => setIsTax(true)}
                   activeOpacity={0.7}
                 >
-                  <ReceiptText size={15} color={isTax ? '#fbbf24' : '#a1a1aa'} />
+                  <ReceiptText size={15} color={isTax ? '#fb7185' : '#a1a1aa'} />
                   <Text style={[styles.typeOptionText, isTax && styles.typeOptionTextTaxActive]}>
                     Pajak (PPN/PB1)
                   </Text>
@@ -623,7 +623,7 @@ export default function TaxFormModal({
                 <Switch
                   value={isActive}
                   onValueChange={setIsActive}
-                  trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#60a5fa' }}
+                  trackColor={{ false: '#3f3f46', true: isTax ? '#e11d48' : '#60a5fa' }}
                   thumbColor={isActive ? '#ffffff' : '#a1a1aa'}
                 />
               </View>
@@ -686,10 +686,10 @@ export default function TaxFormModal({
               activeOpacity={0.85}
             >
               {submitting ? (
-                <ActivityIndicator size="small" color="#09090b" />
+                <ActivityIndicator size="small" color="#ffffff" />
               ) : (
                 <>
-                  <Check size={16} color="#09090b" />
+                  <Check size={16} color="#ffffff" />
                   <Text style={styles.submitButtonText}>
                     {isEditMode ? 'Simpan Perubahan' : 'Tambah Komponen'}
                   </Text>
@@ -916,11 +916,11 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   typeOptionBtnTaxActive: {
-    backgroundColor: '#78350f22',
-    borderColor: '#fbbf24',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderColor: '#e11d48',
   },
   typeOptionTextTaxActive: {
-    color: '#fbbf24',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
   },
   typeOptionBtnFeeActive: {
@@ -990,8 +990,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   applyOptionCardActive: {
-    borderColor: '#fbbf24',
-    backgroundColor: '#78350f11',
+    borderColor: '#e11d48',
+    backgroundColor: 'rgba(225, 29, 72, 0.08)',
   },
   applyOptionRadio: {
     marginTop: 2,
@@ -1006,13 +1006,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   radioOuterActive: {
-    borderColor: '#fbbf24',
+    borderColor: '#e11d48',
   },
   radioInner: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#e11d48',
   },
   applyOptionInfo: {
     flex: 1,
@@ -1024,7 +1024,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   applyOptionTitleActive: {
-    color: '#fbbf24',
+    color: '#fb7185',
   },
   applyOptionDesc: {
     color: '#a1a1aa',
@@ -1111,7 +1111,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#e11d48',
     minHeight: 44,
     paddingVertical: 12,
     borderRadius: 10,
@@ -1121,7 +1121,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   submitButtonText: {
-    color: '#09090b',
+    color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
   },

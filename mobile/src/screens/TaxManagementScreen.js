@@ -255,7 +255,7 @@ export default function TaxManagementScreen({ navigation }) {
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             {refreshing ? (
-              <ActivityIndicator size="small" color="#fbbf24" />
+              <ActivityIndicator size="small" color="#fb7185" />
             ) : (
               <RotateCw size={16} color="#e4e4e7" />
             )}
@@ -265,7 +265,7 @@ export default function TaxManagementScreen({ navigation }) {
         {/* Offline Alert Banner */}
         {isOffline && (
           <View style={styles.offlineBanner}>
-            <WifiOff size={13} color="#fbbf24" style={{ flexShrink: 0 }} />
+            <WifiOff size={13} color="#fb7185" style={{ flexShrink: 0 }} />
             <Text style={styles.offlineBannerText} numberOfLines={1}>
               Mode Offline: Menampilkan data cache pajak & biaya lokal.
             </Text>
@@ -349,7 +349,7 @@ export default function TaxManagementScreen({ navigation }) {
       {/* Main Tax/Fee FlatList */}
       {loading && !refreshing ? (
         <View style={styles.centerLoading}>
-          <ActivityIndicator size="large" color="#fbbf24" />
+          <ActivityIndicator size="large" color="#e11d48" />
           <Text style={styles.loadingText}>Memuat data pajak & biaya...</Text>
         </View>
       ) : (
@@ -370,8 +370,8 @@ export default function TaxManagementScreen({ navigation }) {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              tintColor="#fbbf24"
-              colors={['#fbbf24']}
+              tintColor="#e11d48"
+              colors={['#e11d48']}
             />
           }
           ListEmptyComponent={
@@ -399,7 +399,7 @@ export default function TaxManagementScreen({ navigation }) {
                   onPress={handleOpenCreate}
                   activeOpacity={0.8}
                 >
-                  <Plus size={16} color="#09090b" />
+                  <Plus size={16} color="#ffffff" />
                   <Text style={styles.emptyActionBtnText}>Tambah Komponen</Text>
                 </TouchableOpacity>
               )}
@@ -416,7 +416,7 @@ export default function TaxManagementScreen({ navigation }) {
           activeOpacity={0.85}
           onPress={handleOpenCreate}
         >
-          <Plus size={20} color="#09090b" />
+          <Plus size={20} color="#ffffff" />
           <Text style={styles.fabText}>Tambah Pajak / Biaya</Text>
         </TouchableOpacity>
       )}
@@ -499,16 +499,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(251, 191, 36, 0.12)',
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(251, 191, 36, 0.3)',
+    borderColor: 'rgba(225, 29, 72, 0.3)',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 6,
     marginBottom: 10,
   },
   offlineBannerText: {
-    color: '#fbbf24',
+    color: '#fb7185',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     flex: 1,
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   tabBtnTextActive: {
-    color: '#fbbf24',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
     includeFontPadding: false,
     textAlignVertical: 'center',
@@ -594,9 +594,9 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
   },
   filterPillActive: {
-    backgroundColor: '#202024',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
     borderWidth: 1,
-    borderColor: '#fbbf24',
+    borderColor: '#e11d48',
   },
   filterPillText: {
     color: '#a1a1aa',
@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   filterPillTextActive: {
-    color: '#fbbf24',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
     includeFontPadding: false,
     textAlignVertical: 'center',
@@ -663,14 +663,14 @@ const styles = StyleSheet.create({
   emptyActionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#e11d48',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
     gap: 6,
   },
   emptyActionBtnText: {
-    color: '#09090b',
+    color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
   },
@@ -680,7 +680,7 @@ const styles = StyleSheet.create({
     right: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#e11d48',
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 24,
@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   fabText: {
-    color: '#09090b',
+    color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
   },

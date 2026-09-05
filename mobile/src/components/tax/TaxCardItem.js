@@ -35,7 +35,7 @@ function formatRp(value) {
  * Berstandar Impeccable Defensive UI:
  * - Flexbox pairing: min-w-0 truncate untuk teks dinamis, shrink-0 whitespace-nowrap untuk nilai/badge.
  * - Readability floor: seluruh label teks minimum 12px (text-xs).
- * - Aksen Pajak: Amber #fbbf24, Biaya Layanan: Ungu/Indigo #c084fc.
+ * - Aksen Pajak: Rose Red #fb7185, Biaya Layanan: Blue #60a5fa.
  */
 const TaxCardItem = React.memo(function TaxCardItem({
   item,
@@ -54,9 +54,9 @@ const TaxCardItem = React.memo(function TaxCardItem({
   const isPercentage = item.type === 'PERCENTAGE';
   const rateDisplay = isPercentage ? `${parseFloat(item.value)}%` : formatRp(item.value);
 
-  // Theme Colors (Pajak: Amber #fbbf24, Biaya Layanan: Blue #60a5fa)
-  const accentColor = isTax ? '#fbbf24' : '#60a5fa';
-  const accentBorder = isTax ? 'rgba(251, 191, 36, 0.4)' : 'rgba(96, 165, 250, 0.4)';
+  // Theme Colors (Pajak: Rose Red #fb7185, Biaya Layanan: Blue #60a5fa)
+  const accentColor = isTax ? '#fb7185' : '#60a5fa';
+  const accentBorder = isTax ? 'rgba(225, 29, 72, 0.4)' : 'rgba(96, 165, 250, 0.4)';
 
   // Apply To Badge Renderer
   const renderApplyToBadge = () => {
@@ -71,7 +71,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
       case 'SPECIFIC_PAYMENT':
         return (
           <View style={styles.applyBadgePayment}>
-            <CreditCard size={12} color="#fbbf24" style={{ flexShrink: 0 }} />
+            <CreditCard size={12} color="#fb7185" style={{ flexShrink: 0 }} />
             <Text style={styles.applyBadgeTextPayment} numberOfLines={1}>
               Khusus {item.payment_method || 'Digital'}
             </Text>
@@ -178,7 +178,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
               {isToggling ? (
                 <ActivityIndicator
                   size="small"
-                  color={isTax ? '#fbbf24' : '#60a5fa'}
+                  color={isTax ? '#fb7185' : '#60a5fa'}
                   style={styles.switchLoading}
                 />
               ) : (
@@ -186,7 +186,7 @@ const TaxCardItem = React.memo(function TaxCardItem({
                   value={Boolean(item.is_active)}
                   onValueChange={() => onToggleStatus(item)}
                   disabled={isToggling}
-                  trackColor={{ false: '#3f3f46', true: isTax ? '#fbbf24' : '#60a5fa' }}
+                  trackColor={{ false: '#3f3f46', true: isTax ? '#e11d48' : '#60a5fa' }}
                   thumbColor={item.is_active ? '#ffffff' : '#a1a1aa'}
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
                 />
@@ -370,10 +370,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderWidth: 1,
-    borderColor: 'rgba(251, 191, 36, 0.35)',
+    borderColor: 'rgba(225, 29, 72, 0.35)',
   },
   applyBadgeTextPayment: {
-    color: '#fbbf24',
+    color: '#fb7185',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
   },

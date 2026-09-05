@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Harmonisasi Tema Warna Merah Khas Brand KasirKita (`TaxManagementScreen.js`, `TaxCardItem.js`, `TaxFormModal.js`)**:
+  - Mengubah seluruh palet warna aksen modul Master Pajak & Biaya dari warna kuning/amber (`#fbbf24`, `#f59e0b`, `rgba(251, 191, 36, ...)`) menjadi **warna merah khas brand KasirKita** (`#e11d48` Rose 600 / `#fb7185` Rose 400 / `rgba(225, 29, 72, ...)`):
+    1. *Screen Master (`TaxManagementScreen.js`)*: Memperbarui spinner refresh dan loading ke `#e11d48`, banner offline ke `#fb7185` (`rgba(225, 29, 72, 0.12)`), teks tab aktif ke `#fb7185`, filter pill aktif ke border `#e11d48` dengan background `rgba(225, 29, 72, 0.15)`, serta tombol empty action & Floating Action Button (FAB) ke background `#e11d48` dengan teks dan ikon putih `#ffffff`.
+    2. *Kartu Item (`TaxCardItem.js`)*: Mengubah `accentColor` komponen pajak dari amber ke `#fb7185`, border kategori ke `rgba(225, 29, 72, 0.4)`, switch aktif pajak ke `#e11d48`, spinner toggle ke `#fb7185`, dan badge metode pembayaran digital (`applyBadgePayment`) ke border & teks `#fb7185`.
+    3. *Modal Formulir (`TaxFormModal.js`)*: Mengubah badge preset template PPN 11% dan ikon Zap ke `#fb7185`, ikon header lingkaran ke border `rgba(225, 29, 72, 0.4)`, tombol jenis pajak ke border `#e11d48` dengan teks `#fb7185`, radio selection & card aktif ke `#e11d48`, switch aktif ke `#e11d48`, dan tombol submit utama ke background merah `#e11d48` dengan ikon Check serta teks putih `#ffffff` (rasio kontras WCAG AAA).
+  - Lolos pengujian komprehensif: sintaks JS valid (`node -c`), detektor Impeccable (0 defect), dan kompilasi Expo web.
+
 - **Penyempurnaan Akhir Layar Master Pajak & Biaya (`TaxCardItem.js`, `TaxManagementScreen.js`, `TaxFormModal.js`)**:
   - Menyelesaikan temuan re-critique 37/40 melalui paket polesan akhir Impeccable (`adapt`, `polish`, `delight`):
     1. *Tap-to-Edit Badan Kartu (`adapt`)*: Membungkus seluruh area header, nama, dan aturan kartu item dengan `TouchableOpacity` interaktif, memungkinkan kasir menyentuh bagian mana saja dari kartu untuk membuka modal edit instan tanpa harus membidik tombol kecil berukuran 32dp.
