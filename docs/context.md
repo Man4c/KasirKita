@@ -79,6 +79,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     2. *Memoization Callback `renderItem`*: Mengonversi seluruh renderItem inline di `PromoManagementScreen` dan `ProductGrid` menjadi `useCallback` memoized agar tidak memicu re-instansiasi komponen kartu yang tidak perlu saat state parent berubah.
   - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
 
+- **Penyelarasan Stroke Ikon, Indikator Aktif Pill, dan Kontras Bottom Navigation Bar (`App.js`)**:
+  - Menyelesaikan 3 poin kerapian visual pada bilah navigasi bawah (*bottom nav*):
+    1. *Konsistensi Stroke & Ukuran Ikon*: Menetapkan `size={22}` dan `strokeWidth={2}` eksplisit dan seragam pada seluruh ikon navigasi (`BarChart3`, `ShoppingCart`, `Receipt`, `Settings`) dari `lucide-react-native`, menghilangkan ketimpangan ketebalan visual antara keranjang dan gear.
+    2. *Pill Indikator Aktif Modern*: Mengganti pill pas-pasan sebelumnya dengan dimensi simetris bergaya Material 3 (`minWidth: 54`, `height: 30`, `borderRadius: 15`) berlatar `rgba(244, 63, 94, 0.16)` yang membingkai ikon dengan elegan dan proporsional terhadap teks label di bawahnya.
+    3. *Penyeimbangan Kontras Non-Aktif*: Menaikkan tingkat kecerahan ikon dan teks non-aktif dari `#71717a` (redup/seperti disabled) menjadi `#9ca3af` (zinc-400 terang dan hidup). Teks aktif menggunakan warna rose cerah `#fb7185` dengan `Poppins_600SemiBold`.
+  - Lolos verifikasi build Expo Web (`npx expo export --platform web`).
+
 - **Eliminasi Celah Garis Putih di Sisi Kanan/Bawah Tampilan Mobile (`public/index.html`, `App.js`)**:
   - Menyelesaikan masalah garis putih tipis (*white borders / gaps*) yang kadang muncul di sebelah kanan atau bawah pada mode simulasi HP (misal Pixel 7, Galaxy A51):
     1. *Penyebab Root Cause*: Pada browser web, elemen `html` dan `body` memiliki background default bawaan browser berwarna putih (`#ffffff`). Ketika Chrome DevTools menggunakan fitur *"Fit to window"* dengan scaling zoom tertentu (misal 72%, 83%) atau viewport dengan lebar pecahan piksel (*subpixel rendering*), terjadi pembulatan matematika antara canvas devtools dan kontainer aplikasi KasirKita. Selisih pecahan piksel ($0.5-1$ px) tersebut membuat warna putih `html/body` di belakang aplikasi bocor ke permukaan.
