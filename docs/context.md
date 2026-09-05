@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyederhanaan Visual & Distill Kepadatan Badge Master Pajak & Biaya (`TaxCardItem.js`)**:
+  - Menyelesaikan temuan critique [P2] melalui skill `impeccable distill`:
+    1. *Eliminasi Nested Container (Anti-Pattern Box-in-Box)*: Mengganti kontainer `ruleSection` berlatar gelap `#121215` yang menampung badge di dalam kartu menjadi baris metadata terintegrasi `ruleRow` yang bersih dan lapang.
+    2. *Penajaman Tipografi Nilai Tarif*: Menghapus border kotak sekunder pada nilai tarif (`rateBox`) dan menggantinya dengan tipografi tebal `rateWrapper` 18px Poppins Bold (`rateText`), menciptakan kontras visual yang percaya diri tanpa menambah beban visual.
+    3. *Peningkatan Diferensiasi Kartu Nonaktif*: Menyelaraskan status nonaktif dengan opasitas kartu 0.6 dan background `#141416` yang redup, sehingga status nonaktif terbaca secara intuitif tanpa membebani mata.
+    4. *Verifikasi & Multi-Platform Export*: Lolos verifikasi sintaks JS (`node -c`), detektor Impeccable (0 defect), dan `npx expo export --platform web` (2.347 modul lolos dalam 1,0 detik).
+
 - **Hardening Interaksi & Proteksi Fat-Finger Master Pajak & Biaya (`TaxCardItem.js`, `TaxManagementScreen.js`)**:
   - Menyelesaikan temuan critique [P1] melalui skill `impeccable harden`:
     1. *Proteksi Fat-Finger & Double Trigger*: Menambahkan state `togglingId` di `TaxManagementScreen.js` dan prop `isToggling` ke `TaxCardItem.js` untuk mencegah eksekusi berulang jika pengguna menyentuh switch berkali-kali secara tidak sengaja saat menggulir layar.

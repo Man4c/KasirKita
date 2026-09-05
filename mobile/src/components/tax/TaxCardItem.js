@@ -119,8 +119,8 @@ const TaxCardItem = React.memo(function TaxCardItem({
           )}
         </View>
 
-        {/* Nilai Tarif */}
-        <View style={[styles.rateBox, { borderColor: accentBorder }]}>
+        {/* Nilai Tarif: Tipografi tebal & jelas tanpa kontainer kotak berat */}
+        <View style={styles.rateWrapper}>
           <Text style={[styles.rateText, { color: accentColor }]} numberOfLines={1}>
             {rateDisplay}
           </Text>
@@ -139,9 +139,9 @@ const TaxCardItem = React.memo(function TaxCardItem({
         ) : null}
       </View>
 
-      {/* Trigger Rule Badge & Type indicator */}
-      <View style={styles.ruleSection}>
-        <Text style={styles.ruleLabel}>Aturan Penerapan:</Text>
+      {/* Trigger Rule Badge: Baris metadata terintegrasi yang rapi */}
+      <View style={styles.ruleRow}>
+        <Text style={styles.ruleLabel}>Penerapan:</Text>
         <View style={styles.ruleBadgeWrapper}>
           {renderApplyToBadge()}
         </View>
@@ -235,8 +235,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   cardInactive: {
-    opacity: 0.75,
+    opacity: 0.6,
     borderColor: '#27272a',
+    backgroundColor: '#141416',
   },
   cardHeader: {
     flexDirection: 'row',
@@ -291,21 +292,19 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  rateBox: {
-    backgroundColor: '#202024',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+  rateWrapper: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
     alignItems: 'flex-end',
     justifyContent: 'center',
     flexShrink: 0,
   },
   rateText: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Poppins_700Bold',
     includeFontPadding: false,
     textAlignVertical: 'center',
+    letterSpacing: 0.5,
   },
   bodySection: {
     marginBottom: 10,
@@ -322,14 +321,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     lineHeight: 19,
   },
-  ruleSection: {
+  ruleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#121215',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
     marginBottom: 12,
   },
   ruleLabel: {
