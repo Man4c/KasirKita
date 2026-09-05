@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -62,9 +62,7 @@ export default function UnitManagementScreen({ navigation }) {
     }
 
     try {
-      const res = await unitService.getUnits({
-        search: debouncedSearch.trim() || undefined,
-      });
+      const res = await unitService.getUnits();
       setUnits(res.units || []);
       setIsOffline(Boolean(res.fromCache));
     } catch (err) {
@@ -74,7 +72,7 @@ export default function UnitManagementScreen({ navigation }) {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [debouncedSearch]);
+  }, []);
 
   useEffect(() => {
     loadUnits();
@@ -144,11 +142,23 @@ export default function UnitManagementScreen({ navigation }) {
     setFormModalVisible(false);
   };
 
-  // Summary counts
+  // Summary counts (Dihitung stabil dari master seluruh satuan barang)
   const totalUnits = units.length;
   const activeUnitsWithUsage = units.filter(
     (u) => Number(u.products_count || 0) + Number(u.conversions_count || 0) > 0
   ).length;
+
+  // Client-side Filtered Items (Instan 0ms latency tanpa refetch & angka header stabil)
+  const displayedUnits = useMemo(() => {
+    if (!debouncedSearch.trim()) return units;
+    const q = debouncedSearch.toLowerCase().trim();
+    return units.filter((u) => {
+      const matchName = u.name?.toLowerCase().includes(q);
+      const matchSymbol = u.symbol?.toLowerCase().includes(q);
+      const matchDesc = u.description?.toLowerCase().includes(q);
+      return matchName || matchSymbol || matchDesc;
+    });
+  }, [units, debouncedSearch]);
 
   const renderItem = useCallback(
     ({ item }) => (
@@ -182,7 +192,7 @@ export default function UnitManagementScreen({ navigation }) {
                 Master Satuan
               </Text>
               <Text style={styles.screenSubtitle} numberOfLines={1}>
-                {totalUnits} satuan barang terdaftar
+                {totalUnits} satuan terdaftar • {activeUnitsWithUsage} digunakan produk
               </Text>
             </View>
           </View>
@@ -200,31 +210,12 @@ export default function UnitManagementScreen({ navigation }) {
         {/* Offline Banner */}
         {isOffline && (
           <View style={styles.offlineBanner}>
-            <WifiOff size={13} color='#fbbf24' style={{ flexShrink: 0 }} />
+            <WifiOff size={13} color='#fb7185' style={{ flexShrink: 0 }} />
             <Text style={styles.offlineBannerText} numberOfLines={1}>
-              Mode Offline: Menampilkan data satuan lokal
+              Mode Offline: Menampilkan data cache lokal satuan.
             </Text>
           </View>
         )}
-
-        {/* Summary Metric Cards */}
-        <View style={styles.metricsRow}>
-          <View style={styles.metricCard}>
-            <View style={styles.metricHeader}>
-              <Text style={styles.metricLabel}>Total Satuan</Text>
-              <Scale size={14} color='#f43f5e' />
-            </View>
-            <Text style={styles.metricValue}>{totalUnits}</Text>
-          </View>
-
-          <View style={styles.metricCard}>
-            <View style={styles.metricHeader}>
-              <Text style={styles.metricLabel}>Digunakan Produk</Text>
-              <Package size={14} color='#34d399' />
-            </View>
-            <Text style={styles.metricValue}>{activeUnitsWithUsage}</Text>
-          </View>
-        </View>
 
         {/* Search Input Bar */}
         <View style={styles.searchRow}>
@@ -260,7 +251,7 @@ export default function UnitManagementScreen({ navigation }) {
           </View>
         ) : (
           <FlatList
-            data={units}
+            data={displayedUnits}
             keyExtractor={(item) => String(item.id)}
             renderItem={renderItem}
             contentContainerStyle={styles.listContainer}
@@ -282,14 +273,14 @@ export default function UnitManagementScreen({ navigation }) {
               <View style={styles.emptyContainer}>
                 <Scale size={48} color='#3f3f46' />
                 <Text style={styles.emptyTitle}>
-                  {search.trim() ? 'Satuan Tidak Ditemukan' : 'Belum Ada Satuan Barang'}
+                  {debouncedSearch.trim() ? 'Satuan Tidak Ditemukan' : 'Belum Ada Satuan Barang'}
                 </Text>
                 <Text style={styles.emptySubtitle}>
-                  {search.trim()
-                    ? `Tidak ada satuan yang cocok dengan "${search}"`
+                  {debouncedSearch.trim()
+                    ? `Tidak ada satuan yang cocok dengan "${debouncedSearch}"`
                     : 'Daftarkan unit satuan barang Anda seperti pcs, box, kg, atau botol untuk mempermudah penjualan.'}
                 </Text>
-                {isOwner && !search.trim() && (
+                {isOwner && !debouncedSearch.trim() && (
                   <TouchableOpacity
                     style={styles.emptyCreateBtn}
                     onPress={handleOpenCreateUnit}
@@ -304,14 +295,16 @@ export default function UnitManagementScreen({ navigation }) {
         )}
       </View>
 
-      {/* Floating Action Button (FAB) */}
+      {/* Floating Action Button (FAB) Owner */}
       {isOwner && (
         <TouchableOpacity
           style={styles.fab}
           activeOpacity={0.85}
           onPress={handleOpenCreateUnit}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Plus size={22} color='#ffffff' />
+          <Plus size={20} color='#ffffff' style={{ flexShrink: 0 }} />
+          <Text style={styles.fabText}>Tambah Satuan</Text>
         </TouchableOpacity>
       )}
 
@@ -393,54 +386,20 @@ const styles = StyleSheet.create({
   offlineBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    backgroundColor: 'rgba(245, 158, 11, 0.12)',
+    gap: 6,
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
+    borderColor: 'rgba(225, 29, 72, 0.3)',
     borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     marginBottom: 10,
   },
   offlineBannerText: {
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
-    color: '#fbbf24',
+    color: '#fb7185',
     flex: 1,
-  },
-  metricsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 12,
-  },
-  metricCard: {
-    flex: 1,
-    backgroundColor: '#18181b',
-    borderWidth: 1,
-    borderColor: '#27272a',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    minWidth: 0,
-  },
-  metricHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 4,
-  },
-  metricLabel: {
-    fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    color: '#a1a1aa',
-    flex: 1,
-    minWidth: 0,
-  },
-  metricValue: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: '#f4f4f5',
   },
   searchRow: {
     marginBottom: 12,
@@ -464,7 +423,7 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   listContainer: {
-    paddingBottom: 80,
+    paddingBottom: 100,
   },
   centerContainer: {
     flex: 1,
@@ -516,18 +475,24 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
+    bottom: 20,
     right: 20,
-    bottom: 24,
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: '#e11d48',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#e11d48',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 24,
+    gap: 8,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 6,
+  },
+  fabText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_700Bold',
   },
 });

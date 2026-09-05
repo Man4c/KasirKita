@@ -33,7 +33,12 @@ const UnitCardItem = React.memo(function UnitCardItem({
   const isInUse = totalUsage > 0;
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.85}
+      onPress={() => isOwner && onEdit(item)}
+      disabled={!isOwner}
+    >
       {/* Baris Atas: Simbol Satuan Badge + Nama Satuan + Badge Total Penggunaan */}
       <View style={styles.cardHeader}>
         <View style={styles.unitIdentity}>
@@ -108,7 +113,7 @@ const UnitCardItem = React.memo(function UnitCardItem({
               style={styles.editBtn}
               activeOpacity={0.7}
               onPress={() => onEdit(item)}
-              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <Edit3 size={14} color='#d4d4d8' style={{ flexShrink: 0 }} />
               <Text style={styles.editBtnText}>Edit</Text>
@@ -117,8 +122,11 @@ const UnitCardItem = React.memo(function UnitCardItem({
             <TouchableOpacity
               style={[styles.deleteBtn, isInUse && styles.deleteBtnDisabled]}
               activeOpacity={0.7}
-              onPress={() => onDelete(item)}
-              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              onPress={(e) => {
+                if (e?.stopPropagation) e.stopPropagation();
+                onDelete(item);
+              }}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <Trash2
                 size={14}
@@ -132,7 +140,7 @@ const UnitCardItem = React.memo(function UnitCardItem({
           </View>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 });
 
@@ -340,7 +348,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#3f3f46',
     paddingHorizontal: 10,
-    height: 32,
+    height: 34,
     borderRadius: 8,
     flexShrink: 0,
   },
@@ -361,7 +369,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(244, 63, 94, 0.3)',
     paddingHorizontal: 10,
-    height: 32,
+    height: 34,
     borderRadius: 8,
     flexShrink: 0,
   },

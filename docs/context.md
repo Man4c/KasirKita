@@ -20,6 +20,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Harmonisasi Master Satuan: Extended Pill FAB, Tap-to-Edit Kartu, Peningkatan Touch Target & Eliminasi Kartu Metrik (`UnitManagementScreen.js`, `UnitCardItem.js`, `UnitFormModal.js`)**:
+  - Menyamakan konsistensi Master Satuan dengan modul Master Pajak, Pelanggan, dan Pemasok sesuai standar Impeccable:
+    1. *Extended Pill FAB*: Mengubah tombol tambah satuan dari lingkaran bulat polos `(+)` menjadi **Extended Pill FAB** berlabel (`[+] Tambah Satuan`) dengan `shadowColor: '#000000'`, elevation 6, dan padding 18dp horizontal, selaras dengan master screen lainnya.
+    2. *Tap-to-Edit Badan Kartu*: Membungkus seluruh badan kartu `UnitCardItem.js` dengan `TouchableOpacity` interaktif (`activeOpacity={0.85}`), memungkinkan kasir/owner mengetuk area mana saja pada kartu satuan untuk langsung membuka modal formulir edit tanpa harus membidik tombol kecil.
+    3. *Peningkatan Touch Target*: Menaikkan tinggi tombol aksi `Edit` dan `Hapus` menjadi 34dp dengan padding sentuh protektif `hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}` (area sentuh efektif $\ge 50$dp melampaui standar WCAG 44dp), serta tombol Simpan & Batal modal `minHeight: 44dp`.
+    4. *Eliminasi 2 Kartu Metrik Atas (`distill`)*: Menghapus `metricsRow` (Total Satuan & Digunakan Produk) yang memakan ~90px layar vertikal, lalu memadatkan ringkasannya secara elegan ke subjudul header (`{totalUnits} satuan terdaftar • {activeUnitsWithUsage} digunakan produk`), merebut kembali ruang *first-fold* sehingga daftar satuan langsung tampak utuh tanpa terpotong.
+    5. *Client-side Memo Filter (0ms Latency)*: Menggunakan `useMemo` (`displayedUnits`) untuk pencarian instan 0ms tanpa flickering dan banner offline diselaraskan ke warna merah brand KasirKita (`#fb7185`).
+  - Lolos uji verifikasi penuh: detektor Impeccable (0 defect) dan kompilasi Expo web sukses (2.347 modul).
+
 - **Perbaikan Kestabilan Angka Tab & Filter Master Pelanggan & Pemasok (Pencegahan Tab-Switch Metrics Collapse)**:
   - Menyelesaikan bug di mana saat berpindah ke tab *"VIP"*, counter tab *"Semua"* dan tab lainnya menyusut atau menjadi 0 (`Semua (3) -> Semua (1)`, `Grosir (1) -> Grosir (0)`, dan subjudul `1 pelanggan terdaftar (1 VIP, 0 Grosir)`):
     1. *Stabilitas Master Data*: `loadCustomers` dan `loadSuppliers` kini memuat seluruh data master toko (`{ all: true }`) tanpa menyertakan filter kategori/status ke query backend, sehingga array master tetap utuh.

@@ -445,6 +445,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     backgroundColor: '#27272a',
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cancelBtnText: {
     fontSize: 13,
@@ -454,11 +457,13 @@ const styles = StyleSheet.create({
   submitBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 10,
     backgroundColor: '#e11d48',
+    minHeight: 44,
   },
   submitBtnText: {
     fontSize: 13,
