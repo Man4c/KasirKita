@@ -204,7 +204,7 @@ export default function CustomerManagementScreen({ navigation }) {
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             {refreshing ? (
-              <ActivityIndicator size="small" color="#2dd4bf" />
+              <ActivityIndicator size="small" color="#fb7185" />
             ) : (
               <RotateCw size={16} color="#e4e4e7" />
             )}
@@ -214,39 +214,12 @@ export default function CustomerManagementScreen({ navigation }) {
         {/* Offline Alert Banner */}
         {isOffline && (
           <View style={styles.offlineBanner}>
-            <WifiOff size={13} color="#2dd4bf" style={{ flexShrink: 0 }} />
+            <WifiOff size={13} color="#fb7185" style={{ flexShrink: 0 }} />
             <Text style={styles.offlineBannerText} numberOfLines={1}>
               Mode Offline: Menampilkan data cache pelanggan lokal.
             </Text>
           </View>
         )}
-
-        {/* Summary Metrics Cards */}
-        <View style={styles.metricsRow}>
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: 'rgba(45, 212, 191, 0.15)', borderColor: 'rgba(45, 212, 191, 0.3)' }]}>
-              <Users size={14} color="#2dd4bf" />
-            </View>
-            <Text style={[styles.metricVal, { color: '#2dd4bf' }]}>{totalCustomers}</Text>
-            <Text style={styles.metricLabel}>Total Pelanggan</Text>
-          </View>
-
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: 'rgba(251, 191, 36, 0.15)', borderColor: 'rgba(251, 191, 36, 0.3)' }]}>
-              <Crown size={14} color="#fbbf24" />
-            </View>
-            <Text style={[styles.metricVal, { color: '#fbbf24' }]}>{vipCount}</Text>
-            <Text style={styles.metricLabel}>Member VIP</Text>
-          </View>
-
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: 'rgba(56, 189, 248, 0.15)', borderColor: 'rgba(56, 189, 248, 0.3)' }]}>
-              <Building2 size={14} color="#38bdf8" />
-            </View>
-            <Text style={[styles.metricVal, { color: '#38bdf8' }]}>{wholesaleCount}</Text>
-            <Text style={styles.metricLabel}>Member Grosir</Text>
-          </View>
-        </View>
 
         {/* Search Bar Input */}
         <View style={styles.searchBarContainer}>
@@ -281,7 +254,10 @@ export default function CustomerManagementScreen({ navigation }) {
             onPress={() => setActiveTab('ALL')}
             activeOpacity={0.7}
           >
-            <Text style={[styles.tabText, activeTab === 'ALL' && styles.tabTextActive]}>
+            <Text
+              style={[styles.tabText, activeTab === 'ALL' && styles.tabTextActive]}
+              numberOfLines={1}
+            >
               Semua ({totalCustomers})
             </Text>
           </TouchableOpacity>
@@ -291,7 +267,10 @@ export default function CustomerManagementScreen({ navigation }) {
             onPress={() => setActiveTab('VIP')}
             activeOpacity={0.7}
           >
-            <Text style={[styles.tabText, activeTab === 'VIP' && styles.tabTextActiveVip]}>
+            <Text
+              style={[styles.tabText, activeTab === 'VIP' && styles.tabTextActiveVip]}
+              numberOfLines={1}
+            >
               VIP ({vipCount})
             </Text>
           </TouchableOpacity>
@@ -301,7 +280,10 @@ export default function CustomerManagementScreen({ navigation }) {
             onPress={() => setActiveTab('WHOLESALE')}
             activeOpacity={0.7}
           >
-            <Text style={[styles.tabText, activeTab === 'WHOLESALE' && styles.tabTextActiveWholesale]}>
+            <Text
+              style={[styles.tabText, activeTab === 'WHOLESALE' && styles.tabTextActiveWholesale]}
+              numberOfLines={1}
+            >
               Grosir ({wholesaleCount})
             </Text>
           </TouchableOpacity>
@@ -311,7 +293,10 @@ export default function CustomerManagementScreen({ navigation }) {
             onPress={() => setActiveTab('REGULAR')}
             activeOpacity={0.7}
           >
-            <Text style={[styles.tabText, activeTab === 'REGULAR' && styles.tabTextActive]}>
+            <Text
+              style={[styles.tabText, activeTab === 'REGULAR' && styles.tabTextActive]}
+              numberOfLines={1}
+            >
               Reguler ({regularCount})
             </Text>
           </TouchableOpacity>
@@ -329,7 +314,10 @@ export default function CustomerManagementScreen({ navigation }) {
             onPress={() => setStatusFilter('ALL')}
             activeOpacity={0.7}
           >
-            <Text style={[styles.statusChipText, statusFilter === 'ALL' && styles.statusChipTextActive]}>
+            <Text
+              style={[styles.statusChipText, statusFilter === 'ALL' && styles.statusChipTextActive]}
+              numberOfLines={1}
+            >
               Semua
             </Text>
           </TouchableOpacity>
@@ -339,7 +327,10 @@ export default function CustomerManagementScreen({ navigation }) {
             onPress={() => setStatusFilter('ACTIVE')}
             activeOpacity={0.7}
           >
-            <Text style={[styles.statusChipText, statusFilter === 'ACTIVE' && styles.statusChipTextActive]}>
+            <Text
+              style={[styles.statusChipText, statusFilter === 'ACTIVE' && styles.statusChipTextActive]}
+              numberOfLines={1}
+            >
               Aktif
             </Text>
           </TouchableOpacity>
@@ -349,7 +340,10 @@ export default function CustomerManagementScreen({ navigation }) {
             onPress={() => setStatusFilter('INACTIVE')}
             activeOpacity={0.7}
           >
-            <Text style={[styles.statusChipText, statusFilter === 'INACTIVE' && styles.statusChipTextActive]}>
+            <Text
+              style={[styles.statusChipText, statusFilter === 'INACTIVE' && styles.statusChipTextActive]}
+              numberOfLines={1}
+            >
               Nonaktif
             </Text>
           </TouchableOpacity>
@@ -358,7 +352,7 @@ export default function CustomerManagementScreen({ navigation }) {
         {/* Customers FlatList */}
         {loading && !refreshing ? (
           <View style={styles.centerBox}>
-            <ActivityIndicator size="large" color="#2dd4bf" />
+            <ActivityIndicator size="large" color="#e11d48" />
             <Text style={styles.loadingText}>Memuat data pelanggan...</Text>
           </View>
         ) : (
@@ -368,12 +362,14 @@ export default function CustomerManagementScreen({ navigation }) {
             keyExtractor={(item) => String(item.id)}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
+            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps="handled"
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                tintColor="#2dd4bf"
-                colors={['#2dd4bf']}
+                tintColor="#e11d48"
+                colors={['#e11d48']}
               />
             }
             ListEmptyComponent={
@@ -397,7 +393,7 @@ export default function CustomerManagementScreen({ navigation }) {
                     onPress={handleOpenCreate}
                     activeOpacity={0.8}
                   >
-                    <Plus size={16} color="#09090b" />
+                    <Plus size={16} color="#ffffff" />
                     <Text style={styles.emptyActionBtnText}>Daftarkan Pelanggan</Text>
                   </TouchableOpacity>
                 )}
@@ -414,7 +410,7 @@ export default function CustomerManagementScreen({ navigation }) {
           activeOpacity={0.85}
           onPress={handleOpenCreate}
         >
-          <Plus size={20} color="#09090b" />
+          <Plus size={20} color="#ffffff" />
           <Text style={styles.fabText}>Tambah Pelanggan</Text>
         </TouchableOpacity>
       )}
@@ -497,9 +493,9 @@ const styles = StyleSheet.create({
   offlineBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(45, 212, 191, 0.1)',
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(45, 212, 191, 0.3)',
+    borderColor: 'rgba(225, 29, 72, 0.3)',
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -507,45 +503,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   offlineBannerText: {
-    color: '#2dd4bf',
+    color: '#fb7185',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     flex: 1,
-  },
-  metricsRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 12,
-  },
-  metricCard: {
-    flex: 1,
-    backgroundColor: '#18181b',
-    borderWidth: 1,
-    borderColor: '#27272a',
-    borderRadius: 12,
-    padding: 10,
-    alignItems: 'flex-start',
-  },
-  metricIconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 7,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 6,
-  },
-  metricVal: {
-    fontSize: 18,
-    fontFamily: 'Poppins_700Bold',
-    letterSpacing: -0.5,
-    marginBottom: 1,
-  },
-  metricLabel: {
-    color: '#a1a1aa',
-    fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    lineHeight: 14,
   },
   searchBarContainer: {
     flexDirection: 'row',
@@ -604,7 +565,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
   tabTextActive: {
-    color: '#2dd4bf',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
   },
   tabTextActiveVip: {
@@ -634,15 +595,18 @@ const styles = StyleSheet.create({
   },
   statusChip: {
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderRadius: 16,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',
+    minHeight: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusChipActive: {
-    backgroundColor: 'rgba(45, 212, 191, 0.15)',
-    borderColor: '#2dd4bf',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderColor: '#e11d48',
   },
   statusChipText: {
     color: '#a1a1aa',
@@ -650,7 +614,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   statusChipTextActive: {
-    color: '#2dd4bf',
+    color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
   },
   centerBox: {
@@ -666,7 +630,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   listContent: {
-    paddingBottom: 88,
+    paddingBottom: 110,
   },
   emptyContainer: {
     alignItems: 'center',
@@ -703,14 +667,14 @@ const styles = StyleSheet.create({
   emptyActionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2dd4bf',
+    backgroundColor: '#e11d48',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
     gap: 6,
   },
   emptyActionBtnText: {
-    color: '#09090b',
+    color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
   },
@@ -720,7 +684,7 @@ const styles = StyleSheet.create({
     right: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2dd4bf',
+    backgroundColor: '#e11d48',
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 24,
@@ -732,7 +696,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   fabText: {
-    color: '#09090b',
+    color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
   },

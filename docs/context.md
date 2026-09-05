@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Harmonisasi Tema Merah Brand KasirKita, Eliminasi Kartu Metrik & Bottom Sheet Modal Pelanggan (`CustomerManagementScreen.js`, `CustomerCardItem.js`, `CustomerFormModal.js`)**:
+  - Menyelesaikan temuan critique [P1] dan [P2] melalui paket implementasi komprehensif Impeccable (`colorize`, `distill`, `adapt`, `harden`):
+    1. *Harmonisasi Warna Merah Brand KasirKita (`colorize`)*: Mengganti seluruh aksen teal (`#2dd4bf`) pada FAB, tombol aksi empty state, submit CTA modal, tab aktif, filter status aktif, indikator refresh/loading, dan tier member reguler menjadi warna merah khas brand KasirKita (`#e11d48` Rose 600 / `#fb7185` Rose 400). Pembedaan tier VIP (Emas `#fbbf24`) dan Grosir (Biru `#38bdf8`) tetap dipertahankan.
+    2. *Eliminasi Redundansi 3 Kartu Metrik Atas (`distill`)*: Menghapus 3 kartu metrik atas yang memakan ruang vertikal ~90px, merebut kembali *above-the-fold space* sehingga daftar pelanggan langsung tampak lega tanpa harus di-scroll.
+    3. *Transformasi Bottom Sheet Modal Ergonomis (`adapt`)*: Mengubah `CustomerFormModal` dari legacy centered dialog menjadi **Slide-up Bottom Sheet Modal** dengan visual drag handle, rounded top corners 20dp, backdrop tap-to-dismiss, dan **Sticky Modal Footer** yang memisahkan tombol *Batal* dan *Daftarkan/Simpan* di dasar layar dengan tinggi sentuh $\ge 44$dp.
+    4. *Peningkatan Touch Target & Tap-to-Edit Kartu (`harden`)*: Membungkus badan kartu pelanggan dengan `TouchableOpacity` interaktif untuk membuka modal edit instan, menambahkan proteksi truncate `numberOfLines={1}` pada seluruh tab & stat box, memperluas touch target tombol WhatsApp dan aksi telepon, serta menambah safety margin `paddingBottom: 110` agar kartu terbawah tidak tertutup FAB.
+  - Lolos pengujian: sintaks JS valid (`node -c`), detektor Impeccable (0 defect), dan kompilasi Expo web sukses (2.347 modul).
+
 - **Harmonisasi Tema Warna Merah Khas Brand KasirKita (`TaxManagementScreen.js`, `TaxCardItem.js`, `TaxFormModal.js`)**:
   - Mengubah seluruh palet warna aksen modul Master Pajak & Biaya dari warna kuning/amber (`#fbbf24`, `#f59e0b`, `rgba(251, 191, 36, ...)`) menjadi **warna merah khas brand KasirKita** (`#e11d48` Rose 600 / `#fb7185` Rose 400 / `rgba(225, 29, 72, ...)`):
     1. *Screen Master (`TaxManagementScreen.js`)*: Memperbarui spinner refresh dan loading ke `#e11d48`, banner offline ke `#fb7185` (`rgba(225, 29, 72, 0.12)`), teks tab aktif ke `#fb7185`, filter pill aktif ke border `#e11d48` dengan background `rgba(225, 29, 72, 0.15)`, serta tombol empty action & Floating Action Button (FAB) ke background `#e11d48` dengan teks dan ikon putih `#ffffff`.

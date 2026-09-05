@@ -174,7 +174,7 @@ export default function CustomerFormModal({
       key: 'REGULAR',
       label: 'Reguler',
       desc: 'Pelanggan standar tanpa diskon tier khusus',
-      color: '#2dd4bf',
+      color: '#fb7185',
       Icon: User,
     },
     {
@@ -193,23 +193,35 @@ export default function CustomerFormModal({
     },
   ];
 
+  if (!visible) return null;
+
   return (
     <Modal
       visible={visible}
       transparent
-      animationType="fade"
+      animationType="slide"
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView
         style={styles.modalOverlay}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={styles.modalContent}>
+          {/* Drag Handle Bar (Mobile Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Header */}
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
               <View style={styles.iconCircle}>
-                <User size={20} color="#2dd4bf" />
+                <User size={20} color="#fb7185" />
               </View>
               <View style={styles.headerTextContainer}>
                 <Text style={styles.modalTitle} numberOfLines={1}>
@@ -236,6 +248,7 @@ export default function CustomerFormModal({
           {/* Form Fields ScrollView */}
           <ScrollView
             style={styles.formScroll}
+            contentContainerStyle={styles.formScrollContent}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
@@ -390,7 +403,7 @@ export default function CustomerFormModal({
               <Switch
                 value={isActive}
                 onValueChange={setIsActive}
-                trackColor={{ false: '#3f3f46', true: '#2dd4bf' }}
+                trackColor={{ false: '#3f3f46', true: '#e11d48' }}
                 thumbColor={isActive ? '#ffffff' : '#a1a1aa'}
               />
             </View>
@@ -452,10 +465,10 @@ export default function CustomerFormModal({
               activeOpacity={0.85}
             >
               {submitting ? (
-                <ActivityIndicator size="small" color="#09090b" />
+                <ActivityIndicator size="small" color="#ffffff" />
               ) : (
                 <>
-                  <Check size={16} color="#09090b" />
+                  <Check size={16} color="#ffffff" />
                   <Text style={styles.submitButtonText}>
                     {isEditMode ? 'Simpan Perubahan' : 'Daftarkan Pelanggan'}
                   </Text>
@@ -473,30 +486,43 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+    justifyContent: 'flex-end',
+  },
+  backdropTouchable: {
+    flex: 1,
   },
   modalContent: {
     backgroundColor: '#18181b',
-    borderRadius: 16,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
+    borderBottomWidth: 0,
     borderColor: '#27272a',
     width: '100%',
-    maxWidth: 520,
-    maxHeight: '90%',
-    padding: 16,
+    maxHeight: '92%',
+    paddingTop: 8,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 12,
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 16,
+    paddingHorizontal: 18,
+    paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
@@ -518,7 +544,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: '#3f3f46',
+    borderColor: 'rgba(225, 29, 72, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -535,9 +561,9 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
@@ -546,7 +572,12 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   formScroll: {
-    paddingVertical: 12,
+    maxHeight: '100%',
+  },
+  formScrollContent: {
+    paddingHorizontal: 18,
+    paddingTop: 14,
+    paddingBottom: 24,
   },
   fieldGroup: {
     marginBottom: 14,
@@ -584,7 +615,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   textArea: {
-    minHeight: 60,
+    minHeight: 64,
   },
   inputError: {
     borderColor: '#f87171',
@@ -676,7 +707,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingVertical: 11,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     gap: 6,
   },
@@ -689,15 +721,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    paddingTop: 14,
+    paddingHorizontal: 18,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
     borderTopWidth: 1,
     borderTopColor: '#27272a',
+    backgroundColor: '#18181b',
   },
   cancelButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 11,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     backgroundColor: '#27272a',
     borderWidth: 1,
@@ -713,8 +749,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#2dd4bf',
-    paddingVertical: 11,
+    backgroundColor: '#e11d48',
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     gap: 6,
   },
@@ -722,7 +759,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   submitButtonText: {
-    color: '#09090b',
+    color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
   },

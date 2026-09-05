@@ -35,7 +35,7 @@ function formatRp(value) {
  * Berstandar Impeccable Defensive UI:
  * - Flexbox pairing: min-w-0 truncate untuk nama/telepon, shrink-0 whitespace-nowrap untuk badge tier/belanja.
  * - Readability floor: seluruh teks minimum 12px (text-xs).
- * - Aksen VIP: Amber #fbbf24, Wholesale: Biru #38bdf8, Regular: Teal #2dd4bf.
+ * - Aksen VIP: Amber #fbbf24, Wholesale: Biru #38bdf8, Regular: Rose Red #fb7185.
  */
 const CustomerCardItem = React.memo(function CustomerCardItem({
   item,
@@ -52,9 +52,9 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
   const isWholesale = membershipType === 'WHOLESALE';
 
   // Membership Visual Tokens
-  let tierColor = '#2dd4bf'; // Regular Teal
-  let tierBg = 'rgba(45, 212, 191, 0.12)';
-  let tierBorder = 'rgba(45, 212, 191, 0.3)';
+  let tierColor = '#fb7185'; // Regular Rose Red
+  let tierBg = 'rgba(225, 29, 72, 0.12)';
+  let tierBorder = 'rgba(225, 29, 72, 0.3)';
   let TierIcon = User;
   let tierLabel = 'MEMBER REGULER';
 
@@ -115,89 +115,97 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
 
   return (
     <View style={[styles.card, isInactive && styles.cardInactive]}>
-      {/* Top Header: Badge Membership & Status Badge */}
-      <View style={styles.cardHeader}>
-        <View style={styles.headerLeft}>
-          <View style={[styles.tierBadge, { backgroundColor: tierBg, borderColor: tierBorder }]}>
-            <TierIcon size={12} color={tierColor} style={{ flexShrink: 0 }} />
-            <Text style={[styles.tierBadgeText, { color: tierColor }]}>{tierLabel}</Text>
-          </View>
-          {isInactive && (
-            <View style={styles.statusInactiveBadge}>
-              <Text style={styles.statusInactiveBadgeText}>Nonaktif</Text>
+      {/* Area Kartu Atas & Badan yang Dapat Diklik untuk Edit Cepat */}
+      <TouchableOpacity
+        activeOpacity={0.75}
+        onPress={() => isOwner && onEdit && onEdit(item)}
+        disabled={!isOwner}
+      >
+        {/* Top Header: Badge Membership & Status Badge */}
+        <View style={styles.cardHeader}>
+          <View style={styles.headerLeft}>
+            <View style={[styles.tierBadge, { backgroundColor: tierBg, borderColor: tierBorder }]}>
+              <TierIcon size={12} color={tierColor} style={{ flexShrink: 0 }} />
+              <Text style={[styles.tierBadgeText, { color: tierColor }]}>{tierLabel}</Text>
             </View>
-          )}
-        </View>
-
-        {/* Aggregated Total Spent Pill */}
-        <View style={styles.spentBadge}>
-          <Text style={styles.spentLabel}>Total Belanja:</Text>
-          <Text style={styles.spentValue}>{formatRp(totalSpent)}</Text>
-        </View>
-      </View>
-
-      {/* Main Body: Customer Identity & Avatar */}
-      <View style={styles.cardBody}>
-        <View style={[styles.avatarBox, { borderColor: tierBorder, backgroundColor: tierBg }]}>
-          <TierIcon size={20} color={tierColor} />
-        </View>
-
-        <View style={styles.identityContainer}>
-          <Text style={styles.customerName} numberOfLines={1}>
-            {item.name}
-          </Text>
-
-          {/* Contact Numbers Row */}
-          <View style={styles.contactRow}>
-            {item.phone ? (
-              <TouchableOpacity
-                style={styles.contactChip}
-                onPress={handleCallPhone}
-                activeOpacity={0.7}
-              >
-                <Phone size={12} color="#34d399" style={{ flexShrink: 0 }} />
-                <Text style={styles.contactChipText} numberOfLines={1}>
-                  {item.phone}
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <Text style={styles.noContactText}>Tanpa No. Telepon</Text>
+            {isInactive && (
+              <View style={styles.statusInactiveBadge}>
+                <Text style={styles.statusInactiveBadgeText}>Nonaktif</Text>
+              </View>
             )}
+          </View>
 
-            {item.email ? (
-              <View style={styles.contactChip}>
-                <Mail size={12} color="#a1a1aa" style={{ flexShrink: 0 }} />
-                <Text style={styles.contactChipEmail} numberOfLines={1}>
-                  {item.email}
+          {/* Aggregated Total Spent Pill */}
+          <View style={styles.spentBadge}>
+            <Text style={styles.spentLabel}>Total Belanja:</Text>
+            <Text style={styles.spentValue}>{formatRp(totalSpent)}</Text>
+          </View>
+        </View>
+
+        {/* Main Body: Customer Identity & Avatar */}
+        <View style={styles.cardBody}>
+          <View style={[styles.avatarBox, { borderColor: tierBorder, backgroundColor: tierBg }]}>
+            <TierIcon size={20} color={tierColor} />
+          </View>
+
+          <View style={styles.identityContainer}>
+            <Text style={styles.customerName} numberOfLines={1}>
+              {item.name}
+            </Text>
+
+            {/* Contact Numbers Row */}
+            <View style={styles.contactRow}>
+              {item.phone ? (
+                <TouchableOpacity
+                  style={styles.contactChip}
+                  onPress={handleCallPhone}
+                  activeOpacity={0.7}
+                  hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+                >
+                  <Phone size={12} color="#34d399" style={{ flexShrink: 0 }} />
+                  <Text style={styles.contactChipText} numberOfLines={1}>
+                    {item.phone}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <Text style={styles.noContactText}>Tanpa No. Telepon</Text>
+              )}
+
+              {item.email ? (
+                <View style={styles.contactChip}>
+                  <Mail size={12} color="#a1a1aa" style={{ flexShrink: 0 }} />
+                  <Text style={styles.contactChipEmail} numberOfLines={1}>
+                    {item.email}
+                  </Text>
+                </View>
+              ) : null}
+            </View>
+
+            {/* Address Line (if available) */}
+            {Boolean(item.address) && (
+              <View style={styles.metaRow}>
+                <MapPin size={12} color="#71717a" style={{ flexShrink: 0, marginTop: 2 }} />
+                <Text style={styles.addressText} numberOfLines={1}>
+                  {item.address}
                 </Text>
               </View>
-            ) : null}
-          </View>
+            )}
 
-          {/* Address Line (if available) */}
-          {Boolean(item.address) && (
-            <View style={styles.metaRow}>
-              <MapPin size={12} color="#71717a" style={{ flexShrink: 0, marginTop: 2 }} />
-              <Text style={styles.addressText} numberOfLines={1}>
-                {item.address}
+            {/* Notes (if available) */}
+            {Boolean(item.notes) && (
+              <Text style={styles.notesText} numberOfLines={2}>
+                Catatan: {item.notes}
               </Text>
-            </View>
-          )}
-
-          {/* Notes (if available) */}
-          {Boolean(item.notes) && (
-            <Text style={styles.notesText} numberOfLines={2}>
-              Catatan: {item.notes}
-            </Text>
-          )}
+            )}
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
 
       {/* Metrics Strip: Frekuensi Transaksi & Aksi Kontak Cepat */}
       <View style={styles.metricsStrip}>
         <View style={styles.statBox}>
           <ShoppingBag size={13} color="#a1a1aa" style={{ flexShrink: 0 }} />
-          <Text style={styles.statText}>
+          <Text style={styles.statText} numberOfLines={1}>
             <Text style={styles.statBold}>{txCount}</Text> Kali Transaksi
           </Text>
         </View>
@@ -209,7 +217,7 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
               style={styles.waBtn}
               onPress={handleOpenWhatsApp}
               activeOpacity={0.7}
-              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <MessageCircle size={14} color="#34d399" />
               <Text style={styles.waBtnText}>Chat WA</Text>
@@ -222,9 +230,9 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
                 style={styles.actionBtn}
                 onPress={() => onEdit(item)}
                 activeOpacity={0.7}
-                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <Edit3 size={14} color="#38bdf8" />
+                <Edit3 size={14} color="#d4d4d8" />
                 <Text style={styles.actionBtnEditText}>Edit</Text>
               </TouchableOpacity>
 
@@ -232,7 +240,7 @@ const CustomerCardItem = React.memo(function CustomerCardItem({
                 style={[styles.actionBtn, styles.actionBtnDelete]}
                 onPress={() => onDelete(item)}
                 activeOpacity={0.7}
-                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 <Trash2 size={14} color="#f87171" />
               </TouchableOpacity>
@@ -481,7 +489,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   actionBtnEditText: {
-    color: '#38bdf8',
+    color: '#f4f4f5',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
   },
