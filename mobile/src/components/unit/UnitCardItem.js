@@ -209,9 +209,10 @@ const styles = StyleSheet.create({
   usageBadge: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
     paddingHorizontal: 9,
-    paddingVertical: 5,
+    height: 28,
     borderRadius: 8,
     flexShrink: 0,
   },
@@ -228,6 +229,8 @@ const styles = StyleSheet.create({
   usageText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
     flexShrink: 0,
   },
   usageTextActive: {
@@ -251,8 +254,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(39, 39, 42, 0.5)',
     borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingHorizontal: 12,
+    height: 32,
   },
   breakdownItem: {
     flex: 1,
@@ -270,11 +273,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   breakdownValue: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   footerRow: {
     flexDirection: 'row',

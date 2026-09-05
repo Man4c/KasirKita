@@ -189,9 +189,10 @@ const styles = StyleSheet.create({
   productCountBadge: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
     paddingHorizontal: 9,
-    paddingVertical: 5,
+    height: 28,
     borderRadius: 8,
     flexShrink: 0,
   },
@@ -208,6 +209,8 @@ const styles = StyleSheet.create({
   productCountText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
     flexShrink: 0,
   },
   countTextActive: {

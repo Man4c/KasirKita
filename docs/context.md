@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyejajaran Vertikal Badges, Pills, dan Breakdown Box (`ProductManagementScreen.js`, `PromoManagementScreen.js`, `ProductCardItem.js`, `CategoryCardItem.js`, `UnitCardItem.js`)**:
+  - Menyelesaikan masalah teks dan ikon yang tidak tepat di tengah (*off-center / bottom-heavy*) pada kotak badge stok, pill filter, badge hitungan produk, dan kotak rincian pemakaian di layar Android:
+    1. *Filter Status & Stok*: Menetapkan `height: 32` / `34` dengan `justifyContent: 'center'`, `alignItems: 'center'`, serta menambahkan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada `stockFilterPill`, `stockFilterText` (Master Produk), dan `filterPill`, `filterPillText` (Master Promosi).
+    2. *Badge Stok Produk (`stockPill`)*: Menetapkan `height: 24` dengan `justifyContent: 'center'` serta `includeFontPadding: false` pada teks stok produk.
+    3. *Badge Jumlah Produk & Status (`productCountBadge`, `usageBadge`)*: Menetapkan `height: 28` dan `justifyContent: 'center'` serta `includeFontPadding: false` dan `textAlignVertical: 'center'` pada badge jumlah produk di Master Kategori dan Master Satuan.
+    4. *Kotak Rincian Pemakaian (`breakdownRow`)*: Menetapkan `height: 32` dengan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada label dan value rincian satuan ("Dasar: 0 item | Konversi: 0 varian").
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Penyejajaran Vertikal Ikon & Teks Tombol Aksi Kartu (`CategoryCardItem.js`, `UnitCardItem.js`, `PromoCardItem.js`, `ProductCardItem.js`)**:
   - Menyelesaikan masalah teks tombol "Edit", "Hapus", dan "Stok Masuk" yang tidak sejajar vertikal dengan ikonnya di perangkat fisik Android:
     1. *Penyebab Root Cause*: Font kustom `Poppins` di Android memiliki *internal font metric* yang menambahkan padding vertikal bawaan (`includeFontPadding`), menyebabkan teks terdorong ke bawah 1-2 piksel dibanding ikon SVG saat ditampilkan di layar HP berdensitas tinggi.

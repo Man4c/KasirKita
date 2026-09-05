@@ -323,9 +323,10 @@ const styles = StyleSheet.create({
   stockPill: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
     paddingHorizontal: 8,
-    paddingVertical: 3,
+    height: 24,
     borderRadius: 6,
     borderWidth: 1,
     flexShrink: 0,
@@ -345,6 +346,8 @@ const styles = StyleSheet.create({
   stockPillText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
     whiteSpace: 'nowrap',
   },
   stockTextSafe: {
