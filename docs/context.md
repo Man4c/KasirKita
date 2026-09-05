@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 4 Master Pemasok & Distributor di Mobile (`SupplierFormModal.js`, Plan #31)**:
+  - Menyelesaikan formulir modal pendaftaran dan pengeditan distributor (`mobile/src/components/supplier/SupplierFormModal.js`):
+    1. *Informasi Perusahaan & Kontak*: Input nama perusahaan/distributor (wajib), nama PIC / sales area, nomor telepon/WhatsApp numerik (min. 8 digit), email perusahaan, dan alamat kantor/gudang penyimpanan.
+    2. *Informasi Rekening Bank Transfer*: Selector chip cepat bank populer Indonesia (BCA, Mandiri, BRI, BNI, BSI, CIMB), input nama bank kustom, nomor rekening bank, dan atas nama pemilik rekening.
+    3. *Status & Catatan Kerjasama*: Switch keaktifan supplier dan input catatan/termin tempo pembayaran (misal: "Tempo 14 hari").
+    4. *Aksi Edit & Hapus*: Tombol hapus supplier aman khusus mode edit (soft delete), loading submit state, dan pesan error validasi inline 422.
+    5. *Kepatuhan & Linter*: Lolos verifikasi sintaks JS (`node -c`) dan lolos audit linter `detect.mjs` (0 defect). Phase 4 Plan #31 berstatus `completed`.
+
 - **Implementasi Phase 3 Master Pemasok & Distributor di Mobile (`SupplierCardItem.js`, `SupplierManagementScreen.js`, Plan #31)**:
   - Mengimplementasikan kartu item dan layar utama berstandar Defensive UI Impeccable:
     1. *Kartu Item Pemasok (`mobile/src/components/supplier/SupplierCardItem.js`)*: Desain dengan badge identitas distributor oranye hangat (`#fb923c`), avatar entitas gedung, status aktif/nonaktif, kontak PIC/sales, telepon/email, alamat gudang, catatan termin/tempo pembayaran, metrik frekuensi pasokan barang masuk & akumulasi nominal belanja kulakan, kartu rekening bank transfer dengan tombol salin instan (*Copy to clipboard* + feedback visual), serta aksi cepat panggilan telepon, WhatsApp, edit, dan hapus aman.

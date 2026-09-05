@@ -86,7 +86,7 @@ mobile/src/
 | 1 | **Spesifikasi UX/UI Wireframe & Pemetaan Kontrak Backend**: Verifikasi endpoint `/api/suppliers` (GET paginasi, query search, filter status, POST, PUT, DELETE), serta perancangan visual kartu distributor dan info rekening bank dengan standar defensive UI. | completed |
 | 2 | **Mobile API Service (`supplierService.js`) & Caching Offline**: Implementasi modul API service dengan proteksi role Owner (403), validasi payload 422, dan fallback ke cache lokal offline (`offlineStorage.js`). | completed |
 | 3 | **Komponen Kartu & Layar Utama (`SupplierCardItem.js` & `SupplierManagementScreen.js`)**: Pembuatan kartu supplier dengan badge oranye, info rekening bank (copyable), metrik total pasokan/belanja, aksi panggilan telepon langsung, dan FlatList tervirtualisasi. | completed |
-| 4 | **Modal Formulir Tambah/Edit (`SupplierFormModal.js`)**: Pembuatan modal interaktif penambahan/pengeditan data distributor, contact person, rekening bank transfer, catatan tempo pembayaran, dan tombol hapus aman. | pending |
+| 4 | **Modal Formulir Tambah/Edit (`SupplierFormModal.js`)**: Pembuatan modal interaktif penambahan/pengeditan data distributor, contact person, rekening bank transfer, catatan tempo pembayaran, dan tombol hapus aman. | completed |
 | 5 | **Integrasi Navigasi Hub Menu & Proteksi RBAC**: Menghubungkan tile Pemasok di `DashboardActionHub.js`, registrasi rute di `App.js` dengan proteksi peran khusus Owner, dan aksi kembali ke Dashboard. | pending |
 | 6 | **Audit Kualitas, Defensive UI Check, & Uji Coba Multi-Platform**: Audit linter (`node detect.mjs`), uji ekspor Web (`npx expo export --platform web`), verifikasi kepatuhan WCAG readability floor (min. 12px), dan verifikasi sinkronisasi offline-first. | pending |
 

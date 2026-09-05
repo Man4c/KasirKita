@@ -27,6 +27,7 @@ import {
 import { supplierService } from '../services/supplierService';
 import { useAuth } from '../context/AuthContext';
 import SupplierCardItem from '../components/supplier/SupplierCardItem';
+import SupplierFormModal from '../components/supplier/SupplierFormModal';
 import { showAlert } from '../utils/alert';
 
 /**
@@ -100,25 +101,22 @@ export default function SupplierManagementScreen({ navigation }) {
     loadSuppliers(true);
   };
 
-  // Open Create Supplier Modal (Placeholder until Phase 4)
+  // Open Create Supplier Modal
   const handleOpenCreate = () => {
     setSelectedSupplierForEdit(null);
     setFormModalVisible(true);
-    showAlert(
-      'Tambah Pemasok',
-      'Modal formulir pendaftaran distributor baru akan diaktifkan penuh pada pengerjaan Fase 4.'
-    );
   };
 
-  // Open Edit Supplier Modal (Placeholder until Phase 4)
+  // Open Edit Supplier Modal
   const handleEditSupplier = useCallback((supplier) => {
     setSelectedSupplierForEdit(supplier);
     setFormModalVisible(true);
-    showAlert(
-      'Edit Pemasok',
-      `Modal edit data pemasok "${supplier.name}" akan diaktifkan penuh pada pengerjaan Fase 4.`
-    );
   }, []);
+
+  // Modal Success callback
+  const handleFormSuccess = () => {
+    loadSuppliers(false);
+  };
 
   // Safe Delete Supplier
   const handleDeleteSupplier = useCallback(
@@ -397,6 +395,14 @@ export default function SupplierManagementScreen({ navigation }) {
           <Text style={styles.fabText}>Tambah Pemasok</Text>
         </TouchableOpacity>
       )}
+
+      {/* Modal Formulir Tambah / Edit Pemasok */}
+      <SupplierFormModal
+        visible={formModalVisible}
+        supplier={selectedSupplierForEdit}
+        onClose={() => setFormModalVisible(false)}
+        onSuccess={handleFormSuccess}
+      />
     </View>
   );
 }
