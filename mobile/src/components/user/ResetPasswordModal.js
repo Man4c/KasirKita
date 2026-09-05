@@ -356,8 +356,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12,
     height: 44,
+    paddingVertical: 0,
     color: '#f4f4f5',
     fontSize: 13,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   passwordInputWrap: {
     position: 'relative',
@@ -379,6 +382,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 8,
     marginLeft: 2,
+    includeFontPadding: false,
   },
   modalFooter: {
     flexDirection: 'row',
@@ -389,7 +393,6 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 24 : 14,
     borderTopWidth: 1,
     borderTopColor: '#27272a',
-    backgroundColor: '#18181b',
   },
   cancelBtn: {
     flex: 1,
@@ -405,6 +408,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   submitBtn: {
     flex: 1.5,
@@ -423,5 +428,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

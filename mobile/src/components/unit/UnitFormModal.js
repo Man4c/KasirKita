@@ -409,10 +409,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   presetChipTextActive: {
     color: '#fb7185',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   formGroup: {
     marginBottom: 14,
@@ -443,10 +447,13 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    height: 42,
+    height: 44,
+    paddingVertical: 0,
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   inputError: {
     borderColor: '#f43f5e',
@@ -456,11 +463,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#f43f5e',
     marginTop: 4,
+    includeFontPadding: false,
   },
   textArea: {
-    height: 80,
+    height: 'auto',
+    minHeight: 64,
     paddingTop: 10,
     paddingBottom: 10,
+    textAlignVertical: 'top',
   },
   modalFooter: {
     flexDirection: 'row',
@@ -488,6 +498,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_500Medium',
     color: '#d4d4d8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   submitBtn: {
     flex: 1.5,
@@ -504,5 +516,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

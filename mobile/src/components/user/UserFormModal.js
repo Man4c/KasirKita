@@ -642,8 +642,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12,
     height: 44,
+    paddingVertical: 0,
     color: '#f4f4f5',
     fontSize: 13,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   inputError: {
     borderColor: '#f87171',
@@ -801,6 +804,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   submitBtn: {
     flex: 1.5,
@@ -819,5 +824,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

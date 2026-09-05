@@ -609,13 +609,20 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    height: 44,
+    paddingVertical: 0,
     color: '#f4f4f5',
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   textArea: {
-    minHeight: 64,
+    height: 'auto',
+    minHeight: 72,
+    paddingTop: 10,
+    paddingBottom: 10,
+    textAlignVertical: 'top',
   },
   inputError: {
     borderColor: '#f87171',
@@ -716,6 +723,8 @@ const styles = StyleSheet.create({
     color: '#f87171',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   modalFooter: {
     flexDirection: 'row',
@@ -743,6 +752,8 @@ const styles = StyleSheet.create({
     color: '#d4d4d8',
     fontSize: 13,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   submitButton: {
     flex: 1.5,
@@ -762,5 +773,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

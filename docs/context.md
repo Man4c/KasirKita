@@ -20,6 +20,22 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Presisi Kesejajaran Vertikal Placeholder & Input Text Modal (Universal TextInput Anti-Shift)**:
+  - Menyelesaikan masalah placeholder dan teks input yang turun/tenggelam dan tidak berada di tengah vertikal pada seluruh modal form aplikasi:
+    1. *Penyebab Root Cause*: Pada Android, komponen native `EditText` (basis `<TextInput>` React Native) memiliki padding internal asimetris. Ketika dipadukan dengan `paddingVertical` dan font Poppins tanpa `includeFontPadding: false` dan `textAlignVertical: 'center'`, teks dan placeholder terdorong turun ke bawah mendekati garis batas bawah input box.
+    2. *Formula Standar Universal Single-line TextInput*: Menerapkan `height: 44`, `paddingVertical: 0`, `includeFontPadding: false`, dan `textAlignVertical: 'center'` pada seluruh single-line input, serta `textAlignVertical: 'top'` dan `paddingTop: 10, paddingBottom: 10` pada multiline `textArea`.
+    3. *Cakupan Modal yang Diperbaiki*:
+       - `CustomerFormModal.js` (Nama, Telepon, Email, Alamat, Catatan, Tombol Aksi)
+       - `UserFormModal.js` (Nama, Username, Telepon, Password, Tombol Aksi)
+       - `SupplierFormModal.js` (Nama, Kontak, Bank, Rekening, Alamat, Catatan, Tombol Aksi)
+       - `TaxFormModal.js` (Nama Pajak/Biaya, Nilai Persen/Nominal, Catatan)
+       - `CategoryFormModal.js` (Nama Kategori, Slug Prefix, Deskripsi, Tombol Aksi)
+       - `UnitFormModal.js` (Nama Satuan, Simbol, Catatan, Preset Chips, Tombol Aksi)
+       - `ProductFormModal.js` (Nama Produk, Barcode, Kategori, Harga, Tombol Aksi)
+       - `ResetPasswordModal.js` (PIN/Password Baru, Konfirmasi, Tombol Aksi)
+       - `CustomerManagementScreen.js` (Search Bar Input)
+  - Lolos uji detektor Impeccable (0 defect).
+
 - **Penetapan Standar Aturan "The Anti-Shift Typography Rule" di `AGENTS.md` & Harmonisasi Global**:
   - Melembagakan aturan ke-4 pada Standar Ketahanan Layout (*Defensive UI Craft*) di `AGENTS.md`:
     1. *The Anti-Shift Typography Rule*: Seluruh elemen teks pada React Native (khususnya font Poppins di Android) yang berdampingan dengan ikon SVG (baris horizontal flex) atau berada di dalam tombol (button), badge, chip, dan filter pill WAJIB menyertakan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada StyleSheet-nya.

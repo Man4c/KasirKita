@@ -527,10 +527,13 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    height: 42,
+    height: 44,
+    paddingVertical: 0,
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   pickerRow: {
     flexDirection: 'row',
@@ -553,10 +556,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   pickerChipTextActive: {
     color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   barcodeInputGroup: {
     flexDirection: 'row',
@@ -564,8 +571,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   scanTriggerBtn: {
-    width: 42,
-    height: 42,
+    width: 44,
+    height: 44,
     borderRadius: 10,
     backgroundColor: '#e11d48',
     alignItems: 'center',
@@ -610,6 +617,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#f87171',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   footerRow: {
     flexDirection: 'row',
@@ -622,6 +631,7 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     flex: 1,
+    minHeight: 44,
     paddingVertical: 11,
     borderRadius: 10,
     backgroundColor: '#27272a',
@@ -632,9 +642,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   saveBtn: {
     flex: 2,
+    minHeight: 44,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -647,5 +660,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

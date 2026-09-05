@@ -555,6 +555,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     paddingVertical: 0,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   searchClearBtn: {
     padding: 4,

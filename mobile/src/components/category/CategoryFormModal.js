@@ -367,10 +367,13 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    height: 42,
+    height: 44,
+    paddingVertical: 0,
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   inputError: {
     borderColor: '#f43f5e',
@@ -380,6 +383,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#f43f5e',
     marginTop: 4,
+    includeFontPadding: false,
   },
   slugInputWrapper: {
     flexDirection: 'row',
@@ -389,7 +393,7 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    height: 42,
+    height: 44,
   },
   slugPrefix: {
     fontSize: 14,
@@ -397,6 +401,8 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     marginRight: 4,
     flexShrink: 0,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   slugInput: {
     flex: 1,
@@ -404,11 +410,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#f4f4f5',
     paddingVertical: 0,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   textArea: {
-    height: 80,
+    height: 'auto',
+    minHeight: 80,
     paddingTop: 10,
     paddingBottom: 10,
+    textAlignVertical: 'top',
   },
   modalFooter: {
     flexDirection: 'row',
@@ -436,6 +446,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_500Medium',
     color: '#d4d4d8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   submitBtn: {
     flex: 1.5,
@@ -452,5 +464,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });
