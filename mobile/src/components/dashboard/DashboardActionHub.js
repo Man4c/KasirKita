@@ -120,7 +120,7 @@ export default function DashboardActionHub({
     },
     {
       id: 'tax_fee',
-      name: 'Pajak & Biaya',
+      name: 'Pajak',
       icon: Percent,
       color: '#fbbf24',
       bgColor: 'rgba(251, 191, 36, 0.16)',
@@ -185,10 +185,7 @@ export default function DashboardActionHub({
                 return (
                   <TouchableOpacity
                     key={item.id}
-                    style={[
-                      styles.gridCard,
-                      item.id === 'product' && styles.productCardActive,
-                    ]}
+                    style={styles.gridCard}
                     activeOpacity={0.7}
                     onPress={item.onPress}
                   >
@@ -280,12 +277,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 4,
+    paddingHorizontal: 2,
+    paddingVertical: 6,
     position: 'relative',
-  },
-  productCardActive: {
-    borderColor: 'rgba(16, 185, 129, 0.3)',
-    backgroundColor: '#141c19',
   },
   iconBox: {
     width: 34,
@@ -316,6 +310,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
     color: '#f4f4f5',
     textAlign: 'center',
-    maxWidth: '100%',
+    width: '100%',
   },
 });

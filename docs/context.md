@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyeragaman Tampilan Kartu Master Data & Anti-Truncate Label (`DashboardActionHub.js`)**:
+  - Menyelesaikan perbedaan gaya visual kartu menu "Produk" pada dashboard agar konsisten dengan kartu lainnya:
+    1. *Penyeragaman Kartu*: Menghapus styling khusus `productCardActive` yang sebelumnya memberikan border kehijauan dan background `#141c19` pada kartu Produk. Kini seluruh menu master data (Produk, Kategori, Satuan, Promosi, Pajak, Pelanggan, Pemasok) seragam menggunakan border standar `#27272a` dan background `#18181b`.
+    2. *Pencegahan Teks Terpotong*: Mengoptimalkan label dari `"Pajak & Biaya"` menjadi `"Pajak"` yang ringkas dan padat, serta menambahkan `paddingHorizontal: 2` pada kartu agar nama menu seperti `"Pelanggan"` dan `"Pajak"` tidak terpotong menjadi titik-titik (`...`).
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Perapian Kotak Input Barcode Manual Modal Pemindai (`PosBarcodeScannerView.js`)**:
   - Menyelesaikan masalah tampilan input manual barcode yang sempit, tidak proporsional, dan teks placeholder yang terpotong di Android:
     1. *Unified Input Wrapper*: Membungkus ikon barcode (`Barcode`) dan kolom teks (`TextInput`) ke dalam satu kontainer terpadu (`manualInputWrapper`) dengan latar abu-abu gelap `#27272a`, border halus `#3f3f46`, dan radius sudut `10px`.
