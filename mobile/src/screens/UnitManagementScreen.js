@@ -24,6 +24,7 @@ import { unitService } from '../services/unitService';
 import { useAuth } from '../context/AuthContext';
 import UnitCardItem from '../components/unit/UnitCardItem';
 import UnitFormModal from '../components/unit/UnitFormModal';
+import UnitDeleteModal from '../components/unit/UnitDeleteModal';
 import { showAlert } from '../utils/alert';
 
 export default function UnitManagementScreen({ navigation }) {
@@ -94,20 +95,25 @@ export default function UnitManagementScreen({ navigation }) {
     setFormModalVisible(true);
   }, []);
 
-  // Delete Unit confirmation
+  // Delete Unit confirmation & Smart Reassign modal
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [unitToDelete, setUnitToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
+  // Delete Unit handler
   const handleDeleteUnit = useCallback((unit) => {
     const productsCount = Number(unit.products_count || 0);
     const conversionsCount = Number(unit.conversions_count || 0);
     const totalUsage = productsCount + conversionsCount;
 
     if (totalUsage > 0) {
-      showAlert(
-        'Satuan Tidak Dapat Dihapus',
-        `Satuan "${unit.name}" (${unit.symbol}) masih digunakan oleh ${productsCount} produk dasar dan ${conversionsCount} varian multi-konversi. Hapus keterkaitan produk terlebih dahulu.`
-      );
+      // Jika satuan sedang digunakan, buka modal Hapus Cerdas (Reassign)
+      setUnitToDelete(unit);
+      setDeleteModalVisible(true);
       return;
     }
 
+    // Jika 0 penggunaan, konfirmasi hapus langsung standar
     showAlert(
       'Hapus Satuan',
       `Apakah Anda yakin ingin menghapus satuan "${unit.name}" (${unit.symbol})? Tindakan ini tidak dapat dibatalkan.`,
@@ -129,6 +135,31 @@ export default function UnitManagementScreen({ navigation }) {
       ]
     );
   }, []);
+
+  // Confirm delete with Smart Reassign
+  const handleConfirmDeleteWithReassign = async (payload) => {
+    if (!unitToDelete) return;
+    try {
+      setDeleting(true);
+      await unitService.deleteUnit(unitToDelete.id, payload);
+      setUnits((prev) => prev.filter((u) => u.id !== unitToDelete.id));
+      setDeleteModalVisible(false);
+      const targetUnitObj = units.find((u) => u.id === payload.target_unit_id);
+      const targetName = targetUnitObj ? `${targetUnitObj.name} (${targetUnitObj.symbol})` : 'satuan baru';
+      setUnitToDelete(null);
+
+      showAlert(
+        'Berhasil',
+        `Satuan "${unitToDelete.name}" telah dihapus dan seluruh produk dialihkan ke ${targetName}.`
+      );
+      // Muat ulang satuan untuk menyinkronkan counter produk
+      loadUnits(false);
+    } catch (err) {
+      showAlert('Gagal Menghapus', err.message || 'Terjadi kesalahan saat menghapus satuan.');
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   // Modal save success callback
   const handleFormSuccess = (savedUnit, isEditMode) => {
@@ -315,6 +346,21 @@ export default function UnitManagementScreen({ navigation }) {
           unit={selectedUnitForEdit}
           onClose={() => setFormModalVisible(false)}
           onSuccess={handleFormSuccess}
+        />
+      )}
+
+      {/* Modal Hapus Cerdas Satuan (Smart Reassign) */}
+      {deleteModalVisible && (
+        <UnitDeleteModal
+          visible={deleteModalVisible}
+          unit={unitToDelete}
+          allUnits={units}
+          onClose={() => {
+            setDeleteModalVisible(false);
+            setUnitToDelete(null);
+          }}
+          onConfirm={handleConfirmDeleteWithReassign}
+          loading={deleting}
         />
       )}
     </View>

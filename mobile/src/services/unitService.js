@@ -131,11 +131,16 @@ export const unitService = {
    * Delete a unit.
    *
    * @param {string|number} id - Unit ID
+   * @param {Object} options - Optional { action: 'reassign', target_unit_id: string }
    * @returns {Promise<boolean>}
    */
-  async deleteUnit(id) {
+  async deleteUnit(id, options = {}) {
     try {
-      await api.delete(`/units/${id}`);
+      const config = {};
+      if (options && (options.action || options.target_unit_id)) {
+        config.data = options;
+      }
+      await api.delete(`/units/${id}`, config);
       await offlineStorage.removeCachedUnit(id);
       return true;
     } catch (err) {
@@ -144,6 +149,7 @@ export const unitService = {
         'Gagal menghapus satuan.';
       const error = new Error(message);
       error.status = err.response?.status;
+      error.data = err.response?.data;
       throw error;
     }
   },

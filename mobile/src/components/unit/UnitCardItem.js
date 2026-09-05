@@ -120,7 +120,7 @@ const UnitCardItem = React.memo(function UnitCardItem({
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.deleteBtn, isInUse && styles.deleteBtnDisabled]}
+              style={styles.deleteBtn}
               activeOpacity={0.7}
               onPress={(e) => {
                 if (e?.stopPropagation) e.stopPropagation();
@@ -130,10 +130,10 @@ const UnitCardItem = React.memo(function UnitCardItem({
             >
               <Trash2
                 size={14}
-                color={isInUse ? '#a1a1aa' : '#f87171'}
+                color='#f87171'
                 style={{ flexShrink: 0 }}
               />
-              <Text style={[styles.deleteBtnText, isInUse && styles.deleteBtnTextDisabled]}>
+              <Text style={styles.deleteBtnText}>
                 Hapus
               </Text>
             </TouchableOpacity>
