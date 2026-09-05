@@ -136,10 +136,10 @@ export default function CategoryFormModal({
                 <FolderTree size={20} color='#fb7185' />
               </View>
               <View style={styles.headerTextContainer}>
-                <Text style={styles.modalTitle} numberOfLines={1}>
+                <Text style={styles.modalTitle} numberOfLines={1} ellipsizeMode="tail">
                   {isEditMode ? 'Edit Kategori' : 'Tambah Kategori Baru'}
                 </Text>
-                <Text style={styles.modalSubtitle} numberOfLines={1}>
+                <Text style={styles.modalSubtitle} numberOfLines={1} ellipsizeMode="tail">
                   {isEditMode
                     ? 'Perbarui data pengelompokan produk toko'
                     : 'Kelompokkan produk agar kasir mudah mencari barang'}
@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
   headerTextContainer: {
     flex: 1,
     minWidth: 0,
+    justifyContent: 'center',
   },
   iconCircle: {
     width: 38,
@@ -320,11 +321,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
     lineHeight: 16,
+    marginTop: 2,
+    flexShrink: 1,
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 38,
+    height: 38,
+    borderRadius: 9,
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
