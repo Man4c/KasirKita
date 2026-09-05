@@ -15,12 +15,9 @@ import {
   X,
   Plus,
   ReceiptText,
-  Coins,
   RotateCw,
   WifiOff,
   ChevronLeft,
-  CheckCircle2,
-  SlidersHorizontal,
 } from 'lucide-react-native';
 import { taxService } from '../services/taxService';
 import { useAuth } from '../context/AuthContext';
@@ -173,11 +170,11 @@ export default function TaxManagementScreen({ navigation }) {
   const taxCount = items.filter((i) => i.is_tax).length;
   const feeCount = items.filter((i) => !i.is_tax).length;
 
-  // Segmented Type Tabs
+  // Segmented Type Tabs with live counts
   const tabOptions = [
-    { key: 'ALL', label: 'Semua' },
-    { key: 'TAX', label: 'Pajak' },
-    { key: 'FEE', label: 'Biaya Layanan' },
+    { key: 'ALL', label: `Semua (${totalItems})` },
+    { key: 'TAX', label: `Pajak (${taxCount})` },
+    { key: 'FEE', label: `Biaya Layanan (${feeCount})` },
   ];
 
   // Status Filter Options
@@ -255,32 +252,7 @@ export default function TaxManagementScreen({ navigation }) {
           </View>
         )}
 
-        {/* Summary Metrics Cards */}
-        <View style={styles.metricsRow}>
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(251, 191, 36, 0.4)' }]}>
-              <ReceiptText size={14} color="#fbbf24" />
-            </View>
-            <Text style={[styles.metricVal, { color: '#fbbf24' }]}>{taxCount}</Text>
-            <Text style={styles.metricLabel}>Pajak (PPN/PB1)</Text>
-          </View>
 
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(96, 165, 250, 0.4)' }]}>
-              <Coins size={14} color="#60a5fa" />
-            </View>
-            <Text style={[styles.metricVal, { color: '#60a5fa' }]}>{feeCount}</Text>
-            <Text style={styles.metricLabel}>Biaya Layanan</Text>
-          </View>
-
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: '#202024', borderColor: 'rgba(52, 211, 153, 0.4)' }]}>
-              <CheckCircle2 size={14} color="#34d399" />
-            </View>
-            <Text style={[styles.metricVal, { color: '#34d399' }]}>{activeCount}</Text>
-            <Text style={styles.metricLabel}>Aktif Digunakan</Text>
-          </View>
-        </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
@@ -514,42 +486,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     flex: 1,
-  },
-  metricsRow: {
-    flexDirection: 'row',
-    paddingBottom: 10,
-    gap: 8,
-  },
-  metricCard: {
-    flex: 1,
-    backgroundColor: '#18181b',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#27272a',
-    padding: 10,
-    alignItems: 'center',
-  },
-  metricIconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#27272a',
-    borderWidth: 1,
-    borderColor: '#3f3f46',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 4,
-  },
-  metricVal: {
-    color: '#f4f4f5',
-    fontSize: 24,
-    fontFamily: 'Poppins_700Bold',
-  },
-  metricLabel: {
-    color: '#a1a1aa',
-    fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    textAlign: 'center',
   },
   searchContainer: {
     marginBottom: 10,

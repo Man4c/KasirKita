@@ -20,6 +20,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyederhanaan Layout & Eliminasi 3 Metric Cards Atas (`TaxManagementScreen.js`)**:
+  - Meniadakan 3 kartu metrik atas (*Pajak*, *Biaya Layanan*, *Aktif Digunakan*) yang memakan ruang vertikal layar mobile secara berlebihan.
+  - Memindahkan informasi jumlah komponen secara dinamis langsung ke dalam label tab kategori: `Semua (N)`, `Pajak (N)`, dan `Biaya Layanan (N)`, serta mempertahankan ringkasan keaktifan pada subjudul header (`{total} komponen terdaftar ({active} aktif)`).
+  - Menghasilkan ruang pandang (*viewport space*) yang jauh lebih lega, memungkinkan pengguna langsung melihat kartu item pajak/biaya tanpa terhimpit di layar kecil.
+  - Lolos verifikasi sintaks JS (`node -c`), detektor Impeccable (0 defect), dan `npx expo export --platform web` (2.347 modul lolos).
+
 - **Penyempurnaan Layout Spacing & Safety Margin FAB Master Pajak & Biaya (`TaxManagementScreen.js`)**:
   - Menyelesaikan temuan critique [P3] melalui skill `impeccable layout`:
     1. *Proteksi Ruang Scroll FAB*: Memperbesar `paddingBottom` pada `listContent` dari 88dp menjadi **110dp** agar kartu item terbawah dapat di-scroll sepenuhnya ke atas melewati Floating Action Button (`+ Tambah Pajak / Biaya`) dan bilah navigasi bawah, memastikan tombol Edit, Hapus, dan Switch tidak terhalang.
