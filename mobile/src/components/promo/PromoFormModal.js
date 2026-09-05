@@ -278,12 +278,22 @@ export default function PromoFormModal({
   if (!visible) return null;
 
   return (
-    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.modalOverlay}
       >
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={styles.modalContent}>
+          {/* Drag Handle Bar (Mobile Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Modal Header */}
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
@@ -294,7 +304,7 @@ export default function PromoFormModal({
                 <Text style={styles.modalTitle} numberOfLines={1}>
                   {isEditMode ? 'Edit Program Promosi' : 'Tambah Promosi Baru'}
                 </Text>
-                <Text style={styles.modalSubtitle} numberOfLines={2}>
+                <Text style={styles.modalSubtitle} numberOfLines={1}>
                   {isEditMode
                     ? 'Perbarui skema diskon & masa berlaku kupon'
                     : 'Atur diskon belanja untuk transaksi kasir'}
@@ -654,31 +664,44 @@ export default function PromoFormModal({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'flex-end',
+  },
+  backdropTouchable: {
+    flex: 1,
   },
   modalContent: {
     backgroundColor: '#18181b',
-    borderRadius: 16,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
+    borderBottomWidth: 0,
     borderColor: '#27272a',
     width: '100%',
-    maxWidth: 520,
-    maxHeight: '90%',
-    padding: 16,
+    maxHeight: '92%',
+    paddingTop: 8,
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 12,
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
@@ -880,7 +903,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderWidth: 1,
     borderColor: '#3f3f46',
-    paddingVertical: 10,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     gap: 6,
   },
@@ -893,15 +917,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    paddingTop: 14,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
     borderTopWidth: 1,
     borderTopColor: '#27272a',
+    backgroundColor: '#18181b',
   },
   cancelButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 11,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     backgroundColor: '#27272a',
     borderWidth: 1,
@@ -918,7 +946,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#e11d48',
-    paddingVertical: 11,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     gap: 6,
   },

@@ -113,23 +113,33 @@ export default function UnitFormModal({
   };
 
   return (
-    <Modal visible={visible} animationType='fade' transparent onRequestClose={onClose}>
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.modalOverlay}
       >
+        <TouchableOpacity
+          style={styles.backdropTouchable}
+          activeOpacity={1}
+          onPress={onClose}
+        />
         <View style={styles.modalContent}>
+          {/* Drag Handle Bar (Mobile Bottom Sheet Pattern) */}
+          <View style={styles.dragHandleContainer}>
+            <View style={styles.dragHandle} />
+          </View>
+
           {/* Modal Header */}
           <View style={styles.modalHeader}>
             <View style={styles.headerLeft}>
               <View style={styles.iconCircle}>
-                <Scale size={20} color='#f43f5e' />
+                <Scale size={20} color='#fb7185' />
               </View>
               <View style={styles.headerTextContainer}>
                 <Text style={styles.modalTitle} numberOfLines={1}>
                   {isEditMode ? 'Edit Data Satuan' : 'Tambah Satuan Baru'}
                 </Text>
-                <Text style={styles.modalSubtitle} numberOfLines={2}>
+                <Text style={styles.modalSubtitle} numberOfLines={1}>
                   {isEditMode
                     ? 'Perbarui nama atau simbol satuan barang'
                     : 'Atur unit satuan penjualan produk (UoM)'}
@@ -271,23 +281,44 @@ export default function UnitFormModal({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    justifyContent: 'center',
-    padding: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'flex-end',
+  },
+  backdropTouchable: {
+    flex: 1,
   },
   modalContent: {
     backgroundColor: '#18181b',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
+    borderBottomWidth: 0,
     borderColor: '#27272a',
-    borderRadius: 16,
-    maxHeight: '85%',
-    overflow: 'hidden',
+    width: '100%',
+    maxHeight: '90%',
+    paddingTop: 8,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 12,
+  },
+  dragHandleContainer: {
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandle: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3f3f46',
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
   },
@@ -434,36 +465,40 @@ const styles = StyleSheet.create({
   modalFooter: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
     gap: 10,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
     borderTopWidth: 1,
     borderTopColor: '#27272a',
+    backgroundColor: '#18181b',
   },
   cancelBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     backgroundColor: '#27272a',
-    minHeight: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
   },
   cancelBtnText: {
     fontSize: 13,
     fontFamily: 'Poppins_500Medium',
-    color: '#a1a1aa',
+    color: '#d4d4d8',
   },
   submitBtn: {
+    flex: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingHorizontal: 18,
-    paddingVertical: 10,
+    minHeight: 44,
+    paddingVertical: 12,
     borderRadius: 10,
     backgroundColor: '#e11d48',
-    minHeight: 44,
   },
   submitBtnText: {
     fontSize: 13,

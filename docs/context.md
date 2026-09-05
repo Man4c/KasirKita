@@ -20,6 +20,24 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Transformasi Komprehensif Master Promosi, Satuan, Kategori, & Produk (Native Bottom Sheet Modal, Tap-to-Edit, Extended Pill FAB, & Peningkatan Touch Target)**:
+  - Menyelaraskan 100% konsistensi arsitektur dan ergonomi UI/UX di 4 modul inti (`Promo`, `Unit`, `Category`, `Product`) sesuai standar baku `TaxManagementScreen`, `CustomerManagementScreen`, dan `SupplierManagementScreen`:
+    1. *Transformasi Native Slide-Up Bottom Sheet Modal*:
+       - `UnitFormModal.js`, `PromoFormModal.js`, dan `CategoryFormModal.js` diubah total dari dialog melayang menjadi **Slide-up Native Bottom Sheet Modal** modern dengan visual drag handle bar (38dp), rounded top 20dp, backdrop tap-to-dismiss (`backdropTouchable`), dan **Sticky Modal Footer** simetris (`Batal` flex: 1, `Simpan` flex: 1.5, `minHeight: 44dp`).
+       - Memastikan tombol hapus di form edit diletakkan di Danger Zone paling bawah scrollview untuk mencegah ketidaksengajaan terhapus.
+    2. *Tap-to-Edit Badan Kartu (1-Tap Fast Workflow)*:
+       - Membungkus seluruh badan kartu pada `PromoCardItem.js`, `CategoryCardItem.js`, dan `ProductCardItem.js` dengan `TouchableOpacity activeOpacity={0.88}`, memungkinkan pengguna langsung menyentuh bagian mana saja pada kartu untuk membuka form edit secara instan.
+       - Melengkapi tombol aksi `Edit`, `Hapus`, `Stok Masuk`, dan Switch status dengan `e?.stopPropagation?.()` agar tidak memicu double-trigger kartu.
+    3. *Peningkatan Touch Target Tombol Aksi*:
+       - Menaikkan tinggi tombol aksi `Edit` dan `Hapus` pada kartu promosi dan kategori menjadi 34dp dengan hitSlop protektif $\ge 8$dp (area sentuh efektif $\ge 50$dp, melebihi standar WCAG 44dp).
+       - Tombol `Stok Masuk` dan `Edit Produk` pada kartu produk ditingkatkan ke tinggi 38dp dengan hitSlop 8dp.
+    4. *Extended Pill FAB Berlabel Teks Lengkap*:
+       - Mengubah FAB bulat `(+)` pada `CategoryManagementScreen.js` dan `ProductManagementScreen.js` menjadi **Extended Pill FAB** berlabel teks lengkap (`[+] Tambah Kategori` dan `[+] Tambah Produk`) dengan padding horizontal 18dp, elevation 6, dan shadow konsisten.
+    5. *Eliminasi Kartu Metrik Redundan & Peningkatan Viewport (`distill`)*:
+       - Menghapus baris metrik redundan (`metricsRow`) pada `PromoManagementScreen.js` dan `CategoryManagementScreen.js`, lalu memadatkan ringkasannya ke subjudul header (`{totalPromos} promo ({activePromos} aktif • {totalUsages} dipakai)` dan `{totalCategories} kategori ({activeCategoriesWithProducts} terisi produk)`), mengembalikan ruang first-fold layar mobile.
+       - Memperbarui `listContent` dan `listContainer` dengan safety margin `paddingBottom: 100` agar item terbawah tidak tertutup Extended FAB.
+  - Lolos uji verifikasi penuh: syntax check (`node -c`), detektor Impeccable (0 defect), dan Expo Web Bundler export sukses tanpa warning/error (2.347 modul).
+
 - **Harmonisasi Master Satuan: Extended Pill FAB, Tap-to-Edit Kartu, Peningkatan Touch Target & Eliminasi Kartu Metrik (`UnitManagementScreen.js`, `UnitCardItem.js`, `UnitFormModal.js`)**:
   - Menyamakan konsistensi Master Satuan dengan modul Master Pajak, Pelanggan, dan Pemasok sesuai standar Impeccable:
     1. *Extended Pill FAB*: Mengubah tombol tambah satuan dari lingkaran bulat polos `(+)` menjadi **Extended Pill FAB** berlabel (`[+] Tambah Satuan`) dengan `shadowColor: '#000000'`, elevation 6, dan padding 18dp horizontal, selaras dengan master screen lainnya.

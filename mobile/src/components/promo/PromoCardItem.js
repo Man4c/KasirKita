@@ -91,7 +91,11 @@ const PromoCardItem = React.memo(function PromoCardItem({
   const endDateStr = formatDate(item.end_date);
 
   return (
-    <View style={[styles.card, isInactive && styles.cardInactive]}>
+    <TouchableOpacity
+      style={[styles.card, isInactive && styles.cardInactive]}
+      activeOpacity={isOwner ? 0.88 : 1}
+      onPress={() => isOwner && onEdit && onEdit(item)}
+    >
       {/* Top Header: Badge Kode Kupon + Nilai Potongan Diskon */}
       <View style={styles.cardHeader}>
         <View style={styles.couponBadgeCol}>
@@ -228,7 +232,10 @@ const PromoCardItem = React.memo(function PromoCardItem({
             <TouchableOpacity
               style={styles.editBtn}
               activeOpacity={0.7}
-              onPress={() => onEdit(item)}
+              onPress={(e) => {
+                e?.stopPropagation?.();
+                onEdit(item);
+              }}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <Edit3 size={14} color="#d4d4d8" style={{ flexShrink: 0 }} />
@@ -238,7 +245,10 @@ const PromoCardItem = React.memo(function PromoCardItem({
             <TouchableOpacity
               style={styles.deleteBtn}
               activeOpacity={0.7}
-              onPress={() => onDelete(item)}
+              onPress={(e) => {
+                e?.stopPropagation?.();
+                onDelete(item);
+              }}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <Trash2 size={14} color="#f87171" style={{ flexShrink: 0 }} />
@@ -247,7 +257,7 @@ const PromoCardItem = React.memo(function PromoCardItem({
           </View>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 });
 
@@ -504,7 +514,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#3f3f46',
     paddingHorizontal: 10,
-    height: 32,
+    height: 34,
     borderRadius: 8,
     gap: 5,
     flexShrink: 0,
@@ -524,7 +534,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#3f3f46',
     paddingHorizontal: 10,
-    height: 32,
+    height: 34,
     borderRadius: 8,
     gap: 5,
     flexShrink: 0,

@@ -415,14 +415,15 @@ export default function ProductManagementScreen({
         )}
       </View>
 
-      {/* Floating Action Button (FAB) */}
+      {/* Floating Action Button (FAB) Extended Pill */}
       {isOwner && (
         <TouchableOpacity
           style={styles.fab}
           activeOpacity={0.85}
           onPress={handleOpenCreateProduct}
         >
-          <Plus size={22} color="#ffffff" />
+          <Plus size={20} color="#ffffff" />
+          <Text style={styles.fabText}>Tambah Produk</Text>
         </TouchableOpacity>
       )}
 
@@ -670,7 +671,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   listContent: {
-    paddingBottom: 88,
+    paddingBottom: 100,
   },
   centerBox: {
     flex: 1,
@@ -679,13 +680,12 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
   },
   loadingText: {
-    marginTop: 10,
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    marginTop: 10,
   },
   emptyBox: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 60,
@@ -693,9 +693,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   emptyTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
-    color: '#e4e4e7',
+    color: '#f4f4f5',
+    marginTop: 8,
   },
   emptySubtitle: {
     fontSize: 12,
@@ -718,18 +719,24 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
+    bottom: 20,
     right: 20,
-    bottom: 24,
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: '#e11d48',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#e11d48',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 24,
+    gap: 8,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 6,
+  },
+  fabText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
   },
 });

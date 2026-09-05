@@ -180,7 +180,7 @@ export default function CategoryManagementScreen({ navigation }) {
                 Master Kategori
               </Text>
               <Text style={styles.screenSubtitle} numberOfLines={1}>
-                {totalCategories} kategori terdaftar
+                {totalCategories} kategori ({activeCategoriesWithProducts} terisi produk)
               </Text>
             </View>
           </View>
@@ -204,25 +204,6 @@ export default function CategoryManagementScreen({ navigation }) {
             </Text>
           </View>
         )}
-
-        {/* Summary Metric Cards */}
-        <View style={styles.metricsRow}>
-          <View style={styles.metricCard}>
-            <View style={styles.metricHeader}>
-              <Text style={styles.metricLabel}>Total Kategori</Text>
-              <FolderTree size={14} color='#f43f5e' />
-            </View>
-            <Text style={styles.metricValue}>{totalCategories}</Text>
-          </View>
-
-          <View style={styles.metricCard}>
-            <View style={styles.metricHeader}>
-              <Text style={styles.metricLabel}>Ada Produk</Text>
-              <Package size={14} color='#34d399' />
-            </View>
-            <Text style={styles.metricValue}>{activeCategoriesWithProducts}</Text>
-          </View>
-        </View>
 
         {/* Search Input Bar */}
         <View style={styles.searchRow}>
@@ -302,14 +283,15 @@ export default function CategoryManagementScreen({ navigation }) {
         )}
       </View>
 
-      {/* Floating Action Button (FAB) */}
+      {/* Floating Action Button (FAB) Extended Pill */}
       {isOwner && (
         <TouchableOpacity
           style={styles.fab}
           activeOpacity={0.85}
           onPress={handleOpenCreateCategory}
         >
-          <Plus size={22} color='#ffffff' />
+          <Plus size={20} color='#ffffff' />
+          <Text style={styles.fabText}>Tambah Kategori</Text>
         </TouchableOpacity>
       )}
 
@@ -462,7 +444,7 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   listContainer: {
-    paddingBottom: 80,
+    paddingBottom: 100,
   },
   centerContainer: {
     flex: 1,
@@ -514,18 +496,24 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
+    bottom: 20,
     right: 20,
-    bottom: 24,
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: '#e11d48',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#e11d48',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 24,
+    gap: 8,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 6,
+  },
+  fabText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontFamily: 'Poppins_600SemiBold',
   },
 });

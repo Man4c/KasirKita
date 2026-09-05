@@ -51,7 +51,11 @@ const ProductCardItem = React.memo(function ProductCardItem({
       : null;
 
   return (
-    <View style={[styles.card, isInactive && styles.cardInactive]}>
+    <TouchableOpacity
+      style={[styles.card, isInactive && styles.cardInactive]}
+      activeOpacity={userRole === 'owner' ? 0.88 : 1}
+      onPress={() => userRole === 'owner' && onEdit && onEdit(item)}
+    >
       {/* Baris Atas: Foto/Inisial + Info Nama & Kategori + Badge Stok */}
       <View style={styles.cardHeader}>
         <View style={styles.productIdentity}>
@@ -183,7 +187,11 @@ const ProductCardItem = React.memo(function ProductCardItem({
           <TouchableOpacity
             style={styles.restockBtn}
             activeOpacity={0.7}
-            onPress={() => onRestock && onRestock(item)}
+            onPress={(e) => {
+              e?.stopPropagation?.();
+              onRestock && onRestock(item);
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             <PlusCircle size={14} color="#34d399" />
             <Text style={styles.restockBtnText}>Stok Masuk</Text>
@@ -192,14 +200,18 @@ const ProductCardItem = React.memo(function ProductCardItem({
           <TouchableOpacity
             style={styles.editBtn}
             activeOpacity={0.7}
-            onPress={() => onEdit && onEdit(item)}
+            onPress={(e) => {
+              e?.stopPropagation?.();
+              onEdit && onEdit(item);
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             <Edit3 size={14} color="#e4e4e7" />
             <Text style={styles.editBtnText}>Edit Produk</Text>
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 });
 
@@ -430,7 +442,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#12261e',
     borderColor: 'rgba(52, 211, 153, 0.35)',
     borderWidth: 1,
-    height: 36,
+    height: 38,
     borderRadius: 8,
   },
   restockBtnText: {
@@ -450,7 +462,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderColor: '#3f3f46',
     borderWidth: 1,
-    height: 36,
+    height: 38,
     borderRadius: 8,
   },
   editBtnText: {

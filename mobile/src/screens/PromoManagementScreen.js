@@ -218,7 +218,7 @@ export default function PromoManagementScreen({ navigation }) {
                 Master Promosi
               </Text>
               <Text style={styles.screenSubtitle} numberOfLines={1}>
-                {totalPromos} voucher promo terdaftar
+                {totalPromos} promo ({activePromos} aktif • {totalUsages} dipakai)
               </Text>
             </View>
           </View>
@@ -246,33 +246,6 @@ export default function PromoManagementScreen({ navigation }) {
             </Text>
           </View>
         )}
-
-        {/* Summary Metrics Cards */}
-        <View style={styles.metricsRow}>
-          <View style={styles.metricCard}>
-            <View style={styles.metricIconWrap}>
-              <TicketPercent size={14} color="#fb7185" />
-            </View>
-            <Text style={styles.metricVal}>{totalPromos}</Text>
-            <Text style={styles.metricLabel}>Total Promo</Text>
-          </View>
-
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
-              <CheckCircle2 size={14} color="#34d399" />
-            </View>
-            <Text style={[styles.metricVal, { color: '#34d399' }]}>{activePromos}</Text>
-            <Text style={styles.metricLabel}>Voucher Aktif</Text>
-          </View>
-
-          <View style={styles.metricCard}>
-            <View style={[styles.metricIconWrap, { backgroundColor: '#27272a', borderColor: '#3f3f46' }]}>
-              <Users size={14} color="#f4f4f5" />
-            </View>
-            <Text style={styles.metricVal}>{totalUsages}</Text>
-            <Text style={styles.metricLabel}>Total Dipakai</Text>
-          </View>
-        </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
@@ -588,7 +561,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingTop: 2,
-    paddingBottom: 88,
+    paddingBottom: 100,
   },
   centerLoading: {
     flex: 1,
