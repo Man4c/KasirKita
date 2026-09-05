@@ -17,6 +17,7 @@ import {
   Check,
   Barcode,
   AlertCircle,
+  X,
 } from 'lucide-react-native';
 import { soundService } from '../../services/soundService';
 import api from '../../services/api';
@@ -256,23 +257,36 @@ export default function PosBarcodeScannerView({
       {/* Manual Barcode Input Row (PORTRAIT ONLY - Landscape uses inline input in bottom bar) */}
       {showManualInput && !isLandscape && (
         <View style={styles.manualInputRow}>
-          <Barcode size={16} color="#fb7185" style={{ marginRight: 8 }} />
-          <TextInput
-            style={styles.manualTextInput}
-            placeholder="Ketik kode barcode / SKU..."
-            placeholderTextColor="#71717a"
-            value={manualCode}
-            onChangeText={setManualCode}
-            autoFocus={true}
-            onSubmitEditing={handleManualSubmit}
-            returnKeyType="done"
-          />
+          <View style={styles.manualInputWrapper}>
+            <Barcode size={18} color="#fb7185" style={styles.manualInputIcon} />
+            <TextInput
+              style={styles.manualTextInput}
+              placeholder="Ketik kode barcode / SKU..."
+              placeholderTextColor="#71717a"
+              value={manualCode}
+              onChangeText={setManualCode}
+              autoFocus={true}
+              onSubmitEditing={handleManualSubmit}
+              returnKeyType="search"
+            />
+            {manualCode.length > 0 && (
+              <TouchableOpacity
+                onPress={() => setManualCode('')}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                style={styles.manualClearBtn}
+                activeOpacity={0.7}
+              >
+                <X size={14} color="#a1a1aa" />
+              </TouchableOpacity>
+            )}
+          </View>
           <TouchableOpacity
-            style={[styles.manualSubmitBtn, !manualCode.trim() && { opacity: 0.5 }]}
+            style={[styles.manualSubmitBtn, !manualCode.trim() && styles.manualSubmitBtnDisabled]}
             onPress={handleManualSubmit}
             disabled={!manualCode.trim()}
+            activeOpacity={0.8}
           >
-            <Text style={styles.manualSubmitBtnText}>Cari</Text>
+            <Text style={[styles.manualSubmitBtnText, !manualCode.trim() && styles.manualSubmitBtnTextDisabled]}>Cari</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -574,36 +588,61 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 10,
     backgroundColor: '#18181b',
     borderBottomWidth: 1,
     borderBottomColor: '#27272a',
+    gap: 8,
+  },
+  manualInputWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#27272a',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+    paddingHorizontal: 12,
+    height: 42,
+  },
+  manualInputIcon: {
+    marginRight: 8,
+    flexShrink: 0,
   },
   manualTextInput: {
     flex: 1,
-    backgroundColor: '#27272a',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    height: 32,
     color: '#ffffff',
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: 'Poppins_400Regular',
-    borderWidth: 1,
-    borderColor: '#3f3f46',
-    marginRight: 8,
+    paddingVertical: 0,
+    height: '100%',
   },
-  manualSubmitBtn: {
-    backgroundColor: '#e11d48',
-    paddingHorizontal: 12,
-    height: 32,
-    borderRadius: 8,
+  manualClearBtn: {
+    padding: 4,
+    marginLeft: 4,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  manualSubmitBtn: {
+    backgroundColor: '#e11d48',
+    paddingHorizontal: 16,
+    height: 42,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  manualSubmitBtnDisabled: {
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
   manualSubmitBtnText: {
     color: '#ffffff',
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
+  },
+  manualSubmitBtnTextDisabled: {
+    color: '#71717a',
   },
   cameraViewport: {
     flex: 1,

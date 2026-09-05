@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perapian Kotak Input Barcode Manual Modal Pemindai (`PosBarcodeScannerView.js`)**:
+  - Menyelesaikan masalah tampilan input manual barcode yang sempit, tidak proporsional, dan teks placeholder yang terpotong di Android:
+    1. *Unified Input Wrapper*: Membungkus ikon barcode (`Barcode`) dan kolom teks (`TextInput`) ke dalam satu kontainer terpadu (`manualInputWrapper`) dengan latar abu-abu gelap `#27272a`, border halus `#3f3f46`, dan radius sudut `10px`.
+    2. *Anti-Clipping pada Android*: Menetapkan `paddingVertical: 0` dan tinggi proporsional `42px` (sebelumnya `32px` kaku tanpa vertical padding reset), sehingga teks placeholder *"Ketik kode barcode / SKU..."* tidak lagi terdorong ke atas maupun terpotong sebagian di layar HP Android.
+    3. *Tombol Clear Cepat (`X`)*: Menambahkan tombol bersihkan input saat ada teks (`manualCode.length > 0`) agar kasir dapat mengosongkan teks dengan sekali ketuk.
+    4. *Tombol Aksi Sejajar & Responsif*: Tombol *"Cari"* kini memiliki ketinggian sejajar `42px` dengan radius `10px`, status disabled yang elegan saat teks kosong, dan feedback visual yang jelas.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Network Error pada HP Fisik Android (`api.js`, `LoginScreen.js`, `app.json`)**:
   - Menyelesaikan masalah kegagalan koneksi (*Network Error*) pada perangkat fisik Android:
     1. *Penyebab Root Cause*: Logika `getDefaultBaseUrl()` sebelumnya mengembalikan `http://10.0.2.2:8000/api` untuk semua platform Android. IP `10.0.2.2` adalah alamat router virtual khusus emulator Android Studio di PC dan tidak ada di HP fisik. Selain itu, Android 9+ memblokir lalu lintas HTTP non-HTTPS (cleartext) secara default jika tidak diizinkan di manifest.

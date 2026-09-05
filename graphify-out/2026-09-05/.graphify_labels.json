@@ -69,7 +69,6 @@
   "67": "accept-css.mjs",
   "68": "barPaletteForTheme",
   "69": "extractFindingIgnoreValue",
-  "70": "Operate mode depth (and Read notes)",
   "71": "The Toolkit",
   "72": "Product",
   "73": "[Feature Name] Implementation Plan",
@@ -168,7 +167,6 @@
   "166": "AppServiceProvider",
   "167": "colorFunctionToRgb",
   "168": "context7.sh",
-  "169": "source-lock.mjs",
   "170": "source-lock.mjs",
   "171": "psr-4",
   "172": "require",
@@ -317,7 +315,6 @@
   "315": "Operate mode depth (and Read notes)",
   "316": "Cloud Sync Preferences & Local Data Backup-Restore",
   "317": "updateBarContent",
-  "318": "isGeneratedFile",
   "319": "applyEditing",
   "320": "onAnnotDown",
   "321": "expo-audio",
@@ -340,8 +337,5 @@
   "338": "Impeccable Documenter",
   "339": "constants.mjs",
   "340": "syncEditBadgeHitProxies",
-  "341": "source-lock.mjs",
-  "342": "expo",
-  "343": "UserFactory",
-  "344": "barcode-detector"
+  "342": "expo"
 }

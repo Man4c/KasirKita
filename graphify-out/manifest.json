@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788571629.5100873,
-    "ast_hash": "01da81c5f869475620840af26491b695",
+    "mtime": 1788572348.8221364,
+    "ast_hash": "07efc458e092f5a15cc383a3ade08edc",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2260,8 +2260,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PosBarcodeScannerView.js": {
-    "mtime": 1788518526.2178206,
-    "ast_hash": "8aea0d0723709a21d765f9398c925247",
+    "mtime": 1788572313.5281277,
+    "ast_hash": "ba879b8ca1fe837091118f19f3f74dd1",
     "semantic_hash": ""
   },
   "mobile/src/services/soundService.js": {
