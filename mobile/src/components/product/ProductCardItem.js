@@ -419,13 +419,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#12261e',
     borderColor: 'rgba(52, 211, 153, 0.35)',
     borderWidth: 1,
-    paddingVertical: 7,
+    height: 36,
     borderRadius: 8,
   },
   restockBtnText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#34d399',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
     whiteSpace: 'nowrap',
   },
   editBtn: {
@@ -437,13 +439,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#27272a',
     borderColor: '#3f3f46',
     borderWidth: 1,
-    paddingVertical: 7,
+    height: 36,
     borderRadius: 8,
   },
   editBtnText: {
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#f4f4f5',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
     whiteSpace: 'nowrap',
   },
 });

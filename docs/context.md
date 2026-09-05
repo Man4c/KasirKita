@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyejajaran Vertikal Ikon & Teks Tombol Aksi Kartu (`CategoryCardItem.js`, `UnitCardItem.js`, `PromoCardItem.js`, `ProductCardItem.js`)**:
+  - Menyelesaikan masalah teks tombol "Edit", "Hapus", dan "Stok Masuk" yang tidak sejajar vertikal dengan ikonnya di perangkat fisik Android:
+    1. *Penyebab Root Cause*: Font kustom `Poppins` di Android memiliki *internal font metric* yang menambahkan padding vertikal bawaan (`includeFontPadding`), menyebabkan teks terdorong ke bawah 1-2 piksel dibanding ikon SVG saat ditampilkan di layar HP berdensitas tinggi.
+    2. *Anti-Shift Typography*: Menambahkan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada seluruh label tombol aksi kartu.
+    3. *Fixed Geometry & Flexbox Centering*: Memberikan tinggi proporsional eksplisit (`height: 32` pada tombol kecil kartu kategori/satuan/promo dan `height: 36` pada tombol kartu produk) lengkap dengan `justifyContent: 'center'`, `alignItems: 'center'`, dan padding horizontal `10px`, sehingga ikon dan teks berpasangan simetris dan sejajar presisi baik di Web maupun HP Android fisik.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Penyeragaman Tampilan Kartu Master Data & Anti-Truncate Label (`DashboardActionHub.js`)**:
   - Menyelesaikan perbedaan gaya visual kartu menu "Produk" pada dashboard agar konsisten dengan kartu lainnya:
     1. *Penyeragaman Kartu*: Menghapus styling khusus `productCardActive` yang sebelumnya memberikan border kehijauan dan background `#141c19` pada kartu Produk. Kini seluruh menu master data (Produk, Kategori, Satuan, Promosi, Pajak, Pelanggan, Pemasok) seragam menggunakan border standar `#27272a` dan background `#18181b`.
