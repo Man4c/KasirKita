@@ -49,6 +49,7 @@ export default function Discounts() {
     is_active: true,
   });
 
+  const [hasMinPurchase, setHasMinPurchase] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -75,11 +76,12 @@ export default function Discounts() {
   const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
-    setTimeout(() => setCopiedCode(null), 2000);
+    setTimeout(() => setCopiedCode(''), 2000);
   };
 
   const openAddModal = () => {
     setEditingDiscount(null);
+    setHasMinPurchase(false);
     setFormData({
       code: '',
       name: '',
@@ -99,13 +101,16 @@ export default function Discounts() {
 
   const openEditModal = (item) => {
     setEditingDiscount(item);
+    const resolvedType = item.type === 'MIN_SPEND' ? 'PERCENTAGE' : (item.type || 'PERCENTAGE');
+    const hasMin = Boolean(parseFloat(item.min_purchase_amount) > 0 || item.type === 'MIN_SPEND');
+    setHasMinPurchase(hasMin);
     setFormData({
       code: item.code || '',
       name: item.name || '',
       description: item.description || '',
-      type: item.type || 'PERCENTAGE',
+      type: resolvedType,
       value: item.value ? parseFloat(item.value).toString() : '',
-      min_purchase_amount: item.min_purchase_amount ? parseFloat(item.min_purchase_amount).toString() : '',
+      min_purchase_amount: hasMin && item.min_purchase_amount ? parseFloat(item.min_purchase_amount).toString() : '',
       max_discount_amount: item.max_discount_amount ? parseFloat(item.max_discount_amount).toString() : '',
       start_date: item.start_date ? item.start_date.substring(0, 10) : '',
       end_date: item.end_date ? item.end_date.substring(0, 10) : '',
@@ -128,8 +133,8 @@ export default function Discounts() {
         description: formData.description.trim() || null,
         type: formData.type,
         value: parseFloat(formData.value) || 0,
-        min_purchase_amount: formData.min_purchase_amount ? parseFloat(formData.min_purchase_amount) : 0,
-        max_discount_amount: (formData.type === 'PERCENTAGE' || formData.type === 'MIN_SPEND') && formData.max_discount_amount ? parseFloat(formData.max_discount_amount) : null,
+        min_purchase_amount: hasMinPurchase && formData.min_purchase_amount ? parseFloat(formData.min_purchase_amount) : 0,
+        max_discount_amount: formData.type === 'PERCENTAGE' && formData.max_discount_amount ? parseFloat(formData.max_discount_amount) : null,
         start_date: formData.start_date ? `${formData.start_date} 00:00:00` : null,
         end_date: formData.end_date ? `${formData.end_date} 23:59:59` : null,
         quota: formData.quota ? parseInt(formData.quota, 10) : null,
@@ -633,7 +638,6 @@ export default function Discounts() {
                   >
                     <option value="PERCENTAGE">Persentase (%)</option>
                     <option value="FIXED">Potongan Nominal (Rp)</option>
-                    <option value="MIN_SPEND">Minimal Belanja (Tiered %)</option>
                   </select>
                 </div>
               </div>
@@ -652,7 +656,7 @@ export default function Discounts() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className={`grid grid-cols-1 ${formData.type === 'PERCENTAGE' ? 'sm:grid-cols-2' : ''} gap-4`}>
                 <div>
                   <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
                     Besaran Nilai Diskon <span className="text-rose-500">*</span>
@@ -674,37 +678,74 @@ export default function Discounts() {
                   </div>
                 </div>
 
+                {formData.type === 'PERCENTAGE' && (
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                      Maksimal Potongan (Plafon Rp, Opsional)
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      min="0"
+                      placeholder="Kosongkan jika tanpa batas"
+                      value={formData.max_discount_amount}
+                      onChange={(e) => setFormData({ ...formData, max_discount_amount: e.target.value })}
+                      className="w-full px-3 py-2 text-xs sm:text-sm bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 font-mono focus:outline-none focus:border-rose-500"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Toggle: Syarat Minimal Belanja */}
+              <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800/80 flex items-center justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <span className="text-xs font-semibold text-zinc-200 block">
+                    Syarat Minimal Belanja
+                  </span>
+                  <span className="text-xs text-zinc-400 block mt-0.5">
+                    {hasMinPurchase
+                      ? 'Promo hanya berlaku jika total belanja kasir memenuhi batas minimal'
+                      : 'Promo berlaku untuk semua nilai belanja tanpa batas minimal'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = !hasMinPurchase;
+                    setHasMinPurchase(next);
+                    if (!next) {
+                      setFormData((prev) => ({ ...prev, min_purchase_amount: '' }));
+                    }
+                  }}
+                  className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer shrink-0 ${
+                    hasMinPurchase ? 'bg-rose-600' : 'bg-zinc-800'
+                  }`}
+                  aria-pressed={hasMinPurchase}
+                >
+                  <span
+                    className={`block w-4 h-4 rounded-full bg-white transition-transform absolute top-1 ${
+                      hasMinPurchase ? 'left-6' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Input Minimal Belanja (Progressive Disclosure) */}
+              {hasMinPurchase && (
                 <div>
                   <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                    Minimal Belanja (Rp)
+                    Minimal Pembelian (Rp) <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="number"
                     step="any"
-                    min="0"
-                    placeholder="0 (Tanpa minimal)"
+                    min="1"
+                    required={hasMinPurchase}
+                    placeholder="Contoh: 50.000"
                     value={formData.min_purchase_amount}
                     onChange={(e) => setFormData({ ...formData, min_purchase_amount: e.target.value })}
                     className="w-full px-3 py-2 text-xs sm:text-sm bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 font-mono focus:outline-none focus:border-rose-500"
                   />
-                </div>
-              </div>
-
-              {formData.type !== 'FIXED' && (
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                    Maksimal Potongan Diskon (Plafon Rp)
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    min="0"
-                    placeholder="Kosongkan jika tanpa batas potongan"
-                    value={formData.max_discount_amount}
-                    onChange={(e) => setFormData({ ...formData, max_discount_amount: e.target.value })}
-                    className="w-full px-3 py-2 text-xs sm:text-sm bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 font-mono focus:outline-none focus:border-rose-500"
-                  />
-                  <span className="text-xs text-zinc-400 mt-1 block">Contoh: Diskon 20% maksimal potongan Rp30.000</span>
                 </div>
               )}
 

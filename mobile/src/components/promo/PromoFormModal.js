@@ -55,7 +55,8 @@ export default function PromoFormModal({
   const [code, setCode] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [type, setType] = useState('PERCENTAGE'); // PERCENTAGE | FIXED | MIN_SPEND
+  const [type, setType] = useState('PERCENTAGE'); // PERCENTAGE | FIXED
+  const [hasMinPurchase, setHasMinPurchase] = useState(false);
   const [value, setValue] = useState('');
   const [minPurchaseAmount, setMinPurchaseAmount] = useState('');
   const [maxDiscountAmount, setMaxDiscountAmount] = useState('');
@@ -130,10 +131,16 @@ export default function PromoFormModal({
       setCode(promo.code || '');
       setName(promo.name || '');
       setDescription(promo.description || '');
-      setType(promo.type || 'PERCENTAGE');
+      // Map legacy MIN_SPEND to PERCENTAGE
+      const resolvedType = promo.type === 'MIN_SPEND' ? 'PERCENTAGE' : (promo.type || 'PERCENTAGE');
+      setType(resolvedType);
       setValue(promo.value !== undefined && promo.value !== null ? String(parseFloat(promo.value)) : '');
+      const hasMin = parseFloat(promo.min_purchase_amount) > 0 || promo.type === 'MIN_SPEND';
+      setHasMinPurchase(Boolean(hasMin));
       setMinPurchaseAmount(
-        parseFloat(promo.min_purchase_amount) > 0 ? String(parseFloat(promo.min_purchase_amount)) : ''
+        hasMin && parseFloat(promo.min_purchase_amount) > 0
+          ? String(parseFloat(promo.min_purchase_amount))
+          : ''
       );
       setMaxDiscountAmount(
         promo.max_discount_amount ? String(parseFloat(promo.max_discount_amount)) : ''
@@ -148,6 +155,7 @@ export default function PromoFormModal({
       setDescription('');
       setType('PERCENTAGE');
       setValue('');
+      setHasMinPurchase(false);
       setMinPurchaseAmount('');
       setMaxDiscountAmount('');
       setStartDate('');
@@ -177,14 +185,14 @@ export default function PromoFormModal({
     const numVal = parseFloat(value);
     if (!value || isNaN(numVal) || numVal <= 0) {
       errs.value = 'Nilai diskon harus lebih besar dari 0';
-    } else if ((type === 'PERCENTAGE' || type === 'MIN_SPEND') && numVal > 100) {
+    } else if (type === 'PERCENTAGE' && numVal > 100) {
       errs.value = 'Diskon persentase maksimal 100%';
     }
 
-    if (type === 'MIN_SPEND') {
+    if (hasMinPurchase) {
       const minBuy = parseFloat(minPurchaseAmount);
       if (!minPurchaseAmount || isNaN(minBuy) || minBuy <= 0) {
-        errs.minPurchaseAmount = 'Tipe Min. Belanja mewajibkan syarat nominal belanja';
+        errs.minPurchaseAmount = 'Nominal minimal belanja harus lebih besar dari 0';
       }
     }
 
@@ -207,8 +215,8 @@ export default function PromoFormModal({
         description: description.trim() || undefined,
         type: type,
         value: parseFloat(value),
-        min_purchase_amount: minPurchaseAmount ? parseFloat(minPurchaseAmount) : 0,
-        max_discount_amount: maxDiscountAmount ? parseFloat(maxDiscountAmount) : null,
+        min_purchase_amount: hasMinPurchase && minPurchaseAmount ? parseFloat(minPurchaseAmount) : 0,
+        max_discount_amount: type === 'PERCENTAGE' && maxDiscountAmount ? parseFloat(maxDiscountAmount) : null,
         start_date: startDate ? `${startDate}T00:00:00` : null,
         end_date: endDate ? `${endDate}T23:59:59` : null,
         quota: quota ? parseInt(quota, 10) : null,
@@ -365,17 +373,6 @@ export default function PromoFormModal({
                     Diskon Rp
                   </Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[styles.typeOptionBtn, type === 'MIN_SPEND' && styles.typeOptionBtnActive]}
-                  onPress={() => setType('MIN_SPEND')}
-                  activeOpacity={0.7}
-                >
-                  <TicketPercent size={14} color={type === 'MIN_SPEND' ? '#ffffff' : '#a1a1aa'} />
-                  <Text style={[styles.typeOptionText, type === 'MIN_SPEND' && styles.typeOptionTextActive]}>
-                    Min. Belanja
-                  </Text>
-                </TouchableOpacity>
               </View>
             </View>
 
@@ -401,8 +398,8 @@ export default function PromoFormModal({
               {errors.value && <Text style={styles.errorText}>{errors.value}</Text>}
             </View>
 
-            {/* Field: Batas Maksimal Potongan (Khusus Persentase / Min Spend) */}
-            {(type === 'PERCENTAGE' || type === 'MIN_SPEND') && (
+            {/* Field: Batas Maksimal Potongan (Khusus Persentase) */}
+            {type === 'PERCENTAGE' && (
               <View style={styles.fieldGroup}>
                 <Text style={styles.label}>Maksimal Potongan (Rp, Opsional)</Text>
                 <TextInput
@@ -416,27 +413,55 @@ export default function PromoFormModal({
               </View>
             )}
 
-            {/* Field: Minimal Pembelian */}
-            <View style={styles.fieldGroup}>
-              <View style={styles.labelRow}>
-                <Text style={styles.label}>Minimal Pembelian (Rp)</Text>
-                {type === 'MIN_SPEND' && <Text style={styles.requiredMark}>*</Text>}
+            {/* Toggle Switch: Syarat Minimal Belanja */}
+            <View style={[styles.switchRow, { marginBottom: hasMinPurchase ? 12 : 14 }]}>
+              <View style={{ flex: 1, minWidth: 0, paddingRight: 8 }}>
+                <Text style={styles.switchLabel}>Syarat Minimal Belanja</Text>
+                <Text style={styles.switchSubLabel}>
+                  {hasMinPurchase
+                    ? 'Promo hanya berlaku jika total belanja memenuhi syarat'
+                    : 'Promo berlaku untuk semua belanja tanpa batas minimal'}
+                </Text>
               </View>
-              <TextInput
-                style={[styles.input, errors.minPurchaseAmount && styles.inputError]}
-                placeholder="Contoh: 50.000 (0 = Tanpa minimal)"
-                placeholderTextColor="#a1a1aa"
-                value={minPurchaseAmount}
-                onChangeText={(val) => {
-                  setMinPurchaseAmount(val.replace(/[^0-9]/g, ''));
-                  if (errors.minPurchaseAmount) setErrors((prev) => ({ ...prev, minPurchaseAmount: null }));
+              <Switch
+                value={hasMinPurchase}
+                onValueChange={(val) => {
+                  setHasMinPurchase(val);
+                  if (!val) {
+                    setMinPurchaseAmount('');
+                    if (errors.minPurchaseAmount) {
+                      setErrors((prev) => ({ ...prev, minPurchaseAmount: null }));
+                    }
+                  }
                 }}
-                keyboardType="numeric"
+                trackColor={{ false: '#3f3f46', true: '#e11d48' }}
+                thumbColor={hasMinPurchase ? '#ffffff' : '#a1a1aa'}
               />
-              {errors.minPurchaseAmount && (
-                <Text style={styles.errorText}>{errors.minPurchaseAmount}</Text>
-              )}
             </View>
+
+            {/* Field: Minimal Pembelian (Progressive Disclosure) */}
+            {hasMinPurchase && (
+              <View style={styles.fieldGroup}>
+                <View style={styles.labelRow}>
+                  <Text style={styles.label}>Minimal Pembelian (Rp)</Text>
+                  <Text style={styles.requiredMark}>*</Text>
+                </View>
+                <TextInput
+                  style={[styles.input, errors.minPurchaseAmount && styles.inputError]}
+                  placeholder="Contoh: 50.000"
+                  placeholderTextColor="#a1a1aa"
+                  value={minPurchaseAmount}
+                  onChangeText={(val) => {
+                    setMinPurchaseAmount(val.replace(/[^0-9]/g, ''));
+                    if (errors.minPurchaseAmount) setErrors((prev) => ({ ...prev, minPurchaseAmount: null }));
+                  }}
+                  keyboardType="numeric"
+                />
+                {errors.minPurchaseAmount && (
+                  <Text style={styles.errorText}>{errors.minPurchaseAmount}</Text>
+                )}
+              </View>
+            )}
 
             {/* Field 2 Kolom: Tanggal Mulai & Tanggal Selesai (Interactive Date Pickers) */}
             <View style={styles.twoColRow}>
