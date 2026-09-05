@@ -20,6 +20,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Refaktorisasi Modular Layar Riwayat Transaksi (`TransactionHistoryScreen.js`, `mobile/src/components/history/`)**:
+  - Mengubah arsitektur monolitik `TransactionHistoryScreen.js` (dari ~929 baris menjadi ~280 baris terstruktur), menyelaraskannya dengan pola modular `PosScreen`, `DashboardScreen`, dan `SettingsScreen`:
+    1. *Pemisahan Sub-komponen Terfokus (`mobile/src/components/history/`)*:
+       - `TransactionCardItem.js`: Kartu item nota dengan flexbox pairing (`min-w-0 truncate` vs `shrink-0`), badge status (*Selesai*, *Dibatalkan*, *Belum Sinkron*), ikon metode bayar (`Banknote`, `QrCode`, `CreditCard`), metadata waktu/pelanggan, dan optimasi `React.memo`.
+       - `HistoryHeader.js`: Header bar bernormalisasi (margin 16px, paddingVertical 12px) dengan judul, subtitle dinamis total nota, dan tombol refresh berputar (`ActivityIndicator`).
+       - `HistorySearchBar.js`: Kolom pencarian responsif (tinggi tetap 44px, border fokus Rose Brand) lengkap dengan tombol hapus `(X)` dan segmented filter chips metode bayar (*Semua*, *Tunai*, *QRIS*, *Transfer*).
+       - `HistoryBanner.js`: Banner terpadu untuk indikasi mode offline lokal dan jumlah antrean transaksi offline yang menunggu sinkronisasi.
+       - `HistoryEmptyState.js`: Tampilan ramah saat riwayat kosong atau kata kunci filter tidak ditemukan, dilengkapi tombol reset filter praktis.
+    2. *Pembersihan Dead Code & Style Monolitik*: Menghapus ratusan baris CSS modal struk usang yang sebelumnya menumpuk di file layar utama.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Optimasi Virtualisasi Standar FlatList & Pencegahan Warning Performa (`PromoManagementScreen.js`, `ProductManagementScreen.js`, `CategoryManagementScreen.js`, `UnitManagementScreen.js`, `ProductGrid.js`)**:
   - Mengatasi warning performa development bawaan React Native `VirtualizedList: You have a large list that is slow to update`:
     1. *Parameter Virtualisasi Standar*: Menambahkan konfigurasi efisien pada seluruh FlatList:
