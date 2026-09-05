@@ -27,6 +27,7 @@ export default function DashboardActionHub({
   onOpenMasterUnit,
   onOpenMasterPromo,
   onOpenMasterTax,
+  onOpenMasterCustomer,
 }) {
   const lowStock = Number(inv?.low_stock_count || 0);
   const totalSku = Number(inv?.total_items || 0);
@@ -82,6 +83,17 @@ export default function DashboardActionHub({
       showAlert(
         'Master Pajak & Biaya',
         'Kelola pengaturan tarif PPN / PB1 resto dan biaya layanan (service charge).'
+      );
+    }
+  };
+
+  const handleMasterCustomer = () => {
+    if (onOpenMasterCustomer) {
+      onOpenMasterCustomer();
+    } else {
+      showAlert(
+        'Master Pelanggan',
+        'Data kontak pelanggan tetap, riwayat belanja member, dan tier loyalitas.'
       );
     }
   };
@@ -146,11 +158,7 @@ export default function DashboardActionHub({
       color: '#2dd4bf',
       bgColor: 'rgba(45, 212, 191, 0.16)',
       badge: null,
-      onPress: () =>
-        handleMasterAction(
-          'Master Pelanggan',
-          'Data kontak pelanggan tetap, riwayat belanja member, dan poin loyalitas.'
-        ),
+      onPress: handleMasterCustomer,
     },
     {
       id: 'supplier',

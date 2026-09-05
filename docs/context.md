@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Phase 5 Master Pelanggan & Keanggotaan di Mobile (Navigasi Hub & POS Sync, Plan #30)**:
+  - Mengintegrasikan launcher menu, navigasi RBAC Owner/Manager, dan sinkronisasi kasir POS:
+    1. *Dashboard Action Hub (`mobile/src/components/dashboard/DashboardActionHub.js`)*: Menghubungkan tile Master Pelanggan (`customer`) ke handler `handleMasterCustomer` dengan prop callback `onOpenMasterCustomer`.
+    2. *Integrasi Dashboard Screen (`mobile/src/screens/DashboardScreen.js`)*: Meneruskan callback `navigation.navigate('customer_management')` ke `DashboardActionHub`.
+    3. *Registrasi Rute Aplikasi (`mobile/App.js`)*: Mengimpor `CustomerManagementScreen`, mendaftarkan rute `customer_management` dengan proteksi peran Owner (`user?.role === 'owner'`), serta menyediakan navigasi kembali ke `dashboard`.
+    4. *Verifikasi Defensive UI Kasir POS (`CustomerPickerModal.js`)*: Modal pemilihan pelanggan di kasir POS mematuhi standar defensive UI dan menyinkronkan data member secara offline/online.
+    5. *Audit Defensive Craft & Linter*: Seluruh file lulus audit linter `detect.mjs` (0 defect) dan verifikasi sintaks JS (`node -c`). Phase 5 Plan #30 berstatus `completed`.
+
 - **Implementasi Phase 4 Master Pelanggan & Keanggotaan di Mobile (`CustomerFormModal.js`, Plan #30)**:
   - Menyelesaikan formulir modal pendaftaran dan edit pelanggan (`mobile/src/components/customer/CustomerFormModal.js`):
     1. *Formulir Identitas Lengkap*: Input nama lengkap pelanggan (wajib), nomor telepon / WhatsApp (validasi numerik min 8 digit), email terverifikasi regex, dan alamat domisili/pengiriman.
