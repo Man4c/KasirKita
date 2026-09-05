@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788570370.7558155,
-    "ast_hash": "b9781d7692cf4b87cbd418b7b6425b9d",
+    "mtime": 1788571629.5100873,
+    "ast_hash": "01da81c5f869475620840af26491b695",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1370,8 +1370,8 @@
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788416489.5675917,
-    "ast_hash": "872c4a27346f0358f6278afd31e77390",
+    "mtime": 1788571596.3980236,
+    "ast_hash": "9f09e4b32bebc6f29f64bc7881e2c2ec",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -1395,8 +1395,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
-    "mtime": 1788570330.514502,
-    "ast_hash": "f004ccbed73676c987ed62995c947bd8",
+    "mtime": 1788571591.7618227,
+    "ast_hash": "09521f4e7a26f19adf846f1038847e96",
     "semantic_hash": ""
   },
   "mobile/src/screens/PosScreen.js": {
@@ -1405,8 +1405,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/api.js": {
-    "mtime": 1788570319.4723837,
-    "ast_hash": "57aefc733ced4320b39d416cc4bc1c97",
+    "mtime": 1788571584.2532182,
+    "ast_hash": "4041178b8915e39be4d76fbd5d00af39",
     "semantic_hash": ""
   },
   "mobile/src/services/storage.js": {

@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Resolusi Network Error pada HP Fisik Android (`api.js`, `LoginScreen.js`, `app.json`)**:
+  - Menyelesaikan masalah kegagalan koneksi (*Network Error*) pada perangkat fisik Android:
+    1. *Penyebab Root Cause*: Logika `getDefaultBaseUrl()` sebelumnya mengembalikan `http://10.0.2.2:8000/api` untuk semua platform Android. IP `10.0.2.2` adalah alamat router virtual khusus emulator Android Studio di PC dan tidak ada di HP fisik. Selain itu, Android 9+ memblokir lalu lintas HTTP non-HTTPS (cleartext) secara default jika tidak diizinkan di manifest.
+    2. *Deteksi Host Dinamis (`getHostIp`)*: Mengekstrak IP LAN laptop secara otomatis dari `NativeModules.SourceCode.scriptURL` atau `Constants.expoConfig.hostUri` (misal `192.168.1.3`), sehingga HP fisik otomatis menghubungi IP laptop tanpa perlu input manual.
+    3. *Auto-Heal IP Usang*: Interceptor otomatis mengganti URL `10.0.2.2` atau IP LAN lama yang tidak cocok dengan IP host Metro yang aktif.
+    4. *Cleartext HTTP Traffic (`app.json`)*: Menambahkan `"usesCleartextTraffic": true` pada konfigurasi `android` di `app.json` agar Android mengizinkan request HTTP lokal ke backend Laravel.
+  - Lolos verifikasi linter Impeccable (`detect.mjs` $\rightarrow$ 0 defects) dan build Expo Web (`npx expo export --platform web`).
+
 - **Resolusi Timeout Koneksi Server & Auto-Healing API URL (`api.js`, `LoginScreen.js`, `backend/.env`)**:
   - Mengidentifikasi dan menyelesaikan akar masalah error `timeout of 10000ms exceeded` saat backend aktif:
     1. *Penyebab Root Cause*: State awal `apiUrl` di `LoginScreen.js` sebelumnya di-hardcode ke `http://192.168.1.5:8000/api` dan tersimpan di `storage` browser. Sementara itu, IP laptop di jaringan WiFi telah berganti menjadi `192.168.1.3`. Akibatnya, saat aplikasi dibuka di browser (`localhost:8081`), Axios mencoba mengirim request ke IP usang `192.168.1.5:8000` yang tidak merespons, sehingga memicu timeout 10 detik dan memaksa aplikasi jatuh ke fallback offline.

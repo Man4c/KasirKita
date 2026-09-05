@@ -62,12 +62,12 @@ export default function LoginScreen() {
         }
       }
 
-      if (saved && !saved.includes('192.168.1.5')) {
+      const defaultUrl = getDefaultBaseUrl();
+      if (saved && !saved.includes('192.168.1.5') && (!saved.includes('10.0.2.2') || defaultUrl.includes('10.0.2.2'))) {
         setApiUrl(saved);
       } else {
-        const fallback = getDefaultBaseUrl();
-        setApiUrl(fallback);
-        storage.setApiUrl(fallback);
+        setApiUrl(defaultUrl);
+        storage.setApiUrl(defaultUrl);
       }
     });
   }, []);
