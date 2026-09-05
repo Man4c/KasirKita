@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Temuan Impeccable Master Pelanggan (`CustomerCardItem.js` & `CustomerManagementScreen.js`)**:
+  - Menyelesaikan temuan live detector Impeccable pada screen master pelanggan:
+    1. *Pemberantasan AI Color Palette (Cyan Neon Text)*: Mengganti warna teks badge member grosir dari cyan neon `#38bdf8` (`rgba(56, 189, 248...)`) menjadi warna natural blue-400 `#60a5fa` (`rgba(96, 165, 250...)`) yang selaras dengan palet identitas KasirKita.
+    2. *Pemberantasan Low Contrast Text pada Filter*: Mengubah warna teks label filter status `statusChipPrefixText` (*"Status:"*) dari `#71717a` (4.1:1) menjadi `#a1a1aa` (5.3:1) terhadap latar `#09090b`.
+    3. *Pemberantasan FAB Occlusion*: Menaikkan padding bawah daftar pelanggan (`listContent: paddingBottom: 125`) sehingga catatan pelanggan pada item terbawah tidak tertutup oleh tombol melayang FAB (*"Tambah Pelanggan"*).
+  - Lolos uji detektor Impeccable (0 defect) dan tersimpan permanen via git commit.
+
 - **Penyelesaian Temuan Impeccable Master Pemasok & Distributor (`SupplierCardItem.js` & `SupplierManagementScreen.js`)**:
   - Menyelesaikan temuan kualitas, kontras, dan layout occlusion dari hasil audit Impeccable pada screen master pemasok:
     1. *Pemberantasan Low Contrast Text (WCAG AA Compliance)*: Memperbaiki warna teks alamat (`addressText`) dan placeholder kontak (`noContactText`) dari `#71717a` (3.7:1) menjadi `#a1a1aa` (5.3:1) terhadap latar dark mode.
