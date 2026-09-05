@@ -20,6 +20,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Inisialisasi Rencana Kerja Plan #30 (Master Pelanggan Mobile) & Plan #31 (Master Pemasok Mobile)**:
+  - Menyusun dua dokumen modul rencana kerja detail di folder `plans/`:
+    1. *Plan #30 (`plans/260905-30-mobile-master-pelanggan/plan.md`)*: Screen Master Pelanggan & Keanggotaan (Customer & Membership) di Mobile, FlatList profil member, tab segmented level (VIP, Grosir, Reguler), metrik riwayat belanja dan kunjungan, tombol aksi WhatsApp chat/call, modal pendaftaran member baru, dan sinkronisasi Customer Picker POS.
+    2. *Plan #31 (`plans/260905-31-mobile-master-pemasok/plan.md`)*: Screen Master Pemasok (Supplier & Distributor) di Mobile, informasi contact person/sales, kotak rekening bank dengan fitur salin instan (BCA/Mandiri/BRI), metrik volume restock & total pembelian kas, dan tombol aksi Pemasok di Action Hub Dashboard.
+
 - **Penyelesaian Penuh Master Pajak & Biaya Layanan di Mobile (Phase 6 Audit & Multi-Platform Build, Plan #29 100% Selesai)**:
   - Menyelesaikan seluruh audit kualitas, kepatuhan WCAG, dan pengujian build:
     1. *Audit Defensive UI & Craft Floor*: Seluruh komponen (`TaxCardItem.js`, `TaxManagementScreen.js`, `TaxFormModal.js`, `TaxFeeModal.js`) mematuhi aturan The Flexbox Pairing Rule (`min-w-0 truncate` vs `shrink-0 whitespace-nowrap`) dan The Readability Floor Rule (tidak ada font < 12px).
