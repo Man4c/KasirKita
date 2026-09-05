@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan Margin Layar & Kesejajaran Input Modal Promosi (`PromoFormModal.js`)**:
+  - Menyelesaikan keluhan pengguna mengenai tampilan form modal Tambah/Ubah Promosi yang rapat/menempel ke pinggir layar tanpa celah samping, serta placeholder input yang tidak berada di tengah vertikal:
+    1. *Penyebab Root Cause*: Komponen `<ScrollView>` di dalam modal promosi sebelumnya tidak memiliki properti `paddingHorizontal` (hanya `paddingVertical: 12` pada `styles.formScroll`), dan tidak mendefinisikan `contentContainerStyle`. Akibatnya, seluruh field input formulir (`Kode Kupon`, `Nama Promosi`, pilihan tombol skema diskon `% / Rp`, nominal diskon, dan batas kuota) terentang selebar 100% menabrak bingkai kiri dan kanan layar (0 margin), sementara header dan footer modal memiliki padding 16px.
+    2. *Solusi Layout Spacing*: Menambahkan `contentContainerStyle={styles.formScrollContent}` pada `<ScrollView>` dengan `paddingHorizontal: 16`, `paddingTop: 12`, dan `paddingBottom: 24`. Hal ini membuat seluruh isi formulir sejajar presisi dengan header dan footer modal, sementara scrollbar vertikal tetap berada di sisi luar layar.
+    3. *Penerapan Anti-Shift Typography & Input Centering*: Menyelaraskan seluruh single-line `<TextInput>` dengan standar ketahanan layout (`height: 44`, `paddingVertical: 0`, `includeFontPadding: false`, `textAlignVertical: 'center'`), merapikan multiline `textArea` (`textAlignVertical: 'top'`), serta mensejajarkan ikon dan teks tombol opsi skema diskon (`typeOptionBtn` minHeight 44dp) dan tombol submit.
+  - Lolos uji detektor Impeccable (0 defect).
+
 - **Presisi Kesejajaran Vertikal Placeholder & Input Text Modal (Universal TextInput Anti-Shift)**:
   - Menyelesaikan masalah placeholder dan teks input yang turun/tenggelam dan tidak berada di tengah vertikal pada seluruh modal form aplikasi:
     1. *Penyebab Root Cause*: Pada Android, komponen native `EditText` (basis `<TextInput>` React Native) memiliki padding internal asimetris. Ketika dipadukan dengan `paddingVertical` dan font Poppins tanpa `includeFontPadding: false` dan `textAlignVertical: 'center'`, teks dan placeholder terdorong turun ke bawah mendekati garis batas bawah input box.

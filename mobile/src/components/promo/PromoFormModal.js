@@ -320,7 +320,11 @@ export default function PromoFormModal({
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.formScroll} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={styles.formScroll}
+            contentContainerStyle={styles.formScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
             {/* Field: Kode Kupon */}
             <View style={styles.fieldGroup}>
               <View style={styles.labelRow}>
@@ -751,7 +755,12 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   formScroll: {
-    paddingVertical: 12,
+    maxHeight: '100%',
+  },
+  formScrollContent: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 24,
   },
   fieldGroup: {
     marginBottom: 14,
@@ -787,10 +796,13 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    height: 44,
+    paddingVertical: 0,
     color: '#f4f4f5',
     fontSize: 13,
     fontFamily: 'Poppins_400Regular',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   datePickerTrigger: {
     flexDirection: 'row',
@@ -830,7 +842,11 @@ const styles = StyleSheet.create({
     color: '#fb7185',
   },
   textArea: {
+    height: 'auto',
     minHeight: 64,
+    paddingTop: 10,
+    paddingBottom: 10,
+    textAlignVertical: 'top',
   },
   inputError: {
     borderColor: '#f87171',
@@ -840,6 +856,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     marginTop: 4,
+    includeFontPadding: false,
   },
   typeSelectorRow: {
     flexDirection: 'row',
@@ -847,6 +864,7 @@ const styles = StyleSheet.create({
   },
   typeOptionBtn: {
     flex: 1,
+    minHeight: 44,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -855,8 +873,8 @@ const styles = StyleSheet.create({
     borderColor: '#27272a',
     borderRadius: 10,
     paddingVertical: 10,
-    paddingHorizontal: 4,
-    gap: 4,
+    paddingHorizontal: 8,
+    gap: 6,
   },
   typeOptionBtnActive: {
     backgroundColor: '#e11d48',
@@ -867,10 +885,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
     textAlign: 'center',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   typeOptionTextActive: {
     color: '#ffffff',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   switchRow: {
     flexDirection: 'row',
@@ -912,6 +934,8 @@ const styles = StyleSheet.create({
     color: '#f87171',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   modalFooter: {
     flexDirection: 'row',
@@ -939,6 +963,8 @@ const styles = StyleSheet.create({
     color: '#d4d4d8',
     fontSize: 13,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   submitButton: {
     flex: 1.5,
@@ -958,5 +984,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });
