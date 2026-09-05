@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788591828.248527,
-    "ast_hash": "3bba3a2ac0f1009674420580dd5cf846",
+    "mtime": 1788592001.7956026,
+    "ast_hash": "c957eaa818f906c0be0c121f613266ce",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2130,8 +2130,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/offlineStorage.js": {
-    "mtime": 1788522831.366789,
-    "ast_hash": "274dc625c05aecb286dccd1ea03dddb4",
+    "mtime": 1788591914.4575794,
+    "ast_hash": "849455e2e1cfa3907c5df702f716add7",
     "semantic_hash": ""
   },
   "mobile/src/services/syncManager.js": {
@@ -2460,8 +2460,13 @@
     "semantic_hash": ""
   },
   "plans/260905-29-mobile-master-pajak-dan-biaya/plan.md": {
-    "mtime": 1788591814.6113825,
-    "ast_hash": "e3bf8798cce44b03bb80bf9c7b556da2",
+    "mtime": 1788591993.7456405,
+    "ast_hash": "2de2ffeee9397cdc84828158f6c15e3f",
+    "semantic_hash": ""
+  },
+  "mobile/src/services/taxService.js": {
+    "mtime": 1788591977.0441022,
+    "ast_hash": "5a48279c70ea295f6d0979e148c04cb7",
     "semantic_hash": ""
   }
 }

@@ -347,5 +347,10 @@
   "345": "checkHeroEyebrow",
   "346": "react",
   "347": "react-native",
-  "348": "@react-native-community/datetimepicker"
+  "348": "@react-native-community/datetimepicker",
+  "349": "BORDER_SAFE_TAGS",
+  "350": "Generate Report",
+  "351": "Diagnostic Scan",
+  "352": "Visualize: Direction Comps & Asset Production",
+  "353": "Adaptation Strategies"
 }
