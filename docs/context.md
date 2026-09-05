@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perancangan Modul Master Pengguna & Staf Kasir Mobile (React Native) (`plans/260905-32-mobile-master-pengguna/plan.md`)**:
+  - Menyusun rencana implementasi modular untuk manajemen pengguna/kasir di aplikasi mobile yang terintegrasi dengan backend `/api/users`:
+    1. *Role-Based Access Control (RBAC)*: Akses terbatas hanya untuk `owner`, dengan perlindungan *self-deletion* dan *self-deactivation* guard pada akun owner yang sedang login.
+    2. *Native Bottom Sheet Modals*: `UserFormModal.js` (tambah/edit staf) dan `ResetPasswordModal.js` (ganti password kasir saat shift) dengan drag handle dan sticky footer 44dp.
+    3. *Tap-to-Edit Kartu & Standar Impeccable*: Seluruh badan `UserCardItem.js` dapat diketuk langsung untuk edit cepat, dilengkapi avatar inisial, badge role, performa kasir (jumlah transaksi & omset), dan touch target $\ge 44$dp.
+    4. *Extended Pill FAB*: Tombol mengambang ergonomis `[+] Tambah Staf`.
+    5. *Integrasi Navigasi*: Registrasi rute `user_management` di `App.js` serta launcher tile di `DashboardActionHub.js` dan `SettingsScreen.js`.
+
 - **Transformasi Native Bottom Sheet Modal & Peningkatan Touch Target pada Struk Transaksi Penjualan & Riwayat (`PosReceiptModal.js`, `RecentTransactionsSection.js`, `TransactionCardItem.js`)**:
   - Menyelaraskan tampilan modal struk transaksi belanja yang dipicu dari section 10 transaksi penjualan terakhir di Dashboard (`DashboardScreen.js`) dan layar Riwayat Transaksi (`TransactionHistoryScreen.js`):
     1. *Transformasi Native Slide-Up Bottom Sheet Modal*: Mengubah `PosReceiptModal.js` dari kotak dialog tengah melayang menjadi **Slide-up Native Bottom Sheet Modal** dengan visual drag handle bar (38dp), sudut atas melengkung 20dp, backdrop tap-to-dismiss (`backdropTouchable`), dan sudut bottom sheet yang menempel ergonomis di bagian bawah layar.
