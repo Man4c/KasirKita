@@ -751,27 +751,67 @@ export default function Discounts() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                    Tanggal Mulai Berlaku
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.start_date}
-                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                    className="w-full px-3 py-2 text-xs sm:text-sm bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 focus:outline-none focus:border-rose-500"
-                  />
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-semibold text-zinc-300">
+                      Tanggal Mulai Berlaku
+                    </label>
+                    {formData.start_date && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData((prev) => ({ ...prev, start_date: '' }))}
+                        className="text-xs text-zinc-400 hover:text-rose-400 cursor-pointer"
+                      >
+                        Hapus Tanggal
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      style={{ colorScheme: 'dark' }}
+                      value={formData.start_date}
+                      onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                      onClick={(e) => {
+                        try {
+                          e.target.showPicker?.();
+                        } catch {}
+                      }}
+                      className="w-full px-3 py-2 text-xs sm:text-sm bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 focus:outline-none focus:border-rose-500 cursor-pointer"
+                    />
+                  </div>
+                  <span className="text-xs text-zinc-400 mt-1 block">Klik untuk memilih dari kalender</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                    Tanggal Berakhir Promo
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.end_date}
-                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                    className="w-full px-3 py-2 text-xs sm:text-sm bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 focus:outline-none focus:border-rose-500"
-                  />
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-semibold text-zinc-300">
+                      Tanggal Berakhir Promo
+                    </label>
+                    {formData.end_date && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData((prev) => ({ ...prev, end_date: '' }))}
+                        className="text-xs text-zinc-400 hover:text-rose-400 cursor-pointer"
+                      >
+                        Hapus Tanggal
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      style={{ colorScheme: 'dark' }}
+                      value={formData.end_date}
+                      onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                      onClick={(e) => {
+                        try {
+                          e.target.showPicker?.();
+                        } catch {}
+                      }}
+                      className="w-full px-3 py-2 text-xs sm:text-sm bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 focus:outline-none focus:border-rose-500 cursor-pointer"
+                    />
+                  </div>
+                  <span className="text-xs text-zinc-400 mt-1 block">Klik untuk memilih dari kalender</span>
                 </div>
               </div>
 

@@ -379,9 +379,15 @@ export default function CashFlow() {
                 <input
                   type="date"
                   required
+                  style={{ colorScheme: 'dark' }}
                   value={form.flow_date}
                   onChange={(e) => setForm({ ...form, flow_date: e.target.value })}
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-zinc-200 outline-none focus:border-rose-500"
+                  onClick={(e) => {
+                    try {
+                      e.target.showPicker?.();
+                    } catch {}
+                  }}
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-zinc-200 outline-none focus:border-rose-500 cursor-pointer"
                 />
               </div>
 
