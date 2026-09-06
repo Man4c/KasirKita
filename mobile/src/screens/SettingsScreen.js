@@ -34,6 +34,8 @@ import {
   CheckCircle2,
   Wifi,
   Trash2,
+  Download,
+  Upload,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -42,6 +44,7 @@ import { offlineStorage } from '../services/offlineStorage';
 import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
+import { backupService } from '../services/backupService';
 import { showAlert } from '../utils/alert';
 import {
   UserProfileModal,
@@ -51,6 +54,7 @@ import {
   PrinterGuideModal,
   TestReceiptModal,
   SecurityAuditModal,
+  BackupRestoreModal,
 } from '../components/settings';
 import appConfig from '../../app.json';
 
@@ -97,6 +101,13 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
 
   const [pendingOfflineCount, setPendingOfflineCount] = useState(0);
   const [isSyncingOffline, setIsSyncingOffline] = useState(false);
+
+  // Backup & Restore State
+  const [isExportingBackup, setIsExportingBackup] = useState(false);
+  const [isImportingBackup, setIsImportingBackup] = useState(false);
+  const [backupModalVisible, setBackupModalVisible] = useState(false);
+  const [backupModalMode, setBackupModalMode] = useState('inspect_backup');
+  const [inspectedBackup, setInspectedBackup] = useState(null);
 
   // Guide Modal State
   const [printerGuideOpen, setPrinterGuideOpen] = useState(false);
@@ -157,7 +168,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         setCacheSize('0 KB');
       }
 
-      // 2. Fetch and synchronize latest store identity from Cloud backend
+      // 2. Fetch and synchronize latest store identity & POS preferences from Cloud backend
       const res = await api.get('/settings/store');
       if (res.data?.success && res.data?.data) {
         const cloud = res.data.data;
@@ -169,7 +180,21 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         if (typeof cloud.show_logo_on_receipt === 'boolean') setShowLogoOnReceipt(cloud.show_logo_on_receipt);
         if (typeof cloud.show_phone_on_receipt === 'boolean') setShowPhoneOnReceipt(cloud.show_phone_on_receipt);
 
-        // Cache cloud identity to local storage
+        // Top-down preference sync from Cloud
+        const cloudPrefs = cloud.preferences || {};
+        if (typeof cloudPrefs.show_barcode_scanner === 'boolean') setShowBarcodeScanner(cloudPrefs.show_barcode_scanner);
+        if (typeof cloudPrefs.sound_beep === 'boolean') setSoundBeep(cloudPrefs.sound_beep);
+        if (typeof cloudPrefs.show_customer_picker === 'boolean') setShowCustomerPicker(cloudPrefs.show_customer_picker);
+        if (typeof cloudPrefs.show_voucher_feature === 'boolean') setShowVoucherFeature(cloudPrefs.show_voucher_feature);
+        if (typeof cloudPrefs.show_tax_feature === 'boolean') setShowTaxFeature(cloudPrefs.show_tax_feature);
+        if (typeof cloudPrefs.auto_print === 'boolean') setAutoPrint(cloudPrefs.auto_print);
+        if (typeof cloudPrefs.print_two_copies === 'boolean') setPrintTwoCopies(cloudPrefs.print_two_copies);
+        if (cloudPrefs.paper_size) {
+          setPaperSize(cloudPrefs.paper_size);
+          printerService.setPaperSize(cloudPrefs.paper_size);
+        }
+
+        // Cache cloud identity and preferences to local storage (Cache-First)
         await storage.setSettings({
           ...(saved || {}),
           storeName: cloud.name,
@@ -179,6 +204,14 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
           receiptFooter: cloud.receipt_footer || '',
           showLogoOnReceipt: cloud.show_logo_on_receipt,
           showPhoneOnReceipt: cloud.show_phone_on_receipt,
+          showBarcodeScanner: cloudPrefs.show_barcode_scanner ?? saved?.showBarcodeScanner ?? true,
+          soundBeep: cloudPrefs.sound_beep ?? saved?.soundBeep ?? true,
+          showCustomerPicker: cloudPrefs.show_customer_picker ?? saved?.showCustomerPicker ?? true,
+          showVoucherFeature: cloudPrefs.show_voucher_feature ?? saved?.showVoucherFeature ?? true,
+          showTaxFeature: cloudPrefs.show_tax_feature ?? saved?.showTaxFeature ?? true,
+          autoPrint: cloudPrefs.auto_print ?? saved?.autoPrint ?? false,
+          printTwoCopies: cloudPrefs.print_two_copies ?? saved?.printTwoCopies ?? false,
+          paperSize: cloudPrefs.paper_size || saved?.paperSize || '58mm',
         });
       }
     } catch (err) {
@@ -206,6 +239,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         showTaxFeature,
         showBarcodeScanner,
         orientationPref,
+        paperSize,
         ...overrides,
       };
       await storage.setSettings(current);
@@ -223,6 +257,35 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         }).catch((err) => {
           console.log('[SettingsScreen] Note: Cloud sync for receipt toggle skipped:', err.message);
         });
+      }
+
+      // If owner modifies POS preference toggles, sync to PUT /settings/preferences
+      if (user?.role === 'owner') {
+        const prefKeys = [
+          'showBarcodeScanner',
+          'soundBeep',
+          'showCustomerPicker',
+          'showVoucherFeature',
+          'showTaxFeature',
+          'autoPrint',
+          'printTwoCopies',
+          'paperSize',
+        ];
+        const hasPrefChange = prefKeys.some((k) => overrides[k] !== undefined);
+        if (hasPrefChange) {
+          api.put('/settings/preferences', {
+            show_barcode_scanner: current.showBarcodeScanner,
+            sound_beep: current.soundBeep,
+            show_customer_picker: current.showCustomerPicker,
+            show_voucher_feature: current.showVoucherFeature,
+            show_tax_feature: current.showTaxFeature,
+            auto_print: current.autoPrint,
+            print_two_copies: current.printTwoCopies,
+            paper_size: current.paperSize,
+          }).catch((err) => {
+            console.log('[SettingsScreen] Note: Cloud sync for preferences skipped:', err.message);
+          });
+        }
       }
     } catch (err) {
       console.log('Error saving settings:', err.message);
@@ -378,6 +441,88 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
           },
         ]
       );
+    }
+  };
+
+  // --- Backup & Restore Handlers ---
+  const handleExportBackup = async () => {
+    try {
+      setIsExportingBackup(true);
+      const res = await backupService.exportStoreBackup();
+      setIsExportingBackup(false);
+
+      if (res.success) {
+        const sum = res.summary;
+        let detailMsg = `Berkas: ${res.filename}\nSumber: ${sum.sourceMode}\n\n• ${sum.productsCount} Produk\n• ${sum.categoriesCount} Kategori\n• ${sum.customersCount} Pelanggan\n• ${sum.unitsCount} Satuan\n• ${sum.suppliersCount} Pemasok`;
+        if (sum.hasOfflineQueue) {
+          detailMsg += `\n• ⚠️ ${sum.queueCount} Antrean Nota Offline (Ikut tercadangkan)`;
+        }
+        showAlert('Pencadangan Berhasil', detailMsg);
+      } else {
+        showAlert('Pencadangan Gagal', res.message || 'Terjadi kesalahan saat mengekspor berkas.');
+      }
+    } catch (err) {
+      setIsExportingBackup(false);
+      showAlert('Error', err.message || 'Gagal mengekspor data cadangan');
+    }
+  };
+
+  const handleStartRestore = () => {
+    // If device still has pending offline transactions, show warning mode first (Frictionless UX)
+    if (pendingOfflineCount > 0) {
+      setBackupModalMode('offline_warning');
+      setBackupModalVisible(true);
+    } else {
+      proceedWithFilePicker();
+    }
+  };
+
+  const proceedWithFilePicker = async () => {
+    try {
+      const res = await backupService.pickAndInspectBackupFile();
+      if (res.canceled) return;
+
+      if (!res.valid) {
+        showAlert('Berkas Tidak Valid', res.message || 'Format berkas cadangan tidak sesuai.');
+        return;
+      }
+
+      setInspectedBackup(res);
+      setBackupModalMode('inspect_backup');
+      setBackupModalVisible(true);
+    } catch (err) {
+      showAlert('Error', err.message || 'Gagal membuka berkas cadangan.');
+    }
+  };
+
+  const handleConfirmRestore = async ({ includeOfflineQueue = false } = {}) => {
+    if (!inspectedBackup || !inspectedBackup.payload) return;
+
+    try {
+      setIsImportingBackup(true);
+      const res = await backupService.restoreStoreBackup(inspectedBackup.payload, {
+        includeOfflineQueue,
+      });
+      setIsImportingBackup(false);
+      setBackupModalVisible(false);
+
+      if (res.success) {
+        // Refresh local UI states
+        await loadSettings();
+        syncManager.refreshPendingCount();
+
+        const sum = res.summary;
+        let successMsg = `Berhasil memulihkan:\n• ${sum.products} Produk\n• ${sum.categories} Kategori\n• ${sum.customers} Pelanggan`;
+        if (includeOfflineQueue && sum.queueRestored > 0) {
+          successMsg += `\n• ${sum.queueRestored} Nota Offline dipulihkan ke antrean HP ini`;
+        }
+        showAlert('Pemulihan Selesai', successMsg);
+      } else {
+        showAlert('Pemulihan Gagal', res.message || 'Gagal menerapkan data cadangan.');
+      }
+    } catch (err) {
+      setIsImportingBackup(false);
+      showAlert('Error', err.message || 'Gagal memulihkan data.');
     }
   };
 
@@ -882,7 +1027,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
               <Text style={styles.menuTitle}>Antrean Transaksi Offline</Text>
               <Text style={styles.menuSubtitle}>
                 {pendingOfflineCount > 0
-                  ? `${pendingOfflineCount} nota tersimpan di HP belum terunggah`
+                  ? `🟢 ${pendingOfflineCount} nota aman di HP. Otomatis terunggah ke cloud saat server aktif besok pagi.`
                   : 'Semua transaksi kasir sudah tersinkronkan ke cloud'}
               </Text>
             </View>
@@ -927,7 +1072,65 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         </View>
       </View>
 
-      {/* 6. Seksi Bantuan & Panduan Kasir */}
+      {/* 6. Seksi Pencadangan & Pemulihan Data (JSON) */}
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>PENCADANGAN & PEMULIHAN DATA (JSON)</Text>
+        <View style={styles.card}>
+          {/* Cadangkan Data */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleExportBackup}
+            disabled={isExportingBackup}
+          >
+            <View style={[styles.menuIconBox, { backgroundColor: 'rgba(56, 189, 248, 0.15)', borderWidth: 1, borderColor: 'rgba(56, 189, 248, 0.3)' }]}>
+              {isExportingBackup ? (
+                <ActivityIndicator size="small" color="#38bdf8" />
+              ) : (
+                <Download size={18} color="#38bdf8" />
+              )}
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.menuTitle}>
+                {isExportingBackup ? 'Mengekspor Berkas...' : 'Cadangkan Data Toko (JSON)'}
+              </Text>
+              <Text style={styles.menuSubtitle}>
+                Ekspor seluruh produk, harga, pelanggan, & preferensi kasir
+              </Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Pulihkan Data */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleStartRestore}
+            disabled={isImportingBackup}
+          >
+            <View style={[styles.menuIconBox, { backgroundColor: 'rgba(225, 29, 72, 0.15)', borderWidth: 1, borderColor: 'rgba(225, 29, 72, 0.3)' }]}>
+              {isImportingBackup ? (
+                <ActivityIndicator size="small" color="#fb7185" />
+              ) : (
+                <Upload size={18} color="#fb7185" />
+              )}
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.menuTitle}>
+                {isImportingBackup ? 'Memproses Pemulihan...' : 'Pulihkan Data dari Berkas'}
+              </Text>
+              <Text style={styles.menuSubtitle}>
+                Impor katalog produk & preferensi dari berkas cadangan .json
+              </Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* 7. Seksi Bantuan & Panduan Kasir */}
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>BANTUAN & PANDUAN KASIR</Text>
         <View style={styles.card}>
@@ -1110,6 +1313,33 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         isOnline={isOnline}
         serverPing={serverPing}
         user={user}
+      />
+
+      {/* MODAL 6: PENCADANGAN & PEMULIHAN DATA */}
+      <BackupRestoreModal
+        visible={backupModalVisible}
+        onClose={() => setBackupModalVisible(false)}
+        mode={backupModalMode}
+        pendingCount={pendingOfflineCount}
+        isSyncing={isSyncingOffline}
+        onSyncNow={async () => {
+          await handleSyncOfflineTransactions();
+          const remaining = await offlineStorage.getPendingQueueCount();
+          if (remaining === 0) {
+            setBackupModalVisible(false);
+            proceedWithFilePicker();
+          }
+        }}
+        onBackupFirst={async () => {
+          await handleExportBackup();
+        }}
+        onProceedAnyway={() => {
+          setBackupModalVisible(false);
+          proceedWithFilePicker();
+        }}
+        inspectedData={inspectedBackup}
+        isRestoring={isImportingBackup}
+        onConfirmRestore={handleConfirmRestore}
       />
     </ScrollView>
   );

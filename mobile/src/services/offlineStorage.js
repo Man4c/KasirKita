@@ -143,6 +143,33 @@ export const offlineStorage = {
   },
 
   /**
+   * Cache full products list locally.
+   */
+  async cacheProducts(products) {
+    if (!Array.isArray(products)) return false;
+    try {
+      await AsyncStorage.setItem(KEYS.PRODUCTS, JSON.stringify(products));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menyimpan cache produk:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Get cached products list.
+   */
+  async getCachedProducts() {
+    try {
+      const raw = await AsyncStorage.getItem(KEYS.PRODUCTS);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      console.warn('Gagal membaca cache produk:', err.message);
+      return [];
+    }
+  },
+
+  /**
    * Cache categories list locally.
    */
   async cacheCategories(categories) {
@@ -955,3 +982,5 @@ export const offlineStorage = {
     }
   },
 };
+
+export { KEYS };

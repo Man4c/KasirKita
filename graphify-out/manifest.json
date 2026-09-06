@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788669834.8765354,
-    "ast_hash": "525a0b70fc5e8db799fa7d7c0c2077ab",
+    "mtime": 1788670833.966743,
+    "ast_hash": "4bb255a8d61504ba22d382dd5901ef48",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788574063.3562713,
-    "ast_hash": "1cdb435463d2487c5a9e3a9f49091d20",
+    "mtime": 1788670399.7491364,
+    "ast_hash": "24f0fa0d662c3b39fd96ad9be9be7b2a",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788665763.6815917,
-    "ast_hash": "8cdac845f26c821eb43f62deca453b67",
+    "mtime": 1788670769.1558292,
+    "ast_hash": "64b70537e05375036b525c9ae2368c22",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {
@@ -2105,8 +2105,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/StoreSetting.php": {
-    "mtime": 1788669630.5917315,
-    "ast_hash": "ee08252ea66c4112d8ac483f254a68fe",
+    "mtime": 1788670139.484288,
+    "ast_hash": "35f26b121e074d97aa5d8502f06115b2",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_02_051850_create_store_settings_table.php": {
@@ -2130,8 +2130,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/offlineStorage.js": {
-    "mtime": 1788615516.8837256,
-    "ast_hash": "ba71a1fde8a7803b2717a9aa54a6bbeb",
+    "mtime": 1788670451.2983289,
+    "ast_hash": "d76b0b28bf3bd39359541b7b7d602160",
     "semantic_hash": ""
   },
   "mobile/src/services/syncManager.js": {
@@ -2250,8 +2250,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/index.js": {
-    "mtime": 1788391814.3198445,
-    "ast_hash": "ab863090ddfb8fcbb6008266fa5a4f96",
+    "mtime": 1788670659.7371593,
+    "ast_hash": "9b9ac57dc9f558a3a47061341056630e",
     "semantic_hash": ""
   },
   "plans/260902-23-mobile-settings-screen-refactoring/plan.md": {
@@ -2270,8 +2270,8 @@
     "semantic_hash": ""
   },
   "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md": {
-    "mtime": 1788669828.897835,
-    "ast_hash": "3c84a7b1babee450241b372b67775f68",
+    "mtime": 1788670824.4842565,
+    "ast_hash": "1b9b5b2e40c4b69fe4b27d04caea50b7",
     "semantic_hash": ""
   },
   "mobile/src/components/dashboard/DashboardDetailModal.js": {
@@ -2585,8 +2585,18 @@
     "semantic_hash": ""
   },
   "backend/tests/Feature/StorePreferenceTest.php": {
-    "mtime": 1788669666.920593,
-    "ast_hash": "91b5d2115d2fd4776a7f942c43b130b5",
+    "mtime": 1788670144.7547085,
+    "ast_hash": "ff580e3dd18363aa77ffb4d260605908",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/settings/BackupRestoreModal.js": {
+    "mtime": 1788670612.4546118,
+    "ast_hash": "5edcb2ca39a53d497d0721c668fedf66",
+    "semantic_hash": ""
+  },
+  "mobile/src/services/backupService.js": {
+    "mtime": 1788670484.8560135,
+    "ast_hash": "baa58bac9e836e109335c3bcf04cabbc",
     "semantic_hash": ""
   }
 }

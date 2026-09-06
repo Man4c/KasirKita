@@ -46,6 +46,10 @@ class StoreSetting extends Model
         if (!is_array($decoded)) {
             $decoded = [];
         }
-        return array_merge(self::DEFAULT_PREFERENCES, $decoded);
+        $merged = array_merge(self::DEFAULT_PREFERENCES, $decoded);
+        if (empty($merged['paper_size']) || !in_array($merged['paper_size'], ['58mm', '80mm'], true)) {
+            $merged['paper_size'] = '58mm';
+        }
+        return $merged;
     }
 }

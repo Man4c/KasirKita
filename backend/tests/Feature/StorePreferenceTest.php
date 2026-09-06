@@ -124,4 +124,27 @@ class StorePreferenceTest extends TestCase
         $responseBool->assertStatus(422)
             ->assertJsonValidationErrors(['sound_beep']);
     }
+
+    public function test_model_accessor_merges_defaults_and_protects_paper_size(): void
+    {
+        $setting = new StoreSetting();
+        $setting->name = 'Test Store';
+        // Simulasi DB hanya menyimpan 1 key custom dan paper_size kosong
+        $setting->setRawAttributes([
+            'preferences' => json_encode([
+                'show_tax_feature' => false,
+                'paper_size' => '',
+            ]),
+        ]);
+
+        $prefs = $setting->preferences;
+
+        // Custom DB value must override default
+        $this->assertFalse($prefs['show_tax_feature']);
+        // Unspecified keys must remain true (defaults)
+        $this->assertTrue($prefs['show_barcode_scanner']);
+        $this->assertTrue($prefs['sound_beep']);
+        // Empty paper_size must fallback safely to 58mm
+        $this->assertEquals('58mm', $prefs['paper_size']);
+    }
 }

@@ -327,6 +327,8 @@
   "325": "expo-image-picker",
   "326": "expo-secure-store",
   "327": "expo-status-bar",
+  "328": "SAFE_TAGS",
+  "329": "Responsive Design",
   "330": "@react-native-async-storage/async-storage",
   "331": "react-native-safe-area-context",
   "332": "react-native-svg",
@@ -349,5 +351,7 @@
   "349": "checkRadialSpotlight",
   "350": "checkElementRadialSpotlightDOM",
   "351": "colorFunctionToRgb",
-  "352": "Impeccable Documenter"
+  "352": "Impeccable Documenter",
+  "353": "checkHeroEyebrow",
+  "354": "2026_09_06_000001_add_preferences_to_store_settings_table.php"
 }

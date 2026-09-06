@@ -20,6 +20,29 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Mobile Smart Hybrid Backup-Restore & Sinkronisasi Top-Down Preferensi Cloud - Fase 3, 4, 5, & 6 Plan #24 (`backupService.js`, `BackupRestoreModal.js`, `SettingsScreen.js`, `offlineStorage.js`, `StoreSetting.php`)**:
+  - Menyelesaikan seluruh fase Plan #24 (Cloud Sync Preferences & Local Data Backup-Restore) dari backend hingga frontend mobile:
+    1. *Modul `backupService.js` (Smart Hybrid Backup)*:
+       - **Ekspor Cerdas**: Saat online dan tidak ada antrean offline, sistem secara otomatis mengambil snapshot segar dari server Cloud API (`/products`, `/categories`, `/units`, `/customers`, `/suppliers`, `/taxes-and-fees`, `/discounts`, `/settings/store`). Saat offline atau terdapat antrean offline, sistem langsung mengekstrak snapshot utuh dari `AsyncStorage` dalam 0ms tanpa macet.
+       - **Metadata Envelope Skema Berversi (`schema_version: 2`)**: Membungkus berkas `.json` dengan metadata aplikasi, platform perangkat, dan rincian data.
+       - **Sanitizer / Migrator Versi**: Fungsi `pickAndInspectBackupFile()` secara otomatis mendeteksi berkas skema lama (`schema_version < 2`) dan menyematkan default Multi-UoM `base_unit_id: 'pcs'` serta default preferensi POS toko agar tidak merusak database.
+       - **Multi-Platform File Export**: Mendukung download virtual Blob di Web dan `expo-file-system` + `expo-sharing` (WhatsApp, Google Drive, Save to Files) di Android/iOS native.
+    2. *Komponen Modal `BackupRestoreModal.js` & Dialog Keamanan Frictionless*:
+       - **Proteksi Antrean Offline**: Jika HP saat ini masih memiliki nota offline (`pendingOfflineCount > 0`), proses pemulihan data dicegat dengan dialog frictionless: `[Sinkronkan Sekarang]`, `[Cadangkan Data Dulu]`, `[Tetap Buka Berkas]`, dan `[Batal]`.
+       - **Klarifikasi Skenario "Ganti HP" vs "Tambah HP"**: Jika berkas backup memuat `offline_queue`, pengguna diberikan 2 opsi radio button eksplisit:
+         - 📱 *"Ganti HP Kasir (Impor Lengkap)"*: Memulihkan katalog produk beserta antrean nota offline (untuk HP lama yang rusak/hilang/tidak dipakai).
+         - 👥 *"Tambah HP Baru (Hanya Master Data)"*: Hanya memulihkan katalog produk & preferensi, mengabaikan nota offline HP lama agar terhindar dari duplikasi operasional.
+    3. *Sinkronisasi Top-Down Preferensi Cloud POS (`SettingsScreen.js`)*:
+       - **Owner Write**: Ketika Owner mengubah toggle preferensi di HP miliknya (`showBarcodeScanner`, `soundBeep`, `showCustomerPicker`, `showVoucherFeature`, `showTaxFeature`, `autoPrint`, `printTwoCopies`, `paperSize`), aplikasi otomatis mengunggah perubahan ke cloud via `PUT /settings/preferences`.
+       - **Cashier Read-Only & Cache-First Fallback**: Saat HP kasir dibuka, preferensi lokal aktif dalam 0ms, lalu diperbarui secara background dari cloud tanpa risiko conflict penimpaan.
+       - **Penyempurnaan Microcopy Antrean Offline**: Teks status antrean disempurnakan menjadi *"🟢 X nota aman di HP. Otomatis terunggah ke cloud saat server aktif besok pagi."*
+    4. *Defensive Fallback `paper_size` & Unit Test Backend*:
+       - Menambahkan fallback otomatis di model `StoreSetting.php` sehingga nilai `paper_size` yang kosong/tidak valid di database otomatis kembali ke `'58mm'`.
+       - Menambahkan unit test spesifik `test_model_accessor_merges_defaults_and_protects_paper_size` di `StorePreferenceTest.php`.
+    5. *Verifikasi Kualitas UI & Testing*:
+       - Lolos audit Impeccable Detector (`detect.mjs`): 0 defect, mematuhi touch target (≥44dp), Flexbox pairing rule, dan anti-shift typography (`includeFontPadding: false`, `textAlignVertical: 'center'`).
+       - Seluruh 78 feature & unit tests backend Laravel lulus 100% (`passed: 78, assertions: 352`).
+
 - **Implementasi Backend Preferensi Toko Cloud Sync - Fase 1 & 2 Plan #24 (`StoreSetting.php`, `StoreSettingController.php`, `StorePreferenceTest.php`)**:
   - Menyelesaikan Fase 1 (Spesifikasi Skema Data & Kontrak API) dan Fase 2 (Backend Implementation):
     1. *Migrasi Skema Kolom `preferences`*: Menambahkan kolom `preferences` berformat JSON/JSONB pada tabel `store_settings` melalui migrasi `2026_09_06_000001_add_preferences_to_store_settings_table.php`.
