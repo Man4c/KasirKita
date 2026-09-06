@@ -38,6 +38,8 @@ import SupplierManagementScreen from './src/screens/SupplierManagementScreen';
 import UserManagementScreen from './src/screens/UserManagementScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
+import { updaterService } from './src/services/updaterService';
+import UpdatePromptModal from './src/components/updater/UpdatePromptModal';
 
 // Intercept and eliminate transition: padding injected by web safe area libraries
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -138,6 +140,23 @@ function MainApp() {
     }).catch(() => {});
   }, []);
 
+  // Silent background app update check on startup
+  const [startupUpdateModalOpen, setStartupUpdateModalOpen] = useState(false);
+  const [startupUpdateInfo, setStartupUpdateInfo] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updaterService.checkForUpdate({ timeout: 4000 }).then((info) => {
+        if (info && info.hasUpdate) {
+          setStartupUpdateInfo(info);
+          setStartupUpdateModalOpen(true);
+        }
+      }).catch(() => {});
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // Auto-switch to Kasir POS upon rotating to landscape, restore upon rotating back to portrait
   useEffect(() => {
     if (isLandscape && !prevIsLandscapeRef.current) {
@@ -169,6 +188,11 @@ function MainApp() {
     return (
       <View style={[styles.safeArea, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <LoginScreen />
+        <UpdatePromptModal
+          visible={startupUpdateModalOpen}
+          updateInfo={startupUpdateInfo}
+          onClose={() => setStartupUpdateModalOpen(false)}
+        />
       </View>
     );
   }
@@ -389,6 +413,13 @@ function MainApp() {
           </TouchableOpacity>
         </View>
       )}
+
+      {/* Startup In-App Remote Updater Modal */}
+      <UpdatePromptModal
+        visible={startupUpdateModalOpen}
+        updateInfo={startupUpdateInfo}
+        onClose={() => setStartupUpdateModalOpen(false)}
+      />
     </View>
   );
 }

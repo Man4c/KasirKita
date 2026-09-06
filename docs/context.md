@@ -20,6 +20,22 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Fase 5 & 6 (Tuntas 100%) Plan #33: Integrasi Pengaturan, Startup Check, & SOP Rilis Pemilik Toko (`SettingsScreen.js`, `App.js`, `plan.md`)**:
+  - Menyelesaikan Fase 5 (Mobile Integration) dan Fase 6 (Testing & SOP Rilis):
+    1. *Integrasi Layar Pengaturan (`SettingsScreen.js`)*:
+       - Mengubah baris versi menjadi komponen interaktif *"Pembaruan Sistem"* lengkap dengan status badge visual (`Terbaru` emerald atau `Ada Versi Baru` rose).
+       - Dilengkapi tombol manual interaktif dengan indikator loading (`checkingUpdate`) dan dialog feedback ramah jika aplikasi sudah versi terbaru atau jaringan sedang offline.
+       - Terintegrasi langsung dengan modal `UpdatePromptModal` di sticky footer pengaturan.
+    2. *Pengecekan Hening Startup (`App.js`)*:
+       - Memasang silent background timer (delay 2 detik pasca-mount) saat aplikasi dibuka.
+       - Jika terdeteksi ada versi baru di server, dialog pembaruan muncul secara halus di layar (baik saat di layar kasir maupun di layar login) tanpa memblokir atau membuat aplikasi macet jika server offline.
+    3. *Kepatuhan Impeccable Craft & Defensive Rules*:
+       - Lolos uji audit detektor (`detect.mjs`): 0 defect pada `SettingsScreen.js` dan `App.js`.
+       - Mematuhi The Flexbox Pairing Rule, The Readability Floor Rule (≥12px), dan Anti-Shift Typography (`includeFontPadding: false`, `textAlignVertical: 'center'`).
+    4. *SOP Panduan Rilis untuk Owner Toko*: Dituliskan secara rinci di `plans/260906-33-mobile-in-app-remote-updater/plan.md` mencakup alur build APK, upload ke Supabase Storage, konfigurasi versi di Render, hingga deteksi otomatis di HP kasir.
+    5. *Pengujian Menyeluruh*: Seluruh 18 tests di `testUpdaterService.js`, 10 tests di `testBackupService.js`, dan 86 tests di backend Laravel lulus 100% (total 114 tests lulus tanpa kegagalan).
+  - Status Plan #33 kini **Tuntas 100% (Completed)** pada dashboard Kanban.
+
 - **Penyelesaian Fase 3 & 4 Plan #33: Mobile Updater Service & Bottom Sheet UI Modal (`updaterService.js`, `UpdatePromptModal.js`, `testUpdaterService.js`)**:
   - Menyelesaikan Fase 3 (Mobile Service) dan Fase 4 (UI Bottom Sheet Modal Pembaruan):
     1. *Instalasi Modul Resmi*: Memasang `expo-intent-launcher` (`~57.0.0`) yang kompatibel dengan Expo SDK 57 untuk memicu prompt instalasi native Android.

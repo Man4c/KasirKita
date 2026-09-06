@@ -1,7 +1,7 @@
 ---
 title: "Pembaruan Jarak Jauh APK Otomatis (In-App Remote Updater)"
 description: "Arsitektur pembaruan jarak jauh aplikasi Android (In-App Self Updater) berbasis Supabase Storage (1 GB CDN Gratis), Render backend API versi ringan, dan download intent installer native pada React Native Expo tanpa biaya hosting tambahan."
-status: "in-progress"
+status: "completed"
 priority: "P1"
 effort: "6h"
 tags:
@@ -140,8 +140,8 @@ Solusi **In-App Remote Updater** ini memungkinkan HP kasir secara otomatis mende
 | 02 | Backend Laravel: Endpoint `GET /api/app/version` & Fallback Config | completed |
 | 03 | Mobile Service: `updaterService.js` (Semver check, Download Resumable, & Native Intent Installer) | completed |
 | 04 | Mobile UI: `UpdatePromptModal.js` (Impeccable Bottom Sheet, Progress Bar, & Changelog List) | completed |
-| 05 | Mobile Integration: Integrasi `SettingsScreen.js` & Non-blocking Startup Check | in-progress |
-| 06 | Pengujian Validasi, Simulasi Mock Update APK, & SOP Panduan Rilis untuk Owner | pending |
+| 05 | Mobile Integration: Integrasi `SettingsScreen.js` & Non-blocking Startup Check | completed |
+| 06 | Pengujian Validasi, Simulasi Mock Update APK, & SOP Panduan Rilis untuk Owner | completed |
 
 ---
 
@@ -158,3 +158,58 @@ Solusi **In-App Remote Updater** ini memungkinkan HP kasir secara otomatis mende
    - Seluruh tombol aksi modal dan dismiss memiliki `minHeight: 44` dp dan `hitSlop` proporsional.
 5. **Non-Intrusive Error Handling**:
    - Jika HP kasir sedang offline atau koneksi internet terputus di tengah unduhan, sistem menampilkan pesan ramah tanpa memblokir kasir dari bertransaksi.
+
+---
+
+## SOP Panduan Rilis Pembaruan APK Jarak Jauh (Panduan Pemilik Toko)
+
+Kapan pun Anda selesai memperbaiki bug atau menambahkan fitur baru di laptop dan ingin mengirim pembaruan ke seluruh HP kasir di cabang:
+
+### Langkah 1: Naikkan Nomor Versi di Mobile
+1. Buka file `mobile/app.json`.
+2. Ubah nomor versi, misalnya:
+   - `"version": "1.4.0"`
+   - `"versionCode": 4`
+3. Simpan file.
+
+### Langkah 2: Buat Berkas APK Rilis
+Jalankan perintah build APK rilis di terminal laptop:
+```bash
+cd mobile
+npx expo run:android --variant release
+```
+Berkas APK hasil kompilasi akan berada di `mobile/android/app/build/outputs/apk/release/app-release.apk`.
+Ganti nama file menjadi `KasirKita-v1.4.0.apk`.
+
+### Langkah 3: Unggah Berkas APK ke Supabase Storage
+1. Buka dashboard proyek Supabase Anda di browser.
+2. Masuk ke menu **Storage** ➔ klik bucket **`apk-releases`**.
+3. Klik tombol **Upload File** ➔ seret atau pilih file `KasirKita-v1.4.0.apk`.
+4. Setelah terunggah, klik ikon titik tiga (⋮) pada file tersebut ➔ pilih **Copy URL**.
+   *(Contoh URL: `https://[project-ref].supabase.co/storage/v1/object/public/apk-releases/KasirKita-v1.4.0.apk`)*.
+
+### Langkah 4: Publikasikan Versi Baru ke Backend
+Pilih salah satu cara yang paling nyaman bagi Anda:
+- **Cara A (Melalui Dashboard Render - Tanpa Coding):**
+  Buka Dashboard Render ➔ Masuk ke Web Service Backend KasirKita ➔ Tab **Environment**:
+  - `APP_LATEST_VERSION` = `1.4.0`
+  - `APP_APK_URL` = `https://[project-ref].supabase.co/storage/v1/object/public/apk-releases/KasirKita-v1.4.0.apk`
+  - `APP_CHANGELOG` = `Perbaikan pemulihan cadangan data;Optimasi transaksi kasir offline`
+  - Klik **Save Changes**.
+- **Cara B (Melalui API Endpoint):**
+  Panggil endpoint `PUT /api/app/version` dengan token login Owner:
+  ```json
+  {
+    "latest_version": "1.4.0",
+    "apk_url": "https://[project-ref].supabase.co/storage/v1/object/public/apk-releases/KasirKita-v1.4.0.apk",
+    "changelog": [
+      "Perbaikan pemulihan cadangan data lokal dan cloud",
+      "Optimasi kestabilan kasir saat offline"
+    ]
+  }
+  ```
+
+### Langkah 5: HP Kasir Otomatis Mendeteksi Pembaruan!
+- Saat kasir membuka aplikasi di toko (atau membuka menu Pengaturan ➔ Periksa Pembaruan), jendela pembaruan otomatis muncul.
+- Kasir tinggal klik **"Perbarui Sekarang"** ➔ APK terunduh langsung via CDN Supabase ➔ Klik **"Pasang"**.
+- Semua data kasir, nota offline, dan sesi login tetap aman dan tidak akan hilang!

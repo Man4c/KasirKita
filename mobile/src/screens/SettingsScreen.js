@@ -36,6 +36,8 @@ import {
   Trash2,
   Download,
   Upload,
+  ArrowUpCircle,
+  Sparkles,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -45,6 +47,7 @@ import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
 import { backupService } from '../services/backupService';
+import { updaterService } from '../services/updaterService';
 import { showAlert } from '../utils/alert';
 import {
   UserProfileModal,
@@ -56,6 +59,7 @@ import {
   SecurityAuditModal,
   BackupRestoreModal,
 } from '../components/settings';
+import UpdatePromptModal from '../components/updater/UpdatePromptModal';
 import appConfig from '../../app.json';
 
 const APP_VERSION = appConfig?.expo?.version || '1.3.0';
@@ -112,11 +116,25 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
   // Guide Modal State
   const [printerGuideOpen, setPrinterGuideOpen] = useState(false);
 
+  // In-App Remote Updater State
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState(null);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [hasUpdateAvailable, setHasUpdateAvailable] = useState(false);
+
   // Load persistent settings on mount
   useEffect(() => {
     loadSettings();
     checkServerHealth();
     syncManager.init();
+
+    // Silent background check for latest app version
+    updaterService.checkForUpdate({ timeout: 4000 }).then((info) => {
+      if (info) {
+        setUpdateInfo(info);
+        setHasUpdateAvailable(Boolean(info.hasUpdate));
+      }
+    }).catch(() => {});
 
     const unsubscribe = syncManager.subscribe((state) => {
       setPendingOfflineCount(state.pendingCount);
@@ -127,6 +145,33 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
       unsubscribe();
     };
   }, []);
+
+  const handleCheckUpdateManual = async () => {
+    setCheckingUpdate(true);
+    try {
+      const info = await updaterService.checkForUpdate({ timeout: 6000 });
+      setCheckingUpdate(false);
+      setUpdateInfo(info);
+      setHasUpdateAvailable(Boolean(info.hasUpdate));
+
+      if (info.hasUpdate) {
+        setUpdateModalOpen(true);
+      } else if (info.serverReachable) {
+        showAlert(
+          'Aplikasi Sudah Terbaru',
+          `KasirKita POS saat ini sudah menggunakan versi terbaru (v${APP_VERSION}). Tidak ada pembaruan rilis baru.`
+        );
+      } else {
+        showAlert(
+          'Gagal Memeriksa Pembaruan',
+          'Tidak dapat terhubung ke server pembaruan saat ini. Pastikan koneksi internet aktif.'
+        );
+      }
+    } catch (err) {
+      setCheckingUpdate(false);
+      showAlert('Error', err?.message || 'Gagal memeriksa pembaruan aplikasi.');
+    }
+  };
 
   const loadSettings = async () => {
     try {
@@ -1185,10 +1230,58 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>TENTANG APLIKASI & SESI</Text>
         <View style={styles.card}>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Versi Aplikasi</Text>
-            <Text style={styles.infoValue}>KasirKita POS Mobile v{APP_VERSION}</Text>
-          </View>
+          {/* Menu Periksa Pembaruan Sistem */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={handleCheckUpdateManual}
+            disabled={checkingUpdate}
+          >
+            <View
+              style={[
+                styles.menuIconBox,
+                {
+                  backgroundColor: hasUpdateAvailable
+                    ? 'rgba(225, 29, 72, 0.15)'
+                    : 'rgba(52, 211, 153, 0.15)',
+                  borderColor: hasUpdateAvailable
+                    ? 'rgba(225, 29, 72, 0.3)'
+                    : 'rgba(52, 211, 153, 0.3)',
+                  borderWidth: 1,
+                },
+              ]}
+            >
+              {checkingUpdate ? (
+                <ActivityIndicator size="small" color="#fb7185" />
+              ) : hasUpdateAvailable ? (
+                <ArrowUpCircle size={18} color="#fb7185" />
+              ) : (
+                <Sparkles size={18} color="#34d399" />
+              )}
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                <Text style={styles.menuTitle}>Pembaruan Sistem</Text>
+                {hasUpdateAvailable ? (
+                  <View style={styles.updateAvailableBadge}>
+                    <Text style={styles.updateAvailableBadgeText}>Ada Versi Baru</Text>
+                  </View>
+                ) : (
+                  <View style={styles.latestBadge}>
+                    <Text style={styles.latestBadgeText}>Terbaru</Text>
+                  </View>
+                )}
+              </View>
+              <Text style={styles.menuSubtitle} numberOfLines={1}>
+                {checkingUpdate
+                  ? 'Menghubungi server pembaruan...'
+                  : hasUpdateAvailable
+                  ? `Versi v${updateInfo?.latestVersion} siap diunduh • Ketuk untuk perbarui`
+                  : `Versi saat ini v${APP_VERSION} • Ketuk untuk periksa`}
+              </Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
           <View style={styles.divider} />
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Tipe Aplikasi</Text>
@@ -1351,6 +1444,13 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         inspectedData={inspectedBackup}
         isRestoring={isImportingBackup}
         onConfirmRestore={handleConfirmRestore}
+      />
+
+      {/* MODAL 7: PEMBARUAN APLIKASI (IN-APP REMOTE UPDATER) */}
+      <UpdatePromptModal
+        visible={updateModalOpen}
+        updateInfo={updateInfo}
+        onClose={() => setUpdateModalOpen(false)}
       />
     </ScrollView>
   );
@@ -1520,6 +1620,38 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#fb7185',
+  },
+  latestBadge: {
+    backgroundColor: 'rgba(52, 211, 153, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(52, 211, 153, 0.3)',
+    paddingHorizontal: 7,
+    paddingVertical: 1,
+    borderRadius: 6,
+    flexShrink: 0,
+  },
+  latestBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#34d399',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  updateAvailableBadge: {
+    backgroundColor: 'rgba(225, 29, 72, 0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.4)',
+    paddingHorizontal: 7,
+    paddingVertical: 1,
+    borderRadius: 6,
+    flexShrink: 0,
+  },
+  updateAvailableBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fb7185',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   statusBadge: {
     paddingHorizontal: 8,
