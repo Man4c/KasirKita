@@ -703,6 +703,22 @@ export const offlineStorage = {
   },
 
   /**
+   * Add an existing transaction object to the offline queue (e.g. from backup restoration).
+   */
+  async addOfflineQueue(item) {
+    try {
+      if (!item) return false;
+      const queue = await this.getOfflineQueue();
+      queue.push(item);
+      await AsyncStorage.setItem(KEYS.QUEUE, JSON.stringify(queue));
+      return true;
+    } catch (err) {
+      console.warn('Gagal menambahkan item ke antrean offline:', err.message);
+      return false;
+    }
+  },
+
+  /**
    * Get size of offline catalog cache in bytes.
    */
   async getCatalogCacheSize() {

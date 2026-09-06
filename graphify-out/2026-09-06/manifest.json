@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788671066.5160255,
-    "ast_hash": "21d37f2d9fa7622173fd2492fe773cfc",
+    "mtime": 1788671273.2590175,
+    "ast_hash": "f52c7f38edfd5a5acca8e268d4613212",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788670399.7491364,
-    "ast_hash": "24f0fa0d662c3b39fd96ad9be9be7b2a",
+    "mtime": 1788671244.0738811,
+    "ast_hash": "a4f847fcc8a4dd8bc723c9e6ef015b66",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -2595,8 +2595,13 @@
     "semantic_hash": ""
   },
   "mobile/src/services/backupService.js": {
-    "mtime": 1788670484.8560135,
-    "ast_hash": "baa58bac9e836e109335c3bcf04cabbc",
+    "mtime": 1788671192.6415973,
+    "ast_hash": "7b0f1aec9496c75006170323d0d7aad3",
+    "semantic_hash": ""
+  },
+  "mobile/scripts/testBackupService.js": {
+    "mtime": 1788671229.0342994,
+    "ast_hash": "f0b4d0385cbfb1eda0efd3c27fce05ff",
     "semantic_hash": ""
   }
 }

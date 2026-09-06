@@ -1,5 +1,10 @@
 /**
  * Deterministic Test Suite for KasirKita Backup & Restore Service
+ * Directly imports and tests PRODUCTION modules:
+ * - mobile/src/services/backupService.js
+ * - mobile/src/services/offlineStorage.js
+ * - mobile/src/services/storage.js
+ *
  * Tests:
  * 1. Corrupt JSON & Malformed File Handling
  * 2. Non-KasirKita JSON Rejection
@@ -8,238 +13,107 @@
  *    - "Ganti HP" (Full with Offline Queue)
  *    - "Tambah HP" (Master Data Only, Queue Ignored)
  *    - Idempotent Queue Deduplication
+ * 5. Smart Hybrid Export Verification (Local fallback)
  */
 
 const assert = require('assert');
+const path = require('path');
+const fs = require('fs');
+const vm = require('vm');
+const babel = require('@babel/core');
 
-// Mock AsyncStorage in-memory for testing restoreStoreBackup
+// In-Memory AsyncStorage mock
 const inMemoryStorage = {};
 const mockAsyncStorage = {
-  async getItem(key) {
-    return inMemoryStorage[key] || null;
-  },
-  async setItem(key, value) {
-    inMemoryStorage[key] = value;
-  },
-  async removeItem(key) {
-    delete inMemoryStorage[key];
-  },
-  async multiGet(keys) {
-    return keys.map((k) => [k, inMemoryStorage[k] || null]);
-  },
-  async multiSet(pairs) {
-    for (const [k, v] of pairs) {
-      inMemoryStorage[k] = v;
-    }
-  },
+  async getItem(k) { return inMemoryStorage[k] || null; },
+  async setItem(k, v) { inMemoryStorage[k] = v; },
+  async removeItem(k) { delete inMemoryStorage[k]; },
+  async multiGet(keys) { return keys.map((k) => [k, inMemoryStorage[k] || null]); },
+  async multiSet(pairs) { for (const [k, v] of pairs) inMemoryStorage[k] = v; },
 };
 
-// Pure test harness for backupService logic
-function createTestHarness() {
-  const KEYS = {
-    PRODUCTS: 'kasirkita_offline_products',
-    CATEGORIES: 'kasirkita_offline_categories',
-    UNITS: 'kasirkita_offline_units',
-    CUSTOMERS: 'kasirkita_offline_customers',
-    SUPPLIERS: 'kasirkita_offline_suppliers',
-    TAXES_FEES: 'kasirkita_offline_taxes_fees',
-    PROMOS: 'kasirkita_offline_promos',
-    QUEUE: 'kasirkita_offline_transaction_queue',
-    SETTINGS: 'kasirkita_app_settings',
+// Loader that compiles React Native/Expo ES modules using Babel and runs them in a sandboxed context
+function loadProductionModule(filePath, customResolver = {}) {
+  const code = fs.readFileSync(filePath, 'utf8');
+  const transformed = babel.transformSync(code, {
+    presets: ['babel-preset-expo'],
+    filename: filePath,
+  });
+
+  const exportsObj = {};
+  const moduleObj = { exports: exportsObj };
+
+  const customRequire = (id) => {
+    if (customResolver[id]) return customResolver[id];
+    if (id === '@react-native-async-storage/async-storage') return mockAsyncStorage;
+    if (id === 'react-native') return { Platform: { OS: 'android' } };
+    if (id === 'expo-secure-store') return { getItemAsync: async () => null, setItemAsync: async () => {} };
+    if (id === 'expo-file-system') return {
+      cacheDirectory: '/tmp/',
+      EncodingType: { UTF8: 'utf8' },
+      writeAsStringAsync: async () => {},
+      readAsStringAsync: async () => '',
+    };
+    if (id === 'expo-sharing') return { isAvailableAsync: async () => true, shareAsync: async () => {} };
+    if (id === 'expo-document-picker') return { getDocumentAsync: async () => ({ canceled: true }) };
+    if (id.endsWith('app.json')) return { expo: { version: '1.3.0' } };
+    return require(id);
   };
 
-  const offlineStorage = {
-    async cacheProducts(p) { await mockAsyncStorage.setItem(KEYS.PRODUCTS, JSON.stringify(p)); },
-    async getCachedProducts() { const raw = await mockAsyncStorage.getItem(KEYS.PRODUCTS); return raw ? JSON.parse(raw) : []; },
-    async cacheCategories(c) { await mockAsyncStorage.setItem(KEYS.CATEGORIES, JSON.stringify(c)); },
-    async getCachedCategories() { const raw = await mockAsyncStorage.getItem(KEYS.CATEGORIES); return raw ? JSON.parse(raw) : []; },
-    async cacheUnits(u) { await mockAsyncStorage.setItem(KEYS.UNITS, JSON.stringify(u)); },
-    async getCachedUnits() { const raw = await mockAsyncStorage.getItem(KEYS.UNITS); return raw ? JSON.parse(raw) : []; },
-    async cacheCustomers(c) { await mockAsyncStorage.setItem(KEYS.CUSTOMERS, JSON.stringify(c)); },
-    async getCachedCustomers() { const raw = await mockAsyncStorage.getItem(KEYS.CUSTOMERS); return raw ? JSON.parse(raw) : []; },
-    async cacheSuppliers(s) { await mockAsyncStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(s)); },
-    async getCachedSuppliers() { const raw = await mockAsyncStorage.getItem(KEYS.SUPPLIERS); return raw ? JSON.parse(raw) : []; },
-    async cacheTaxesAndFees(t) { await mockAsyncStorage.setItem(KEYS.TAXES_FEES, JSON.stringify(t)); },
-    async getCachedTaxesAndFees() { const raw = await mockAsyncStorage.getItem(KEYS.TAXES_FEES); return raw ? JSON.parse(raw) : []; },
-    async cachePromos(p) { await mockAsyncStorage.setItem(KEYS.PROMOS, JSON.stringify(p)); },
-    async getCachedPromos() { const raw = await mockAsyncStorage.getItem(KEYS.PROMOS); return raw ? JSON.parse(raw) : []; },
-    async getOfflineQueue() { const raw = await mockAsyncStorage.getItem(KEYS.QUEUE); return raw ? JSON.parse(raw) : []; },
-    async addOfflineQueue(item) {
-      const q = await this.getOfflineQueue();
-      q.push(item);
-      await mockAsyncStorage.setItem(KEYS.QUEUE, JSON.stringify(q));
-    },
-  };
+  const context = vm.createContext({
+    require: customRequire,
+    module: moduleObj,
+    exports: exportsObj,
+    console,
+    setTimeout,
+    clearTimeout,
+    Date,
+    JSON,
+    Number,
+    Array,
+    String,
+    Boolean,
+    Error,
+    Promise,
+    Object,
+    Math,
+  });
 
-  const storage = {
-    async getSettings() { const raw = await mockAsyncStorage.getItem(KEYS.SETTINGS); return raw ? JSON.parse(raw) : null; },
-    async setSettings(s) { await mockAsyncStorage.setItem(KEYS.SETTINGS, JSON.stringify(s)); },
-  };
-
-  // Import pure logic functions identical to backupService.js
-  const service = {
-    parseAndValidateBackupContent(rawJsonContent, filename = 'backup.json') {
-      try {
-        if (!rawJsonContent || typeof rawJsonContent !== 'string') {
-          throw new Error('Berkas cadangan kosong atau tidak terbaca.');
-        }
-
-        let parsed = null;
-        try {
-          parsed = JSON.parse(rawJsonContent);
-        } catch (e) {
-          throw new Error('Berkas yang dipilih bukan format JSON yang valid (sintaks rusak atau terpotong).');
-        }
-
-        if (!parsed || typeof parsed !== 'object' || parsed.app !== 'KasirKita') {
-          throw new Error('Berkas bukan merupakan cadangan resmi KasirKita POS.');
-        }
-
-        if (!parsed.data || typeof parsed.data !== 'object') {
-          throw new Error('Struktur data dalam berkas cadangan tidak lengkap.');
-        }
-
-        const schemaVersion = Number(parsed.schema_version) || 1;
-        const data = parsed.data || {};
-
-        // Schema Migrator / Sanitizer for backward compatibility
-        if (schemaVersion < 2) {
-          if (Array.isArray(data.products)) {
-            data.products = data.products.map((p) => ({
-              ...p,
-              base_unit_id: p.base_unit_id || p.unit_id || 'pcs',
-              default_pos_unit_id: p.default_pos_unit_id || p.base_unit_id || p.unit_id || 'pcs',
-            }));
-          }
-
-          if (!data.preferences) {
-            data.preferences = {
-              show_barcode_scanner: true,
-              sound_beep: true,
-              show_customer_picker: true,
-              show_voucher_feature: true,
-              show_tax_feature: true,
-              auto_print: false,
-              print_two_copies: false,
-              paper_size: '58mm',
-            };
-          }
-        }
-
-        const queue = Array.isArray(data.offline_queue) ? data.offline_queue : [];
-
-        return {
-          canceled: false,
-          valid: true,
-          filename,
-          schemaVersion,
-          exportedAt: parsed.exported_at || null,
-          appVersion: parsed.app_version || '1.0.0',
-          payload: parsed,
-          summary: {
-            productsCount: Array.isArray(data.products) ? data.products.length : 0,
-            categoriesCount: Array.isArray(data.categories) ? data.categories.length : 0,
-            unitsCount: Array.isArray(data.units) ? data.units.length : 0,
-            customersCount: Array.isArray(data.customers) ? data.customers.length : 0,
-            suppliersCount: Array.isArray(data.suppliers) ? data.suppliers.length : 0,
-            taxesCount: Array.isArray(data.taxes_and_fees) ? data.taxes_and_fees.length : 0,
-            discountsCount: Array.isArray(data.discounts) ? data.discounts.length : 0,
-            queueCount: queue.length,
-            hasOfflineQueue: queue.length > 0,
-          },
-        };
-      } catch (err) {
-        return {
-          canceled: false,
-          valid: false,
-          message: err.message || 'Format berkas tidak valid',
-        };
-      }
-    },
-
-    async restoreStoreBackup(backupPayload, { includeOfflineQueue = false } = {}) {
-      try {
-        if (!backupPayload || !backupPayload.data) {
-          throw new Error('Data cadangan kosong atau tidak valid.');
-        }
-
-        const data = backupPayload.data;
-
-        if (Array.isArray(data.categories)) await offlineStorage.cacheCategories(data.categories);
-        if (Array.isArray(data.units)) await offlineStorage.cacheUnits(data.units);
-        if (Array.isArray(data.products)) await offlineStorage.cacheProducts(data.products);
-        if (Array.isArray(data.customers)) await offlineStorage.cacheCustomers(data.customers);
-        if (Array.isArray(data.suppliers)) await offlineStorage.cacheSuppliers(data.suppliers);
-        if (Array.isArray(data.taxes_and_fees)) await offlineStorage.cacheTaxesAndFees(data.taxes_and_fees);
-        if (Array.isArray(data.discounts)) await offlineStorage.cachePromos(data.discounts);
-
-        const currentSettings = (await storage.getSettings()) || {};
-        const incomingStore = data.store || {};
-        const incomingPrefs = data.preferences || {};
-
-        const mergedSettings = {
-          ...currentSettings,
-          ...(incomingStore.name ? { storeName: incomingStore.name } : {}),
-          ...(incomingStore.address !== undefined ? { storeAddress: incomingStore.address } : {}),
-          ...(incomingStore.phone !== undefined ? { storePhone: incomingStore.phone } : {}),
-          ...(incomingStore.logo !== undefined ? { storeLogo: incomingStore.logo } : {}),
-          ...(incomingStore.receipt_footer !== undefined ? { receiptFooter: incomingStore.receipt_footer } : {}),
-          ...(typeof incomingStore.show_logo_on_receipt === 'boolean' ? { showLogoOnReceipt: incomingStore.show_logo_on_receipt } : {}),
-          ...(typeof incomingStore.show_phone_on_receipt === 'boolean' ? { showPhoneOnReceipt: incomingStore.show_phone_on_receipt } : {}),
-
-          showBarcodeScanner: incomingPrefs.show_barcode_scanner ?? incomingPrefs.showBarcodeScanner ?? currentSettings.showBarcodeScanner ?? true,
-          soundBeep: incomingPrefs.sound_beep ?? incomingPrefs.soundBeep ?? currentSettings.soundBeep ?? true,
-          showCustomerPicker: incomingPrefs.show_customer_picker ?? incomingPrefs.showCustomerPicker ?? currentSettings.showCustomerPicker ?? true,
-          showVoucherFeature: incomingPrefs.show_voucher_feature ?? incomingPrefs.showVoucherFeature ?? currentSettings.showVoucherFeature ?? true,
-          showTaxFeature: incomingPrefs.show_tax_feature ?? incomingPrefs.showTaxFeature ?? currentSettings.showTaxFeature ?? true,
-          autoPrint: incomingPrefs.auto_print ?? incomingPrefs.autoPrint ?? currentSettings.autoPrint ?? false,
-          printTwoCopies: incomingPrefs.print_two_copies ?? incomingPrefs.printTwoCopies ?? currentSettings.printTwoCopies ?? false,
-          paperSize: incomingPrefs.paper_size || incomingPrefs.paperSize || currentSettings.paperSize || '58mm',
-        };
-
-        await storage.setSettings(mergedSettings);
-
-        let restoredQueueCount = 0;
-        if (includeOfflineQueue && Array.isArray(data.offline_queue) && data.offline_queue.length > 0) {
-          const existingQueue = await offlineStorage.getOfflineQueue();
-          for (const incomingTx of data.offline_queue) {
-            if (!incomingTx || !incomingTx.offline_id) continue;
-            const exists = existingQueue.some((q) => q.offline_id === incomingTx.offline_id);
-            if (!exists) {
-              await offlineStorage.addOfflineQueue(incomingTx);
-              restoredQueueCount++;
-            }
-          }
-        }
-
-        return {
-          success: true,
-          restoredSettings: mergedSettings,
-          restoredQueueCount,
-          summary: {
-            products: data.products?.length || 0,
-            categories: data.categories?.length || 0,
-            customers: data.customers?.length || 0,
-            queueRestored: restoredQueueCount,
-          },
-        };
-      } catch (err) {
-        return {
-          success: false,
-          message: err.message || 'Gagal memulihkan data cadangan',
-        };
-      }
-    },
-  };
-
-  return { service, offlineStorage, storage };
+  vm.runInContext(transformed.code, context);
+  return moduleObj.exports;
 }
+
+// 1. Load actual production offlineStorage.js
+const offlineStorageMod = loadProductionModule(
+  path.resolve(__dirname, '../src/services/offlineStorage.js')
+);
+const offlineStorage = offlineStorageMod.offlineStorage;
+
+// 2. Load actual production storage.js
+const storageMod = loadProductionModule(
+  path.resolve(__dirname, '../src/services/storage.js')
+);
+const storage = storageMod.storage;
+
+// 3. Load actual production backupService.js
+const backupServiceMod = loadProductionModule(
+  path.resolve(__dirname, '../src/services/backupService.js'),
+  {
+    './offlineStorage': offlineStorageMod,
+    './storage': storageMod,
+    './api': { get: async () => ({ data: { success: false } }) },
+  }
+);
+const service = backupServiceMod.backupService || backupServiceMod.default;
 
 // RUN ALL TEST SUITES
 async function runTests() {
-  console.log('🧪 Memulai Pengujian Ketahanan & Validasi End-to-End Backup & Restore KasirKita...\n');
+  console.log('🧪 Memulai Pengujian Ketahanan & Validasi End-to-End Backup & Restore KasirKita (Production Source Code)...\n');
 
-  const { service, offlineStorage, storage } = createTestHarness();
+  console.log(`  🔍 Verifikasi Sumber Kode Produksi:`);
+  console.log(`     - backupService: ${typeof service.parseAndValidateBackupContent} (dari mobile/src/services/backupService.js)`);
+  console.log(`     - offlineStorage: ${typeof offlineStorage.cacheProducts} (dari mobile/src/services/offlineStorage.js)`);
+  console.log(`     - storage: ${typeof storage.getSettings} (dari mobile/src/services/storage.js)\n`);
 
   let passed = 0;
   let failed = 0;
@@ -423,6 +297,21 @@ async function runTests() {
 
     const queue = await offlineStorage.getOfflineQueue();
     assert.strictEqual(queue.length, 2); // Tetap 2, tidak menjadi 4!
+  });
+
+  // --- SUITE 4: UJI SMART HYBRID EXPORT DARI KODE PRODUKSI ---
+  console.log('\n--- SUITE 4: Uji Smart Hybrid Export (Kode Produksi backupService) ---');
+
+  await testAsync('Export backup menghasilkan amplop berstandar KasirKita schema_version: 2', async () => {
+    // Pastikan ada data di storage
+    await storage.setSettings({ storeName: 'Toko Sukses Makmur', showBarcodeScanner: true });
+    await offlineStorage.cacheProducts([{ id: 99, name: 'Kopi Hitam' }]);
+
+    const exportRes = await service.exportStoreBackup({ forceLocal: true });
+    assert.strictEqual(exportRes.success, true);
+    assert.strictEqual(exportRes.summary.productsCount, 1);
+    assert.strictEqual(exportRes.summary.sourceMode, 'Memori HP (Lokal)');
+    assert(exportRes.filename.startsWith('kasirkita_backup_'));
   });
 
   console.log(`\n========================================`);
