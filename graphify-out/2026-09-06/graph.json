@@ -1669,8 +1669,8 @@
       "source_location": "L231",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_resolvelocalcontextdir",
-      "community": 21,
-      "community_name": "css-cascade.mjs",
+      "community": 7,
+      "community_name": "context.mjs",
       "norm_label": "resolvelocalcontextdir()"
     },
     {
@@ -1746,8 +1746,8 @@
       "source_location": "L306",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_discovertargetcandidates",
-      "community": 21,
-      "community_name": "css-cascade.mjs",
+      "community": 7,
+      "community_name": "context.mjs",
       "norm_label": "discovertargetcandidates()"
     },
     {
@@ -1834,8 +1834,8 @@
       "source_location": "L452",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_iscandidateprojectroot",
-      "community": 21,
-      "community_name": "css-cascade.mjs",
+      "community": 7,
+      "community_name": "context.mjs",
       "norm_label": "iscandidateprojectroot()"
     },
     {
@@ -1856,8 +1856,8 @@
       "source_location": "L467",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_findtargetexample",
-      "community": 21,
-      "community_name": "css-cascade.mjs",
+      "community": 7,
+      "community_name": "context.mjs",
       "norm_label": "findtargetexample()"
     },
     {
@@ -1900,8 +1900,8 @@
       "source_location": "L545",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_nearesttargetcontextroot",
-      "community": 21,
-      "community_name": "css-cascade.mjs",
+      "community": 7,
+      "community_name": "context.mjs",
       "norm_label": "nearesttargetcontextroot()"
     },
     {
@@ -1922,8 +1922,8 @@
       "source_location": "L577",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_nearestpackagerootbetween",
-      "community": 7,
-      "community_name": "context.mjs",
+      "community": 21,
+      "community_name": "css-cascade.mjs",
       "norm_label": "nearestpackagerootbetween()"
     },
     {
@@ -2109,8 +2109,8 @@
       "source_location": "L788",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_firstexisting",
-      "community": 21,
-      "community_name": "css-cascade.mjs",
+      "community": 7,
+      "community_name": "context.mjs",
       "norm_label": "firstexisting()"
     },
     {
@@ -2153,8 +2153,8 @@
       "source_location": "L908",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_escaperegexp",
-      "community": 7,
-      "community_name": "context.mjs",
+      "community": 21,
+      "community_name": "css-cascade.mjs",
       "norm_label": "escaperegexp()"
     },
     {
@@ -2164,8 +2164,8 @@
       "source_location": "L918",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_context_extractsectionvalue",
-      "community": 7,
-      "community_name": "context.mjs",
+      "community": 21,
+      "community_name": "css-cascade.mjs",
       "norm_label": "extractsectionvalue()"
     },
     {
@@ -5915,8 +5915,8 @@
       "source_location": "L4006",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkemdashoveruse",
-      "community": 53,
-      "community_name": "collectBrowserFindings",
+      "community": 41,
+      "community_name": "detect-antipatterns-browser.js",
       "norm_label": "checkemdashoveruse()"
     },
     {
@@ -5926,8 +5926,8 @@
       "source_location": "L4016",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkemdashoverusedom",
-      "community": 53,
-      "community_name": "collectBrowserFindings",
+      "community": 41,
+      "community_name": "detect-antipatterns-browser.js",
       "norm_label": "checkemdashoverusedom()"
     },
     {
@@ -12306,8 +12306,8 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_doctor_rel",
-      "community": 21,
-      "community_name": "css-cascade.mjs",
+      "community": 7,
+      "community_name": "context.mjs",
       "norm_label": "rel()"
     },
     {
@@ -18675,8 +18675,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "template-extensions.mjs"
     },
     {
@@ -18686,8 +18686,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_live_template_extensions",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "live_template_extensions"
     },
     {
@@ -18697,8 +18697,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_normalizeextensionentries",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "normalizeextensionentries()"
     },
     {
@@ -18708,8 +18708,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_mergeextensions",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "mergeextensions()"
     },
     {
@@ -18730,8 +18730,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_matchestemplateextension",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "matchestemplateextension()"
     },
     {
@@ -18741,8 +18741,8 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_resolvelivetemplateextensions",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "resolvelivetemplateextensions()"
     },
     {
@@ -18752,8 +18752,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_extensioncache",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "extensioncache"
     },
     {
@@ -18763,8 +18763,8 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_cleartemplateextensioncache",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "cleartemplateextensioncache()"
     },
     {
@@ -18774,8 +18774,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_readlivetemplateextensions",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "readlivetemplateextensions()"
     },
     {
@@ -18785,8 +18785,8 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_template_extensions_safereadjson",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "safereadjson()"
     },
     {
@@ -31468,8 +31468,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "source-search.mjs"
     },
     {
@@ -31479,8 +31479,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_source_search_dirs",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "source_search_dirs"
     },
     {
@@ -31490,8 +31490,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_never_source_dirs",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "never_source_dirs"
     },
     {
@@ -31501,8 +31501,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_findsourcefile",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "findsourcefile()"
     },
     {
@@ -31512,8 +31512,8 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_source_search_walk",
-      "community": 306,
-      "community_name": "Visualize: Direction Comps & Asset Production",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "walk()"
     },
     {
@@ -35450,8 +35450,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "poscontroller.php"
     },
     {
@@ -35461,8 +35461,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "poscontroller"
     },
     {
@@ -35472,8 +35472,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_construct",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".__construct()"
     },
     {
@@ -35483,8 +35483,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_checkout",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".checkout()"
     },
     {
@@ -35494,8 +35494,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_php_request",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "request"
     },
     {
@@ -35505,8 +35505,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_php_jsonresponse",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "jsonresponse"
     },
     {
@@ -35516,8 +35516,8 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_index",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".index()"
     },
     {
@@ -35527,8 +35527,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_show",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".show()"
     },
     {
@@ -35538,8 +35538,8 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_poscontroller_poscontroller_cancel",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": ".cancel()"
     },
     {
@@ -36165,8 +36165,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "usercontroller.php"
     },
     {
@@ -36176,8 +36176,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "usercontroller"
     },
     {
@@ -36187,8 +36187,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_index",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".index()"
     },
     {
@@ -36198,8 +36198,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_php_request",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "request"
     },
     {
@@ -36209,8 +36209,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_php_jsonresponse",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": "jsonresponse"
     },
     {
@@ -36220,8 +36220,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_store",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".store()"
     },
     {
@@ -36231,8 +36231,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_show",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".show()"
     },
     {
@@ -36242,8 +36242,8 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_update",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".update()"
     },
     {
@@ -36253,8 +36253,8 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_destroy",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".destroy()"
     },
     {
@@ -36264,8 +36264,8 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_resetpassword",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".resetpassword()"
     },
     {
@@ -36275,8 +36275,8 @@
       "source_location": "L204",
       "_origin": "ast",
       "id": "backend_app_http_controllers_api_usercontroller_usercontroller_togglestatus",
-      "community": 328,
-      "community_name": "checkElementGptBorderShadowDOM",
+      "community": 62,
+      "community_name": "User",
       "norm_label": ".togglestatus()"
     },
     {
@@ -36286,8 +36286,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_http_controllers_controller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "controller.php"
     },
     {
@@ -36297,8 +36297,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "backend_app_http_controllers_controller_controller",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 99,
+      "community_name": "live-status.mjs",
       "norm_label": "controller"
     },
     {
@@ -36374,8 +36374,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_app_models_cashflow",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "cashflow.php"
     },
     {
@@ -36385,8 +36385,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "cashflow"
     },
     {
@@ -36429,8 +36429,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_casts",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".casts()"
     },
     {
@@ -36440,8 +36440,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_user",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".user()"
     },
     {
@@ -36451,8 +36451,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_php_belongsto",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "belongsto"
     },
     {
@@ -36462,8 +36462,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_transaction",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".transaction()"
     },
     {
@@ -36473,8 +36473,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "backend_app_models_cashflow_cashflow_supplier",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".supplier()"
     },
     {
@@ -36737,8 +36737,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "backend_app_models_product_product_booted",
-      "community": 246,
-      "community_name": "Unit",
+      "community": 72,
+      "community_name": "Product",
       "norm_label": ".booted()"
     },
     {
@@ -37859,8 +37859,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "backend_app_services_posservice_posservice",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": "posservice"
     },
     {
@@ -37870,8 +37870,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "backend_app_services_posservice_posservice_checkout",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".checkout()"
     },
     {
@@ -37881,8 +37881,8 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "backend_app_services_posservice_posservice_canceltransaction",
-      "community": 105,
-      "community_name": "openTunePopover",
+      "community": 111,
+      "community_name": "extractFindingIgnoreValue",
       "norm_label": ".canceltransaction()"
     },
     {
@@ -38838,8 +38838,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory",
-      "community": 246,
-      "community_name": "Unit",
+      "community": 306,
+      "community_name": "Visualize: Direction Comps & Asset Production",
       "norm_label": "userfactory.php"
     },
     {
@@ -38849,8 +38849,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory_userfactory",
-      "community": 246,
-      "community_name": "Unit",
+      "community": 306,
+      "community_name": "Visualize: Direction Comps & Asset Production",
       "norm_label": "userfactory"
     },
     {
@@ -38860,8 +38860,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "factory",
-      "community": 246,
-      "community_name": "Unit",
+      "community": 306,
+      "community_name": "Visualize: Direction Comps & Asset Production",
       "norm_label": "factory"
     },
     {
@@ -38871,8 +38871,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory_userfactory_definition",
-      "community": 246,
-      "community_name": "Unit",
+      "community": 306,
+      "community_name": "Visualize: Direction Comps & Asset Production",
       "norm_label": ".definition()"
     },
     {
@@ -38882,8 +38882,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "backend_database_factories_userfactory_userfactory_unverified",
-      "community": 246,
-      "community_name": "Unit",
+      "community": 306,
+      "community_name": "Visualize: Direction Comps & Asset Production",
       "norm_label": ".unverified()"
     },
     {
@@ -38893,8 +38893,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "static",
-      "community": 246,
-      "community_name": "Unit",
+      "community": 306,
+      "community_name": "Visualize: Direction Comps & Asset Production",
       "norm_label": "static"
     },
     {
@@ -39762,8 +39762,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_database_seeders_databaseseeder",
-      "community": 111,
-      "community_name": "extractFindingIgnoreValue",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": "databaseseeder.php"
     },
     {
@@ -39773,8 +39773,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "backend_database_seeders_databaseseeder_databaseseeder",
-      "community": 111,
-      "community_name": "extractFindingIgnoreValue",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": "databaseseeder"
     },
     {
@@ -39784,8 +39784,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "seeder",
-      "community": 111,
-      "community_name": "extractFindingIgnoreValue",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": "seeder"
     },
     {
@@ -39795,8 +39795,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "backend_database_seeders_databaseseeder_databaseseeder_run",
-      "community": 111,
-      "community_name": "extractFindingIgnoreValue",
+      "community": 246,
+      "community_name": "Unit",
       "norm_label": ".run()"
     },
     {
@@ -54620,7 +54620,7 @@
       "label": "Keputusan Arsitektur",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1504",
+      "source_location": "L1505",
       "_origin": "ast",
       "id": "docs_context_keputusan_arsitektur",
       "community": 146,
@@ -54631,7 +54631,7 @@
       "label": "Keputusan UI",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1572",
+      "source_location": "L1573",
       "_origin": "ast",
       "id": "docs_context_keputusan_ui",
       "community": 146,
@@ -54642,7 +54642,7 @@
       "label": "Keputusan Logic / Data",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1581",
+      "source_location": "L1582",
       "_origin": "ast",
       "id": "docs_context_keputusan_logic_data",
       "community": 146,
@@ -54653,7 +54653,7 @@
       "label": "Catatan Verifikasi",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1585",
+      "source_location": "L1586",
       "_origin": "ast",
       "id": "docs_context_catatan_verifikasi",
       "community": 146,
@@ -54664,7 +54664,7 @@
       "label": "Hal Yang Perlu Diperhatikan Agent",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1594",
+      "source_location": "L1595",
       "_origin": "ast",
       "id": "docs_context_hal_yang_perlu_diperhatikan_agent",
       "community": 146,
@@ -56248,7 +56248,7 @@
       "label": "Arsitektur & Spesifikasi Solusi",
       "file_type": "document",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L30",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_arsitektur_spesifikasi_solusi",
       "community": 316,
@@ -56259,7 +56259,7 @@
       "label": "1. Solusi 1: Cloud Sync Preferensi Toko (Free-Tier Ready: Supabase + Render)",
       "file_type": "document",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L32",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_1_solusi_1_cloud_sync_preferensi_toko_free_tier_ready_supabase_render",
       "community": 316,
@@ -56270,7 +56270,7 @@
       "label": "2. Solusi 3: Ekspor / Impor Cadangan Data Mandiri (JSON Backup with Safety Net)",
       "file_type": "document",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L52",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_2_solusi_3_ekspor_impor_cadangan_data_mandiri_json_backup_with_safety_net",
       "community": 316,
@@ -56281,7 +56281,7 @@
       "label": "Phase Breakdown",
       "file_type": "document",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L94",
+      "source_location": "L105",
       "_origin": "ast",
       "id": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_phase_breakdown",
       "community": 316,
@@ -192729,7 +192729,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1585",
+      "source_location": "L1586",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -192740,7 +192740,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1594",
+      "source_location": "L1595",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -192751,7 +192751,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1504",
+      "source_location": "L1505",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -192762,7 +192762,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1581",
+      "source_location": "L1582",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -192773,7 +192773,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1572",
+      "source_location": "L1573",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -194060,7 +194060,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L30",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
       "source": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_cloud_sync_preferences_local_data_backup_restore",
@@ -194082,7 +194082,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L94",
+      "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast",
       "source": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_cloud_sync_preferences_local_data_backup_restore",
@@ -194093,7 +194093,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L32",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_arsitektur_spesifikasi_solusi",
@@ -194104,7 +194104,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md",
-      "source_location": "L52",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
       "source": "plans_260903_24_cloud_sync_dan_data_backup_restore_plan_arsitektur_spesifikasi_solusi",
@@ -195631,5 +195631,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d920f1cc9181ab4a7349ec98dc38bd546de7dbac"
+  "built_at_commit": "d04da922ae9957587b165a42c90fb274f452c47e"
 }

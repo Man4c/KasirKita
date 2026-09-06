@@ -87,6 +87,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:owner')->group(function () {
         // Store Settings update
         Route::put('/settings/store', [StoreSettingController::class, 'updateStore']);
+        Route::put('/settings/preferences', [StoreSettingController::class, 'updatePreferences']);
 
         // Taxes & Fees management
         Route::post('/taxes-and-fees', [TaxAndFeeController::class, 'store']);

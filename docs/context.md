@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Backend Preferensi Toko Cloud Sync - Fase 1 & 2 Plan #24 (`StoreSetting.php`, `StoreSettingController.php`, `StorePreferenceTest.php`)**:
+  - Menyelesaikan Fase 1 (Spesifikasi Skema Data & Kontrak API) dan Fase 2 (Backend Implementation):
+    1. *Migrasi Skema Kolom `preferences`*: Menambahkan kolom `preferences` berformat JSON/JSONB pada tabel `store_settings` melalui migrasi `2026_09_06_000001_add_preferences_to_store_settings_table.php`.
+    2. *Model Eloquent & Default Preferences*: Mendefinisikan konstanta `DEFAULT_PREFERENCES` di `StoreSetting.php` (`show_barcode_scanner`, `sound_beep`, `show_customer_picker`, `show_voucher_feature`, `show_tax_feature`, `auto_print`, `print_two_copies`, `paper_size: '58mm'`). Dilengkapi cast `array` dan accessor `getPreferencesAttribute` yang secara atomik menggabungkan (*merge*) preferensi tersimpan dengan default agar frontend tidak pernah menerima key `undefined`.
+    3. *API Endpoint & RBAC Strict*:
+       - `PUT /api/settings/preferences`: Khusus role `owner` (`middleware(['auth:sanctum', 'role:owner'])`), memvalidasi seluruh tipe data boolean & enum, dan menyimpan perubahan atomik. Role non-owner (kasir) dijamin menerima `403 Forbidden`.
+       - `GET /api/settings/store`: Tersedia untuk seluruh staf terotentikasi, mengembalikan identitas toko beserta preferensi POS terkini.
+    4. *Idempotensi Database Seeder*: Memperbaiki `DatabaseSeeder.php` agar pengecekan produk (`Product::withTrashed()->where('sku_barcode', ...)`), pelanggan (`Customer::withTrashed()`), dan `StockMovement` (InitialStock) bersifat 100% idempoten tanpa duplikasi atau pelanggaran constraint saat `db:seed` dijalankan berulang.
+    5. *Verifikasi Otomatis*: Menulis 5 pengujian fitur komprehensif di `StorePreferenceTest.php` (default preferences, validasi format, update sukses oleh owner, penolakan akses kasir 403, dan endpoint getStore). Seluruh 77 test suite backend lulus 100% (`passed: 77, assertions: 348`).
+
 - **Pembaruan Desain Arsitektur Plan #24 (Cloud Sync Preferences & Local Data Backup-Restore)**:
   - Memperbarui spesifikasi teknis Plan #24 dengan keputusan strategis baru:
     1. *Cron Ping Jam Sibuk Terbatas*: Tetap memasang webhook cron keep-alive gratis (`cron-job.org`), namun dibatasi hanya pada jam operasional toko (pk 08.00–21.00 = ~390 jam/bulan) agar menghemat kuota 750 jam Render Free Tier dengan sisa ~360 jam aman dari resiko suspensi akhir bulan, didukung arsitektur offline-first jika kasir buka sebelum jam cron.

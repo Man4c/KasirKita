@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788669299.7252965,
-    "ast_hash": "aa435cf26df6b47c8b8c4984b49ba842",
+    "mtime": 1788669834.8765354,
+    "ast_hash": "525a0b70fc5e8db799fa7d7c0c2077ab",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1160,8 +1160,8 @@
     "semantic_hash": "9ac8ca6ff520e4be6b782874fe6d2e3f"
   },
   "backend/database/seeders/DatabaseSeeder.php": {
-    "mtime": 1788665013.166269,
-    "ast_hash": "784b531516c0ca506a9106877632ce08",
+    "mtime": 1788669790.634609,
+    "ast_hash": "3a5f8a26f96c5faf53ebf8e692100c0b",
     "semantic_hash": ""
   },
   "backend/package.json": {
@@ -1185,8 +1185,8 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1788326407.5297275,
-    "ast_hash": "1d453f138838fdf53344d91b02c1a0d9",
+    "mtime": 1788669652.30755,
+    "ast_hash": "7859228c8ab6b21b46cc79b104518fa4",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -2100,13 +2100,13 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/StoreSettingController.php": {
-    "mtime": 1788326700.1113975,
-    "ast_hash": "2cba77d73b348be1b9555a6d1ad96d1e",
+    "mtime": 1788669643.011901,
+    "ast_hash": "477d5b9fa49ff1df0c41b7a8204c2f45",
     "semantic_hash": ""
   },
   "backend/app/Models/StoreSetting.php": {
-    "mtime": 1788326357.853575,
-    "ast_hash": "7c49267680da7029b98d7f3b4ad77328",
+    "mtime": 1788669630.5917315,
+    "ast_hash": "ee08252ea66c4112d8ac483f254a68fe",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_02_051850_create_store_settings_table.php": {
@@ -2270,8 +2270,8 @@
     "semantic_hash": ""
   },
   "plans/260903-24-cloud-sync-dan-data-backup-restore/plan.md": {
-    "mtime": 1788669287.8939087,
-    "ast_hash": "0218af3dad97e62b2a7cea053af135c3",
+    "mtime": 1788669828.897835,
+    "ast_hash": "3c84a7b1babee450241b372b67775f68",
     "semantic_hash": ""
   },
   "mobile/src/components/dashboard/DashboardDetailModal.js": {
@@ -2577,6 +2577,16 @@
   "mobile/src/components/unit/UnitDeleteModal.js": {
     "mtime": 1788622760.1679091,
     "ast_hash": "57c7df008c1b42138565c1d68296a85d",
+    "semantic_hash": ""
+  },
+  "backend/database/migrations/2026_09_06_000001_add_preferences_to_store_settings_table.php": {
+    "mtime": 1788669619.5293024,
+    "ast_hash": "3a21d800058928023e9db20aa5f6e50f",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/StorePreferenceTest.php": {
+    "mtime": 1788669666.920593,
+    "ast_hash": "91b5d2115d2fd4776a7f942c43b130b5",
     "semantic_hash": ""
   }
 }

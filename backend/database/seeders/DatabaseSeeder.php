@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
                 'receipt_footer' => 'Terima kasih atas kunjungan Anda! Layanan Konsumen: 0812-3456-7890',
                 'show_logo_on_receipt' => true,
                 'show_phone_on_receipt' => true,
+                'preferences' => StoreSetting::DEFAULT_PREFERENCES,
             ]
         );
 
@@ -179,7 +180,10 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($customersData as $cust) {
-            Customer::firstOrCreate(['name' => $cust['name']], $cust);
+            $existing = Customer::withTrashed()->where('name', $cust['name'])->orWhere('phone', $cust['phone'])->first();
+            if (! $existing) {
+                Customer::create($cust);
+            }
         }
 
         // 7. Seed Taxes and Fees
@@ -411,20 +415,40 @@ class DatabaseSeeder extends Seeder
             $unitModel = $units[$item['base_unit']] ?? $units['pcs'];
             $supplier = $suppliers[$item['supplier_index']] ?? null;
 
-            $product = Product::create([
-                'category_id' => $catId,
-                'base_unit_id' => $unitModel->id,
-                'default_pos_unit_id' => $unitModel->id,
-                'name' => $item['name'],
-                'sku_barcode' => $item['sku_barcode'],
-                'description' => $item['description'],
-                'price' => $item['price'],
-                'avg_cost' => $item['avg_cost'],
-                'stock' => $item['stock'],
-                'min_stock' => $item['min_stock'],
-                'is_active' => true,
-                'is_for_sale' => true,
-            ]);
+            $product = Product::withTrashed()->where('sku_barcode', $item['sku_barcode'])->first();
+            if ($product) {
+                if ($product->trashed()) {
+                    $product->restore();
+                }
+                $product->update([
+                    'category_id' => $catId,
+                    'base_unit_id' => $unitModel->id,
+                    'default_pos_unit_id' => $unitModel->id,
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'price' => $item['price'],
+                    'avg_cost' => $item['avg_cost'],
+                    'stock' => $item['stock'],
+                    'min_stock' => $item['min_stock'],
+                    'is_active' => true,
+                    'is_for_sale' => true,
+                ]);
+            } else {
+                $product = Product::create([
+                    'category_id' => $catId,
+                    'base_unit_id' => $unitModel->id,
+                    'default_pos_unit_id' => $unitModel->id,
+                    'name' => $item['name'],
+                    'sku_barcode' => $item['sku_barcode'],
+                    'description' => $item['description'],
+                    'price' => $item['price'],
+                    'avg_cost' => $item['avg_cost'],
+                    'stock' => $item['stock'],
+                    'min_stock' => $item['min_stock'],
+                    'is_active' => true,
+                    'is_for_sale' => true,
+                ]);
+            }
 
             // Ensure base unit conversion exists with is_default_pos = true
             ProductUnitConversion::updateOrCreate(
@@ -457,23 +481,27 @@ class DatabaseSeeder extends Seeder
                 }
             }
 
-            // Record initial stock movement (IN)
-            StockMovement::create([
-                'product_id' => $product->id,
-                'user_id' => $owner->id,
-                'supplier_id' => $supplier?->id,
-                'type' => 'IN',
-                'quantity' => $product->stock,
-                'unit_name' => $unitModel->name,
-                'conversion_factor' => 1.0000,
-                'base_quantity' => $product->stock,
-                'unit_cost' => $product->avg_cost,
-                'total_cost' => $product->stock * $product->avg_cost,
-                'balance_after' => $product->stock,
-                'reference_type' => 'InitialStock',
-                'notes' => 'Stok awal inisialisasi sistem KasirKita POS',
-                'created_at' => now(),
-            ]);
+            // Record initial stock movement (IN) if not already recorded
+            StockMovement::firstOrCreate(
+                [
+                    'product_id' => $product->id,
+                    'reference_type' => 'InitialStock',
+                ],
+                [
+                    'user_id' => $owner->id,
+                    'supplier_id' => $supplier?->id,
+                    'type' => 'IN',
+                    'quantity' => $product->stock,
+                    'unit_name' => $unitModel->name,
+                    'conversion_factor' => 1.0000,
+                    'base_quantity' => $product->stock,
+                    'unit_cost' => $product->avg_cost,
+                    'total_cost' => $product->stock * $product->avg_cost,
+                    'balance_after' => $product->stock,
+                    'notes' => 'Stok awal inisialisasi sistem KasirKita POS',
+                    'created_at' => now(),
+                ]
+            );
         }
     }
 }

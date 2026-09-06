@@ -1,16 +1,16 @@
 # Graph Report - KasirKita  (2026-09-06)
 
 ## Corpus Check
-- 490 files · ~684,402 words
+- 490 files · ~684,642 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5266 nodes · 11874 edges · 352 communities (302 shown, 50 thin omitted)
+- 5266 nodes · 11874 edges · 351 communities (301 shown, 50 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 375 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d920f1cc`
+- Built from commit: `d04da922`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -274,7 +274,6 @@
 - expo-image-picker
 - expo-secure-store
 - expo-status-bar
-- checkElementGptBorderShadowDOM
 - @react-native-async-storage/async-storage
 - react-native-safe-area-context
 - react-native-svg
@@ -324,7 +323,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (352 total, 50 thin omitted)
+## Communities (351 total, 50 thin omitted)
 
 ### Community 0 - "live-browser.js"
 Cohesion: 0.03
@@ -356,7 +355,7 @@ Nodes (7): DiscountController, JsonResponse, Request, Discount, Builder, HasMany
 
 ### Community 7 - "context.mjs"
 Cohesion: 0.05
-Nodes (76): appendAutonomyCounterDirective(), appendBuildPathDirective(), appendCompRoundOpenDirective(), appendDetectorFallback(), appendImageGenDirective(), appendImageToolsDirective(), appendSubagentAuthorizationDirective(), appendSurfaceBriefContext() (+68 more)
+Nodes (80): appendAutonomyCounterDirective(), appendBuildPathDirective(), appendCompRoundOpenDirective(), appendDetectorFallback(), appendImageGenDirective(), appendImageToolsDirective(), appendSubagentAuthorizationDirective(), appendSurfaceBriefContext() (+72 more)
 
 ### Community 8 - "el"
 Cohesion: 0.07
@@ -411,12 +410,12 @@ Cohesion: 0.11
 Nodes (45): allow(), bumpCursorDenial(), cursorBlockMessage(), deny(), detectProposedHtml(), done(), escapeRegExp(), findingSignature() (+37 more)
 
 ### Community 21 - "css-cascade.mjs"
-Cohesion: 0.16
-Nodes (21): directChildDirs(), discoverRootsForPattern(), discoverTargetCandidates(), expandSimplePattern(), findTargetExample(), firstExisting(), isCandidateProjectRoot(), isExcludedByWorkspacePattern() (+13 more)
+Cohesion: 0.18
+Nodes (17): directChildDirs(), discoverRootsForPattern(), escapeRegExp(), expandSimplePattern(), extractSectionValue(), isExcludedByWorkspacePattern(), isIgnoredWorkspaceDiscoveryDir(), isSelectableCandidate() (+9 more)
 
 ### Community 22 - "live-accept.mjs"
-Cohesion: 0.12
-Nodes (39): acceptCli(), acceptReceiptPath(), argVal(), buildAcceptedWrappedSource(), buildCarbonizeReplacement(), decodeHtmlAttr(), deindentContent(), detectCommentSyntax() (+31 more)
+Cohesion: 0.08
+Nodes (51): extensionCache, LIVE_TEMPLATE_EXTENSIONS, matchesTemplateExtension(), mergeExtensions(), normalizeExtensionEntries(), readLiveTemplateExtensions(), resolveLiveTemplateExtensions(), safeReadJson() (+43 more)
 
 ### Community 23 - "checkHtmlPatterns"
 Cohesion: 0.14
@@ -492,7 +491,7 @@ Nodes (14): DashboardActionHub(), styles, DashboardDetailModal(), styles, Dashbo
 
 ### Community 41 - "detect-antipatterns-browser.js"
 Cohesion: 0.05
-Nodes (60): browserColorsClose(), browserDesignSystemConfig(), browserHasDirectText(), browserPrimaryFont(), browserRadiusTokens(), browserSampleText(), buildSelectorSegment(), checkBrowserDesignSystemSources() (+52 more)
+Nodes (62): browserColorsClose(), browserDesignSystemConfig(), browserHasDirectText(), browserPrimaryFont(), browserRadiusTokens(), browserSampleText(), buildSelectorSegment(), checkBrowserDesignSystemSources() (+54 more)
 
 ### Community 42 - "staleness.mjs"
 Cohesion: 0.15
@@ -539,8 +538,8 @@ Cohesion: 0.16
 Nodes (26): analyzeSourceHint(), buildCandidatesForOp(), buildContextHintsByRef(), buildManualEditEvidence(), collectSearchFiles(), countOps(), decodeBasicHtml(), escapeRegExp() (+18 more)
 
 ### Community 53 - "collectBrowserFindings"
-Cohesion: 0.11
-Nodes (27): browserFindingsFromMap(), checkBorders(), checkCreamPalette(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementBorders(), checkElementBordersDOM(), checkElementPseudoStripeDOM() (+19 more)
+Cohesion: 0.13
+Nodes (25): browserFindingsFromMap(), checkBorders(), checkCreamPalette(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementBorders(), checkElementBordersDOM(), checkElementPseudoStripeDOM() (+17 more)
 
 ### Community 54 - "live-inject.mjs"
 Cohesion: 0.16
@@ -575,8 +574,8 @@ Cohesion: 0.22
 Nodes (20): Analysis, analyzeAttributes(), analyzeFragment(), analyzeNode(), analyzeSvelteMarkup(), applyReplacements(), classifyEachKey(), classifyRoots() (+12 more)
 
 ### Community 62 - "User"
-Cohesion: 0.05
-Nodes (18): Authenticatable, HasMany, User, AuthApiTest, EndToEndFlowTest, ExampleTest, FinanceApiTest, MultiUomTest (+10 more)
+Cohesion: 0.04
+Nodes (21): Authenticatable, JsonResponse, Request, UserController, HasMany, User, AuthApiTest, EndToEndFlowTest (+13 more)
 
 ### Community 63 - "onboard.md"
 Cohesion: 0.09
@@ -723,8 +722,8 @@ Cohesion: 0.25
 Nodes (13): applyTanStackLiveAdapter(), buildTanStackLiveRootComponent(), detectTanStackStartProject(), escapeRegExp(), insertAfterLastImport(), isManagedComponent(), patchTanStackRoot(), pruneEmptyDir() (+5 more)
 
 ### Community 99 - "live-status.mjs"
-Cohesion: 0.14
-Nodes (11): ApiResponse, AuthController, JsonResponse, Request, JsonResponse, Request, StockOpnameController, JsonResponse (+3 more)
+Cohesion: 0.11
+Nodes (15): ApiResponse, AuthController, JsonResponse, Request, JsonResponse, Request, PosController, JsonResponse (+7 more)
 
 ### Community 100 - "package.json"
 Cohesion: 0.13
@@ -743,8 +742,8 @@ Cohesion: 0.29
 Nodes (6): Arsitektur File & Struktur Komponen, Fitur Utama & Kebutuhan Pengguna, Master Pengguna & Staf Kasir Mobile (React Native), Overview & Latar Belakang, Phase Breakdown, Standar Defensive UI & Impeccable Craft
 
 ### Community 105 - "openTunePopover"
-Cohesion: 0.08
-Nodes (16): FinanceController, JsonResponse, Request, JsonResponse, Request, PosController, Controller, CashFlow (+8 more)
+Cohesion: 0.13
+Nodes (9): FinanceController, JsonResponse, Request, BelongsTo, HasMany, HasOne, Transaction, FinanceService (+1 more)
 
 ### Community 106 - "detect-utils.mjs"
 Cohesion: 0.21
@@ -767,8 +766,8 @@ Cohesion: 0.70
 Nodes (4): isStopEvent(), writeAuditLog(), main(), stdinIsStop()
 
 ### Community 111 - "extractFindingIgnoreValue"
-Cohesion: 0.10
-Nodes (17): HasMany, BelongsTo, ProductUnitConversion, BelongsTo, StockMovement, BelongsTo, HasMany, StockOpname (+9 more)
+Cohesion: 0.08
+Nodes (18): CashFlow, BelongsTo, HasMany, BelongsTo, ProductUnitConversion, BelongsTo, StockMovement, BelongsTo (+10 more)
 
 ### Community 112 - "index.mjs"
 Cohesion: 0.23
@@ -1115,8 +1114,8 @@ Cohesion: 0.18
 Nodes (10): 1. Kontrak Endpoint API Backend, 2. Spesifikasi UI/UX & Wireframe Layar, 3. Aturan Ketahanan & Validasi (Defensive Rules), A. Katalog Produk (`/api/products`), B. Master Kategori & Satuan Pendukung, C. Format Response API, Spesifikasi UX/UI Wireframe & Kontrak Endpoint API - Master Produk Mobile (Plan #25 Fase 1), Wireframe 1: Layar Utama Master Produk (`ProductManagementScreen.js`) (+2 more)
 
 ### Community 246 - "Unit"
-Cohesion: 0.18
-Nodes (8): JsonResponse, Request, UnitController, HasMany, Unit, UserFactory, Factory, static
+Cohesion: 0.23
+Nodes (7): JsonResponse, Request, UnitController, HasMany, Unit, DatabaseSeeder, Seeder
 
 ### Community 248 - "Master Cabang & Multi-Outlet (Multi-Branch Management)"
 Cohesion: 0.40
@@ -1147,8 +1146,8 @@ Cohesion: 0.09
 Nodes (27): ReceiptView(), styles, ChangePasswordModal(), styles, PrinterGuideModal(), styles, PrinterSettingsModal(), styles (+19 more)
 
 ### Community 306 - "Visualize: Direction Comps & Asset Production"
-Cohesion: 0.20
-Nodes (12): extensionCache, LIVE_TEMPLATE_EXTENSIONS, matchesTemplateExtension(), mergeExtensions(), normalizeExtensionEntries(), readLiveTemplateExtensions(), resolveLiveTemplateExtensions(), safeReadJson() (+4 more)
+Cohesion: 0.47
+Nodes (3): UserFactory, Factory, static
 
 ### Community 307 - "Master Pemasok & Distributor di Mobile"
 Cohesion: 0.20
@@ -1201,10 +1200,6 @@ Nodes (5): After approval: the comp becomes a spec, Generate three compositional
 ### Community 322 - "BORDER_SAFE_TAGS"
 Cohesion: 0.20
 Nodes (9): 1. Layar Daftar Master Kategori (`CategoryManagementScreen.js`), 2. Formulir Tambah / Edit Kategori (`CategoryFormModal.js`), 3. Layanan API & Offline Cache (`categoryService.js`), 4. Integrasi Navigasi, Action Hub, & Sinkronisasi POS, Arsitektur Komponen & Struktur File, Fitur Utama & Kebutuhan Pengguna, Master Kategori di Mobile, Overview (+1 more)
-
-### Community 328 - "checkElementGptBorderShadowDOM"
-Cohesion: 0.44
-Nodes (3): JsonResponse, Request, UserController
 
 ### Community 335 - "barcode-detector"
 Cohesion: 0.20
@@ -1262,7 +1257,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.078) - this node is a cross-community bridge._
 - **Why does `v()` connect `modern-screenshot.umd.js` to `font-match.mjs`, `captureElementToBlob`, `design-parser.mjs`, `accept-css.mjs`, `initGlobalBar`, `index.mjs`, `live-browser.js`, `Request`, `applyEditing`, `User`, `checkElementRadialSpotlightDOM`, `collectBrowserFindings`, `TransactionItem.php`?**
   _High betweenness centrality (0.050) - this node is a cross-community bridge._
-- **Why does `createRequestHandler()` connect `live-server.mjs` to `captureElementToBlob`, `index.mjs`, `design-parser.mjs`, `detect-utils.mjs`, `applyEditing`, `css-cascade.mjs`, `source-lock.mjs`, `event-validation.mjs`?**
+- **Why does `createRequestHandler()` connect `live-server.mjs` to `captureElementToBlob`, `index.mjs`, `design-parser.mjs`, `context.mjs`, `detect-utils.mjs`, `applyEditing`, `source-lock.mjs`, `event-validation.mjs`?**
   _High betweenness centrality (0.033) - this node is a cross-community bridge._
 - **Are the 14 inferred relationships involving `User` (e.g. with `.login()` and `.destroy()`) actually correct?**
   _`User` has 14 INFERRED edges - model-reasoned connections that need verification._

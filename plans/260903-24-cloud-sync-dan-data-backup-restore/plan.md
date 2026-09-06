@@ -1,7 +1,7 @@
 ---
 title: Cloud Sync Preferences & Local Data Backup-Restore
 description: Perancangan dua jalur sinkronisasi multi-device tanpa hosting berbayar (Solusi 1 Cloud Free-Tier dengan Cron Terjadwal Jam Sibuk & Solusi 3 Cadangkan/Pulihkan File JSON Berversi Aman) agar preferensi toggle, katalog produk, dan data kasir identik antar-HP.
-status: pending
+status: in_progress
 priority: P1
 effort: 8h
 tags: [cloud-sync, backup-restore, json-export, settings, multi-device, offline-first, free-tier, scheduled-cron, schema-versioning]
@@ -106,8 +106,8 @@ Fitur ini menggabungkan dua strategi komplementer yang telah disempurnakan:
 
 | Phase | Description | Status |
 |---|---|---|
-| **1** | Spesifikasi Skema Data, Metadata `schema_version`, & Kontrak API Preferensi Toko | pending |
-| **2** | Backend: Migrasi Kolom `preferences` JSONB & Endpoint API Settings (Role Owner Only) | pending |
+| **1** | Spesifikasi Skema Data, Metadata `schema_version`, & Kontrak API Preferensi Toko | completed |
+| **2** | Backend: Migrasi Kolom `preferences` JSONB & Endpoint API Settings (Role Owner Only) | completed |
 | **3** | Mobile: Modul Backup Service (`exportStoreBackup` & `importStoreBackup` dengan Migrator Versi & Proteksi Transaksi) | pending |
 | **4** | Mobile: Integrasi UI Cadangkan & Pulihkan Berkas di `SettingsScreen.js` (dengan Dialog Keamanan Frictionless) | pending |
 | **5** | Mobile: Integrasi Sinkronisasi Top-Down Preferensi Cloud (Owner Write, Cashier Read-Only Cache-First) & Microcopy Pengaturan | pending |
