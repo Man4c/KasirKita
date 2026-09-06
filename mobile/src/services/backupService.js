@@ -243,15 +243,39 @@ export const backupService = {
         });
       }
 
+      return this.parseAndValidateBackupContent(rawJsonContent, filename);
+    } catch (err) {
+      return {
+        canceled: false,
+        valid: false,
+        message: err.message || 'Format berkas tidak valid',
+      };
+    }
+  },
+
+  /**
+   * Parse and validate raw backup JSON string.
+   * Runs schema sanitizer to support backward compatibility with schema_version 1.
+   */
+  parseAndValidateBackupContent(rawJsonContent, filename = 'backup.json') {
+    try {
+      if (!rawJsonContent || typeof rawJsonContent !== 'string') {
+        throw new Error('Berkas cadangan kosong atau tidak terbaca.');
+      }
+
       let parsed = null;
       try {
         parsed = JSON.parse(rawJsonContent);
       } catch (e) {
-        throw new Error('Berkas yang dipilih bukan format JSON yang valid.');
+        throw new Error('Berkas yang dipilih bukan format JSON yang valid (sintaks rusak atau terpotong).');
       }
 
       if (!parsed || typeof parsed !== 'object' || parsed.app !== 'KasirKita') {
         throw new Error('Berkas bukan merupakan cadangan resmi KasirKita POS.');
+      }
+
+      if (!parsed.data || typeof parsed.data !== 'object') {
+        throw new Error('Struktur data dalam berkas cadangan tidak lengkap.');
       }
 
       const schemaVersion = Number(parsed.schema_version) || 1;

@@ -40,9 +40,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
        - Menambahkan fallback otomatis di model `StoreSetting.php` sehingga nilai `paper_size` yang kosong/tidak valid di database otomatis kembali ke `'58mm'`.
        - Menambahkan unit test spesifik `test_model_accessor_merges_defaults_and_protects_paper_size` di `StorePreferenceTest.php`.
        - Menambahkan logging audit trail terstruktur `Log::info()` di `PosService.php` saat duplikasi `offline_id` terdeteksi (merekam `offline_id`, `invoice_number`, `transaction_id`, dan ID kasir) untuk mempermudah debugging dan investigasi tanpa mengganggu respon transaksi ke kasir.
-    5. *Verifikasi Kualitas UI & Testing*:
+    5. *Verifikasi Kualitas UI & Testing Komprehensif*:
        - Lolos audit Impeccable Detector (`detect.mjs`): 0 defect, mematuhi touch target (≥44dp), Flexbox pairing rule, dan anti-shift typography (`includeFontPadding: false`, `textAlignVertical: 'center'`).
        - Seluruh 78 feature & unit tests backend Laravel lulus 100% (`passed: 78, assertions: 352`).
+       - **Test Suite Otomatis Backup & Restore (`npm run test:backup` / `mobile/scripts/testBackupService.js`)**: 8/8 test lulus 100% (menguji penolakan berkas rusak/truncated, penolakan JSON asing/non-KasirKita, penolakan payload data kosong, migrasi backward-compat skema v1 ke v2 dengan auto-inject `pcs` dan default preferences, skenario pemulihan Ganti HP, skenario Tambah HP, dan deduplikasi idempoten antrean nota tanpa duplikasi).
 
 - **Implementasi Backend Preferensi Toko Cloud Sync - Fase 1 & 2 Plan #24 (`StoreSetting.php`, `StoreSettingController.php`, `StorePreferenceTest.php`)**:
   - Menyelesaikan Fase 1 (Spesifikasi Skema Data & Kontrak API) dan Fase 2 (Backend Implementation):
