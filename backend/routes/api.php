@@ -85,9 +85,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Owner-Only Administrative & Financial Routes
     Route::middleware('role:owner')->group(function () {
-        // Store Settings update
+        // Store Settings update & restore
         Route::put('/settings/store', [StoreSettingController::class, 'updateStore']);
         Route::put('/settings/preferences', [StoreSettingController::class, 'updatePreferences']);
+        Route::post('/settings/restore', [StoreSettingController::class, 'restoreBackup']);
 
         // Taxes & Fees management
         Route::post('/taxes-and-fees', [TaxAndFeeController::class, 'store']);

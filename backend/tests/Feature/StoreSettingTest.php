@@ -96,4 +96,41 @@ class StoreSettingTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['name']);
     }
+
+    public function test_owner_can_restore_backup_payload_to_database(): void
+    {
+        // 1. Buat kategori lalu soft-delete
+        $cat = \App\Models\Category::create(['name' => 'Kategori Terhapus', 'slug' => 'kategori-terhapus']);
+        $cat->delete();
+        $this->assertSoftDeleted('categories', ['name' => 'Kategori Terhapus']);
+
+        // 2. Kirim payload restore
+        $payload = [
+            'data' => [
+                'categories' => [
+                    ['id' => $cat->id, 'name' => 'Kategori Terhapus', 'description' => 'Dipulihkan'],
+                    ['name' => 'Kategori Baru Pulih', 'description' => 'Baru'],
+                ],
+                'preferences' => [
+                    'paper_size' => '80mm',
+                ],
+            ],
+        ];
+
+        $response = $this->actingAs($this->owner, 'sanctum')
+            ->postJson('/api/settings/restore', $payload);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('success', true);
+
+        // Kategori terhapus harus kembali aktif (not soft deleted)
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Kategori Terhapus',
+            'deleted_at' => null,
+        ]);
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Kategori Baru Pulih',
+            'deleted_at' => null,
+        ]);
+    }
 }

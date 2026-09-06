@@ -429,8 +429,23 @@ export const backupService = {
         }
       }
 
+      // 4. If online and authenticated, synchronize restored data to Cloud database (Owner)
+      let cloudRestored = false;
+      try {
+        const cloudRes = await api.post('/settings/restore', {
+          data: backupPayload.data,
+          includeOfflineQueue,
+        });
+        if (cloudRes.data?.success) {
+          cloudRestored = true;
+        }
+      } catch (cloudErr) {
+        console.log('[backupService] Cloud restore sync skipped (offline or non-owner):', cloudErr.message);
+      }
+
       return {
         success: true,
+        cloudRestored,
         restoredSettings: mergedSettings,
         restoredQueueCount,
         summary: {

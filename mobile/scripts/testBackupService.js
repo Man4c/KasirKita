@@ -101,7 +101,10 @@ const backupServiceMod = loadProductionModule(
   {
     './offlineStorage': offlineStorageMod,
     './storage': storageMod,
-    './api': { get: async () => ({ data: { success: false } }) },
+    './api': {
+      get: async () => ({ data: { success: false } }),
+      post: async () => ({ data: { success: true } }),
+    },
   }
 );
 const service = backupServiceMod.backupService || backupServiceMod.default;
