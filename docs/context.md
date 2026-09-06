@@ -20,6 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Implementasi Solusi 2-Baris Nama Produk & Tinggi Seragam Grid Kasir POS (`ProductGrid.js` & `PosCartModal.js`)**:
+  - Menyelesaikan keluhan pemotongan teks nama produk yang panjang (seperti *"Teh Botol Melati 350..."*, *"Kopi Susu Gula Aren..."*, *"Keripik Kentang Bal..."*) pada layar katalog kasir:
+    1. *Penyebab Root Cause*: Nama produk pada kartu grid kasir sebelumnya dibatasi secara kaku hanya 1 baris (`numberOfLines={1}`). Karena layar HP portrait terbagi 2 kolom, lebar kotak hanya ~150-160px yang hanya muat sekitar 14-17 karakter, sehingga sebagian besar nama produk UMKM yang memiliki 3-5 kata otomatis terpotong ellipsis.
+    2. *Solusi 2-Baris dengan Wadah Tinggi Seragam*: Menerapkan `numberOfLines={2}` pada teks judul kartu produk (`cardTitle`), dipadukan dengan tinggi tetap 2 baris (`lineHeight: 18`, `minHeight: 36` di portrait; `lineHeight: 16`, `minHeight: 32` di landscape). Kartu dengan nama pendek (misal *"Tisue"*) menyisakan ruang baris kedua secara transparan, menjamin seluruh kartu dalam satu baris grid memiliki tinggi yang rata, simetris, dan baris harga/stok selalu sejajar horizontal.
+    3. *Pencegahan Tabrakan Badge*: Menambahkan container pembungkus kategori dan judul serta `cardHeaderInCart: { paddingRight: 48 }` sehingga nama kategori tidak pernah tertabrak oleh floating badge jumlah belanjaan saat produk masuk keranjang.
+    4. *Penyelarasan Keranjang Kasir*: Mengizinkan 2 baris (`numberOfLines={2}`, `lineHeight: 19`) pada daftar item di modal keranjang (`PosCartModal.js`) agar nama produk tetap terbaca utuh saat kasir meninjau pesanan.
+  - Lolos uji detektor Impeccable (0 defect).
+
 - **Implementasi Sentuh Luar Modal (Backdrop Dismiss) & Bottom Sheet Pattern pada Modal Produk (`ProductFormModal.js` & `QuickStockAdjustModal.js`)**:
   - Menyelesaikan keluhan pengguna mengenai modal Tambah/Edit Produk yang belum bisa ditutup dengan menyentuh area luar/gelap di sekitar modal seperti halnya modal-modal lain:
     1. *Penyebab Root Cause*: Pada `ProductFormModal.js` dan `QuickStockAdjustModal.js`, penampung overlay (`modalBackdrop` / `backdrop`) sebelumnya berstatus `<View>` statis tanpa area interaktif touchable, dan belum dibungkus oleh `<KeyboardAvoidingView>`. Akibatnya, sentuhan pengguna pada area latar di luar kartu modal tidak terdeteksi.

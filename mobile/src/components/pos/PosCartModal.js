@@ -95,7 +95,7 @@ export default function PosCartModal({
                   <View key={item.product.id} style={styles.cartSheetItemRow}>
                     {/* Item Info (Left) */}
                     <View style={{ flex: 1, minWidth: 0, marginRight: 10 }}>
-                      <Text style={styles.cartSheetItemName} numberOfLines={1} ellipsizeMode="tail">
+                      <Text style={styles.cartSheetItemName} numberOfLines={2} ellipsizeMode="tail">
                         {item.product.name}
                       </Text>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
@@ -258,6 +258,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 14,
     fontFamily: 'Poppins_500Medium',
+    lineHeight: 19,
+    includeFontPadding: false,
   },
   cartSheetItemPrice: {
     color: '#a1a1aa',

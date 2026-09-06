@@ -57,23 +57,25 @@ export default function ProductGrid({
             </View>
           )}
 
-          <View style={styles.cardHeader}>
-            <Text style={styles.cardCategory} numberOfLines={1} ellipsizeMode="tail">
-              {item.category?.name || 'Umum'}
+          <View>
+            <View style={[styles.cardHeader, inCart && styles.cardHeaderInCart]}>
+              <Text style={styles.cardCategory} numberOfLines={1} ellipsizeMode="tail">
+                {item.category?.name || 'Umum'}
+              </Text>
+            </View>
+
+            <Text
+              style={[
+                styles.cardTitle,
+                isLandscape && styles.cardTitleLandscape,
+                compact && styles.cardTitleCompactLandscape,
+              ]}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {item.name}
             </Text>
           </View>
-
-          <Text
-            style={[
-              styles.cardTitle,
-              isLandscape && styles.cardTitleLandscape,
-              compact && styles.cardTitleCompactLandscape,
-            ]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {item.name}
-          </Text>
 
           <View style={styles.cardFooter}>
             <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 2, flexShrink: 0 }}>
@@ -494,6 +496,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#27272a',
     position: 'relative',
+    justifyContent: 'space-between',
   },
   productCardLandscape: {
     padding: 8,
@@ -526,28 +529,43 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   cardHeader: {
     marginBottom: 4,
+  },
+  cardHeaderInCart: {
+    paddingRight: 48,
   },
   cardCategory: {
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
   },
   cardTitle: {
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
+    lineHeight: 18,
+    minHeight: 36,
     marginBottom: 6,
+    includeFontPadding: false,
   },
   cardTitleLandscape: {
     fontSize: 12,
+    lineHeight: 16,
+    minHeight: 32,
     marginBottom: 4,
+    includeFontPadding: false,
   },
   cardTitleCompactLandscape: {
     fontSize: 12,
+    lineHeight: 15,
+    minHeight: 30,
     marginBottom: 2,
+    includeFontPadding: false,
   },
   cardFooter: {
     flexDirection: 'row',
@@ -559,21 +577,25 @@ const styles = StyleSheet.create({
     color: '#fb7185',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
+    includeFontPadding: false,
   },
   cardPriceUnit: {
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
+    includeFontPadding: false,
   },
   cardStock: {
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     flexShrink: 0,
+    includeFontPadding: false,
   },
   cardStockLow: {
     color: '#f59e0b',
     fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
   },
   emptyProductsContainer: {
     flex: 1,
