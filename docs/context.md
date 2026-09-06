@@ -36,9 +36,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
        - **Owner Write**: Ketika Owner mengubah toggle preferensi di HP miliknya (`showBarcodeScanner`, `soundBeep`, `showCustomerPicker`, `showVoucherFeature`, `showTaxFeature`, `autoPrint`, `printTwoCopies`, `paperSize`), aplikasi otomatis mengunggah perubahan ke cloud via `PUT /settings/preferences`.
        - **Cashier Read-Only & Cache-First Fallback**: Saat HP kasir dibuka, preferensi lokal aktif dalam 0ms, lalu diperbarui secara background dari cloud tanpa risiko conflict penimpaan.
        - **Penyempurnaan Microcopy Antrean Offline**: Teks status antrean disempurnakan menjadi *"🟢 X nota aman di HP. Otomatis terunggah ke cloud saat server aktif besok pagi."*
-    4. *Defensive Fallback `paper_size` & Unit Test Backend*:
+    4. *Defensive Fallback `paper_size`, Audit Trail Idempotensi, & Testing Backend*:
        - Menambahkan fallback otomatis di model `StoreSetting.php` sehingga nilai `paper_size` yang kosong/tidak valid di database otomatis kembali ke `'58mm'`.
        - Menambahkan unit test spesifik `test_model_accessor_merges_defaults_and_protects_paper_size` di `StorePreferenceTest.php`.
+       - Menambahkan logging audit trail terstruktur `Log::info()` di `PosService.php` saat duplikasi `offline_id` terdeteksi (merekam `offline_id`, `invoice_number`, `transaction_id`, dan ID kasir) untuk mempermudah debugging dan investigasi tanpa mengganggu respon transaksi ke kasir.
     5. *Verifikasi Kualitas UI & Testing*:
        - Lolos audit Impeccable Detector (`detect.mjs`): 0 defect, mematuhi touch target (≥44dp), Flexbox pairing rule, dan anti-shift typography (`includeFontPadding: false`, `textAlignVertical: 'center'`).
        - Seluruh 78 feature & unit tests backend Laravel lulus 100% (`passed: 78, assertions: 352`).

@@ -13,6 +13,7 @@ use App\Models\TransactionItem;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PosService
@@ -44,6 +45,14 @@ class PosService
                 ->where('offline_id', $data['offline_id'])
                 ->first();
             if ($existing) {
+                Log::info('POS Idempotency: Transaksi dengan offline_id duplikat terdeteksi & dikembalikan tanpa eksekusi ulang.', [
+                    'offline_id' => $data['offline_id'],
+                    'invoice_number' => $existing->invoice_number,
+                    'transaction_id' => $existing->id,
+                    'cashier_id' => $cashier->id,
+                    'cashier_name' => $cashier->name,
+                ]);
+
                 return $existing;
             }
         }
