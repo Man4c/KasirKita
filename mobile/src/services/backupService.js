@@ -412,8 +412,11 @@ export const backupService = {
           if (!incomingTx || !incomingTx.offline_id) continue;
           const exists = existingQueue.some((q) => q.offline_id === incomingTx.offline_id);
           if (!exists) {
-            await offlineStorage.addOfflineQueue(incomingTx);
-            restoredQueueCount++;
+            const added = await offlineStorage.addOfflineQueue(incomingTx);
+            if (added) {
+              existingQueue.push(incomingTx);
+              restoredQueueCount++;
+            }
           }
         }
       }

@@ -704,11 +704,14 @@ export const offlineStorage = {
 
   /**
    * Add an existing transaction object to the offline queue (e.g. from backup restoration).
+   * Idempotent: rejects duplicate offline_id to protect against double entries.
    */
   async addOfflineQueue(item) {
     try {
-      if (!item) return false;
+      if (!item || !item.offline_id) return false;
       const queue = await this.getOfflineQueue();
+      const exists = queue.some((q) => q.offline_id === item.offline_id);
+      if (exists) return false;
       queue.push(item);
       await AsyncStorage.setItem(KEYS.QUEUE, JSON.stringify(queue));
       return true;

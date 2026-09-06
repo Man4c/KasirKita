@@ -43,7 +43,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     5. *Verifikasi Kualitas UI & Testing Komprehensif*:
        - Lolos audit Impeccable Detector (`detect.mjs`): 0 defect, mematuhi touch target (≥44dp), Flexbox pairing rule, dan anti-shift typography (`includeFontPadding: false`, `textAlignVertical: 'center'`).
        - Seluruh 78 feature & unit tests backend Laravel lulus 100% (`passed: 78, assertions: 352`).
-       - **Test Suite Otomatis Backup & Restore (`npm run test:backup` / `mobile/scripts/testBackupService.js`)**: Diperbarui agar memanggil dan mengeksekusi **modul kode produksi asli** (`mobile/src/services/backupService.js`, `mobile/src/services/offlineStorage.js`, dan `mobile/src/services/storage.js`) secara langsung via Babel sandbox & mock AsyncStorage (bukan lagi kode tiruan/harness terpisah). Verifikasi ini sekaligus mengungkap dan memperbaiki metode `offlineStorage.addOfflineQueue(item)` yang sebelumnya hilang di produksi. Seluruh 9/9 test suite lulus 100% (termasuk verifikasi ekspor smart hybrid langsung dari kode produksi).
+       - **Test Suite Otomatis Backup & Restore (`npm run test:backup` / `mobile/scripts/testBackupService.js`)**: Diperbarui agar memanggil dan mengeksekusi **modul kode produksi asli** (`mobile/src/services/backupService.js`, `mobile/src/services/offlineStorage.js`, dan `mobile/src/services/storage.js`) secara langsung via Babel sandbox & mock AsyncStorage (bukan lagi kode tiruan/harness terpisah). Verifikasi ini mengungkap dan memperbaiki metode `offlineStorage.addOfflineQueue(item)` yang sebelumnya hilang di produksi.
+       - **Proteksi Deduplikasi Ganda (Defense-in-Depth)**:
+         - *Layer 1 (Loop Level)*: `restoreStoreBackup()` melacak array antrean in-memory (`existingQueue.push(incomingTx)`) sehingga duplikasi `offline_id` di dalam satu berkas cadangan (*intra-file duplicate*) langsung dicegat.
+         - *Layer 2 (Storage Level)*: `offlineStorage.addOfflineQueue(item)` memeriksa duplikasi terhadap database lokal `AsyncStorage` sebelum menyimpan.
+         - Menambahkan Skenario D di test suite: **10/10 test suite lulus 100%**.
+       - **Roadmap Infrastruktur Testing Mobile**: Dicatat dalam backlog teknis untuk memigrasikan runner Babel VM sandbox custom ini ke **Jest + `jest-expo` preset** pada fase refactoring infrastruktur berikutnya demi standardisasi jangka panjang.
 
 - **Implementasi Backend Preferensi Toko Cloud Sync - Fase 1 & 2 Plan #24 (`StoreSetting.php`, `StoreSettingController.php`, `StorePreferenceTest.php`)**:
   - Menyelesaikan Fase 1 (Spesifikasi Skema Data & Kontrak API) dan Fase 2 (Backend Implementation):

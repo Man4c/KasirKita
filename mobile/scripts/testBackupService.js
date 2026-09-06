@@ -299,6 +299,32 @@ async function runTests() {
     assert.strictEqual(queue.length, 2); // Tetap 2, tidak menjadi 4!
   });
 
+  await testAsync('Skenario D (Deduplikasi Intra-File): Berkas backup dengan offline_id kembar dalam satu payload hanya merestore 1 nota unik', async () => {
+    for (const k in inMemoryStorage) delete inMemoryStorage[k];
+
+    const duplicatePayload = {
+      app: 'KasirKita',
+      schema_version: 2,
+      data: {
+        store: { name: 'Toko Dedup Test' },
+        offline_queue: [
+          { offline_id: 'TX-IDENTICAL-001', invoice_number: 'INV-1' },
+          { offline_id: 'TX-IDENTICAL-001', invoice_number: 'INV-1-DUP' }, // Duplikat dalam berkas yang sama
+          { offline_id: 'TX-UNIQUE-002', invoice_number: 'INV-2' },
+        ],
+      },
+    };
+
+    const restoreRes = await service.restoreStoreBackup(duplicatePayload, { includeOfflineQueue: true });
+    assert.strictEqual(restoreRes.success, true);
+    assert.strictEqual(restoreRes.restoredQueueCount, 2); // Hanya 2 item unik yang direstore, bukan 3!
+
+    const queue = await offlineStorage.getOfflineQueue();
+    assert.strictEqual(queue.length, 2);
+    assert.strictEqual(queue[0].offline_id, 'TX-IDENTICAL-001');
+    assert.strictEqual(queue[1].offline_id, 'TX-UNIQUE-002');
+  });
+
   // --- SUITE 4: UJI SMART HYBRID EXPORT DARI KODE PRODUKSI ---
   console.log('\n--- SUITE 4: Uji Smart Hybrid Export (Kode Produksi backupService) ---');
 
