@@ -299,7 +299,6 @@
   "297": "SKILL.md",
   "298": "SKILL.md",
   "299": ".oxlintrc.json",
-  "300": "addVisualContrastFindings",
   "301": "Mobile Bottom Navigation & Auto-Rotate Landscape POS",
   "302": "BORDER_SAFE_TAGS",
   "303": "2026_09_01_182500_create_taxes_and_fees_table.php",
@@ -314,7 +313,6 @@
   "312": "scaffoldSvelteComponentSession",
   "313": "App",
   "314": "checkElementRadialSpotlightDOM",
-  "315": "CategoryManagementScreen.js",
   "316": "Cloud Sync Preferences & Local Data Backup-Restore",
   "317": "SAFE_TAGS",
   "318": "bolder.md",
@@ -337,7 +335,6 @@
   "335": "barcode-detector",
   "336": "expo-camera",
   "337": "checkElementGptBorderShadowDOM",
-  "338": "doctor.md",
   "339": "checkElementRadialSpotlightDOM",
   "340": "barcode-detector",
   "341": "TransactionHistoryScreen.js",
@@ -350,6 +347,5 @@
   "348": "@react-native-community/datetimepicker",
   "349": "checkRadialSpotlight",
   "350": "checkElementRadialSpotlightDOM",
-  "351": "colorFunctionToRgb",
-  "352": "Impeccable Documenter"
+  "351": "colorFunctionToRgb"
 }

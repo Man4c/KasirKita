@@ -217,10 +217,18 @@ class ProductController extends Controller
             $validated['price'] = 0;
         }
 
+        if (empty($validated['base_unit_id'])) {
+            $validated['base_unit_id'] = $product->base_unit_id ?? Unit::where('symbol', 'pcs')->value('id') ?? Unit::first()?->id;
+        }
+
+        if (empty($validated['default_pos_unit_id'])) {
+            $validated['default_pos_unit_id'] = $product->default_pos_unit_id ?? $validated['base_unit_id'];
+        }
+
         DB::transaction(function () use ($product, $validated) {
             $product->update($validated);
 
-            $baseUnitId = $product->base_unit_id;
+            $baseUnitId = $product->base_unit_id ?? Unit::where('symbol', 'pcs')->value('id') ?? Unit::first()?->id;
 
             // Sync base conversion
             ProductUnitConversion::updateOrCreate(

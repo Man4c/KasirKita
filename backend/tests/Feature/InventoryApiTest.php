@@ -262,7 +262,10 @@ class InventoryApiTest extends TestCase
         $response->assertStatus(422)
             ->assertJson([
                 'success' => false,
-                'message' => 'Kategori tidak dapat dihapus karena masih memiliki produk terkait.',
+                'errors' => [
+                    'products_count' => 1,
+                    'requires_action' => true,
+                ],
             ]);
 
         $this->assertDatabaseHas('categories', ['id' => $category->id]);
@@ -284,6 +287,6 @@ class InventoryApiTest extends TestCase
                 'message' => 'Kategori berhasil dihapus.',
             ]);
 
-        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+        $this->assertSoftDeleted('categories', ['id' => $category->id]);
     }
 }

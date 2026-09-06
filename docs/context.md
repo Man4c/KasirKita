@@ -20,6 +20,22 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pembersihan Total & Pembuatan Ulang Data Seeder Komprehensif Multi-UoM serta Penambahan Defensive Fallback Satuan Produk (`DatabaseSeeder.php` & `ProductController.php`)**:
+  - Menyelesaikan kendala pengeditan produk bawaan seeder lama dan meremajakan seluruh database sistem KasirKita POS dari nol:
+    1. *Penyebab Root Cause Produk Gagal Diedit*: Pada seeder lama, produk dibuat tanpa mendefinisikan `base_unit_id` dan tabel `units` belum disemai. Akibatnya relasi `product_unit_conversions.unit_id` bernilai NULL yang memicu error fatal `SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: product_unit_conversions.unit_id` saat form edit produk di-submit.
+    2. *Defensive Fallback di Controller*: Menambahkan fallback otomatis pada `ProductController.php@update` sehingga apabila `base_unit_id` atau `default_pos_unit_id` kosong/omitted dari request, controller secara otomatis mengisi nilai dari satuan produk yang sudah ada, atau fallback aman ke `pcs` / satuan pertama di database.
+    3. *Pembangunan Ulang `DatabaseSeeder.php`*: Menulis ulang seluruh seeder dari awal dengan dataset lengkap dan terstruktur:
+       - **Pengaturan Toko (`StoreSetting`)**: KasirKita Mart & Cafe, alamat Jl. Jenderal Sudirman Jakarta, nomor telepon, dan teks footer struk.
+       - **Pengguna (`User`)**: Akun Pemilik (`owner@kasirkita.com` / `password123`) dan Kasir (`kasir@kasirkita.com` / `password123`).
+       - **Satuan / UoM (`Unit`)**: Pcs (`pcs`), Kilogram (`kg`), Gram (`g`), Liter (`l`), Botol (`btl`), Pack/Bungkus (`pack`), Dus/Karton (`dus`), Cup (`cup`), Porsi (`porsi`).
+       - **Kategori (`Category`)**: Makanan, Minuman, Snack & Camilan, Sembako.
+       - **Pemasok (`Supplier`)**: Distributor Minuman Segar Nusantara, Agen Sembako Makmur Bersama, Supplier Snack & Biskuit Jaya (lengkap dengan rekening bank & kontak sales).
+       - **Pelanggan (`Customer`)**: Pelanggan Umum (REGULAR), Ahmad Fadhil (VIP), Warung Berkah Ibu Siti (WHOLESALE).
+       - **Pajak & Biaya (`TaxAndFee`)**: PPN 11% (default, aktif), Biaya Layanan 2.5%, Biaya Kantong Belanja Rp2.000 (Takeaway).
+       - **Promosi & Diskon (`Discount`)**: DISKON10 (10% min Rp50rb), HEMAT5RB (Rp5.000 min Rp30rb), JUMATBERKAH (15% min Rp100rb).
+       - **Produk Mock Lengkap (`Product`)**: 8 produk ritel & F&B dengan harga, harga pokok (avg_cost), stok riil, stok minimum, konversi multi-UoM (1 Dus Teh Botol = 24 btl, 1 Dus Mie = 40 pack, 1 Dus Minyak = 6 pack, 1 Dus Air Mineral = 24 btl), serta riwayat pergerakan stok awal (`StockMovement` type: IN, InitialStock).
+    4. *Verifikasi & Testing*: Menjalankan `php artisan migrate:fresh --seed`, seluruh 72 test feature & unit backend lulus 100% (`passed: 72, assertions: 319`), dan uji coba simulasi edit produk berhasil sukses (HTTP 200 OK).
+
 - **Implementasi Solusi 2-Baris Nama Produk & Tinggi Seragam Grid Kasir POS (`ProductGrid.js` & `PosCartModal.js`)**:
   - Menyelesaikan keluhan pemotongan teks nama produk yang panjang (seperti *"Teh Botol Melati 350..."*, *"Kopi Susu Gula Aren..."*, *"Keripik Kentang Bal..."*) pada layar katalog kasir:
     1. *Penyebab Root Cause*: Nama produk pada kartu grid kasir sebelumnya dibatasi secara kaku hanya 1 baris (`numberOfLines={1}`). Karena layar HP portrait terbagi 2 kolom, lebar kotak hanya ~150-160px yang hanya muat sekitar 14-17 karakter, sehingga sebagian besar nama produk UMKM yang memiliki 3-5 kata otomatis terpotong ellipsis.
