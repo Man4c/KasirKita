@@ -18,7 +18,14 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "versionCode": 3
+      "versionCode": 3,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ],
+      "package": "com.man4c.kasirkitaposmobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -27,6 +34,11 @@
       "expo-secure-store",
       "expo-audio",
       "@react-native-community/datetimepicker"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a7c6d9c0-7e69-4bd1-8b93-826e33fa5e40"
+      }
+    }
   }
 }
