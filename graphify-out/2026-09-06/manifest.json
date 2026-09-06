@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788664369.4045343,
-    "ast_hash": "d0e2ec27214ed2889f30f6f9cbd55045",
+    "mtime": 1788665210.9727745,
+    "ast_hash": "d2a989e64534c8cbbc8a9f021db50ed0",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1160,9 +1160,9 @@
     "semantic_hash": "9ac8ca6ff520e4be6b782874fe6d2e3f"
   },
   "backend/database/seeders/DatabaseSeeder.php": {
-    "mtime": 1787998741.1682582,
-    "ast_hash": "49b25d884d12e93ccd074285c90e17af",
-    "semantic_hash": "49b25d884d12e93ccd074285c90e17af"
+    "mtime": 1788665013.166269,
+    "ast_hash": "784b531516c0ca506a9106877632ce08",
+    "semantic_hash": ""
   },
   "backend/package.json": {
     "mtime": 1788000896.0420475,
@@ -1235,8 +1235,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/ProductController.php": {
-    "mtime": 1788619965.4810784,
-    "ast_hash": "ab93093da1f6f8f0f0e4e4233e1edbc3",
+    "mtime": 1788664987.2863836,
+    "ast_hash": "2c680621a36268a53accc6c41b5195b3",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/StockOpnameController.php": {
@@ -1250,8 +1250,8 @@
     "semantic_hash": ""
   },
   "backend/tests/Feature/InventoryApiTest.php": {
-    "mtime": 1788522063.2302914,
-    "ast_hash": "c00dc88404e9e97ad5fa259bd25074b6",
+    "mtime": 1788665094.0836318,
+    "ast_hash": "83584ff9dbb6a0737b7770eb8816782b",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/PosController.php": {

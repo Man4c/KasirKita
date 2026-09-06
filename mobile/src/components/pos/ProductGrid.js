@@ -27,6 +27,14 @@ export default function ProductGrid({
   formatRp,
   onOpenBarcodeScanner,
 }) {
+  const selectedCatObj =
+    selectedCat === 'UNCATEGORIZED'
+      ? { name: 'Tanpa Kategori' }
+      : Array.isArray(categories)
+      ? categories.find((c) => c.id === selectedCat || c.slug === selectedCat)
+      : null;
+  const selectedCatName = selectedCatObj?.name ? `"${selectedCatObj.name}"` : 'ini';
+
   const renderProductGridItem = useCallback(
     ({ item }) => {
       const inCart = cart.find((i) => i.product.id === item.id);
@@ -275,7 +283,7 @@ export default function ProductGrid({
                 {search.trim()
                   ? `Tidak ada produk yang cocok dengan pencarian "${search}".`
                   : selectedCat !== 'ALL'
-                  ? `Belum ada produk di kategori ${selectedCatObj?.name || 'ini'}.`
+                  ? `Belum ada produk di kategori ${selectedCatName}.`
                   : 'Belum ada produk aktif yang tersedia di katalog kasir.'}
               </Text>
               {(search.trim() || selectedCat !== 'ALL') && (
@@ -625,6 +633,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     marginBottom: 6,
     textAlign: 'center',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   emptyProductsSub: {
     color: '#a1a1aa',
@@ -634,13 +644,16 @@ const styles = StyleSheet.create({
     maxWidth: 280,
     lineHeight: 18,
     marginBottom: 16,
+    includeFontPadding: false,
   },
   emptyResetBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    minHeight: 44,
+    borderRadius: 22,
     backgroundColor: 'rgba(225, 29, 72, 0.1)',
     borderWidth: 1,
     borderColor: 'rgba(225, 29, 72, 0.3)',
@@ -649,5 +662,7 @@ const styles = StyleSheet.create({
     color: '#fb7185',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

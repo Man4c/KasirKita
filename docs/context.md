@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Perbaikan ReferenceError Filter Kategori Kosong & Empty State di Katalog Kasir POS (`ProductGrid.js`)**:
+  - Menyelesaikan keluhan error crash saat pengguna menekan filter kategori di layar kasir (khususnya saat menyentuh filter yang tidak memiliki produk seperti "Tanpa Kategori"):
+    1. *Penyebab Root Cause*: Pada komponen `ProductGrid.js`, teks deskripsi empty state (`emptyProductsSub`) mencoba merender nama kategori menggunakan `${selectedCatObj?.name || 'ini'}` saat `selectedCat !== 'ALL'`. Namun, variabel `selectedCatObj` tidak pernah didefinisikan sebelumnya, sehingga seketika memicu crash JavaScript: `Web ERROR [ReferenceError: selectedCatObj is not defined]`.
+    2. *Solusi*: Mendeklarasikan `selectedCatObj` berbasis pencarian dari props `categories` dan penanganan khusus untuk `'UNCATEGORIZED'` (`{ name: 'Tanpa Kategori' }`). Menyiapkan string terformat `selectedCatName` agar nama kategori tampil rapi di dalam tanda petik ganda.
+    3. *Penyelarasan Anti-Shift Typography & Touch Target*: Menambahkan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada judul, subjudul, dan teks tombol empty state, serta memperluas touch target tombol reset filter/pencarian (`minHeight: 44`, `borderRadius: 22`, padding seimbang) sesuai WCAG.
+    4. *Verifikasi*: Lolos uji detektor Impeccable (0 defect) dan syntax check bersih.
+
 - **Pembersihan Total & Pembuatan Ulang Data Seeder Komprehensif Multi-UoM serta Penambahan Defensive Fallback Satuan Produk (`DatabaseSeeder.php` & `ProductController.php`)**:
   - Menyelesaikan kendala pengeditan produk bawaan seeder lama dan meremajakan seluruh database sistem KasirKita POS dari nol:
     1. *Penyebab Root Cause Produk Gagal Diedit*: Pada seeder lama, produk dibuat tanpa mendefinisikan `base_unit_id` dan tabel `units` belum disemai. Akibatnya relasi `product_unit_conversions.unit_id` bernilai NULL yang memicu error fatal `SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: product_unit_conversions.unit_id` saat form edit produk di-submit.
