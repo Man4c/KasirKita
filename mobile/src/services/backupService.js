@@ -451,7 +451,11 @@ export const backupService = {
         summary: {
           products: data.products?.length || 0,
           categories: data.categories?.length || 0,
+          units: data.units?.length || 0,
           customers: data.customers?.length || 0,
+          suppliers: data.suppliers?.length || 0,
+          taxes: data.taxes_and_fees?.length || 0,
+          discounts: data.discounts?.length || 0,
           queueRestored: restoredQueueCount,
         },
       };

@@ -511,11 +511,22 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         await loadSettings();
         syncManager.refreshPendingCount();
 
-        const sum = res.summary;
-        let successMsg = `Berhasil memulihkan:\n• ${sum.products} Produk\n• ${sum.categories} Kategori\n• ${sum.customers} Pelanggan`;
+        const sum = res.summary || {};
+        const items = [];
+        if (sum.products > 0) items.push(`• ${sum.products} Produk`);
+        if (sum.categories > 0) items.push(`• ${sum.categories} Kategori`);
+        if (sum.units > 0) items.push(`• ${sum.units} Satuan`);
+        if (sum.customers > 0) items.push(`• ${sum.customers} Pelanggan`);
+        if (sum.suppliers > 0) items.push(`• ${sum.suppliers} Pemasok`);
+        if (sum.taxes > 0) items.push(`• ${sum.taxes} Pajak & Biaya`);
+        if (sum.discounts > 0) items.push(`• ${sum.discounts} Promo / Diskon`);
         if (includeOfflineQueue && sum.queueRestored > 0) {
-          successMsg += `\n• ${sum.queueRestored} Nota Offline dipulihkan ke antrean HP ini`;
+          items.push(`• ${sum.queueRestored} Nota Offline dipulihkan ke antrean HP ini`);
         }
+
+        const successMsg = items.length > 0
+          ? `Berhasil memulihkan:\n${items.join('\n')}`
+          : 'Data cadangan berhasil dipulihkan.';
         showAlert('Pemulihan Selesai', successMsg);
       } else {
         showAlert('Pemulihan Gagal', res.message || 'Gagal menerapkan data cadangan.');
