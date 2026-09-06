@@ -20,6 +20,21 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyelesaian Fase 3 & 4 Plan #33: Mobile Updater Service & Bottom Sheet UI Modal (`updaterService.js`, `UpdatePromptModal.js`, `testUpdaterService.js`)**:
+  - Menyelesaikan Fase 3 (Mobile Service) dan Fase 4 (UI Bottom Sheet Modal Pembaruan):
+    1. *Instalasi Modul Resmi*: Memasang `expo-intent-launcher` (`~57.0.0`) yang kompatibel dengan Expo SDK 57 untuk memicu prompt instalasi native Android.
+    2. *Modul `updaterService.js`*:
+       - Parser SemVer numerik (`parseSemver`) dan komparator versi deterministik (`isNewerVersion`) yang kebal terhadap urutan string leksikografis (misal: `1.10.0` > `1.9.0`).
+       - Pengunduh file APK resumable (`downloadApk`) memanfaatkan `expo-file-system/legacy` dengan callback progres real-time (`percent`, `totalBytesWritten`, `totalBytesExpectedToWrite`) dan pembersihan otomatis file APK usang dari direktori cache perangkat.
+       - Peluncur instalasi Android (`installApk`) memanfaatkan `FileSystem.getContentUriAsync()` untuk memenuhi regulasi Android Nougat+ (API 24+) Scoped Storage dengan bendera izin `FLAG_GRANT_READ_URI_PERMISSION`.
+    3. *Komponen `UpdatePromptModal.js`*:
+       - Desain Bottom Sheet Impeccable Craft dengan palet Dark/Rose KasirKita (`#09090b`, `#18181b`, `#27272a`, `#e11d48`, `#fb7185`).
+       - Strip komparasi versi visual (Versi Saat Ini `v1.3.0` ➔ Versi Terbaru `v1.4.0`), tanggal rilis, dan badge status wajib/opsional.
+       - Bilah progres unduhan animasi dengan persentase real-time, ukuran MB (`12.4 MB / 45.0 MB`), dan tombol pembatalan unduhan.
+       - Banner konfirmasi keamanan data: nota, preferensi, dan database lokal dijamin tidak hilang pasca-pembaruan.
+       - Lolos uji audit Impeccable Detector (`detect.mjs`): 0 defect, mematuhi The Readability Floor Rule (≥12px), touch target (≥44dp), dan Anti-Shift Typography (`includeFontPadding: false`, `textAlignVertical: 'center'`).
+    4. *Test Suite Otomatis (`npm run test:updater` / `testUpdaterService.js`)*: 18/18 test case lulus 100% (SemVer comparison, format bytes, check update success & network error handling, download progress callback, dan Intent invocation).
+
 - **Penyelesaian Fase 1 & 2 Plan #33: Backend API & Spesifikasi In-App Remote Updater (`AppVersionController.php`, `StoreSetting.php`, `AppVersionTest.php`, `app_version.php`)**:
   - Menyelesaikan Fase 1 (Spesifikasi Arsitektur Supabase Storage) dan Fase 2 (Backend Endpoint & Konfigurasi):
     1. *Spesifikasi Storage Supabase*: Bucket publik `apk-releases` dengan format nama file `KasirKita-v{MAJOR}.{MINOR}.{PATCH}.apk`, unduhan langsung via CDN Cloudflare tanpa membebani disk/memori Render.
