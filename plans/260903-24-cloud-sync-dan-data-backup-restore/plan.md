@@ -1,27 +1,29 @@
 ---
 title: Cloud Sync Preferences & Local Data Backup-Restore
-description: Perancangan dua jalur sinkronisasi multi-device tanpa hosting berbayar (Solusi 1 Cloud Free-Tier & Solusi 3 Cadangkan/Pulihkan File JSON) agar preferensi toggle, katalog produk, dan data kasir identik antar-HP.
+description: Perancangan dua jalur sinkronisasi multi-device tanpa hosting berbayar (Solusi 1 Cloud Free-Tier dengan Cron Terjadwal Jam Sibuk & Solusi 3 Cadangkan/Pulihkan File JSON Berversi Aman) agar preferensi toggle, katalog produk, dan data kasir identik antar-HP.
 status: pending
 priority: P1
 effort: 8h
-tags: [cloud-sync, backup-restore, json-export, settings, multi-device, offline-first, free-tier]
+tags: [cloud-sync, backup-restore, json-export, settings, multi-device, offline-first, free-tier, scheduled-cron, schema-versioning]
 created: 2026-09-03
+updated: 2026-09-06
 assignee: Fullstack Architecture Specialist
 ---
 
 # Cloud Sync Preferences & Local Data Backup-Restore
 
 ## Overview
-Menyediakan solusi interoperabilitas multi-device untuk toko UMKM yang **tidak memiliki server lokal/laptop di toko dan tidak ingin sewa hosting berbayar**. 
+Menyediakan solusi interoperabilitas multi-device untuk toko UMKM yang **tidak memiliki server lokal/laptop di toko dan tidak ingin sewa hosting berbayar**.
 
-Fitur ini menggabungkan dua strategi komplementer:
-1. **Solusi 1: Cloud Sync (Free-Tier Backend & DB)**
+Fitur ini menggabungkan dua strategi komplementer yang telah disempurnakan:
+1. **Solusi 1: Cloud Sync (Free-Tier Backend & DB dengan Cron Terjadwal Jam Sibuk)**
    - Jalur utama otomatis via internet gratis (Supabase / Neon DB + Render / Railway Backend).
-   - Sinkronisasi profil toko dan seluruh toggle preferensi POS (Pajak, Voucher, Pelanggan, Barcode Scanner, Beep) antar-perangkat (HP 1 ke HP 2).
-2. **Solusi 3: Cadangkan & Pulihkan Berkas JSON (Emergency Safety Net)**
+   - Sinkronisasi profil toko dan seluruh toggle preferensi POS (Pajak, Voucher, Pelanggan, Barcode Scanner, Beep) secara hierarkis (Owner-driven top-down).
+   - Cron keep-alive dibatasi secara cerdas hanya pada jam operasional/sibuk toko untuk menjaga kuota 750 jam/bulan Render tetap aman.
+2. **Solusi 3: Cadangkan & Pulihkan Berkas JSON (Emergency Safety Net Berversi & Anti-Data Loss)**
    - Jalur darurat offline murni tanpa internet.
-   - Ekspor seluruh database lokal (produk, kategori, riwayat transaksi, preferensi toggle) menjadi berkas terenkripsi/terstruktur `.json`.
-   - Impor / pulihkan berkas backup di HP mana pun melalui picker berkas, WhatsApp, atau Bluetooth file sharing.
+   - Ekspor seluruh database lokal (produk, kategori, riwayat transaksi, preferensi toggle) menjadi berkas terstruktur `.json` dengan metadata `schema_version`.
+   - Proteksi ketat saat pemulihan (*restore*): blokir pemulihan jika ada transaksi kasir offline yang belum tersinkron, serta metode penggabungan (*merge by UUID*) agar tidak ada data transaksi yang tertimpa.
 
 ---
 
@@ -31,30 +33,61 @@ Fitur ini menggabungkan dua strategi komplementer:
 - **Infrastruktur Cloud Rp 0 (Free-Tier):**
   - **Database (Supabase)**: Database cloud PostgreSQL gratis (500 MB kapasitas, native connection pgsql).
   - **Backend (Render.com)**: Web Service container Laravel gratis dengan koneksi otomatis ke GitHub.
-  - **Keep-Alive Ping Strategy (Pencegahan Cold-Start Render)**:
-    - Paket gratis Render memiliki idle timeout 15 menit (masuk mode sleep).
-    - Setup webhook cron gratis (via `cron-job.org` atau `UptimeRobot`) yang memanggil `GET /api/v1/health` setiap 10 menit selama jam buka toko, menjaga container tetap melek tanpa cold-start.
-    - Dilindungi oleh arsitektur *Offline-First* KasirKita: jika server sedang wake-up, kasir tetap bisa checkout & cetak struk tanpa delay.
+  - **Keep-Alive Ping Terjadwal Khusus Jam Sibuk (Schedule-Bounded Ping)**:
+    - Paket gratis Render memiliki batas kuota 750 jam compute gratis per bulan.
+    - **Jadwal Cron Terbatas**: Webhook cron gratis (via `cron-job.org`) disetel memanggil `GET /api/v1/health` setiap 10 menit **hanya pada jam operasional toko** (misalnya pk 08.00 – 21.00 WIB = 13 jam/hari x 30 hari = 390 jam).
+    - **Efisiensi Kuota**: Pada malam hari (pk 21.01 – 07.59), server dibiarkan tidur (*sleep*). Dengan konsumsi hanya 390 jam/bulan, sisa kuota Render masih tersisa ~360 jam (sangat aman dari resiko suspensi di akhir bulan).
+    - **Proteksi Offline-First**: Jika kasir melayani transaksi di luar jam cron atau saat server sedang bangun (*cold-start* 20–30 detik), kasir langsung bisa checkout & cetak struk tanpa terhambat sama sekali.
 - **Backend API (`backend/app/Models/StoreSetting.php` & `SettingsController.php`):**
   - Menambahkan kolom `preferences` berformat `JSONB` pada tabel `store_settings`.
   - Menyimpan status: `show_barcode_scanner`, `sound_beep`, `show_customer_picker`, `show_voucher_feature`, `show_tax_feature`, `auto_print`, `print_two_copies`.
-  - Endpoint `PUT /api/v1/settings/preferences` untuk memperbarui preferensi secara atomik.
-  - Endpoint `GET /api/v1/settings/store` mengembalikan preferensi toko bersama data identitas toko.
-- **Mobile Integration (`mobile/src/screens/SettingsScreen.js` & `PosScreen.js`):**
-  - Saat Owner mengubah toggle di HP 1, aplikasi memperbarui memori lokal dan mengirim update ke API.
-  - Saat HP 2 dibuka, aplikasi mengambil snapshot preferensi terbaru dari cloud dan menyinkronkan switch lokal.
+  - Endpoint `PUT /api/v1/settings/preferences` khusus role `owner` (RBAC) untuk memperbarui preferensi secara atomik.
+  - Endpoint `GET /api/v1/settings/store` mengembalikan preferensi toko bersama data identitas toko untuk semua role.
+- **Pola Sinkronisasi Top-Down (Owner-Driven, Zero-Conflict):**
+  - Hanya akun **Owner** (HP 1) yang berwenang mengubah dan mengunggah (*write*) preferensi ke cloud.
+  - Akun **Kasir** (HP 2) bersifat *Read-Only Sync*: saat aplikasi kasir dibuka, sistem mengambil preferensi toko terbaru dari cloud dan menyelaraskan toggle lokal tanpa resiko konflik penimpaan (*zero-conflict*).
 
-### 2. Solusi 3: Ekspor / Impor Cadangan Data Mandiri (JSON Backup)
+---
+
+### 2. Solusi 3: Ekspor / Impor Cadangan Data Mandiri (JSON Backup with Safety Net)
+- **Metadata Skema Berkas (`schema_version` & Integritas Data):**
+  - Setiap berkas cadangan wajib menyertakan envelope metadata:
+    ```json
+    {
+      "app": "KasirKita",
+      "schema_version": 2,
+      "exported_at": "2026-09-06T12:00:00Z",
+      "app_version": "1.3.0",
+      "data": {
+        "store": { ... },
+        "categories": [ ... ],
+        "units": [ ... ],
+        "products": [ ... ],
+        "customers": [ ... ],
+        "taxes_and_fees": [ ... ],
+        "discounts": [ ... ],
+        "preferences": { ... }
+      }
+    }
+    ```
+  - **Fungsi Migrator / Sanitizer**: Jika file backup berasal dari versi lama (`schema_version < 2`), modul impor secara otomatis memvalidasi dan mengisi nilai bawaan (misal: menyematkan default `base_unit_id: 'pcs'` pada produk) agar tidak merusak database.
+- **Strategi Pemulihan Data (*Upsert Katalog & Proteksi Antrean Transaksi*):**
+  - **Master Data (Katalog, Kategori, Pelanggan, Pajak)**: Dipulihkan dengan metode **Upsert by UUID** (menambahkan item baru dan memperbarui item yang sudah ada tanpa menghapus data lain secara sembrono).
+  - **Proteksi Antrean Transaksi Offline (`offlineQueue`)**:
+    - Sebelum memulihkan data, sistem memeriksa antrean transaksi lokal di perangkat.
+    - Jika masih terdapat transaksi kasir offline yang belum tersinkronkan ke server cloud, proses restore **WAJIB DIBLOKIR** dengan dialog peringatan merah:
+      > *"Ada [X] transaksi offline di perangkat ini yang belum tersinkronkan ke server. Harap lakukan sinkronisasi transaksi atau cadangkan data saat ini terlebih dahulu sebelum memulihkan data baru."*
+    - Transaksi lokal tidak akan ditimpa, melainkan digabungkan (*merge by UUID*) untuk mencegah risiko data transaksi hilang.
 - **Modul Layanan (`mobile/src/services/backupService.js`):**
-  - `exportStoreBackup()`: Mengumpulkan data profil toko, katalog produk, kategori, pelanggan, transaksi antrean offline, dan preferensi pengaturan ke objek JSON terstruktur lengkap dengan metadata timestamp dan checksum versi skema.
-  - `importStoreBackup(jsonData)`: Memvalidasi integritas berkas, melakukan sanitasi skema, dan menyimpan ulang seluruh dataset ke memori lokal `AsyncStorage`.
+  - `exportStoreBackup()`: Mengumpulkan seluruh data lokal, menghitung checksum, dan mengompres berkas JSON.
+  - `importStoreBackup(jsonData)`: Memverifikasi `schema_version`, menjalankan sanitizer, memvalidasi integritas, dan menerapkan upsert aman.
 - **Interaksi Berkas (`expo-file-system` & `expo-sharing`):**
-  - Fitur simpan/bagikan berkas backup langsung ke WhatsApp, Google Drive, atau folder dokumen HP.
+  - Fitur bagikan berkas backup langsung ke WhatsApp, Google Drive, Bluetooth, atau unduh ke folder perangkat.
   - Fitur pilih berkas backup menggunakan document picker native.
 - **UI Kontrol Pengaturan (`mobile/src/screens/SettingsScreen.js`):**
   - Menambahkan seksi kartu *"Pencadangan & Pemulihan Data"* di layar Pengaturan.
-  - Tombol **"Cadangkan Data (JSON)"** dengan konfirmasi tanggal dan ukuran data.
-  - Tombol **"Pulihkan Data (JSON)"** dengan dialog konfirmasi peringatan sebelum menimpa data.
+  - Tombol **"Cadangkan Data (JSON)"** dengan rincian jumlah item dan tanggal.
+  - Tombol **"Pulihkan Data (JSON)"** dengan dialog konfirmasi peringatan bertingkat sebelum eksekusi.
 
 ---
 
@@ -62,9 +95,9 @@ Fitur ini menggabungkan dua strategi komplementer:
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | Spesifikasi Skema Data & Kontrak API Preferensi Toko (Cloud Sync) | pending |
-| 2 | Backend: Migrasi Kolom Preferences JSONB & Endpoint API Settings | pending |
-| 3 | Mobile: Modul Backup Service (`exportStoreBackup` & `importStoreBackup`) | pending |
-| 4 | Mobile: Integrasi UI Cadangkan & Pulihkan Berkas di `SettingsScreen.js` | pending |
-| 5 | Mobile: Integrasi Sinkronisasi Dua Arah Preferensi Cloud di HP 1 & HP 2 | pending |
-| 6 | Pengujian Validasi Multi-Device, Uji Berkas Rusak/Incompatible, & Verifikasi Build | pending |
+| **1** | Spesifikasi Skema Data, Metadata `schema_version`, & Kontrak API Preferensi Toko | pending |
+| **2** | Backend: Migrasi Kolom `preferences` JSONB & Endpoint API Settings (Role Owner Only) | pending |
+| **3** | Mobile: Modul Backup Service (`exportStoreBackup` & `importStoreBackup` dengan Migrator Versi & Proteksi Transaksi) | pending |
+| **4** | Mobile: Integrasi UI Cadangkan & Pulihkan Berkas di `SettingsScreen.js` (dengan Dialog Keamanan) | pending |
+| **5** | Mobile: Integrasi Sinkronisasi Top-Down Preferensi Cloud (Owner Write, Cashier Read-Only) & Panduan Setup Cron Jam Sibuk | pending |
+| **6** | Pengujian Validasi Multi-Device, Uji Berkas Skema Lama/Rusak, Uji Proteksi Overwrite Transaksi, & Verifikasi Build | pending |

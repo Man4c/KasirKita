@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788665528.9068801,
-    "ast_hash": "a66ac72edb918cd6950548399dea05d3",
+    "mtime": 1788665783.6467144,
+    "ast_hash": "4d063596ef45bd7d50489ca44c5ee578",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788616274.7412124,
-    "ast_hash": "e9b66fe392ab42864dbc015b2273d8e1",
+    "mtime": 1788665763.6815917,
+    "ast_hash": "8cdac845f26c821eb43f62deca453b67",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {

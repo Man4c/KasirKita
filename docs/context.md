@@ -20,6 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Pembaruan Desain Arsitektur Plan #24 (Cloud Sync Preferences & Local Data Backup-Restore)**:
+  - Memperbarui spesifikasi teknis Plan #24 dengan keputusan strategis baru:
+    1. *Cron Ping Jam Sibuk Terbatas*: Tetap memasang webhook cron keep-alive gratis (`cron-job.org`), namun dibatasi hanya pada jam operasional toko (pk 08.00–21.00 = ~390 jam/bulan) agar menghemat kuota 750 jam Render Free Tier dengan sisa ~360 jam aman dari resiko suspensi akhir bulan, didukung arsitektur offline-first jika kasir buka sebelum jam cron.
+    2. *Sinkronisasi Top-Down (Owner-Driven, Zero-Conflict)*: Hanya role Owner yang berhak mengubah dan mengunggah preferensi cloud (`PUT /settings/preferences`). Role Kasir bersifat read-only sync, mengeliminasi kebutuhan merge-conflict rumit.
+    3. *Versi Skema JSON (`schema_version: 2`)*: Menyematkan metadata versi pada berkas cadangan dan menyertakan migrator sanitizer untuk backward compatibility data masa lalu (misal Multi-UoM).
+    4. *Strategi Restore Aman*: Upsert by UUID untuk master data, dan pemblokiran mutlak restore jika masih ada transaksi kasir offline yang belum tersinkron ke cloud demi mencegah *data loss*.
+
 - **Penyempurnaan Re-Ping Interaktif & Indikator Latensi Jaringan Server (`SettingsScreen.js`)**:
   - Memberikan transparansi dan kemudahan pengujian latensi round-trip (RTT) koneksi backend:
     1. *Fitur Re-Ping On-Demand*: Mengubah baris menu *"Koneksi Server Backend"* menjadi komponen `TouchableOpacity` interaktif lengkap dengan status loading spinner `checkingServer`, sehingga pengguna dapat mengetes ulang respon server secara langsung (*warm latency* yang biasanya turun ke 100-300ms) tanpa perlu keluar-masuk layar.
