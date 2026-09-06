@@ -136,9 +136,9 @@ Solusi **In-App Remote Updater** ini memungkinkan HP kasir secara otomatis mende
 
 | Phase | Description | Status |
 |---|---|---|
-| 01 | Spesifikasi Arsitektur, Skema Metadata Versi, & Supabase Storage Bucket Setup | in-progress |
-| 02 | Backend Laravel: Endpoint `GET /api/app/version` & Fallback Config | pending |
-| 03 | Mobile Service: `updaterService.js` (Semver check, Download Resumable, & Native Intent Installer) | pending |
+| 01 | Spesifikasi Arsitektur, Skema Metadata Versi, & Supabase Storage Bucket Setup | completed |
+| 02 | Backend Laravel: Endpoint `GET /api/app/version` & Fallback Config | completed |
+| 03 | Mobile Service: `updaterService.js` (Semver check, Download Resumable, & Native Intent Installer) | in-progress |
 | 04 | Mobile UI: `UpdatePromptModal.js` (Impeccable Bottom Sheet, Progress Bar, & Changelog List) | pending |
 | 05 | Mobile Integration: Integrasi `SettingsScreen.js` & Non-blocking Startup Check | pending |
 | 06 | Pengujian Validasi, Simulasi Mock Update APK, & SOP Panduan Rilis untuk Owner | pending |

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AppVersionController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CustomerController;
@@ -29,6 +30,9 @@ Route::get('/health', function () {
         'timestamp' => now()->toIso8601String(),
     ]);
 });
+
+// App Version & Remote Update (Public for mobile client self-check)
+Route::get('/app/version', [AppVersionController::class, 'getVersion']);
 
 // Authentication Routes
 Route::prefix('auth')->group(function () {
@@ -89,6 +93,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/settings/store', [StoreSettingController::class, 'updateStore']);
         Route::put('/settings/preferences', [StoreSettingController::class, 'updatePreferences']);
         Route::post('/settings/restore', [StoreSettingController::class, 'restoreBackup']);
+        Route::put('/app/version', [AppVersionController::class, 'updateVersion']);
 
         // Taxes & Fees management
         Route::post('/taxes-and-fees', [TaxAndFeeController::class, 'store']);

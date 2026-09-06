@@ -20,15 +20,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Inisiasi Plan #33: Pembaruan Jarak Jauh APK Otomatis (In-App Remote Updater) (`plans/260906-33-mobile-in-app-remote-updater/plan.md`)**:
-  - Merancang arsitektur sistem pembaruan APK jarak jauh tanpa biaya (Rp 0) memanfaatkan ekosistem yang sudah ada:
-    1. *Supabase Storage*: Host publik berkas APK rilis (`apk-releases/KasirKita-vX.Y.Z.apk`) dengan CDN Cloudflare global berkecepatan tinggi, aktif 24 jam non-stop tanpa menghabiskan kuota atau kapasitas Render.
-    2. *Render (Laravel API)*: Menyediakan endpoint versi ringan `GET /api/app/version` (~250 bytes) dengan fallback config aman dan informasi changelog.
-    3. *Mobile React Native (Expo)*:
-       - `updaterService.js`: Parser semver akurat, downloader resumable dengan progress callback (`expo-file-system/legacy`), dan Android Content URI + Native Intent Launcher (`expo-intent-launcher`).
-       - `UpdatePromptModal.js`: Bottom Sheet Impeccable (Dark/Rose) dengan progress bar dinamis, teks rasio ukuran MB, dan changelog.
-       - `SettingsScreen.js` & App Startup: Tombol pengecekan manual dan pengecekan otomatis non-blocking saat startup.
-  - Membuka plans-kanban server untuk pelacakan fase task Plan #33.
+- **Penyelesaian Fase 1 & 2 Plan #33: Backend API & Spesifikasi In-App Remote Updater (`AppVersionController.php`, `StoreSetting.php`, `AppVersionTest.php`, `app_version.php`)**:
+  - Menyelesaikan Fase 1 (Spesifikasi Arsitektur Supabase Storage) dan Fase 2 (Backend Endpoint & Konfigurasi):
+    1. *Spesifikasi Storage Supabase*: Bucket publik `apk-releases` dengan format nama file `KasirKita-v{MAJOR}.{MINOR}.{PATCH}.apk`, unduhan langsung via CDN Cloudflare tanpa membebani disk/memori Render.
+    2. *Database & Model `StoreSetting`*: Migrasi `2026_09_06_000002_add_app_version_to_store_settings_table.php` menambahkan kolom JSON `app_version`. Model `StoreSetting` dilengkapi konstanta `DEFAULT_APP_VERSION` dan accessor atomik `getAppVersionAttribute` yang menggabungkan nilai database dengan fallback aman dari `config/app_version.php` dan `.env`.
+    3. *API Endpoints*:
+       - `GET /api/app/version`: Endpoint publik tanpa autentikasi, super ringan (~250 bytes), ramah kuota Render, dapat diakses kapan saja oleh HP kasir.
+       - `PUT /api/app/version`: Khusus role `owner` (`auth:sanctum` + `role:owner`), memvalidasi format SemVer, URL APK, changelog list, dan memperbarui versi seketika di database.
+    4. *Verifikasi & Testing*: Menulis 6 feature tests di `AppVersionTest.php` (akses publik, update owner sukses, penolakan kasir 403, penolakan tanpa auth 401, validasi semver/URL, dan accessor model). Seluruh 86 tests backend Laravel lulus 100% (`passed: 86, assertions: 391`).
 
 - **Implementasi Mobile Smart Hybrid Backup-Restore & Sinkronisasi Top-Down Preferensi Cloud - Fase 3, 4, 5, & 6 Plan #24 (`backupService.js`, `BackupRestoreModal.js`, `SettingsScreen.js`, `offlineStorage.js`, `StoreSetting.php`)**:
   - Menyelesaikan seluruh fase Plan #24 (Cloud Sync Preferences & Local Data Backup-Restore) dari backend hingga frontend mobile:
