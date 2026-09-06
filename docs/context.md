@@ -24,8 +24,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Memperbarui spesifikasi teknis Plan #24 dengan keputusan strategis baru:
     1. *Cron Ping Jam Sibuk Terbatas*: Tetap memasang webhook cron keep-alive gratis (`cron-job.org`), namun dibatasi hanya pada jam operasional toko (pk 08.00–21.00 = ~390 jam/bulan) agar menghemat kuota 750 jam Render Free Tier dengan sisa ~360 jam aman dari resiko suspensi akhir bulan, didukung arsitektur offline-first jika kasir buka sebelum jam cron.
     2. *Sinkronisasi Top-Down (Owner-Driven, Zero-Conflict)*: Hanya role Owner yang berhak mengubah dan mengunggah preferensi cloud (`PUT /settings/preferences`). Role Kasir bersifat read-only sync, mengeliminasi kebutuhan merge-conflict rumit.
-    3. *Versi Skema JSON (`schema_version: 2`)*: Menyematkan metadata versi pada berkas cadangan dan menyertakan migrator sanitizer untuk backward compatibility data masa lalu (misal Multi-UoM).
-    4. *Strategi Restore Aman*: Upsert by UUID untuk master data, dan pemblokiran mutlak restore jika masih ada transaksi kasir offline yang belum tersinkron ke cloud demi mencegah *data loss*.
+    3. *Cache-First Fallback (Anti-Freeze HP Kasir)*: Saat HP kasir dibuka offline, preferensi lokal langsung aktif dalam 0ms tanpa loading spinner berputar selamanya.
+    4. *Versi Skema JSON (`schema_version: 2`)*: Menyematkan metadata versi pada berkas cadangan dan menyertakan migrator sanitizer untuk backward compatibility data masa lalu (misal Multi-UoM).
+    5. *Frictionless Restore & Penempatan UX Bersih (Opsi 3 Terpilih)*: Header kasir tetap mempertahankan tombol Keluar (tanpa badge awan yang memenuhi layar kasir), modal pembayaran tetap bersih. Teks penenang antrean offline dipusatkan di Pengaturan, dan dialog pemulihan data menyediakan tombol aksi langsung [Sinkronkan Sekarang], [Cadangkan Dulu], dan [Batal] di tempat.
 
 - **Penyempurnaan Re-Ping Interaktif & Indikator Latensi Jaringan Server (`SettingsScreen.js`)**:
   - Memberikan transparansi dan kemudahan pengujian latensi round-trip (RTT) koneksi backend:

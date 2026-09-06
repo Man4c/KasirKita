@@ -1,16 +1,16 @@
 # Graph Report - KasirKita  (2026-09-06)
 
 ## Corpus Check
-- 490 files · ~683,895 words
+- 490 files · ~684,402 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5266 nodes · 11874 edges · 353 communities (303 shown, 50 thin omitted)
+- 5266 nodes · 11874 edges · 352 communities (302 shown, 50 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 375 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5486dfa7`
+- Built from commit: `d920f1cc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -275,7 +275,6 @@
 - expo-secure-store
 - expo-status-bar
 - checkElementGptBorderShadowDOM
-- UserFactory
 - @react-native-async-storage/async-storage
 - react-native-safe-area-context
 - react-native-svg
@@ -325,7 +324,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (353 total, 50 thin omitted)
+## Communities (352 total, 50 thin omitted)
 
 ### Community 0 - "live-browser.js"
 Cohesion: 0.03
@@ -404,8 +403,8 @@ Cohesion: 0.08
 Nodes (23): CustomerPickerModal(), styles, LandscapeRegisterPanel(), styles, PaymentSuccessModal(), styles, PosCartModal(), styles (+15 more)
 
 ### Community 19 - "GENERIC_FONTS"
-Cohesion: 0.21
-Nodes (14): checkKickerAboveHeading(), checkKickerAboveHeadingDOM(), checkKickerAboveHeadingFromDoc(), checkNumberedSectionLabels(), checkNumberedSectionLabelsDOM(), checkNumberedSectionLabelsFromDoc(), cleanInlineText(), collectKickerCandidates() (+6 more)
+Cohesion: 0.14
+Nodes (20): checkElementHeroEyebrow(), checkElementHeroEyebrowDOM(), checkHeroEyebrow(), checkKickerAboveHeading(), checkKickerAboveHeadingDOM(), checkKickerAboveHeadingFromDoc(), checkNumberedSectionLabels(), checkNumberedSectionLabelsDOM() (+12 more)
 
 ### Community 20 - "hook-before-edit.mjs"
 Cohesion: 0.11
@@ -417,7 +416,7 @@ Nodes (21): directChildDirs(), discoverRootsForPattern(), discoverTargetCandidat
 
 ### Community 22 - "live-accept.mjs"
 Cohesion: 0.12
-Nodes (38): acceptCli(), acceptReceiptPath(), argVal(), buildAcceptedWrappedSource(), buildCarbonizeReplacement(), decodeHtmlAttr(), deindentContent(), detectCommentSyntax() (+30 more)
+Nodes (39): acceptCli(), acceptReceiptPath(), argVal(), buildAcceptedWrappedSource(), buildCarbonizeReplacement(), decodeHtmlAttr(), deindentContent(), detectCommentSyntax() (+31 more)
 
 ### Community 23 - "checkHtmlPatterns"
 Cohesion: 0.14
@@ -480,8 +479,8 @@ Cohesion: 0.35
 Nodes (10): detectCsp(), INLINE_HEADER_SIGNALS, LAYOUT_EXTS, MONOREPO_HELPER_SIGNALS, NUXT_ROUTE_RULES_SIGNALS, NUXT_SECURITY_SIGNALS, SCAN_EXTS, SKIP_DIRS (+2 more)
 
 ### Community 38 - "applyEditing"
-Cohesion: 0.16
-Nodes (17): averageRgb01(), captureChromeNodes(), captureElementFromRenderedAncestor(), captureElementToBlob(), cssColorToRgb01(), dominantRgb01(), findBackdropAncestor(), findShaderProxyCaptureRoot() (+9 more)
+Cohesion: 0.09
+Nodes (34): averageRgb01(), beginEditPin(), buildAnnotationsForCapture(), buildPinElement(), cancelEditingPin(), captureChromeNodes(), captureElementFromRenderedAncestor(), captureElementToBlob() (+26 more)
 
 ### Community 39 - "Request"
 Cohesion: 0.08
@@ -493,7 +492,7 @@ Nodes (14): DashboardActionHub(), styles, DashboardDetailModal(), styles, Dashbo
 
 ### Community 41 - "detect-antipatterns-browser.js"
 Cohesion: 0.05
-Nodes (68): browserColorsClose(), browserDesignSystemConfig(), browserHasDirectText(), browserPrimaryFont(), browserRadiusTokens(), browserSampleText(), buildSelectorSegment(), checkBrowserDesignSystemSources() (+60 more)
+Nodes (60): browserColorsClose(), browserDesignSystemConfig(), browserHasDirectText(), browserPrimaryFont(), browserRadiusTokens(), browserSampleText(), buildSelectorSegment(), checkBrowserDesignSystemSources() (+52 more)
 
 ### Community 42 - "staleness.mjs"
 Cohesion: 0.15
@@ -540,8 +539,8 @@ Cohesion: 0.16
 Nodes (26): analyzeSourceHint(), buildCandidatesForOp(), buildContextHintsByRef(), buildManualEditEvidence(), collectSearchFiles(), countOps(), decodeBasicHtml(), escapeRegExp() (+18 more)
 
 ### Community 53 - "collectBrowserFindings"
-Cohesion: 0.13
-Nodes (25): browserFindingsFromMap(), checkBorders(), checkCreamPalette(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementBorders(), checkElementBordersDOM(), checkElementPseudoStripeDOM() (+17 more)
+Cohesion: 0.11
+Nodes (27): browserFindingsFromMap(), checkBorders(), checkCreamPalette(), checkEdgeFlushCardsDOM(), checkElementBlinkingCursorDOM(), checkElementBorders(), checkElementBordersDOM(), checkElementPseudoStripeDOM() (+19 more)
 
 ### Community 54 - "live-inject.mjs"
 Cohesion: 0.16
@@ -576,8 +575,8 @@ Cohesion: 0.22
 Nodes (20): Analysis, analyzeAttributes(), analyzeFragment(), analyzeNode(), analyzeSvelteMarkup(), applyReplacements(), classifyEachKey(), classifyRoots() (+12 more)
 
 ### Community 62 - "User"
-Cohesion: 0.04
-Nodes (21): Authenticatable, JsonResponse, Request, UserController, HasMany, User, AuthApiTest, EndToEndFlowTest (+13 more)
+Cohesion: 0.05
+Nodes (18): Authenticatable, HasMany, User, AuthApiTest, EndToEndFlowTest, ExampleTest, FinanceApiTest, MultiUomTest (+10 more)
 
 ### Community 63 - "onboard.md"
 Cohesion: 0.09
@@ -724,8 +723,8 @@ Cohesion: 0.25
 Nodes (13): applyTanStackLiveAdapter(), buildTanStackLiveRootComponent(), detectTanStackStartProject(), escapeRegExp(), insertAfterLastImport(), isManagedComponent(), patchTanStackRoot(), pruneEmptyDir() (+5 more)
 
 ### Community 99 - "live-status.mjs"
-Cohesion: 0.11
-Nodes (15): ApiResponse, AuthController, JsonResponse, Request, JsonResponse, Request, PosController, JsonResponse (+7 more)
+Cohesion: 0.14
+Nodes (11): ApiResponse, AuthController, JsonResponse, Request, JsonResponse, Request, StockOpnameController, JsonResponse (+3 more)
 
 ### Community 100 - "package.json"
 Cohesion: 0.13
@@ -744,8 +743,8 @@ Cohesion: 0.29
 Nodes (6): Arsitektur File & Struktur Komponen, Fitur Utama & Kebutuhan Pengguna, Master Pengguna & Staf Kasir Mobile (React Native), Overview & Latar Belakang, Phase Breakdown, Standar Defensive UI & Impeccable Craft
 
 ### Community 105 - "openTunePopover"
-Cohesion: 0.13
-Nodes (9): FinanceController, JsonResponse, Request, BelongsTo, HasMany, HasOne, Transaction, FinanceService (+1 more)
+Cohesion: 0.08
+Nodes (16): FinanceController, JsonResponse, Request, JsonResponse, Request, PosController, Controller, CashFlow (+8 more)
 
 ### Community 106 - "detect-utils.mjs"
 Cohesion: 0.21
@@ -768,8 +767,8 @@ Cohesion: 0.70
 Nodes (4): isStopEvent(), writeAuditLog(), main(), stdinIsStop()
 
 ### Community 111 - "extractFindingIgnoreValue"
-Cohesion: 0.08
-Nodes (18): CashFlow, BelongsTo, HasMany, BelongsTo, ProductUnitConversion, BelongsTo, StockMovement, BelongsTo (+10 more)
+Cohesion: 0.10
+Nodes (17): HasMany, BelongsTo, ProductUnitConversion, BelongsTo, StockMovement, BelongsTo, HasMany, StockOpname (+9 more)
 
 ### Community 112 - "index.mjs"
 Cohesion: 0.23
@@ -1116,8 +1115,8 @@ Cohesion: 0.18
 Nodes (10): 1. Kontrak Endpoint API Backend, 2. Spesifikasi UI/UX & Wireframe Layar, 3. Aturan Ketahanan & Validasi (Defensive Rules), A. Katalog Produk (`/api/products`), B. Master Kategori & Satuan Pendukung, C. Format Response API, Spesifikasi UX/UI Wireframe & Kontrak Endpoint API - Master Produk Mobile (Plan #25 Fase 1), Wireframe 1: Layar Utama Master Produk (`ProductManagementScreen.js`) (+2 more)
 
 ### Community 246 - "Unit"
-Cohesion: 0.23
-Nodes (7): JsonResponse, Request, UnitController, HasMany, Unit, DatabaseSeeder, Seeder
+Cohesion: 0.18
+Nodes (8): JsonResponse, Request, UnitController, HasMany, Unit, UserFactory, Factory, static
 
 ### Community 248 - "Master Cabang & Multi-Outlet (Multi-Branch Management)"
 Cohesion: 0.40
@@ -1148,8 +1147,8 @@ Cohesion: 0.09
 Nodes (27): ReceiptView(), styles, ChangePasswordModal(), styles, PrinterGuideModal(), styles, PrinterSettingsModal(), styles (+19 more)
 
 ### Community 306 - "Visualize: Direction Comps & Asset Production"
-Cohesion: 0.19
-Nodes (13): extensionCache, LIVE_TEMPLATE_EXTENSIONS, matchesTemplateExtension(), mergeExtensions(), normalizeExtensionEntries(), readLiveTemplateExtensions(), resolveLiveTemplateExtensions(), safeReadJson() (+5 more)
+Cohesion: 0.20
+Nodes (12): extensionCache, LIVE_TEMPLATE_EXTENSIONS, matchesTemplateExtension(), mergeExtensions(), normalizeExtensionEntries(), readLiveTemplateExtensions(), resolveLiveTemplateExtensions(), safeReadJson() (+4 more)
 
 ### Community 307 - "Master Pemasok & Distributor di Mobile"
 Cohesion: 0.20
@@ -1177,7 +1176,7 @@ Nodes (8): CategoryCardItem, styles, CategoryDeleteModal(), styles, CategoryForm
 
 ### Community 316 - "Cloud Sync Preferences & Local Data Backup-Restore"
 Cohesion: 0.29
-Nodes (6): 1. Solusi 1: Cloud Sync Preferensi Toko (Free-Tier Ready: Supabase + Render), 2. Solusi 3: Ekspor / Impor Cadangan Data Mandiri (JSON Backup), Arsitektur & Spesifikasi Solusi, Cloud Sync Preferences & Local Data Backup-Restore, Overview, Phase Breakdown
+Nodes (6): 1. Solusi 1: Cloud Sync Preferensi Toko (Free-Tier Ready: Supabase + Render), 2. Solusi 3: Ekspor / Impor Cadangan Data Mandiri (JSON Backup with Safety Net), Arsitektur & Spesifikasi Solusi, Cloud Sync Preferences & Local Data Backup-Restore, Overview, Phase Breakdown
 
 ### Community 317 - "SAFE_TAGS"
 Cohesion: 0.24
@@ -1204,12 +1203,8 @@ Cohesion: 0.20
 Nodes (9): 1. Layar Daftar Master Kategori (`CategoryManagementScreen.js`), 2. Formulir Tambah / Edit Kategori (`CategoryFormModal.js`), 3. Layanan API & Offline Cache (`categoryService.js`), 4. Integrasi Navigasi, Action Hub, & Sinkronisasi POS, Arsitektur Komponen & Struktur File, Fitur Utama & Kebutuhan Pengguna, Master Kategori di Mobile, Overview (+1 more)
 
 ### Community 328 - "checkElementGptBorderShadowDOM"
-Cohesion: 0.20
-Nodes (17): beginEditPin(), buildAnnotationsForCapture(), buildPinElement(), cancelEditingPin(), clampPlaceholderSize(), finalizeEditingPin(), initAnnotOverlay(), localCoords() (+9 more)
-
-### Community 329 - "UserFactory"
-Cohesion: 0.47
-Nodes (3): UserFactory, Factory, static
+Cohesion: 0.44
+Nodes (3): JsonResponse, Request, UserController
 
 ### Community 335 - "barcode-detector"
 Cohesion: 0.20
