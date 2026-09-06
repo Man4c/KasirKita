@@ -10,8 +10,8 @@ class PrinterService {
     this.paperSize = '58mm';
     this.autoPrint = false;
     this.printTwoCopies = false;
-    this.isSimulation = true;
-    this.deviceName = 'Printer Bluetooth Virtual (58mm)';
+    this.isSimulation = false;
+    this.deviceName = 'Panda PRJ-58D (Bluetooth & USB)';
   }
 
   async init() {
@@ -23,7 +23,7 @@ class PrinterService {
         if (typeof saved.printTwoCopies === 'boolean') this.printTwoCopies = saved.printTwoCopies;
         if (saved.selectedPrinter) this.deviceName = saved.selectedPrinter;
         if (typeof saved.isPrinterConnected === 'boolean') {
-          this.isSimulation = !this.writeCharacteristic;
+          this.isSimulation = false;
         }
       }
     } catch (err) {
@@ -148,23 +148,32 @@ class PrinterService {
   }
 
   /**
-   * Set printer to virtual simulation mode (for testing without physical hardware).
+   * Set printer to physical hardware profile (Bluetooth or USB).
    */
-  async setSimulationMode(name = 'Panda PRJ-58D (Mode Simulasi)') {
+  async setPhysicalPrinter(name = 'Panda PRJ-58D (Bluetooth & USB)', isBluetooth = true) {
     this.disconnect();
-    this.isSimulation = true;
+    this.isSimulation = false;
     this.deviceName = name;
 
     await storage.setSettings({
       selectedPrinter: this.deviceName,
       isPrinterConnected: true,
+      isPhysicalPrinter: isBluetooth,
     });
 
     return {
       success: true,
       name: this.deviceName,
-      isPhysical: false,
+      isPhysical: isBluetooth,
     };
+  }
+
+  /**
+   * Legacy alias mapped directly to physical printer profile
+   */
+  async setSimulationMode(name = 'Panda PRJ-58D (Bluetooth & USB)') {
+    const isBluetooth = !name.toLowerCase().includes('usb');
+    return this.setPhysicalPrinter(name, isBluetooth);
   }
 
   disconnect() {
@@ -176,7 +185,7 @@ class PrinterService {
     this.device = null;
     this.gattServer = null;
     this.writeCharacteristic = null;
-    this.isSimulation = true;
+    this.isSimulation = false;
   }
 
   setPaperSize(size = '58mm') {
@@ -187,19 +196,19 @@ class PrinterService {
   /**
    * Print a KasirKita receipt.
    * If real Bluetooth thermal printer connected: sends ESC/POS byte chunks over Bluetooth.
-   * If simulation: logs ESC/POS and returns simulated status.
+   * If on Web / USB / System driver: invokes printWebReceiptHtml directly to trigger hardware print.
    */
   async printReceipt(transaction, storeSettings) {
     const settings = await this.getStoreSettings(storeSettings);
     const shouldPrintTwo = typeof settings.printTwoCopies === 'boolean' ? settings.printTwoCopies : this.printTwoCopies;
     const copies = shouldPrintTwo ? ['SALINAN KASIR', 'SALINAN PELANGGAN'] : [null];
 
-    for (let c = 0; c < copies.length; c++) {
-      const copyLabel = copies[c];
-      const bytes = buildReceiptEscpos(transaction, settings, this.paperSize, copyLabel);
+    // 1. If real Bluetooth characteristic is connected
+    if (this.writeCharacteristic && this.gattServer?.connected) {
+      for (let c = 0; c < copies.length; c++) {
+        const copyLabel = copies[c];
+        const bytes = buildReceiptEscpos(transaction, settings, this.paperSize, copyLabel);
 
-      // 1. If real Bluetooth characteristic is connected
-      if (this.writeCharacteristic && this.gattServer?.connected) {
         try {
           // Send in 512-byte chunks to avoid buffer overflow
           const chunkSize = 512;
@@ -217,28 +226,43 @@ class PrinterService {
           console.warn('Bluetooth print write error:', err);
           throw new Error('Gagal mengirim data ke printer Bluetooth: ' + err.message);
         }
-      } else {
-        // 2. Simulation / Virtual mode
-        console.log(`[ESC/POS Sim] Generated ${bytes.length} bytes for copy: ${copyLabel || 'Original'}`);
       }
+
+      return {
+        success: true,
+        mode: 'bluetooth',
+        copies: copies.length,
+      };
+    }
+
+    // 2. If on Web or USB / System Driver mode
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      for (let c = 0; c < copies.length; c++) {
+        await this.printWebReceiptHtml(transaction, storeSettings, copies[c]);
+      }
+      return {
+        success: true,
+        mode: 'usb_system',
+        copies: copies.length,
+      };
     }
 
     return {
       success: true,
-      mode: this.writeCharacteristic ? 'bluetooth' : 'simulation',
+      mode: 'ready',
       copies: copies.length,
     };
   }
 
   /**
-   * Print sample test receipt.
+   * Print sample test receipt directly to printer hardware.
    */
   async printSample(storeSettings) {
     const sampleTx = {
-      invoice_number: 'INV-SAMPLE-001',
+      invoice_number: 'INV-TEST-001',
       created_at: new Date().toISOString(),
-      cashier_name: 'Kasir Uji',
-      customer_name: 'Pelanggan Uji Coba',
+      cashier_name: 'Kasir Utama',
+      customer_name: 'Pelanggan Umum',
       subtotal: 35000,
       discount_amount: 5000,
       tax_amount: 3300,

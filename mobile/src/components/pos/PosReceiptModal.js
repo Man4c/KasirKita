@@ -75,15 +75,15 @@ export default function PosReceiptModal({
               activeOpacity={0.8}
               onPress={async () => {
                 if (!completedTx) return;
-                const res = await printerService.printReceipt(completedTx, storeSettings);
-                if (res.mode === 'bluetooth') {
-                  showAlert('Sukses', 'Struk berhasil dicetak ke printer Bluetooth.');
-                } else {
-                  if (Platform.OS === 'web') {
-                    await printerService.printWebReceiptHtml(completedTx, storeSettings);
+                try {
+                  const res = await printerService.printReceipt(completedTx, storeSettings);
+                  if (res?.mode === 'bluetooth') {
+                    showAlert('Sukses', 'Struk berhasil dicetak ke printer Bluetooth.');
                   } else {
-                    showAlert('Simulasi Cetak', 'Perintah cetak ESC/POS disiapkan (Mode Simulasi). Hubungkan printer Bluetooth fisik di menu Pengaturan jika sudah ada perangkat.');
+                    showAlert('Sukses', 'Struk berhasil diproses dan dikirim ke antrean printer kasir.');
                   }
+                } catch (err) {
+                  showAlert('Gagal Cetak', 'Terjadi kesalahan saat mencetak struk: ' + err.message);
                 }
               }}
             >

@@ -93,6 +93,18 @@ export default function PrinterGuideModal({
                 </Text>
               </View>
             </View>
+
+            <View style={styles.guideStepItem}>
+              <View style={styles.guideStepBadge}>
+                <Text style={styles.guideStepBadgeText}>5</Text>
+              </View>
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Text style={styles.guideStepTitle}>Koneksi Cadangan Kabel USB</Text>
+                <Text style={styles.guideStepDesc}>
+                  Jika baterai printer habis atau Bluetooth bermasalah di kasir, cukup hubungkan kabel USB printer ke perangkat kasir / PC toko untuk tetap mencetak tanpa kendala.
+                </Text>
+              </View>
+            </View>
           </ScrollView>
 
           <View style={styles.modalActionRow}>

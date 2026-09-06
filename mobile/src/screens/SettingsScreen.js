@@ -74,11 +74,11 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
   const [storeLogo, setStoreLogo] = useState(null);
   const [receiptFooter, setReceiptFooter] = useState('Terima kasih atas kunjungan Anda! Barang yang dibeli tidak dapat ditukar.');
   
-  const [selectedPrinter, setSelectedPrinter] = useState('Panda PRJ-58D (Mode Simulasi)');
+  const [selectedPrinter, setSelectedPrinter] = useState('Panda PRJ-58D (Bluetooth & USB)');
   const [isPrinterConnected, setIsPrinterConnected] = useState(true);
   const [paperSize, setPaperSize] = useState('58mm');
   const [isScanningBluetooth, setIsScanningBluetooth] = useState(false);
-  const [isPhysicalPrinter, setIsPhysicalPrinter] = useState(false);
+  const [isPhysicalPrinter, setIsPhysicalPrinter] = useState(true);
   const [autoPrint, setAutoPrint] = useState(false);
   const [printTwoCopies, setPrintTwoCopies] = useState(false);
   const [showLogoOnReceipt, setShowLogoOnReceipt] = useState(true);
@@ -183,7 +183,17 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         if (saved.storePhone) setStorePhone(saved.storePhone);
         if (saved.storeLogo) setStoreLogo(saved.storeLogo);
         if (saved.receiptFooter) setReceiptFooter(saved.receiptFooter);
-        if (saved.selectedPrinter) setSelectedPrinter(saved.selectedPrinter);
+        if (saved.selectedPrinter) {
+          const cleanPrinter = saved.selectedPrinter.includes('Simulasi')
+            ? 'Panda PRJ-58D (Bluetooth & USB)'
+            : saved.selectedPrinter;
+          setSelectedPrinter(cleanPrinter);
+          if (typeof saved.isPhysicalPrinter === 'boolean') {
+            setIsPhysicalPrinter(saved.isPhysicalPrinter);
+          } else {
+            setIsPhysicalPrinter(!cleanPrinter.toLowerCase().includes('usb'));
+          }
+        }
         if (typeof saved.isPrinterConnected === 'boolean') setIsPrinterConnected(saved.isPrinterConnected);
         if (typeof saved.autoPrint === 'boolean') setAutoPrint(saved.autoPrint);
         if (typeof saved.printTwoCopies === 'boolean') setPrintTwoCopies(saved.printTwoCopies);
@@ -719,12 +729,12 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
               <Printer size={18} color="#fb7185" />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={styles.menuTitle}>Printer Bluetooth Thermal</Text>
+              <Text style={styles.menuTitle}>Printer Kasir Thermal</Text>
               <Text style={styles.menuSubtitle} numberOfLines={1}>{selectedPrinter}</Text>
             </View>
-            <View style={[styles.statusBadge, isPrinterConnected ? (isPhysicalPrinter ? styles.statusBadgeGreen : styles.statusBadgeAmber) : styles.statusBadgeGray]}>
-              <Text style={[styles.statusBadgeText, isPrinterConnected ? (isPhysicalPrinter ? styles.statusBadgeTextGreen : styles.statusBadgeTextAmber) : styles.statusBadgeTextGray]}>
-                {isPrinterConnected ? (isPhysicalPrinter ? 'Bluetooth' : 'Simulasi') : 'Terputus'}
+            <View style={[styles.statusBadge, isPrinterConnected ? styles.statusBadgeGreen : styles.statusBadgeGray]}>
+              <Text style={[styles.statusBadgeText, isPrinterConnected ? styles.statusBadgeTextGreen : styles.statusBadgeTextGray]}>
+                {isPrinterConnected ? (isPhysicalPrinter ? 'Bluetooth' : 'Kabel USB') : 'Terputus'}
               </Text>
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0, marginLeft: 6 }} />
@@ -785,15 +795,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
           <TouchableOpacity
             style={styles.actionBtnRow}
             activeOpacity={0.7}
-            onPress={async () => {
-              await printerService.printSample({
-                storeName,
-                storeAddress,
-                storePhone,
-                storeLogo,
-                receiptFooter,
-                showPhoneOnReceipt,
-              });
+            onPress={() => {
               setTestReceiptOpen(true);
             }}
           >

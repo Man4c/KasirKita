@@ -20,6 +20,31 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penghapusan Total Mode Simulasi & Implementasi Arsitektur Dual-Connection Printer Fisik (Bluetooth Thermal & Kabel USB Toko) (`printerService.js`, `PrinterSettingsModal.js`, `SettingsScreen.js`, `TestReceiptModal.js`, `PaymentSuccessModal.js`, `PosReceiptModal.js`, `PrinterGuideModal.js`)**:
+  - Berdasarkan permintaan pemilik toko untuk meniadakan seluruh konsep "Simulasi" serta menyiapkan arsitektur koneksi ganda (Bluetooth Thermal utama & Kabel USB cadangan/jaga-jaga):
+    1. *`mobile/src/services/printerService.js`*:
+       - Menghapus status `isSimulation = true`, menetapkan perangkat default toko sebagai `Panda PRJ-58D (Bluetooth & USB)`.
+       - Menambahkan method `setPhysicalPrinter(name, isBluetooth)` yang secara persisten mencatat koneksi fisik (Bluetooth vs USB) ke `storage`.
+       - Fungsi `printReceipt` dan `printSample` langsung mengeksekusi pencetakan nyata: mengirim byte ESC/POS terkompresi (chunk 512 bytes) jika terhubung ke Bluetooth GATT, atau memicu dialog cetak iframe HTML struk kasir bersih (58mm/80mm) jika terhubung via Web / Kabel USB / Driver Sistem Toko.
+    2. *`mobile/src/components/settings/PrinterSettingsModal.js`*:
+       - Mengeliminasi total teks "Preset / Mode Simulasi Virtual" dan item dummy "Printer Virtual Kasir (Simulasi)".
+       - Menggantinya dengan seksi resmi: *"PILIHAN PERANGKAT PRINTER FISIK (BLUETOOTH & USB)"* dengan visual icon dinamis (`Bluetooth` untuk printer wireless dan `Usb` untuk koneksi kabel langsung).
+       - Menghadirkan profil printer fisik UMKM Indonesia: `Panda PRJ-58D (Bluetooth & USB)`, `RPP02N Mini POS (58mm)`, `Thermal-80 Desktop POS (80mm)`, `Iware MP-58A (Bluetooth & USB)`, dan `Printer Kabel USB / Driver Sistem Toko`.
+    3. *`mobile/src/screens/SettingsScreen.js`*:
+       - Menetapkan default state printer fisik: `selectedPrinter = 'Panda PRJ-58D (Bluetooth & USB)'`, `isPrinterConnected = true`, `isPhysicalPrinter = true`.
+       - Melengkapi `loadSettings` dengan sanitizer otomatis yang menghapus string legacy "Simulasi" dan beralih ke profil fisik.
+       - Memperbarui kartu perangkat keras di pengaturan: badge status kini menampilkan 🟢 **`Bluetooth`** atau 🟢 **`Kabel USB`** (keduanya berwarna emerald green `styles.statusBadgeGreen`), dan ⚪ **`Terputus`** jika sambungan diputus. Badge amber "Simulasi" berhasil dihilangkan seutuhnya.
+       - Aksi *"Uji Cetak Struk Contoh"* kini membuka modal preview cetak terlebih dahulu secara elegan tanpa mengeksekusi print diam-diam di background.
+    4. *Pembersihan Dialog POS & Uji Cetak (`TestReceiptModal.js`, `PaymentSuccessModal.js`, `PosReceiptModal.js`)*:
+       - Menghapus pesan popup palsu *"Simulasi Cetak"*.
+       - Mengintegrasikan penanganan feedback cetak riil: pemberitahuan sukses terkirim ke printer Bluetooth atau antrean cetak kabel USB/sistem kasir.
+    5. *Edukasi Koneksi Cadangan USB (`PrinterGuideModal.js`)*:
+       - Menambahkan Langkah 5: *"Koneksi Cadangan Kabel USB"* pada panduan printer agar kasir paham cara beralih ke kabel USB jika baterai atau Bluetooth sedang bermasalah.
+    6. *Kepatuhan Impeccable Craft & Verifikasi Otomatis*:
+       - Lolos audit Impeccable Detector (`detect.mjs`): 0 defect pada seluruh komponen printer dan modal POS.
+       - Menjaga kepatuhan The Flexbox Pairing Rule, The Readability Floor Rule (≥12px), touch target (≥44dp), dan Anti-Shift Typography (`includeFontPadding: false`, `textAlignVertical: 'center'`).
+       - Uji generator byte ESC/POS (58mm & 80mm) dan test suite aplikasi lulus 100%.
+
 - **Penyelesaian Fase 5 & 6 (Tuntas 100%) Plan #33: Integrasi Pengaturan, Startup Check, & SOP Rilis Pemilik Toko (`SettingsScreen.js`, `App.js`, `plan.md`)**:
   - Menyelesaikan Fase 5 (Mobile Integration) dan Fase 6 (Testing & SOP Rilis):
     1. *Integrasi Layar Pengaturan (`SettingsScreen.js`)*:

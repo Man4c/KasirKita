@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788671786.843807,
-    "ast_hash": "6a5b20c7cd0032bfaffde92b95300dc6",
+    "mtime": 1788685295.838165,
+    "ast_hash": "26178b0c0878fb7fd75e056a3bf7fe0a",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1185,8 +1185,8 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1788669652.30755,
-    "ast_hash": "7859228c8ab6b21b46cc79b104518fa4",
+    "mtime": 1788684293.4121768,
+    "ast_hash": "c797164b12872b5049ff5159d259b178",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -1235,8 +1235,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/ProductController.php": {
-    "mtime": 1788664987.2863836,
-    "ast_hash": "2c680621a36268a53accc6c41b5195b3",
+    "mtime": 1788674946.1179905,
+    "ast_hash": "49a7c46b46265ab3fdb27880baec6b38",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/StockOpnameController.php": {
@@ -1250,8 +1250,8 @@
     "semantic_hash": ""
   },
   "backend/tests/Feature/InventoryApiTest.php": {
-    "mtime": 1788665094.0836318,
-    "ast_hash": "83584ff9dbb6a0737b7770eb8816782b",
+    "mtime": 1788674970.7193103,
+    "ast_hash": "b01691b2c12dc7d755378732d6678e14",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/PosController.php": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788616254.7272308,
-    "ast_hash": "e83278e249ad0d6e10d8c4e404500ff6",
+    "mtime": 1788685244.3891847,
+    "ast_hash": "43d6a76b587c98b8a5e92474d570c469",
     "semantic_hash": ""
   },
   "mobile/app.json": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788671244.0738811,
-    "ast_hash": "a4f847fcc8a4dd8bc723c9e6ef015b66",
+    "mtime": 1788684981.865669,
+    "ast_hash": "3def4ce8e64a2d6c3c8a133fb69dbd9f",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788670769.1558292,
-    "ast_hash": "64b70537e05375036b525c9ae2368c22",
+    "mtime": 1788686330.0992606,
+    "ast_hash": "aa43f4b9996bc5d07d3a47e801a881c8",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {
@@ -2100,13 +2100,13 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/StoreSettingController.php": {
-    "mtime": 1788669643.011901,
-    "ast_hash": "477d5b9fa49ff1df0c41b7a8204c2f45",
+    "mtime": 1788677002.556354,
+    "ast_hash": "7892f347aba81afe75349cd4988fae92",
     "semantic_hash": ""
   },
   "backend/app/Models/StoreSetting.php": {
-    "mtime": 1788670139.484288,
-    "ast_hash": "35f26b121e074d97aa5d8502f06115b2",
+    "mtime": 1788684275.7461889,
+    "ast_hash": "421bdb4bd922141801685dabfead4022",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_02_051850_create_store_settings_table.php": {
@@ -2115,8 +2115,8 @@
     "semantic_hash": ""
   },
   "backend/tests/Feature/StoreSettingTest.php": {
-    "mtime": 1788326418.7297585,
-    "ast_hash": "f044465e7445efe31e32d67534d88ea8",
+    "mtime": 1788677030.0719247,
+    "ast_hash": "2447bc996ae1775f76983df256748b38",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_02_060500_alter_transactions_add_offline_id.php": {
@@ -2130,8 +2130,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/offlineStorage.js": {
-    "mtime": 1788671697.5149555,
-    "ast_hash": "9c51e1bbc8b792cf63ea4fbe6a5c583e",
+    "mtime": 1788672206.4874394,
+    "ast_hash": "325dc4d75f57415b3d7e732cfd40433b",
     "semantic_hash": ""
   },
   "mobile/src/services/syncManager.js": {
@@ -2150,8 +2150,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/printerService.js": {
-    "mtime": 1788504938.7313707,
-    "ast_hash": "11ce71e40331ca64c677de128333b274",
+    "mtime": 1788686265.9498496,
+    "ast_hash": "29448e2271a0f1db5442c672921f13e6",
     "semantic_hash": ""
   },
   "mobile/src/services/orientationService.js": {
@@ -2195,8 +2195,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PosReceiptModal.js": {
-    "mtime": 1788614826.5596063,
-    "ast_hash": "74c18943173b9ac5fcd6b6337521c050",
+    "mtime": 1788686348.8237464,
+    "ast_hash": "46b3fdc3641e4b1e88483c663865ac5a",
     "semantic_hash": ""
   },
   "mobile/src/components/pos/ProductGrid.js": {
@@ -2220,13 +2220,13 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/PrinterGuideModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "ad2772e402ec83051d1ed4f2d985eca0",
+    "mtime": 1788686356.1941342,
+    "ast_hash": "6309ffe87956ca48e685306c0e92cef4",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/PrinterSettingsModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "c9647d6a419d13390858d6cf90457b25",
+    "mtime": 1788686285.3444166,
+    "ast_hash": "f2cc0c6778c52304fa41e7da547d95f8",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/SecurityAuditModal.js": {
@@ -2240,8 +2240,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/TestReceiptModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "a000a79252a1c6bb830c516bd2fbe1ab",
+    "mtime": 1788686337.117546,
+    "ast_hash": "a866677c22f43266736c7253700ee8ec",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/UserProfileModal.js": {
@@ -2300,8 +2300,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PaymentSuccessModal.js": {
-    "mtime": 1788436735.9328358,
-    "ast_hash": "2e5662d0798b227980864ba09c1abff4",
+    "mtime": 1788686344.340421,
+    "ast_hash": "82d44ec1dce112f5ac4c49978f5c91ef",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_04_000001_add_trgm_and_indexes_to_transactions.php": {
@@ -2595,13 +2595,58 @@
     "semantic_hash": ""
   },
   "mobile/src/services/backupService.js": {
-    "mtime": 1788671192.6415973,
-    "ast_hash": "7b0f1aec9496c75006170323d0d7aad3",
+    "mtime": 1788678214.197722,
+    "ast_hash": "0faa450cb1800502bfd001f7e94f3f35",
     "semantic_hash": ""
   },
   "mobile/scripts/testBackupService.js": {
-    "mtime": 1788671672.1027944,
-    "ast_hash": "8eac30aaf94b10df37b9afda332c4330",
+    "mtime": 1788677107.2011175,
+    "ast_hash": "7e3d796539d59f5f92c17b543ea8cb32",
+    "semantic_hash": ""
+  },
+  "plans/260906-33-mobile-in-app-remote-updater/plan.md": {
+    "mtime": 1788685287.4240556,
+    "ast_hash": "758938e44f42a9f1b9ef6ce133adbe9a",
+    "semantic_hash": ""
+  },
+  "backend/app/Http/Controllers/Api/AppVersionController.php": {
+    "mtime": 1788684280.18922,
+    "ast_hash": "892bcae875d26ba7351ce018d395f318",
+    "semantic_hash": ""
+  },
+  "backend/config/app_version.php": {
+    "mtime": 1788684268.5622778,
+    "ast_hash": "0acb1e87cf8bedd39b117df271560897",
+    "semantic_hash": ""
+  },
+  "backend/database/migrations/2026_09_06_000002_add_app_version_to_store_settings_table.php": {
+    "mtime": 1788684265.7151647,
+    "ast_hash": "f580b3ba0c2c205c22aac4ea1b89baa3",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/AppVersionTest.php": {
+    "mtime": 1788684306.6284075,
+    "ast_hash": "f36050471103572a538227fba84a4201",
+    "semantic_hash": ""
+  },
+  "mobile/scripts/testUpdaterService.js": {
+    "mtime": 1788684972.4706786,
+    "ast_hash": "4cd242f9c2bc34f36baef92080565610",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/updater/UpdatePromptModal.js": {
+    "mtime": 1788684920.9586995,
+    "ast_hash": "8119630699519b9a610ad20f3e8aa199",
+    "semantic_hash": ""
+  },
+  "mobile/src/services/updaterService.js": {
+    "mtime": 1788684901.0108979,
+    "ast_hash": "25e9dc0d9c914b3aa08d5534c37cfb21",
+    "semantic_hash": ""
+  },
+  "mobile/eas.json": {
+    "mtime": 1788685730.245028,
+    "ast_hash": "60c2f875290b28cc2760bd8cb5683290",
     "semantic_hash": ""
   }
 }

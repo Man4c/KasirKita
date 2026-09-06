@@ -26,24 +26,24 @@ export default function TestReceiptModal({
 }) {
   const handlePrint = async () => {
     onClose();
-    const res = await printerService.printSample({
-      storeName: storeSettings.storeName,
-      storeAddress: storeSettings.storeAddress,
-      storePhone: storeSettings.storePhone,
-      storeLogo: storeSettings.storeLogo,
-      showPhoneOnReceipt: storeSettings.showPhoneOnReceipt,
-      receiptFooter: storeSettings.receiptFooter,
-      printTwoCopies,
-    });
+    try {
+      const res = await printerService.printSample({
+        storeName: storeSettings.storeName,
+        storeAddress: storeSettings.storeAddress,
+        storePhone: storeSettings.storePhone,
+        storeLogo: storeSettings.storeLogo,
+        showPhoneOnReceipt: storeSettings.showPhoneOnReceipt,
+        receiptFooter: storeSettings.receiptFooter,
+        printTwoCopies,
+      });
 
-    if (res.mode === 'bluetooth') {
-      showAlert('Cetak Berhasil', res.message || 'Struk terkirim ke printer!');
-    } else {
-      if (Platform.OS === 'web') {
-        window.print();
+      if (res?.mode === 'bluetooth') {
+        showAlert('Cetak Berhasil', res.message || 'Struk uji coba berhasil dikirim ke printer Bluetooth!');
       } else {
-        Alert.alert('Simulasi Cetak', `${res.copies} salinan struk disiapkan.`);
+        showAlert('Perintah Cetak Terkirim', 'Struk uji coba berhasil diproses dan dikirim ke printer sistem / kabel USB.');
       }
+    } catch (err) {
+      showAlert('Gagal Mencetak', err?.message || 'Terjadi kendala saat mengirim data ke printer.');
     }
   };
 

@@ -15,6 +15,7 @@ import {
   X,
   Check,
   Bluetooth,
+  Usb,
 } from 'lucide-react-native';
 import { printerService } from '../../services/printerService';
 import { showAlert } from '../../utils/alert';
@@ -38,7 +39,7 @@ export default function PrinterSettingsModal({
       } else {
         Alert.alert(
           'Koneksi Bluetooth Smartphone',
-          'Saat ini aplikasi dibuka melalui wadah uji coba Expo Go di HP Anda. Akses perangkat keras Bluetooth printer fisik (seperti Panda PRJ-58D atau RPP02N) akan otomatis aktif penuh saat aplikasi di-build menjadi file APK resmi toko Anda.\n\nUntuk latihan dan uji cetak saat ini, silakan pilih model printer di daftar bawah agar format kertas struk (58mm/80mm) disesuaikan.',
+          'Akses perangkat keras Bluetooth printer fisik (seperti Panda PRJ-58D atau RPP02N) akan otomatis mendeteksi printer yang dipasangkan.\n\nAnda juga dapat memilih profil printer langsung pada daftar di bawah untuk mengaktifkan cetak Bluetooth atau Kabel USB.',
           [{ text: 'Paham & Lanjutkan', style: 'default' }]
         );
       }
@@ -60,6 +61,14 @@ export default function PrinterSettingsModal({
     }
   };
 
+  const hardwareProfiles = [
+    { id: 'Panda PRJ-58D (Bluetooth & USB)', desc: 'Ukuran 58mm • Portabel Bluetooth & Kabel USB Toko', isBluetooth: true },
+    { id: 'RPP02N Mini POS (58mm)', desc: 'Ukuran 58mm • Mini Saku Bluetooth Portabel', isBluetooth: true },
+    { id: 'Thermal-80 Desktop POS (80mm)', desc: 'Ukuran 80mm • Kasir Minimarket / Resto', isBluetooth: true },
+    { id: 'Iware MP-58A (Bluetooth & USB)', desc: 'Ukuran 58mm • Portabel UMKM Bluetooth & USB', isBluetooth: true },
+    { id: 'Printer Kabel USB / Driver Sistem Toko', desc: 'Koneksi kabel USB langsung & driver printer sistem', isBluetooth: false },
+  ];
+
   return (
     <Modal
       visible={visible}
@@ -75,8 +84,8 @@ export default function PrinterSettingsModal({
                 <Printer size={18} color="#fb7185" />
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
-                <Text style={styles.modalTitle}>Printer Bluetooth Thermal</Text>
-                <Text style={styles.modalSubtitle}>Pilih perangkat printer kasir Anda</Text>
+                <Text style={styles.modalTitle}>Printer Kasir Thermal</Text>
+                <Text style={styles.modalSubtitle}>Koneksi Bluetooth & Kabel USB Toko</Text>
               </View>
             </View>
             <TouchableOpacity
@@ -105,44 +114,42 @@ export default function PrinterSettingsModal({
                 ? 'Memindai Bluetooth...'
                 : Platform.OS === 'web'
                 ? 'Pindai Printer Bluetooth (Web Bluetooth)'
-                : 'Hubungkan Printer Bluetooth HP'}
+                : 'Pindai Perangkat Bluetooth'}
             </Text>
           </TouchableOpacity>
 
           <View style={{ marginVertical: 10, paddingHorizontal: 4 }}>
-            <Text style={{ fontSize: 12, fontFamily: 'Poppins_600SemiBold', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: 0.5 }}>
-              Preset / Mode Simulasi Virtual
+            <Text style={styles.sectionHeading}>
+              PILIHAN PERANGKAT PRINTER FISIK (BLUETOOTH & USB)
             </Text>
-            <Text style={{ fontSize: 12, fontFamily: 'Poppins_400Regular', color: '#a1a1aa' }}>
-              Pilih profil di bawah jika belum ada printer fisik:
+            <Text style={styles.sectionSubtitle}>
+              Pilih model printer kasir yang Anda gunakan untuk toko:
             </Text>
           </View>
 
-          <ScrollView style={{ maxHeight: 260 }} showsVerticalScrollIndicator={false}>
-            {[
-              { id: 'Panda PRJ-58D (Bluetooth Thermal)', desc: 'Ukuran 58mm • Standar POS Ritel' },
-              { id: 'RPP02N Mini POS (58mm)', desc: 'Ukuran 58mm • Mini Saku Bluetooth' },
-              { id: 'Thermal-80 Desktop POS (80mm)', desc: 'Ukuran 80mm • Kasir Minimarket / Resto' },
-              { id: 'Iware MP-58A (Bluetooth Thermal)', desc: 'Ukuran 58mm • Portabel UMKM' },
-              { id: 'Printer Virtual Kasir (Simulasi)', desc: 'Cetak ke layar & dialog cetak printer biasa' },
-            ].map((p) => {
+          <ScrollView style={{ maxHeight: 270 }} showsVerticalScrollIndicator={false}>
+            {hardwareProfiles.map((p) => {
               const isSelected = selectedPrinter === p.id;
+              const IconComp = p.isBluetooth ? Bluetooth : Usb;
               return (
                 <TouchableOpacity
                   key={p.id}
                   style={[styles.printerOptionRow, isSelected && styles.printerOptionRowActive]}
                   onPress={async () => {
-                    await printerService.setSimulationMode(p.id);
-                    onSelectPrinter(p.id, true, false);
+                    await printerService.setPhysicalPrinter(p.id, p.isBluetooth);
+                    onSelectPrinter(p.id, true, p.isBluetooth);
                     onClose();
                   }}
                   activeOpacity={0.7}
                 >
-                  <View style={{ flex: 1, minWidth: 0 }}>
-                    <Text style={[styles.printerOptionName, isSelected && styles.printerOptionNameActive]}>
+                  <View style={[styles.typeIconBox, isSelected && styles.typeIconBoxActive]}>
+                    <IconComp size={16} color={isSelected ? '#fb7185' : '#a1a1aa'} />
+                  </View>
+                  <View style={{ flex: 1, minWidth: 0, marginLeft: 10, marginRight: 8 }}>
+                    <Text style={[styles.printerOptionName, isSelected && styles.printerOptionNameActive]} numberOfLines={1}>
                       {p.id}
                     </Text>
-                    <Text style={styles.printerOptionDesc}>{p.desc}</Text>
+                    <Text style={styles.printerOptionDesc} numberOfLines={1}>{p.desc}</Text>
                   </View>
                   {isSelected && <Check size={18} color="#fb7185" style={{ flexShrink: 0 }} />}
                 </TouchableOpacity>
@@ -204,11 +211,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   modalSubtitle: {
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
+    includeFontPadding: false,
+    marginTop: 2,
   },
   closeBtn: {
     padding: 4,
@@ -221,11 +232,29 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 12,
     marginBottom: 10,
+    minHeight: 44,
   },
   scanBluetoothBtnText: {
     color: '#ffffff',
     fontSize: 13,
     fontFamily: 'Poppins_700Bold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  sectionHeading: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#a1a1aa',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    includeFontPadding: false,
+  },
+  sectionSubtitle: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#a1a1aa',
+    includeFontPadding: false,
+    marginTop: 2,
   },
   printerOptionRow: {
     flexDirection: 'row',
@@ -237,15 +266,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#27272a',
     marginBottom: 8,
+    minHeight: 52,
   },
   printerOptionRowActive: {
     borderColor: '#fb7185',
     backgroundColor: 'rgba(225, 29, 72, 0.08)',
   },
+  typeIconBox: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#27272a',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  typeIconBoxActive: {
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+  },
   printerOptionName: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#ffffff',
+    includeFontPadding: false,
   },
   printerOptionNameActive: {
     color: '#fb7185',
@@ -255,6 +298,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     color: '#a1a1aa',
     marginTop: 2,
+    includeFontPadding: false,
   },
   modalActionRow: {
     flexDirection: 'row',
@@ -273,10 +317,14 @@ const styles = StyleSheet.create({
     borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 44,
   },
   cancelBtnText: {
     fontSize: 13,
     fontFamily: 'Poppins_600SemiBold',
     color: '#d4d4d8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });
+
