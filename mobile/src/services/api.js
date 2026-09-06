@@ -30,11 +30,22 @@ export const getHostIp = () => {
   return '192.168.1.3';
 };
 
+// URL Production Server Render KasirKita
+export const PRODUCTION_API_URL = 'https://kasirkita.onrender.com/api';
+
 // Resolusi Base URL yang adaptif berdasarkan platform dan hostname
 export const getDefaultBaseUrl = () => {
   if (Platform.OS === 'web' && typeof window !== 'undefined') {
     const host = window.location.hostname || 'localhost';
-    return `http://${host}:8000/api`;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return `http://${host}:8000/api`;
+    }
+    return PRODUCTION_API_URL;
+  }
+
+  // Jika aplikasi berjalan di mode Standalone Production (hasil EAS Build APK)
+  if (!__DEV__) {
+    return PRODUCTION_API_URL;
   }
 
   const host = getHostIp();
@@ -44,7 +55,7 @@ export const getDefaultBaseUrl = () => {
     return 'http://10.0.2.2:8000/api';
   }
 
-  // Untuk HP fisik Android atau iOS di jaringan Wi-Fi
+  // Untuk HP fisik Android atau iOS di jaringan Wi-Fi saat development
   return `http://${host}:8000/api`;
 };
 
