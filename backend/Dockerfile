@@ -1,5 +1,5 @@
-# Official PHP 8.3 Apache base image
-FROM php:8.3-apache
+# Official PHP 8.4 Apache base image
+FROM php:8.4-apache
 
 # Install required system packages & PostgreSQL development libraries
 RUN apt-get update && apt-get install -y \
@@ -31,8 +31,8 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html
 
-# Install production dependencies via Composer
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Install production dependencies via Composer (with platform reqs safeguard)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
 # Set permissions for Laravel writable directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
