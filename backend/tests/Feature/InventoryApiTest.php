@@ -289,4 +289,24 @@ class InventoryApiTest extends TestCase
 
         $this->assertSoftDeleted('categories', ['id' => $category->id]);
     }
+
+    public function test_product_listing_with_is_active_all_returns_both_active_and_inactive_products(): void
+    {
+        Product::create([
+            'name' => 'Produk Aktif',
+            'price' => 10000,
+            'is_active' => true,
+        ]);
+        Product::create([
+            'name' => 'Produk Nonaktif',
+            'price' => 15000,
+            'is_active' => false,
+        ]);
+
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)
+            ->getJson('/api/products?is_active=all');
+
+        $response->assertStatus(200);
+        $this->assertEquals(2, $response->json('data.total'));
+    }
 }

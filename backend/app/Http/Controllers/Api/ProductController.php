@@ -52,8 +52,8 @@ class ProductController extends Controller
             }
         }
 
-        // Filter by active status
-        if ($request->has('is_active')) {
+        // Filter by active status (supports 'true', 'false', or 'all' to skip filter)
+        if ($request->has('is_active') && $request->query('is_active') !== 'all' && $request->query('is_active') !== '') {
             $query->where('is_active', filter_var($request->query('is_active'), FILTER_VALIDATE_BOOLEAN));
         }
 
