@@ -6,6 +6,7 @@ import {
   Wallet,
   Boxes,
   X,
+  Lightbulb,
 } from 'lucide-react-native';
 
 export default function DashboardDetailModal({
@@ -151,8 +152,9 @@ export default function DashboardDetailModal({
 
             {/* Formula / Education Note */}
             <View style={styles.formulaBox}>
+              <Lightbulb size={16} color="#fbbf24" style={{ flexShrink: 0, marginTop: 2, marginRight: 8 }} />
               <Text style={styles.formulaText}>
-                💡 <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>{config.formulaTitle}</Text> {config.formulaText}
+                <Text style={{ fontFamily: 'Poppins_600SemiBold', color: '#e4e4e7' }}>{config.formulaTitle}</Text> {config.formulaText}
               </Text>
             </View>
           </View>
@@ -264,6 +266,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_700Bold',
   },
   formulaBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     backgroundColor: '#27272a',
     borderRadius: 10,
     padding: 12,
@@ -272,6 +276,7 @@ const styles = StyleSheet.create({
     borderColor: '#3f3f46',
   },
   formulaText: {
+    flex: 1,
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',

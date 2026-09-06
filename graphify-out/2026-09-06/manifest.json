@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788685212.3246896,
-    "ast_hash": "9f88074e19d8466b2e816e6d59f1caa9",
+    "mtime": 1788686330.0992606,
+    "ast_hash": "aa43f4b9996bc5d07d3a47e801a881c8",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {
@@ -2150,8 +2150,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/printerService.js": {
-    "mtime": 1788504938.7313707,
-    "ast_hash": "11ce71e40331ca64c677de128333b274",
+    "mtime": 1788686265.9498496,
+    "ast_hash": "29448e2271a0f1db5442c672921f13e6",
     "semantic_hash": ""
   },
   "mobile/src/services/orientationService.js": {
@@ -2195,8 +2195,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PosReceiptModal.js": {
-    "mtime": 1788614826.5596063,
-    "ast_hash": "74c18943173b9ac5fcd6b6337521c050",
+    "mtime": 1788686348.8237464,
+    "ast_hash": "46b3fdc3641e4b1e88483c663865ac5a",
     "semantic_hash": ""
   },
   "mobile/src/components/pos/ProductGrid.js": {
@@ -2220,13 +2220,13 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/PrinterGuideModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "ad2772e402ec83051d1ed4f2d985eca0",
+    "mtime": 1788686356.1941342,
+    "ast_hash": "6309ffe87956ca48e685306c0e92cef4",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/PrinterSettingsModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "c9647d6a419d13390858d6cf90457b25",
+    "mtime": 1788686285.3444166,
+    "ast_hash": "f2cc0c6778c52304fa41e7da547d95f8",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/SecurityAuditModal.js": {
@@ -2240,8 +2240,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/TestReceiptModal.js": {
-    "mtime": 1788391512.9697542,
-    "ast_hash": "a000a79252a1c6bb830c516bd2fbe1ab",
+    "mtime": 1788686337.117546,
+    "ast_hash": "a866677c22f43266736c7253700ee8ec",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/UserProfileModal.js": {
@@ -2300,8 +2300,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/pos/PaymentSuccessModal.js": {
-    "mtime": 1788436735.9328358,
-    "ast_hash": "2e5662d0798b227980864ba09c1abff4",
+    "mtime": 1788686344.340421,
+    "ast_hash": "82d44ec1dce112f5ac4c49978f5c91ef",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_04_000001_add_trgm_and_indexes_to_transactions.php": {
@@ -2642,6 +2642,11 @@
   "mobile/src/services/updaterService.js": {
     "mtime": 1788684901.0108979,
     "ast_hash": "25e9dc0d9c914b3aa08d5534c37cfb21",
+    "semantic_hash": ""
+  },
+  "mobile/eas.json": {
+    "mtime": 1788685730.245028,
+    "ast_hash": "60c2f875290b28cc2760bd8cb5683290",
     "semantic_hash": ""
   }
 }

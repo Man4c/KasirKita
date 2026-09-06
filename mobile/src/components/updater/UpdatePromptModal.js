@@ -19,6 +19,7 @@ import {
   ShieldAlert,
   Sparkles,
   RefreshCw,
+  ShieldCheck,
 } from 'lucide-react-native';
 import { updaterService, formatBytes } from '../../services/updaterService';
 
@@ -287,8 +288,9 @@ export default function UpdatePromptModal({
 
             {/* Data Safety Reassurance */}
             <View style={styles.safetyBox}>
+              <ShieldCheck size={16} color="#34d399" style={{ flexShrink: 0, marginTop: 1, marginRight: 8 }} />
               <Text style={styles.safetyText}>
-                🔒 <Text style={styles.safetyBold}>Data kasir terjamin aman:</Text> Riwayat nota, pengaturan, dan transaksi offline tidak akan hilang setelah pembaruan.
+                <Text style={styles.safetyBold}>Data kasir terjamin aman:</Text> Riwayat nota, pengaturan, dan transaksi offline tidak akan hilang setelah pembaruan.
               </Text>
             </View>
           </ScrollView>
@@ -695,19 +697,21 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   safetyBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     backgroundColor: 'rgba(39, 39, 42, 0.5)',
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 10,
     marginBottom: 4,
   },
   safetyText: {
+    flex: 1,
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
     color: '#a1a1aa',
     lineHeight: 17,
     includeFontPadding: false,
-    textAlignVertical: 'center',
   },
   safetyBold: {
     fontFamily: 'Poppins-Medium',

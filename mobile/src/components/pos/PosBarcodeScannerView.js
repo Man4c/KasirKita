@@ -439,8 +439,9 @@ export default function PosBarcodeScannerView({
                   style={styles.bottomCtrlBtn}
                   onPress={() => { setShowManualInput(false); setManualCode(''); }}
                   activeOpacity={0.7}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <Text style={styles.bottomCtrlBtnText}>✕</Text>
+                  <X size={15} color="#ffffff" />
                 </TouchableOpacity>
               </>
             ) : (

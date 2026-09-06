@@ -25,6 +25,9 @@ import {
   Check,
   Sparkles,
   Zap,
+  Landmark,
+  Utensils,
+  Handshake,
 } from 'lucide-react-native';
 import { taxService } from '../../services/taxService';
 import { showAlert } from '../../utils/alert';
@@ -61,7 +64,8 @@ function parseNumberValue(val) {
 const PRESET_TEMPLATES = [
   {
     id: 'ppn_11',
-    label: '🏛️ PPN 11%',
+    label: 'PPN 11%',
+    icon: Landmark,
     badge: 'Nasional',
     badgeColor: '#fb7185',
     name: 'PPN 11%',
@@ -74,7 +78,8 @@ const PRESET_TEMPLATES = [
   },
   {
     id: 'pb1_10',
-    label: '🍽️ PB1 Resto 10%',
+    label: 'PB1 Resto 10%',
+    icon: Utensils,
     badge: 'Resto & Kafe',
     badgeColor: '#fb923c',
     name: 'PB1 Restoran 10%',
@@ -87,7 +92,8 @@ const PRESET_TEMPLATES = [
   },
   {
     id: 'bungkus_2000',
-    label: '📦 Biaya Bungkus',
+    label: 'Biaya Bungkus',
+    icon: Package,
     badge: 'Takeaway',
     badgeColor: '#60a5fa',
     name: 'Biaya Kemasan Bungkus',
@@ -100,7 +106,8 @@ const PRESET_TEMPLATES = [
   },
   {
     id: 'service_5',
-    label: '🤝 Service 5%',
+    label: 'Service 5%',
+    icon: Handshake,
     badge: 'Layanan',
     badgeColor: '#34d399',
     name: 'Biaya Layanan Toko',
@@ -386,6 +393,7 @@ export default function TaxFormModal({
                 >
                   {PRESET_TEMPLATES.map((preset) => {
                     const isSelected = selectedPresetId === preset.id;
+                    const PresetIcon = preset.icon;
                     return (
                       <TouchableOpacity
                         key={preset.id}
@@ -400,6 +408,13 @@ export default function TaxFormModal({
                         activeOpacity={0.7}
                         hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
                       >
+                        {PresetIcon && (
+                          <PresetIcon
+                            size={13}
+                            color={isSelected ? '#ffffff' : preset.badgeColor}
+                            style={{ flexShrink: 0 }}
+                          />
+                        )}
                         <Text
                           style={[
                             styles.presetChipLabel,

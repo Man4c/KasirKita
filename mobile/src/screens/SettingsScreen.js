@@ -510,7 +510,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         const sum = res.summary;
         let detailMsg = `Berkas: ${res.filename}\nSumber: ${sum.sourceMode}\n\n• ${sum.productsCount} Produk\n• ${sum.categoriesCount} Kategori\n• ${sum.customersCount} Pelanggan\n• ${sum.unitsCount} Satuan\n• ${sum.suppliersCount} Pemasok`;
         if (sum.hasOfflineQueue) {
-          detailMsg += `\n• ⚠️ ${sum.queueCount} Antrean Nota Offline (Ikut tercadangkan)`;
+          detailMsg += `\n• ${sum.queueCount} Antrean Nota Offline (Ikut tercadangkan)`;
         }
         showAlert('Pencadangan Berhasil', detailMsg);
       } else {
@@ -1083,11 +1083,18 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
             </View>
             <View style={{ flex: 1, minWidth: 0, paddingRight: 8 }}>
               <Text style={styles.menuTitle}>Antrean Transaksi Offline</Text>
-              <Text style={styles.menuSubtitle}>
-                {pendingOfflineCount > 0
-                  ? `🟢 ${pendingOfflineCount} nota aman di HP. Otomatis terunggah ke cloud saat server aktif besok pagi.`
-                  : 'Semua transaksi kasir sudah tersinkronkan ke cloud'}
-              </Text>
+              {pendingOfflineCount > 0 ? (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                  <CheckCircle2 size={13} color="#34d399" style={{ flexShrink: 0 }} />
+                  <Text style={[styles.menuSubtitle, { marginTop: 0, flex: 1 }]} numberOfLines={2}>
+                    {pendingOfflineCount} nota aman di HP. Otomatis terunggah saat online.
+                  </Text>
+                </View>
+              ) : (
+                <Text style={styles.menuSubtitle}>
+                  Semua transaksi kasir sudah tersinkronkan ke cloud
+                </Text>
+              )}
             </View>
             {pendingOfflineCount > 0 ? (
               <TouchableOpacity
