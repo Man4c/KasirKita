@@ -91,6 +91,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
   const [syncing, setSyncing] = useState(false);
   const [serverStatus, setServerStatus] = useState('Memeriksa...');
   const [serverPing, setServerPing] = useState(null);
+  const [checkingServer, setCheckingServer] = useState(false);
   const [cacheSize, setCacheSize] = useState('...');
   const [securityModalOpen, setSecurityModalOpen] = useState(false);
 
@@ -230,6 +231,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
 
   const checkServerHealth = async () => {
     try {
+      setCheckingServer(true);
       const start = Date.now();
       const res = await api.get('/health');
       const latency = Date.now() - start;
@@ -243,6 +245,8 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
     } catch (err) {
       setServerStatus('Offline / Terputus');
       setServerPing(null);
+    } finally {
+      setCheckingServer(false);
     }
   };
 
@@ -813,21 +817,34 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         <Text style={styles.sectionHeader}>DATA & JARINGAN SERVER</Text>
         <View style={styles.card}>
           {/* Server Connection Status */}
-          <View style={styles.menuRow}>
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={checkServerHealth}
+            disabled={checkingServer}
+          >
             <View style={styles.menuIconBox}>
-              <Activity size={18} color="#34d399" />
+              {checkingServer ? (
+                <ActivityIndicator size="small" color="#34d399" />
+              ) : (
+                <Activity size={18} color="#34d399" />
+              )}
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.menuTitle}>Koneksi Server Backend</Text>
-              <Text style={styles.menuSubtitle}>{serverStatus}</Text>
+              <Text style={styles.menuSubtitle}>
+                {checkingServer
+                  ? 'Mengetes kecepatan respon server...'
+                  : `${serverStatus} • Ketuk untuk tes ping`}
+              </Text>
             </View>
-            {serverPing && (
+            {serverPing && !checkingServer && (
               <View style={styles.pingBadge}>
                 <Wifi size={12} color="#6ee7b7" />
                 <Text style={styles.pingBadgeText}>{serverPing}</Text>
               </View>
             )}
-          </View>
+          </TouchableOpacity>
 
           <View style={styles.divider} />
 
@@ -1468,6 +1485,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_600SemiBold',
     color: '#6ee7b7',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   divider: {
     height: 1,

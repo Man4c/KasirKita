@@ -20,6 +20,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Penyempurnaan Re-Ping Interaktif & Indikator Latensi Jaringan Server (`SettingsScreen.js`)**:
+  - Memberikan transparansi dan kemudahan pengujian latensi round-trip (RTT) koneksi backend:
+    1. *Fitur Re-Ping On-Demand*: Mengubah baris menu *"Koneksi Server Backend"* menjadi komponen `TouchableOpacity` interaktif lengkap dengan status loading spinner `checkingServer`, sehingga pengguna dapat mengetes ulang respon server secara langsung (*warm latency* yang biasanya turun ke 100-300ms) tanpa perlu keluar-masuk layar.
+    2. *Anti-Shift Typography*: Menambahkan `includeFontPadding: false` dan `textAlignVertical: 'center'` pada teks badge ping (`pingBadgeText`) agar angka milidetik dan ikon sinyal Wi-Fi sejajar di titik tengah vertikal.
+
 - **Perbaikan ReferenceError Filter Kategori Kosong & Empty State di Katalog Kasir POS (`ProductGrid.js`)**:
   - Menyelesaikan keluhan error crash saat pengguna menekan filter kategori di layar kasir (khususnya saat menyentuh filter yang tidak memiliki produk seperti "Tanpa Kategori"):
     1. *Penyebab Root Cause*: Pada komponen `ProductGrid.js`, teks deskripsi empty state (`emptyProductsSub`) mencoba merender nama kategori menggunakan `${selectedCatObj?.name || 'ini'}` saat `selectedCat !== 'ALL'`. Namun, variabel `selectedCatObj` tidak pernah didefinisikan sebelumnya, sehingga seketika memicu crash JavaScript: `Web ERROR [ReferenceError: selectedCatObj is not defined]`.
