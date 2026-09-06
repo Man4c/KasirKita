@@ -229,7 +229,7 @@ export const backupService = {
       } else {
         const pickerRes = await DocumentPicker.getDocumentAsync({
           type: ['application/json', 'text/json', '*/*'],
-          copyToCacheDirectory: true,
+          copyToCacheDirectory: false,
         });
 
         if (pickerRes.canceled || !pickerRes.assets?.[0]?.uri) {
@@ -238,9 +238,17 @@ export const backupService = {
 
         const asset = pickerRes.assets[0];
         filename = asset.name || 'backup.json';
-        rawJsonContent = await FileSystem.readAsStringAsync(asset.uri, {
-          encoding: FileSystem.EncodingType.UTF8,
-        });
+
+        // Dual-Engine File Reader: First attempt FileSystem, fallback to React Native fetch()
+        try {
+          rawJsonContent = await FileSystem.readAsStringAsync(asset.uri, {
+            encoding: FileSystem.EncodingType.UTF8,
+          });
+        } catch (fsErr) {
+          console.warn('[backupService] FileSystem.readAsStringAsync failed, falling back to fetch():', fsErr.message);
+          const response = await fetch(asset.uri);
+          rawJsonContent = await response.text();
+        }
       }
 
       return this.parseAndValidateBackupContent(rawJsonContent, filename);
