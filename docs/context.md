@@ -20,6 +20,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Inisiasi Plan #33: Pembaruan Jarak Jauh APK Otomatis (In-App Remote Updater) (`plans/260906-33-mobile-in-app-remote-updater/plan.md`)**:
+  - Merancang arsitektur sistem pembaruan APK jarak jauh tanpa biaya (Rp 0) memanfaatkan ekosistem yang sudah ada:
+    1. *Supabase Storage*: Host publik berkas APK rilis (`apk-releases/KasirKita-vX.Y.Z.apk`) dengan CDN Cloudflare global berkecepatan tinggi, aktif 24 jam non-stop tanpa menghabiskan kuota atau kapasitas Render.
+    2. *Render (Laravel API)*: Menyediakan endpoint versi ringan `GET /api/app/version` (~250 bytes) dengan fallback config aman dan informasi changelog.
+    3. *Mobile React Native (Expo)*:
+       - `updaterService.js`: Parser semver akurat, downloader resumable dengan progress callback (`expo-file-system/legacy`), dan Android Content URI + Native Intent Launcher (`expo-intent-launcher`).
+       - `UpdatePromptModal.js`: Bottom Sheet Impeccable (Dark/Rose) dengan progress bar dinamis, teks rasio ukuran MB, dan changelog.
+       - `SettingsScreen.js` & App Startup: Tombol pengecekan manual dan pengecekan otomatis non-blocking saat startup.
+  - Membuka plans-kanban server untuk pelacakan fase task Plan #33.
+
 - **Implementasi Mobile Smart Hybrid Backup-Restore & Sinkronisasi Top-Down Preferensi Cloud - Fase 3, 4, 5, & 6 Plan #24 (`backupService.js`, `BackupRestoreModal.js`, `SettingsScreen.js`, `offlineStorage.js`, `StoreSetting.php`)**:
   - Menyelesaikan seluruh fase Plan #24 (Cloud Sync Preferences & Local Data Backup-Restore) dari backend hingga frontend mobile:
     1. *Modul `backupService.js` (Smart Hybrid Backup)*:
