@@ -48,7 +48,7 @@ function loadProductionModule(filePath, customResolver = {}) {
     if (id === '@react-native-async-storage/async-storage') return mockAsyncStorage;
     if (id === 'react-native') return { Platform: { OS: 'android' } };
     if (id === 'expo-secure-store') return { getItemAsync: async () => null, setItemAsync: async () => {} };
-    if (id === 'expo-file-system') return {
+    if (id === 'expo-file-system' || id === 'expo-file-system/legacy') return {
       cacheDirectory: '/tmp/',
       EncodingType: { UTF8: 'utf8' },
       writeAsStringAsync: async () => {},
