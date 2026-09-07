@@ -20,6 +20,20 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
+- **Setup & Deployment Cloud Backend (Render Singapore), Database Supabase PostgreSQL, & Native Database Cron (`pg_cron` + `pg_net`)**:
+  - *Migrasi Server ke Region Singapore*: Backend Docker Laravel berhasil dideploy di Render Region Singapore (`https://kasirkita.onrender.com`), memangkas latensi database dari ~5.2 detik (Oregon) menjadi ~2.6 detik karena berlokasi di region yang sama dengan Supabase Singapore (`ap-southeast-1`).
+  - *Database Supabase PostgreSQL*: Berhasil menghubungkan Render ke Supabase via IPv4 Connection Pooler Session Mode (`aws-0-ap-southeast-1.pooler.supabase.com:5432`), memigrasikan 25 tabel database kasir secara utuh.
+  - *Akun Toko & Data Awal*: Dibuatkan akun toko `KasirKita` dengan role Owner (`admin@kasirkita.com` / `password123`) serta master data standar satuan (9 UoM) dan kategori produk.
+  - *Otomatisasi Cron Job Penghemat Kuota Render (09.00 - 21.00 WIB)*:
+    - Mengaktifkan ekstensi `pg_net` dan `pg_cron` langsung di database Supabase.
+    - Menjadwalkan job `keep-render-alive` dengan ekspresi `*/10 2-14 * * *` (setiap 10 menit antara pukul 02:00 - 14:00 UTC atau 09:00 - 21:00 WIB).
+    - Menghilangkan *Cold Start* Render (tanpa lag 50 detik) selama jam operasional toko, sekaligus menghemat kuota bulanan Render (hanya terpakai ~360 jam dari total kuota gratis 750 jam).
+  - *Ketahanan Jaringan Mobile & Integrasi EAS Build*:
+    - Timeout koneksi `api.js` dinaikkan dari 10s menjadi 60s dengan normalisasi pesan error ramah pengguna.
+    - Menetapkan default fallback production URL ke `https://kasirkita.onrender.com/api` pada standalone APK.
+    - Memperbaiki validasi `expo doctor` (menghapus `usesCleartextTraffic` & memasang `expo-asset`, skor 21/21 lolos 100%).
+    - Sukses mem-build standalone APK KasirKita POS via Expo EAS Build (`@man4c/kasirkita-pos-mobile`).
+
 - **Penghapusan Total Emoticon/Emoji & Penggantian dengan Ikon Vektor Resmi Lucide (`DashboardDetailModal.js`, `PosBarcodeScannerView.js`, `TaxFormModal.js`, `UpdatePromptModal.js`, `SettingsScreen.js`)**:
   - Menindaklanjuti permintaan pemilik toko untuk mengeliminasi seluruh emoticon/emoji di aplikasi dan menggantinya dengan pustaka ikon resmi Lucide (`lucide-react-native`):
     1. *Audit Menyeluruh Kode*: Memindai seluruh direktori `mobile/src`, `web/src`, dan `backend/`. Ditemukan tepat 9 karakter emoticon/simbol teks non-standar di 5 file mobile, sementara web dan backend sudah 100% bebas emoji.
