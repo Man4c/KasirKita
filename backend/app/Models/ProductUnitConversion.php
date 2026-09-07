@@ -12,6 +12,7 @@ class ProductUnitConversion extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'store_id',
         'product_id',
         'unit_id',
         'conversion_factor',
@@ -36,5 +37,10 @@ class ProductUnitConversion extends Model
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 }

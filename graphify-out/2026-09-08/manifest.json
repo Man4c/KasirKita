@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788779075.7916975,
-    "ast_hash": "934f213a5a1d602cc4c515ee5e42c8eb",
+    "mtime": 1788820627.2060628,
+    "ast_hash": "e5ea782fe2b969eb3ab7d3df5a85bf6c",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1185,8 +1185,8 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1788684293.4121768,
-    "ast_hash": "c797164b12872b5049ff5159d259b178",
+    "mtime": 1788820264.6967921,
+    "ast_hash": "8d09aa76ab7a9a336f543c36d63ddcea",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788685244.3891847,
-    "ast_hash": "43d6a76b587c98b8a5e92474d570c469",
+    "mtime": 1788820576.6951249,
+    "ast_hash": "0676fdb6899e0fe2f72366e5c60ef543",
     "semantic_hash": ""
   },
   "mobile/app.json": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788753316.0263042,
-    "ast_hash": "8d130d4c3721176b26a05995bd51b0b4",
+    "mtime": 1788820565.3360639,
+    "ast_hash": "d3672e9eb0b3b0d90f68a9b5a858b7ac",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -2460,8 +2460,8 @@
     "semantic_hash": ""
   },
   "plans/260905-29-mobile-master-pajak-dan-biaya/plan.md": {
-    "mtime": 1788592942.4664216,
-    "ast_hash": "11a8205b15b2c647a58e113a9734746e",
+    "mtime": 1788780113.9109108,
+    "ast_hash": "a2dabd89e568633a88f0c9a0bc0bd3b2",
     "semantic_hash": ""
   },
   "mobile/src/services/taxService.js": {
@@ -2867,6 +2867,41 @@
   "mobile/scripts/generate_app_icon.py": {
     "mtime": 1788778949.3861654,
     "ast_hash": "e45839a5f14724a32937354ee2e473b9",
+    "semantic_hash": ""
+  },
+  "backend/app/Http/Controllers/Api/AppTelemetryController.php": {
+    "mtime": 1788820256.4128513,
+    "ast_hash": "3596cd56fb2c2e63a894c1a534998d13",
+    "semantic_hash": ""
+  },
+  "backend/app/Models/AppInstallation.php": {
+    "mtime": 1788820250.03949,
+    "ast_hash": "d1b2284827e10430c4a472e1be6cb18b",
+    "semantic_hash": ""
+  },
+  "backend/database/migrations/2026_09_08_000001_create_app_installations_table.php": {
+    "mtime": 1788820245.42924,
+    "ast_hash": "6d69c02171b5d2ffa34efd5be8669b94",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/AppTelemetryTest.php": {
+    "mtime": 1788820272.1011775,
+    "ast_hash": "ff6e78cce474160f4a05909e696f852f",
+    "semantic_hash": ""
+  },
+  "mobile/scripts/testTelemetryService.js": {
+    "mtime": 1788820431.335256,
+    "ast_hash": "f2a41f7dc7ec887dcf30d925f0258aa1",
+    "semantic_hash": ""
+  },
+  "mobile/src/services/telemetryService.js": {
+    "mtime": 1788820423.1279805,
+    "ast_hash": "e6417b04d769d93617396e26bf61c2cd",
+    "semantic_hash": ""
+  },
+  "plans/260908-35-app-installation-and-telemetry-tracking/plan.md": {
+    "mtime": 1788820621.9621007,
+    "ast_hash": "2fcdac87ff0150c6acf2db00366020d1",
     "semantic_hash": ""
   }
 }

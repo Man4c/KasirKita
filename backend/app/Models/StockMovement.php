@@ -14,6 +14,7 @@ class StockMovement extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'store_id',
         'product_id',
         'user_id',
         'supplier_id',
@@ -57,5 +58,10 @@ class StockMovement extends Model
     public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 }

@@ -13,6 +13,7 @@ class Supplier extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'store_id',
         'name',
         'contact_person',
         'phone',
@@ -24,6 +25,11 @@ class Supplier extends Model
         'notes',
         'is_active',
     ];
+
+    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Store::class);
+    }
 
     protected function casts(): array
     {

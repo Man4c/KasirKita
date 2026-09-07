@@ -13,12 +13,18 @@ class StockOpname extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'store_id',
         'opname_number',
         'user_id',
         'status',
         'notes',
         'conducted_at',
     ];
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
+    }
 
     protected function casts(): array
     {

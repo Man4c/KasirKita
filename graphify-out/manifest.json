@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788820627.2060628,
-    "ast_hash": "e5ea782fe2b969eb3ab7d3df5a85bf6c",
+    "mtime": 1788823456.45887,
+    "ast_hash": "b2d5735745ee90e3651b122abdef47dc",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -975,29 +975,29 @@
     "semantic_hash": "25a307335c0719bc9a91b3f7babd186d"
   },
   "backend/app/Models/CashFlow.php": {
-    "mtime": 1788151468.186233,
-    "ast_hash": "311638914e97f0bae2fae337c7301620",
+    "mtime": 1788823280.3263814,
+    "ast_hash": "e3c81c6c1bd4fee49f8cb345f9225954",
     "semantic_hash": ""
   },
   "backend/app/Models/Category.php": {
-    "mtime": 1788622660.8700154,
-    "ast_hash": "a89369a8db2a5bbee3e55e6797711bae",
+    "mtime": 1788823203.3040779,
+    "ast_hash": "9eb57898b2a2b97a3703979b112c49f7",
     "semantic_hash": ""
   },
   "backend/app/Models/Product.php": {
-    "mtime": 1788187655.3215,
-    "ast_hash": "6ac3e1c066040b97ebd1bc60c426f1f2",
+    "mtime": 1788823184.8115125,
+    "ast_hash": "a5295b9dab0aeb2a7094ba56792732e0",
     "semantic_hash": ""
   },
   "backend/app/Models/StockMovement.php": {
-    "mtime": 1788151457.4162617,
-    "ast_hash": "afba2404b1df695314a73bfc27c9de70",
+    "mtime": 1788823263.523117,
+    "ast_hash": "abf9cd3a7102345453f6274490f826c8",
     "semantic_hash": ""
   },
   "backend/app/Models/StockOpname.php": {
-    "mtime": 1787998728.489552,
-    "ast_hash": "0658b070ad85659bc879aac9670665d3",
-    "semantic_hash": "0658b070ad85659bc879aac9670665d3"
+    "mtime": 1788823269.5142727,
+    "ast_hash": "435441cf86297f4b43341a5ed8176512",
+    "semantic_hash": ""
   },
   "backend/app/Models/StockOpnameItem.php": {
     "mtime": 1788148319.6856523,
@@ -1005,8 +1005,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/Transaction.php": {
-    "mtime": 1788504737.1018522,
-    "ast_hash": "26e69204a9e7759f400dd54c6c8abe42",
+    "mtime": 1788823251.0818727,
+    "ast_hash": "3765702ea135455161d34287bd79638d",
     "semantic_hash": ""
   },
   "backend/app/Models/TransactionItem.php": {
@@ -1015,8 +1015,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/User.php": {
-    "mtime": 1788152053.2620277,
-    "ast_hash": "6583feaa25da02ee5ddab5c6e610f0e7",
+    "mtime": 1788823172.3187394,
+    "ast_hash": "bf31ed0d376d7cd68fe9c0c418802cd7",
     "semantic_hash": ""
   },
   "backend/app/Providers/AppServiceProvider.php": {
@@ -1595,13 +1595,13 @@
     "semantic_hash": ""
   },
   "backend/app/Models/ProductUnitConversion.php": {
-    "mtime": 1788187664.0210216,
-    "ast_hash": "c0daacc05c918f0d3e9ecf7487f5f31d",
+    "mtime": 1788823193.7005575,
+    "ast_hash": "a68aa4801d402f694dd991bba83d5b19",
     "semantic_hash": ""
   },
   "backend/app/Models/Unit.php": {
-    "mtime": 1788622666.434656,
-    "ast_hash": "93383d94a7d1d3c8402bcafadadac0f1",
+    "mtime": 1788823216.5061696,
+    "ast_hash": "d39912373d8e87cf0cacd315f3c9bb0e",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_08_31_000001_create_units_and_product_unit_conversions_tables.php": {
@@ -1660,8 +1660,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/Customer.php": {
-    "mtime": 1788150454.7661912,
-    "ast_hash": "8152547076dc97dd43616be6c3ad0ce7",
+    "mtime": 1788823221.6584013,
+    "ast_hash": "a1b40827c26ec82b75c8da6a0334164b",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_08_31_042649_create_customers_table.php": {
@@ -1690,8 +1690,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/Supplier.php": {
-    "mtime": 1788151448.4178793,
-    "ast_hash": "b2811bfb07d8623f5d0eb1dfb6d3202d",
+    "mtime": 1788823229.077,
+    "ast_hash": "7e30349f9f32e6ed810791f411bf0059",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_08_31_044311_create_suppliers_table.php": {
@@ -1760,8 +1760,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/Discount.php": {
-    "mtime": 1788168481.691931,
-    "ast_hash": "922d762713e0b47ab2bdb21570673eeb",
+    "mtime": 1788823233.9015856,
+    "ast_hash": "0bd6ccaa10c342f86323296601894e3e",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_08_31_092647_create_discounts_table.php": {
@@ -2045,8 +2045,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/TaxAndFee.php": {
-    "mtime": 1788258192.972598,
-    "ast_hash": "1c9299bd1f0b80f1bfed657d52406430",
+    "mtime": 1788823239.5523403,
+    "ast_hash": "f111589a740ed336f5e987581ea2968d",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_01_182500_create_taxes_and_fees_table.php": {
@@ -2105,8 +2105,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/StoreSetting.php": {
-    "mtime": 1788684275.7461889,
-    "ast_hash": "421bdb4bd922141801685dabfead4022",
+    "mtime": 1788823297.5570982,
+    "ast_hash": "5b02da9ef88639c2bf924839c5b6cf7b",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_02_051850_create_store_settings_table.php": {
@@ -2880,8 +2880,8 @@
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_08_000001_create_app_installations_table.php": {
-    "mtime": 1788820245.42924,
-    "ast_hash": "6d69c02171b5d2ffa34efd5be8669b94",
+    "mtime": 1788820739.898336,
+    "ast_hash": "e885274c6ff55a76ad587974cef49265",
     "semantic_hash": ""
   },
   "backend/tests/Feature/AppTelemetryTest.php": {
@@ -2902,6 +2902,26 @@
   "plans/260908-35-app-installation-and-telemetry-tracking/plan.md": {
     "mtime": 1788820621.9621007,
     "ast_hash": "2fcdac87ff0150c6acf2db00366020d1",
+    "semantic_hash": ""
+  },
+  "backend/app/Models/Store.php": {
+    "mtime": 1788823154.490995,
+    "ast_hash": "31a387fa13b0e40f5d8f8800767cc96c",
+    "semantic_hash": ""
+  },
+  "backend/database/migrations/2026_09_08_000002_create_stores_and_add_multi_tenant_to_tables.php": {
+    "mtime": 1788823364.2964969,
+    "ast_hash": "1f404529439c0560918e61b0c6eaed0c",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/StoreMultiTenantTest.php": {
+    "mtime": 1788823395.979549,
+    "ast_hash": "38ad00142318dca66564f242d367dd89",
+    "semantic_hash": ""
+  },
+  "plans/260908-36-multi-tenant-dan-lisensi-toko/plan.md": {
+    "mtime": 1788823449.8208137,
+    "ast_hash": "97a007e7fe3e5a9ea7c99684be108a83",
     "semantic_hash": ""
   }
 }

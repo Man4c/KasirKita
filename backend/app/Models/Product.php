@@ -15,6 +15,7 @@ class Product extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'store_id',
         'category_id',
         'base_unit_id',
         'default_pos_unit_id',
@@ -55,6 +56,7 @@ class Product extends Model
         static::created(function ($product) {
             if (! $product->conversions()->where('is_base', true)->exists()) {
                 $product->conversions()->create([
+                    'store_id' => $product->store_id,
                     'unit_id' => $product->base_unit_id,
                     'conversion_factor' => 1.0000,
                     'sku_barcode' => $product->sku_barcode,
@@ -63,6 +65,11 @@ class Product extends Model
                 ]);
             }
         });
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 
     public function category(): BelongsTo

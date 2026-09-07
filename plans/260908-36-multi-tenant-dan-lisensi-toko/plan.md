@@ -49,7 +49,7 @@ Transformasi arsitektur **KasirKita POS** dari *single-store* menjadi **Multi-Te
 
 | Phase | Description | Status |
 |---|---|---|
-| 1 | **Skema Database Multi-Tenant & Migrasi Atomik Toko #1**: Pembuatan tabel `stores`, penambahan kolom `store_id` berindeks ke seluruh tabel bisnis, migrasi data lama ke toko perdana, dan migrasi constraint `UNIQUE(store_id, barcode)`. | pending |
+| 1 | **Skema Database Multi-Tenant & Migrasi Atomik Toko #1**: Pembuatan tabel `stores`, penambahan kolom `store_id` berindeks ke seluruh tabel bisnis, migrasi data lama ke toko perdana, dan migrasi constraint `UNIQUE(store_id, barcode)`. | completed |
 | 2 | **Global Scope `BelongsToStore` & Subscription Guard**: Pembuatan Trait Laravel untuk penyaringan otomatis seluruh query model bisnis, penanganan data baru otomatis, serta middleware `EnsureStoreActive` untuk memblokir transaksi pada toko berstatus `expired`. | pending |
 | 3 | **Backend Auth, Registrasi Toko & Template Data Bawaan**: Endpoint `POST /api/auth/register-store` dengan auto-provisioning template data awal (satuan, kategori) sesuai kategori usaha (Ritel, F&B, Jasa), serta webhook alert Telegram pemilik. | pending |
 | 4 | **Sistem Lisensi & Generator Kode Aktivasi**: Tabel `license_keys`, generator kode serial acak berformat `KK-PRO-XXXX-XXXX`, dan endpoint `POST /api/store/activate-license` untuk klaim lisensi di HP toko. | pending |

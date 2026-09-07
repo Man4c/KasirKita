@@ -14,6 +14,7 @@ class Transaction extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'store_id',
         'invoice_number',
         'offline_id',
         'user_id',
@@ -78,5 +79,10 @@ class Transaction extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 }

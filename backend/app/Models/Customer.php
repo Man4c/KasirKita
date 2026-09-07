@@ -13,6 +13,7 @@ class Customer extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'store_id',
         'name',
         'phone',
         'email',
@@ -21,6 +22,11 @@ class Customer extends Model
         'notes',
         'is_active',
     ];
+
+    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Store::class);
+    }
 
     protected function casts(): array
     {

@@ -28,6 +28,7 @@ class User extends Authenticatable
         'role',
         'phone',
         'is_active',
+        'store_id',
     ];
 
     /**
@@ -83,5 +84,10 @@ class User extends Authenticatable
     public function stockMovements(): HasMany
     {
         return $this->hasMany(StockMovement::class);
+    }
+
+    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 }

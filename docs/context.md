@@ -18,16 +18,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
-- **Perencanaan Sistem Multi-Tenant, Registrasi Toko Baru & Manajemen Lisensi Toko (`Plan 36`)**:
+- **Implementasi Sistem Multi-Tenant & Lisensi Toko (`Plan 36`)**:
   - Transformasi arsitektur KasirKita POS dari *single-store* menjadi **Multi-Tenant (SaaS)** untuk mendukung penjualan jemput bola (*door-to-door*) ke toko-toko secara aman dan terisolasi.
-  - *Prinsip Isolasi Data*: Menggunakan row-level multi-tenancy (`store_id` UUID) dan Laravel Global Scope `BelongsToStore` di seluruh model bisnis (`products`, `transactions`, `customers`, dll) dan service layer.
-  - *Kemandirian Barcode per Toko*: Mengubah constraint dari `UNIQUE(barcode)` menjadi composite `UNIQUE(store_id, barcode)` agar produk dengan barcode identik di toko berbeda tidak saling bentrok.
-  - *Migrasi Atomik Toko #1*: Mengelompokkan seluruh data existing ke toko default perdana (`KasirKita Mart & Cafe`) tanpa downtime atau risiko kehilangan data.
-  - *Sistem Lisensi Hibrida (The Pragmatic Hybrid)*: Status toko terbagi menjadi `trial` (otomatis 14 hari penuh), `active` (diaktifkan manual/permanen via kode serial voucher di HP atau Web Superadmin), dan `expired` (fitur transaksi & cetak struk terkunci).
-  - *Pemisahan Peran Pengelolaan*:
-    1. **Web Superadmin (`/superadmin`)**: Manajemen daftar toko lengkap, filter status, analitik, dan generator kode lisensi.
-    2. **Telegram Bot Webhook**: Murni sebagai radar pemberitahuan instan (*push alert*) saat ada pendaftaran toko baru di lapangan.
-    3. **Kode Lisensi (Serial Key)**: Aktivasi instan di HP toko saat pembeli membayar tunai di tempat.
+  - *Status Fase 1 (Selesai)*:
+    - Membuat model `Store.php` dan migrasi `2026_09_08_000002_create_stores_and_add_multi_tenant_to_tables.php`.
+    - Menambahkan kolom `store_id` (foreignUuid) berindeks ke 14 tabel bisnis: `users`, `products`, `product_unit_conversions`, `categories`, `units`, `customers`, `suppliers`, `discounts`, `taxes_and_fees`, `transactions`, `stock_movements`, `stock_opnames`, `cash_flows`, dan `store_settings`.
+    - Memperbarui 14 model Eloquent dengan `$fillable = ['store_id', ...]` dan relasi `store(): BelongsTo`.
+    - Migrasi atomik data existing ke toko perdana (`KasirKita Mart & Cafe`, owner: `Admin`) pada database live Supabase tanpa downtime dan tanpa kehilangan baris data.
+    - Mengubah constraint barcode dari global `UNIQUE(sku_barcode)` menjadi composite `UNIQUE(store_id, sku_barcode)` di `products` dan `product_unit_conversions`.
+    - Automated test suite backend lolos 100% (94 tests, 440 assertions, termasuk test isolasi barcode antar toko di `StoreMultiTenantTest.php`).
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.

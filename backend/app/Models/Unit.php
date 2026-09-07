@@ -13,10 +13,16 @@ class Unit extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'store_id',
         'name',
         'symbol',
         'description',
     ];
+
+    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Store::class);
+    }
 
     public function products(): HasMany
     {

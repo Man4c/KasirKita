@@ -15,6 +15,7 @@ class TaxAndFee extends Model
     protected $table = 'taxes_and_fees';
 
     protected $fillable = [
+        'store_id',
         'name',
         'type', // PERCENTAGE, FIXED
         'value',
@@ -25,6 +26,11 @@ class TaxAndFee extends Model
         'is_active',
         'description',
     ];
+
+    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Store::class);
+    }
 
     protected function casts(): array
     {

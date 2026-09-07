@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StoreSetting extends Model
 {
@@ -34,6 +35,7 @@ class StoreSetting extends Model
     ];
 
     protected $fillable = [
+        'store_id',
         'name',
         'address',
         'phone',
@@ -88,5 +90,10 @@ class StoreSetting extends Model
         }
 
         return $merged;
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 }

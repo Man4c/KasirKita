@@ -12,6 +12,7 @@ class CashFlow extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'store_id',
         'user_id',
         'transaction_id',
         'supplier_id',
@@ -43,5 +44,10 @@ class CashFlow extends Model
     public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 }
