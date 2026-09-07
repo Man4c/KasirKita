@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\PosController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StockOpnameController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\StoreLicenseController;
 use App\Http\Controllers\Api\StoreSettingController;
 use App\Http\Controllers\Api\TaxAndFeeController;
 use App\Http\Controllers\Api\UnitController;
@@ -88,11 +89,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/taxes-and-fees', [TaxAndFeeController::class, 'index']);
     Route::get('/taxes-and-fees/{id}', [TaxAndFeeController::class, 'show']);
 
-    // Store Settings API (Read for all staff)
+    // Store Settings & License API (Read for all staff)
     Route::get('/settings/store', [StoreSettingController::class, 'getStore']);
+    Route::get('/store/license', [StoreLicenseController::class, 'status']);
 
     // Owner-Only Administrative & Financial Routes
     Route::middleware('role:owner')->group(function () {
+        // Store License Activation
+        Route::post('/store/activate-license', [StoreLicenseController::class, 'activate']);
+
         // Store Settings update & restore
         Route::put('/settings/store', [StoreSettingController::class, 'updateStore']);
         Route::put('/settings/preferences', [StoreSettingController::class, 'updatePreferences']);

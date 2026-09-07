@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LicenseKey;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
@@ -10,6 +11,41 @@ use Throwable;
 
 class TelegramNotificationService
 {
+    /**
+     * Send a notification when a store activates a license key.
+     */
+    public function notifyLicenseActivated(Store $store, User $user, LicenseKey $licenseKey): bool
+    {
+        $botToken = config('services.telegram.bot_token');
+        $chatId = config('services.telegram.admin_chat_id');
+
+        if (empty($botToken) || empty($chatId)) {
+            return false;
+        }
+
+        $activatedAt = now()->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i');
+
+        $durationLabel = match ($licenseKey->duration_type) {
+            'lifetime' => '💎 SEUMUR HIDUP (LIFETIME)',
+            '1_year' => '📅 1 TAHUN (' . ($licenseKey->duration_days ?? 365) . ' Hari)',
+            '1_month' => '🗓️ 1 BULAN (' . ($licenseKey->duration_days ?? 30) . ' Hari)',
+            default => strtoupper($licenseKey->duration_type),
+        };
+
+        $notes = $licenseKey->notes ? "\n📝 *Catatan:* " . $this->escapeMarkdown($licenseKey->notes) : '';
+
+        $text = "🎉 *LISENSI KASIRKITA AKTIF!*\n"
+            . "━━━━━━━━━━━━━━━━━━━━\n"
+            . "🏪 *Toko:* " . $this->escapeMarkdown($store->name) . "\n"
+            . "👤 *Aktivator:* " . $this->escapeMarkdown($user->name) . " (" . $this->escapeMarkdown($user->email) . ")\n"
+            . "🔑 *Serial Key:* `{$licenseKey->license_key}`\n"
+            . "⏱️ *Paket:* {$durationLabel}{$notes}\n"
+            . "━━━━━━━━━━━━━━━━━━━━\n"
+            . "⏰ *Waktu:* {$activatedAt} WIB";
+
+        return $this->sendMessage($text);
+    }
+
     /**
      * Send a notification when a new store registers.
      */

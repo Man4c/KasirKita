@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788824151.1639676,
-    "ast_hash": "101843071a9897874ccf9c7f689e61cc",
+    "mtime": 1788824480.4884095,
+    "ast_hash": "b87ccedc9ba3451ba2138083fd97b0ab",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -965,8 +965,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/AuthController.php": {
-    "mtime": 1788823817.581961,
-    "ast_hash": "57443faaca1ec89698fbd3ee3c6169dd",
+    "mtime": 1788824422.2930853,
+    "ast_hash": "8e17c25eaa138e00ade4adbf684231f6",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Controller.php": {
@@ -1095,9 +1095,9 @@
     "semantic_hash": "e3887ebee464a1b2c014cb16696a2b50"
   },
   "backend/config/services.php": {
-    "mtime": 1787675219.0,
-    "ast_hash": "918f5aa09663e375f4570301a91548f9",
-    "semantic_hash": "918f5aa09663e375f4570301a91548f9"
+    "mtime": 1788824400.7834766,
+    "ast_hash": "596cacd1dbf17af8542fab59feedf410",
+    "semantic_hash": ""
   },
   "backend/config/session.php": {
     "mtime": 1787675219.0,
@@ -1185,8 +1185,8 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1788823697.8776934,
-    "ast_hash": "28087e0a04960b30abb3e10f8e942aaa",
+    "mtime": 1788824427.7906127,
+    "ast_hash": "7ea71d08656acebff089c631f7f63c3f",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -2920,8 +2920,8 @@
     "semantic_hash": ""
   },
   "plans/260908-36-multi-tenant-dan-lisensi-toko/plan.md": {
-    "mtime": 1788824143.8351583,
-    "ast_hash": "b14984b961303c1f66e827a8a78e0cdf",
+    "mtime": 1788824472.1595285,
+    "ast_hash": "ad10fc9b27d16c76b3b0f155cf5f81ea",
     "semantic_hash": ""
   },
   "backend/app/Http/Middleware/EnsureStoreActive.php": {
@@ -2947,6 +2947,26 @@
   "backend/tests/Feature/MultiTenantScopeAndGuardTest.php": {
     "mtime": 1788824085.2250855,
     "ast_hash": "7430556c6eee6b0f3cbac53767586408",
+    "semantic_hash": ""
+  },
+  "backend/app/Services/StoreProvisioningService.php": {
+    "mtime": 1788824415.4054685,
+    "ast_hash": "0074eb2d61958be7351b4464b334abd3",
+    "semantic_hash": ""
+  },
+  "backend/app/Services/TelegramNotificationService.php": {
+    "mtime": 1788824405.2757154,
+    "ast_hash": "4622fa1eb4d6bb49d947056760632629",
+    "semantic_hash": ""
+  },
+  "backend/database/migrations/2026_09_08_000003_scope_category_and_unit_uniqueness_per_store.php": {
+    "mtime": 1788824389.1961484,
+    "ast_hash": "3b135ef19c7d50506369b5fd78eef6b9",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/StoreRegistrationTest.php": {
+    "mtime": 1788824436.1786373,
+    "ast_hash": "bf4940ea24fd605c3dccbf33b01f42c6",
     "semantic_hash": ""
   }
 }

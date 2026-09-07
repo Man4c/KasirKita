@@ -22,6 +22,7 @@ class Store extends Model
         'subscription_status',
         'trial_ends_at',
         'activated_at',
+        'subscription_expires_at',
         'license_key',
         'notes',
     ];
@@ -29,6 +30,7 @@ class Store extends Model
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'activated_at' => 'datetime',
+        'subscription_expires_at' => 'datetime',
     ];
 
     /**
@@ -64,6 +66,14 @@ class Store extends Model
     }
 
     /**
+     * License keys redeemed by this store.
+     */
+    public function licenseKeys(): HasMany
+    {
+        return $this->hasMany(LicenseKey::class, 'redeemed_by_store_id');
+    }
+
+    /**
      * Store identity and receipt settings.
      */
     public function setting(): HasOne
@@ -72,12 +82,12 @@ class Store extends Model
     }
 
     /**
-     * Check if store subscription is active (either lifetime active or within trial period).
+     * Check if store subscription is active (either lifetime active, valid subscription period, or within trial).
      */
     public function isActive(): bool
     {
         if ($this->subscription_status === 'active') {
-            return true;
+            return $this->subscription_expires_at === null || $this->subscription_expires_at->isFuture();
         }
 
         if ($this->subscription_status === 'trial') {
@@ -96,11 +106,15 @@ class Store extends Model
     }
 
     /**
-     * Check if store trial has expired without activation.
+     * Check if store subscription or trial has expired without activation.
      */
     public function isExpired(): bool
     {
         if ($this->subscription_status === 'expired') {
+            return true;
+        }
+
+        if ($this->subscription_status === 'active' && $this->subscription_expires_at && $this->subscription_expires_at->isPast()) {
             return true;
         }
 

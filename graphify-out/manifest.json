@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788824480.4884095,
-    "ast_hash": "b87ccedc9ba3451ba2138083fd97b0ab",
+    "mtime": 1788824820.2753625,
+    "ast_hash": "d26e056b05a10d133658b16878102837",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -965,8 +965,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/AuthController.php": {
-    "mtime": 1788824422.2930853,
-    "ast_hash": "8e17c25eaa138e00ade4adbf684231f6",
+    "mtime": 1788824703.3306384,
+    "ast_hash": "b90c169d2c9991adb4c0d5217b0232e6",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Controller.php": {
@@ -1185,8 +1185,8 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1788824427.7906127,
-    "ast_hash": "7ea71d08656acebff089c631f7f63c3f",
+    "mtime": 1788824714.976164,
+    "ast_hash": "dde703872b8465d75965765f248755b5",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -2905,8 +2905,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/Store.php": {
-    "mtime": 1788823154.490995,
-    "ast_hash": "31a387fa13b0e40f5d8f8800767cc96c",
+    "mtime": 1788824667.0417955,
+    "ast_hash": "5891d1cdf01db5054f4d34160027fca7",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_08_000002_create_stores_and_add_multi_tenant_to_tables.php": {
@@ -2920,8 +2920,8 @@
     "semantic_hash": ""
   },
   "plans/260908-36-multi-tenant-dan-lisensi-toko/plan.md": {
-    "mtime": 1788824472.1595285,
-    "ast_hash": "ad10fc9b27d16c76b3b0f155cf5f81ea",
+    "mtime": 1788824778.330835,
+    "ast_hash": "deac4dc64d9ac774746e841d3349d7a6",
     "semantic_hash": ""
   },
   "backend/app/Http/Middleware/EnsureStoreActive.php": {
@@ -2955,8 +2955,8 @@
     "semantic_hash": ""
   },
   "backend/app/Services/TelegramNotificationService.php": {
-    "mtime": 1788824405.2757154,
-    "ast_hash": "4622fa1eb4d6bb49d947056760632629",
+    "mtime": 1788824673.5332239,
+    "ast_hash": "e94114f7e0843f9eaeea0bb1be68d652",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_08_000003_scope_category_and_unit_uniqueness_per_store.php": {
@@ -2967,6 +2967,36 @@
   "backend/tests/Feature/StoreRegistrationTest.php": {
     "mtime": 1788824436.1786373,
     "ast_hash": "bf4940ea24fd605c3dccbf33b01f42c6",
+    "semantic_hash": ""
+  },
+  "backend/app/Console/Commands/GenerateLicenseKeysCommand.php": {
+    "mtime": 1788824682.9059405,
+    "ast_hash": "184f10f8211e661c62deb78c95894a8d",
+    "semantic_hash": ""
+  },
+  "backend/app/Http/Controllers/Api/StoreLicenseController.php": {
+    "mtime": 1788824687.9020684,
+    "ast_hash": "3dbd601914d30dc26e3addc11c3b6fba",
+    "semantic_hash": ""
+  },
+  "backend/app/Models/LicenseKey.php": {
+    "mtime": 1788824658.4805622,
+    "ast_hash": "4aeb7936f9964726090ee5667bb13721",
+    "semantic_hash": ""
+  },
+  "backend/app/Services/LicenseService.php": {
+    "mtime": 1788824679.852013,
+    "ast_hash": "d74712cfa12cf6de53d401cd98b799e7",
+    "semantic_hash": ""
+  },
+  "backend/database/migrations/2026_09_08_000004_create_license_keys_table.php": {
+    "mtime": 1788824643.251741,
+    "ast_hash": "60a0b94c0ee9d8388745299ecc3f0865",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/LicenseActivationTest.php": {
+    "mtime": 1788824742.854018,
+    "ast_hash": "554bb33469cfc2be89472fb67facdf57",
     "semantic_hash": ""
   }
 }

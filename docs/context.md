@@ -44,6 +44,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Melakukan migrasi database `2026_09_08_000003_scope_category_and_unit_uniqueness_per_store.php` di cloud Supabase dan SQLite untuk memastikan kategori dan satuan unik per `store_id` (`UNIQUE(store_id, slug)` dan `UNIQUE(store_id, symbol)`).
     - Mengembangkan `TelegramNotificationService.php` yang mengirimkan push alert instan terformat rapi ke Telegram pengembang/pemilik aplikasi saat ada pendaftaran toko baru (non-blocking fail-safe).
     - Membuat automated test suite `StoreRegistrationTest.php` (5 tests, 54 assertions). Total 105 tests di backend lolos 100% (517 assertions).
+  - *Status Fase 4 (Selesai)*:
+    - Membuat migrasi `2026_09_08_000004_create_license_keys_table.php` (tabel `license_keys` dengan kolom `license_key`, `status`, `duration_type`, `duration_days`, `redeemed_by_store_id`, `redeemed_by_user_id`, `redeemed_at`, `notes`, serta penambahan kolom `subscription_expires_at` pada tabel `stores`). Migrasi berhasil dieksekusi di database cloud Supabase (`sdtnczxxlkgormclplzz`) dan lokal SQLite.
+    - Membuat model `LicenseKey.php` dengan scope `available`, `redeemed`, relasi ke `Store` & `User`, dan helper methods.
+    - Memperbarui model `Store.php` (`$fillable`, `$casts`, relasi `licenseKeys()`, penyempurnaan helper `isActive()` dan `isExpired()` untuk menangani lisensi bertenggat waktu maupun permanen seumur hidup).
+    - Membuat service `LicenseService.php`: generator kode acak unik format `KK-PRO-XXXX-XXXX` menggunakan karakter Crockford Base32 (anti-salah baca, bebas karakter ambigu 0/O/1/I), generator batch dengan batas keamanan, algoritma normalisasi input yang toleran terhadap format ketikan pengguna di HP, dan eksekusi aktivasi lisensi atomik (`lockForUpdate` + `DB::transaction`).
+    - Membuat Artisan Console Command `GenerateLicenseKeysCommand.php` (`php artisan license:generate`) untuk pembuatan serial key instan via CLI dengan opsi durasi, jumlah batch, dan catatan distribusi.
+    - Membuat controller `StoreLicenseController.php` dengan endpoint:
+      - `GET /api/store/license`: Informasi status langganan toko, sisa hari aktif/trial, dan serial key aktif.
+      - `POST /api/store/activate-license`: Klaim lisensi toko khusus role `owner` dengan proteksi kode duplikat, invalid, dan revoked.
+    - Menghubungkan notifikasi aktivasi instan ke Telegram pengembang melalui `TelegramNotificationService::notifyLicenseActivated()`.
+    - Membuat automated test suite komprehensif `LicenseActivationTest.php` (8 tests, 40 assertions). Seluruh test suite backend lolos 100% (**114 tests passed, 558 assertions, 0 errors**).
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.
