@@ -39,6 +39,7 @@ Route::get('/app/download', [AppTelemetryController::class, 'download']);
 
 // Authentication Routes
 Route::prefix('auth')->group(function () {
+    Route::post('/register-store', [AuthController::class, 'registerStore']);
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\StoreProvisioningService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,53 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     use ApiResponse;
+
+    /**
+     * Register a new store and owner account with initial template data.
+     */
+    public function registerStore(Request $request, StoreProvisioningService $provisioningService): JsonResponse
+    {
+        $validated = $request->validate([
+            'store_name' => ['required', 'string', 'max:255'],
+            'business_type' => ['required', 'string', 'in:retail,fnb,service,other'],
+            'owner_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'max:50'],
+            'password' => ['required', 'string', 'min:6'],
+            'address' => ['nullable', 'string'],
+        ]);
+
+        $result = $provisioningService->registerStore($validated);
+        $user = $result['user'];
+        $store = $result['store'];
+        $token = $result['token'];
+
+        $storeData = [
+            'id' => $store->id,
+            'name' => $store->name,
+            'business_type' => $store->business_type,
+            'subscription_status' => $store->subscription_status,
+            'trial_ends_at' => $store->trial_ends_at?->toIso8601String(),
+            'activated_at' => $store->activated_at?->toIso8601String(),
+            'is_active' => $store->isActive(),
+            'is_trial' => $store->isTrial(),
+            'is_expired' => $store->isExpired(),
+        ];
+
+        return $this->successResponse([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'phone' => $user->phone,
+                'store_id' => $user->store_id,
+                'store' => $storeData,
+            ],
+            'token' => $token,
+            'token_type' => 'Bearer',
+        ], 'Pendaftaran toko berhasil! Selamat datang di KasirKita POS.', 201);
+    }
 
     /**
      * Handle user login and generate Sanctum token.

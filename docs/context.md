@@ -34,6 +34,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Memperbarui `AuthController.php` (`login` & `me`) untuk menyertakan objek data toko lengkap (`subscription_status`, `is_active`, `is_trial`, `is_expired`, `trial_ends_at`).
     - Memperbarui `UserController.php` agar manajemen kasir dan staf terisolasi per toko secara ketat.
     - Membuat automated test suite komprehensif `MultiTenantScopeAndGuardTest.php` (6 tests, 23 assertions). Seluruh test suite backend lolos 100% (100 tests, 463 assertions, 0 errors).
+  - *Status Fase 3 (Selesai)*:
+    - Membuat endpoint publik `POST /api/auth/register-store` untuk pendaftaran mandiri toko baru langsung dari aplikasi mobile / web.
+    - Membuat service `StoreProvisioningService.php`: secara atomik (`DB::transaction`) membuat toko berstatus `trial` 14 hari, membuat akun user Owner, mengaitkan owner ke toko, membuat `StoreSetting` bawaan, dan meng-generate access token Sanctum.
+    - Menyiapkan sistem auto-provisioning template data bisnis awal sesuai jenis usaha:
+      - **Ritel (`retail`)**: Kategori `Makanan & Minuman`, `Kebutuhan Pokok`, `Snack & Camilan`, `Perawatan & Kebersihan`, `Rokok & Tembakau`.
+      - **F&B (`fnb`)**: Kategori `Makanan Utama`, `Minuman & Kopi`, `Camilan & Dessert`, `Menu Paket`, `Topping & Tambahan`, serta satuan `Porsi`, `Cup`, `Gelas`.
+      - **Jasa (`service`)**: Kategori `Layanan Utama`, `Paket Layanan`, `Sparepart & Bahan`, serta satuan `Sesi`, `Jam`.
+    - Melakukan migrasi database `2026_09_08_000003_scope_category_and_unit_uniqueness_per_store.php` di cloud Supabase dan SQLite untuk memastikan kategori dan satuan unik per `store_id` (`UNIQUE(store_id, slug)` dan `UNIQUE(store_id, symbol)`).
+    - Mengembangkan `TelegramNotificationService.php` yang mengirimkan push alert instan terformat rapi ke Telegram pengembang/pemilik aplikasi saat ada pendaftaran toko baru (non-blocking fail-safe).
+    - Membuat automated test suite `StoreRegistrationTest.php` (5 tests, 54 assertions). Total 105 tests di backend lolos 100% (517 assertions).
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.
