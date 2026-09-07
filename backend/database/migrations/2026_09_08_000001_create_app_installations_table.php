@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamp('first_installed_at')->nullable()->index()->comment('First time app was launched on device');
             $table->timestamp('last_active_at')->nullable()->index()->comment('Most recent heartbeat ping from device');
             $table->unsignedInteger('total_pings')->default(1)->comment('Cumulative app opens / heartbeat count');
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->comment('Associated logged-in user if available');
+            $table->foreignUuid('user_id')->nullable()->constrained('users')->nullOnDelete()->comment('Associated logged-in user if available');
             $table->json('metadata')->nullable()->comment('Extra telemetry parameters (locale, orientation, etc.)');
             $table->timestamps();
         });
