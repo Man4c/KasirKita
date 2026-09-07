@@ -189,7 +189,7 @@ export const updaterService = {
 
   /**
    * Launch native Android package installer for downloaded APK.
-   * Uses Android Scoped Storage compliant Content URI.
+   * Uses Android Scoped Storage compliant Content URI with FLAG_ACTIVITY_NEW_TASK.
    *
    * @param {string} localFileUri - Absolute file:// URI in device cache
    */
@@ -209,9 +209,12 @@ export const updaterService = {
       throw new Error('Gagal membuat Content URI untuk berkas instalasi.');
     }
 
+    // Intent.FLAG_GRANT_READ_URI_PERMISSION (1) | Intent.FLAG_ACTIVITY_NEW_TASK (268435456)
+    const installFlags = 1 | 268435456;
+
     return IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
       data: contentUri,
-      flags: 1, // Intent.FLAG_GRANT_READ_URI_PERMISSION
+      flags: installFlags,
       type: 'application/vnd.android.package-archive',
     });
   },

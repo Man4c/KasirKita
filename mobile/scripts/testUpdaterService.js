@@ -270,7 +270,7 @@ async function runAsyncTests() {
     assert.strictEqual(mockContentUriCalled, 'file:///data/cache/KasirKita-update.apk');
     assert.strictEqual(mockIntentLaunched.action, 'android.intent.action.VIEW');
     assert.strictEqual(mockIntentLaunched.options.type, 'application/vnd.android.package-archive');
-    assert.strictEqual(mockIntentLaunched.options.flags, 1);
+    assert.strictEqual(mockIntentLaunched.options.flags, 1 | 268435456);
     passed++;
     console.log('  ✅ installApk creates Content URI and triggers Android IntentLauncher');
   } catch (e) {

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import {
   ArrowUpCircle,
@@ -20,6 +21,7 @@ import {
   Sparkles,
   RefreshCw,
   ShieldCheck,
+  ExternalLink,
 } from 'lucide-react-native';
 import { updaterService, formatBytes } from '../../services/updaterService';
 
@@ -104,6 +106,17 @@ export default function UpdatePromptModal({
     } catch (err) {
       setErrorMessage(err?.message || 'Gagal membuka penginstal aplikasi Android.');
       setDownloadState('ERROR');
+    }
+  };
+
+  const handleOpenInBrowser = async () => {
+    if (updateInfo?.apkUrl) {
+      try {
+        await Linking.openURL(updateInfo.apkUrl);
+      } catch {
+        setErrorMessage('Tidak dapat membuka peramban web pada perangkat.');
+        setDownloadState('ERROR');
+      }
     }
   };
 
@@ -330,33 +343,61 @@ export default function UpdatePromptModal({
             )}
 
             {downloadState === 'READY' && (
-              <TouchableOpacity
-                style={styles.installBtn}
-                onPress={() => handleLaunchInstaller()}
-                activeOpacity={0.8}
-              >
-                <CheckCircle2 size={18} color="#ffffff" style={{ marginRight: 8 }} />
-                <Text style={styles.installBtnText}>Pasang Pembaruan Sekarang</Text>
-              </TouchableOpacity>
+              <View style={styles.readyActionColumn}>
+                <TouchableOpacity
+                  style={styles.installBtn}
+                  onPress={() => handleLaunchInstaller()}
+                  activeOpacity={0.8}
+                >
+                  <CheckCircle2 size={18} color="#ffffff" style={{ marginRight: 8 }} />
+                  <Text style={styles.installBtnText}>Pasang Pembaruan Sekarang</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.browserFallbackBtn}
+                  onPress={handleOpenInBrowser}
+                  activeOpacity={0.8}
+                >
+                  <ExternalLink size={16} color="#38bdf8" style={{ marginRight: 6 }} />
+                  <Text style={styles.browserFallbackBtnText}>Pasang / Unduh Lewat Browser</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.fallbackHelpText}>
+                  Tips: Jika dialog instalasi tidak muncul otomatis di layar HP, ketuk tombol browser di atas. Data transaksi Anda tetap aman.
+                </Text>
+              </View>
             )}
 
             {downloadState === 'ERROR' && (
-              <View style={styles.footerButtonRow}>
-                <TouchableOpacity
-                  style={styles.cancelBtn}
-                  onPress={onClose}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.cancelBtnText}>Tutup</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.primaryBtn}
-                  onPress={handleStartDownload}
-                  activeOpacity={0.8}
-                >
-                  <RefreshCw size={18} color="#ffffff" style={{ marginRight: 8 }} />
-                  <Text style={styles.primaryBtnText}>Coba Lagi</Text>
-                </TouchableOpacity>
+              <View style={{ width: '100%', gap: 10 }}>
+                <View style={styles.footerButtonRow}>
+                  <TouchableOpacity
+                    style={styles.cancelBtn}
+                    onPress={onClose}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.cancelBtnText}>Tutup</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.primaryBtn}
+                    onPress={handleStartDownload}
+                    activeOpacity={0.8}
+                  >
+                    <RefreshCw size={18} color="#ffffff" style={{ marginRight: 8 }} />
+                    <Text style={styles.primaryBtnText}>Coba Lagi</Text>
+                  </TouchableOpacity>
+                </View>
+
+                {Boolean(updateInfo?.apkUrl) && (
+                  <TouchableOpacity
+                    style={styles.browserFallbackBtn}
+                    onPress={handleOpenInBrowser}
+                    activeOpacity={0.8}
+                  >
+                    <ExternalLink size={16} color="#38bdf8" style={{ marginRight: 6 }} />
+                    <Text style={styles.browserFallbackBtnText}>Unduh Manual via Browser</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             )}
           </View>
@@ -788,5 +829,36 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
+  },
+  readyActionColumn: {
+    width: '100%',
+    gap: 8,
+  },
+  browserFallbackBtn: {
+    width: '100%',
+    minHeight: 46,
+    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.3)',
+    borderRadius: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  browserFallbackBtnText: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Medium',
+    color: '#38bdf8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  fallbackHelpText: {
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+    color: '#71717a',
+    textAlign: 'center',
+    marginTop: 2,
+    lineHeight: 16,
+    includeFontPadding: false,
   },
 });
