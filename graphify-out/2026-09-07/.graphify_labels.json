@@ -395,5 +395,9 @@
   "393": "expo-font",
   "394": "expo-sharing",
   "395": "react",
-  "396": "react-native-safe-area-context"
+  "396": "react-native-safe-area-context",
+  "397": "source-lock.mjs",
+  "398": "isScreenReaderOnlyTextStyle",
+  "399": "checkElementRadialSpotlightDOM",
+  "400": "axios"
 }

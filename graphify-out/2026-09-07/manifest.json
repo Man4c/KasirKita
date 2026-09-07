@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788754340.246377,
-    "ast_hash": "7c21a2a6d0ecc8e5c76b4cdd7ef1bb4f",
+    "mtime": 1788755968.8231533,
+    "ast_hash": "9d7f3652020c2c7c1c666f9da3f7c73b",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1370,8 +1370,8 @@
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788753308.6672544,
-    "ast_hash": "02e33bf255476daf520eeff405bc301a",
+    "mtime": 1788755158.1705377,
+    "ast_hash": "6989142c4b605da06ff8d510c884a0c2",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -2630,18 +2630,18 @@
     "semantic_hash": ""
   },
   "mobile/scripts/testUpdaterService.js": {
-    "mtime": 1788684972.4706786,
-    "ast_hash": "4cd242f9c2bc34f36baef92080565610",
+    "mtime": 1788755168.227508,
+    "ast_hash": "2bea93eb91e2bd78005d577c3ac8bb12",
     "semantic_hash": ""
   },
   "mobile/src/components/updater/UpdatePromptModal.js": {
-    "mtime": 1788687786.5117059,
-    "ast_hash": "6bc05d838a40b371755b7b2fb8e18a12",
+    "mtime": 1788755219.6478474,
+    "ast_hash": "aac4f106d405f8ef21bf9c53b1087dc7",
     "semantic_hash": ""
   },
   "mobile/src/services/updaterService.js": {
-    "mtime": 1788684901.0108979,
-    "ast_hash": "25e9dc0d9c914b3aa08d5534c37cfb21",
+    "mtime": 1788755165.19639,
+    "ast_hash": "c2815050c5d0b67194011bf71ca144e6",
     "semantic_hash": ""
   },
   "mobile/eas.json": {
