@@ -18,6 +18,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
+- **Implementasi Logo Resmi Launcher KasirKita POS (Konsep A - Vibrant KasirKita Red)**:
+  - Mengganti seluruh aset ikon default Expo (`icon.png`, `android-icon-foreground.png`, `android-icon-background.png`, `android-icon-monochrome.png`, `splash-icon.png`, `favicon.png`) dengan logo resmi KasirKita POS beresolusi tinggi 1024x1024 px.
+  - *Desain Konsep A*: Memadukan kanopi ritel UMKM, terminal kasir modern dengan layar transaksi bercentang emerald, laci kas, serta lencana timbul "POS" berlatar merah gradasi KasirKita (`#E11D48` ➔ `#9F1239`).
+  - *Kepatuhan Safe Zone Android*: Seluruh elemen visual terkonsentrasi di zona aman pusat 60% (radius 1150px dari 4096px), menjamin logo tampil presisi dan tidak terpotong pada berbagai bentuk launcher OEM (lingkaran Pixel/Samsung, squircle Xiaomi MIUI, maupun rounded rect Oppo/Vivo).
+  - *Warna Adaptive Latar*: Memperbarui `adaptiveIcon.backgroundColor` di `mobile/app.json` dari `#E6F4FE` menjadi `#E11D48`.
+
 - **Perencanaan Optimasi Ukuran Unduhan APK (~20 - 28 MB) (`plans/260907-34-mobile-apk-size-optimization/plan.md`)**:
   - Menyusun rencana modular 7 fase untuk merampingkan berkas APK KasirKita POS dari ~108 MB ke ~20-28 MB (penurunan > 70%) secara 100% gratis.
   - Strategi utama: mengeliminasi 3 arsitektur CPU tidak terpakai (`x86`, `x86_64`, `armeabi-v7a`) dengan mengisolasi `arm64-v8a` via `expo-build-properties`, serta mengaktifkan R8/ProGuard code & resource shrinking.
