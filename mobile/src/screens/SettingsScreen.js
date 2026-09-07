@@ -369,11 +369,11 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
   };
 
   const handleOpenWhatsAppSupport = () => {
-    const phone = '6281234567890';
+    const phone = '6285696343551';
     const text = encodeURIComponent('Halo Tim Bantuan KasirKita, saya butuh panduan terkait operasional kasir / printer.');
     const url = `https://wa.me/${phone}?text=${text}`;
     Linking.openURL(url).catch(() => {
-      showAlert('Bantuan CS', 'Silakan hubungi WhatsApp CS KasirKita di: +62 812-3456-7890');
+      showAlert('Bantuan CS', 'Silakan hubungi WhatsApp CS KasirKita di: 0856-9634-3551 (+62 856-9634-3551)');
     });
   };
 
