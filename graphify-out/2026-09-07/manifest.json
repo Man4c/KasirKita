@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788755968.8231533,
-    "ast_hash": "9d7f3652020c2c7c1c666f9da3f7c73b",
+    "mtime": 1788776161.0252368,
+    "ast_hash": "d673c6f18e344b070acd34d8387aeaa1",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2857,6 +2857,11 @@
   ".agents/skills/supabase/references/skill-feedback.md": {
     "mtime": 1788690795.10699,
     "ast_hash": "c9fa098e2ec8bdce9d6a0f8a64d2c6c0",
+    "semantic_hash": ""
+  },
+  "plans/260907-34-mobile-apk-size-optimization/plan.md": {
+    "mtime": 1788776131.841547,
+    "ast_hash": "04e9c5355916893bf766a68311bbda13",
     "semantic_hash": ""
   }
 }

@@ -399,5 +399,8 @@
   "397": "source-lock.mjs",
   "398": "isScreenReaderOnlyTextStyle",
   "399": "checkElementRadialSpotlightDOM",
-  "400": "axios"
+  "400": "axios",
+  "401": "isScreenReaderOnlyTextStyle",
+  "402": "generate_app_icon.py",
+  "403": "Adaptation Strategies"
 }
