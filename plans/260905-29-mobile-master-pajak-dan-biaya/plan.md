@@ -1,7 +1,7 @@
 ---
 title: Master Pajak & Biaya Layanan di Mobile
 description: Perancangan dan implementasi modul manajemen Master Pajak (PPN/PB1 Resto) & Biaya Layanan (Service Charge, Admin Fee, Packaging) pada aplikasi Mobile (React Native), mencakup katalog pajak & biaya, formulir tambah/edit dengan skema persentase dan nominal, filter trigger transaksi (Semua, Bawa Pulang, Pilihan Kasir, Khusus Pembayaran), saklar status aktif/nonaktif instan, integrasi peluncur di Action Hub Dashboard, serta sinkronisasi reaktif dengan modal kasir POS dan keranjang checkout.
-status: pending
+status: completed
 priority: P1
 effort: 6h
 tags: [mobile, master-pajak, tax, service-fee, pricing, offline-first, rbac, pos-sync]
