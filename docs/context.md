@@ -18,7 +18,9 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
-## Progress Terbaru
+- **Perencanaan Optimasi Ukuran Unduhan APK (~20 - 28 MB) (`plans/260907-34-mobile-apk-size-optimization/plan.md`)**:
+  - Menyusun rencana modular 7 fase untuk merampingkan berkas APK KasirKita POS dari ~108 MB ke ~20-28 MB (penurunan > 70%) secara 100% gratis.
+  - Strategi utama: mengeliminasi 3 arsitektur CPU tidak terpakai (`x86`, `x86_64`, `armeabi-v7a`) dengan mengisolasi `arm64-v8a` via `expo-build-properties`, serta mengaktifkan R8/ProGuard code & resource shrinking.
 
 - **Rilis & Publikasi OTA Update APK KasirKita POS v1.3.1 Build 5 (Pembaruan Nomor CS WhatsApp, Izin Native Installer, & In-App Auto-Updater)**:
   - *Perubahan Konfigurasi & Nomor CS*: Memperbarui nomor kontak layanan bantuan CS WhatsApp di `mobile/src/screens/SettingsScreen.js` menjadi `085696343551` (`https://wa.me/6285696343551` dan label tampilan `0856-9634-3551`).
