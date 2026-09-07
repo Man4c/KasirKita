@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToStore;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StockOpname extends Model
 {
-    use HasFactory, HasUuids;
+    use BelongsToStore, HasFactory, HasUuids;
 
     protected $fillable = [
         'store_id',
@@ -20,11 +21,6 @@ class StockOpname extends Model
         'notes',
         'conducted_at',
     ];
-
-    public function store(): BelongsTo
-    {
-        return $this->belongsTo(Store::class);
-    }
 
     protected function casts(): array
     {

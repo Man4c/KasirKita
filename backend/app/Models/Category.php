@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToStore;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use BelongsToStore, HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'store_id',
@@ -18,11 +19,6 @@ class Category extends Model
         'slug',
         'description',
     ];
-
-    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Store::class);
-    }
 
     public function products(): HasMany
     {

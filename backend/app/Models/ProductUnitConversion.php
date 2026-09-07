@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToStore;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductUnitConversion extends Model
 {
-    use HasFactory, HasUuids;
+    use BelongsToStore, HasFactory, HasUuids;
 
     protected $fillable = [
         'store_id',
@@ -37,10 +38,5 @@ class ProductUnitConversion extends Model
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
-    }
-
-    public function store(): BelongsTo
-    {
-        return $this->belongsTo(Store::class);
     }
 }

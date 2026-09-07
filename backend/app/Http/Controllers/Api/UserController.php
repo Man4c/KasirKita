@@ -24,6 +24,10 @@ class UserController extends Controller
                 $q->where('payment_status', 'COMPLETED');
             }], 'total_amount');
 
+        if ($request->user() && ! empty($request->user()->store_id)) {
+            $query->where('store_id', $request->user()->store_id);
+        }
+
         // Search by name, email, or phone
         if ($search = $request->query('search')) {
             $operator = DB::getDriverName() === 'pgsql' ? 'ilike' : 'like';
@@ -69,6 +73,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
+            'store_id' => $request->user()?->store_id,
             'name' => $validated['name'],
             'email' => strtolower($validated['email']),
             'phone' => $validated['phone'] ?? null,
@@ -83,16 +88,22 @@ class UserController extends Controller
     /**
      * Display the specified user details and sales performance.
      */
-    public function show(string $id): JsonResponse
+    public function show(Request $request, string $id): JsonResponse
     {
-        $user = User::withCount('transactions as transactions_count')
+        $query = User::withCount('transactions as transactions_count')
             ->withSum(['transactions as total_sales' => function ($q) {
                 $q->where('payment_status', 'COMPLETED');
             }], 'total_amount')
             ->with(['transactions' => function ($q) {
                 $q->orderBy('created_at', 'desc')->limit(5);
             }])
-            ->find($id);
+            ->where('id', $id);
+
+        if ($request->user() && ! empty($request->user()->store_id)) {
+            $query->where('store_id', $request->user()->store_id);
+        }
+
+        $user = $query->first();
 
         if (! $user) {
             return $this->errorResponse('Pengguna tidak ditemukan.', 404);
@@ -106,7 +117,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        $user = User::find($id);
+        $user = $this->findUserForTenant($request, $id);
 
         if (! $user) {
             return $this->errorResponse('Pengguna tidak ditemukan.', 404);
@@ -150,7 +161,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request, string $id): JsonResponse
     {
-        $user = User::find($id);
+        $user = $this->findUserForTenant($request, $id);
 
         if (! $user) {
             return $this->errorResponse('Pengguna tidak ditemukan.', 404);
@@ -162,7 +173,11 @@ class UserController extends Controller
         }
 
         // Prevent deleting the sole remaining owner
-        if ($user->isOwner() && User::where('role', 'owner')->count() <= 1) {
+        $ownerCountQuery = User::where('role', 'owner');
+        if ($request->user() && ! empty($request->user()->store_id)) {
+            $ownerCountQuery->where('store_id', $request->user()->store_id);
+        }
+        if ($user->isOwner() && $ownerCountQuery->count() <= 1) {
             return $this->errorResponse('Tidak dapat menghapus satu-satunya akun pemilik toko.', 400);
         }
 
@@ -178,7 +193,7 @@ class UserController extends Controller
      */
     public function resetPassword(Request $request, string $id): JsonResponse
     {
-        $user = User::find($id);
+        $user = $this->findUserForTenant($request, $id);
 
         if (! $user) {
             return $this->errorResponse('Pengguna tidak ditemukan.', 404);
@@ -203,7 +218,7 @@ class UserController extends Controller
      */
     public function toggleStatus(Request $request, string $id): JsonResponse
     {
-        $user = User::find($id);
+        $user = $this->findUserForTenant($request, $id);
 
         if (! $user) {
             return $this->errorResponse('Pengguna tidak ditemukan.', 404);
@@ -224,5 +239,19 @@ class UserController extends Controller
         $statusText = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
 
         return $this->successResponse($user, "Akun staf berhasil {$statusText}.");
+    }
+
+    /**
+     * Find a user scoped to the tenant's store_id if applicable.
+     */
+    private function findUserForTenant(Request $request, string $id): ?User
+    {
+        $query = User::where('id', $id);
+
+        if ($request->user() && ! empty($request->user()->store_id)) {
+            $query->where('store_id', $request->user()->store_id);
+        }
+
+        return $query->first();
     }
 }

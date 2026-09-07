@@ -73,7 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Point of Sales (POS) API (Sales operational for all staff)
     Route::prefix('pos')->group(function () {
-        Route::post('/checkout', [PosController::class, 'checkout']);
+        Route::post('/checkout', [PosController::class, 'checkout'])->middleware('store.active');
         Route::get('/transactions', [PosController::class, 'index']);
         Route::get('/transactions/{id}', [PosController::class, 'show']);
     });
@@ -152,7 +152,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/stock-opnames/{id}/complete', [StockOpnameController::class, 'complete']);
 
         // POS Void / Cancel Transaction
-        Route::post('/pos/transactions/{id}/cancel', [PosController::class, 'cancel']);
+        Route::post('/pos/transactions/{id}/cancel', [PosController::class, 'cancel'])->middleware('store.active');
 
         // Finance & Reports API
         Route::prefix('finance')->group(function () {

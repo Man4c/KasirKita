@@ -38,6 +38,21 @@ class AuthController extends Controller
         $deviceName = $validated['device_name'] ?? 'kasirkita-client';
         $token = $user->createToken($deviceName)->plainTextToken;
 
+        $storeData = null;
+        if ($user->store) {
+            $storeData = [
+                'id' => $user->store->id,
+                'name' => $user->store->name,
+                'business_type' => $user->store->business_type,
+                'subscription_status' => $user->store->subscription_status,
+                'trial_ends_at' => $user->store->trial_ends_at?->toIso8601String(),
+                'activated_at' => $user->store->activated_at?->toIso8601String(),
+                'is_active' => $user->store->isActive(),
+                'is_trial' => $user->store->isTrial(),
+                'is_expired' => $user->store->isExpired(),
+            ];
+        }
+
         return $this->successResponse([
             'user' => [
                 'id' => $user->id,
@@ -45,6 +60,8 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'phone' => $user->phone,
+                'store_id' => $user->store_id,
+                'store' => $storeData,
             ],
             'token' => $token,
             'token_type' => 'Bearer',
@@ -58,12 +75,29 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
+        $storeData = null;
+        if ($user->store) {
+            $storeData = [
+                'id' => $user->store->id,
+                'name' => $user->store->name,
+                'business_type' => $user->store->business_type,
+                'subscription_status' => $user->store->subscription_status,
+                'trial_ends_at' => $user->store->trial_ends_at?->toIso8601String(),
+                'activated_at' => $user->store->activated_at?->toIso8601String(),
+                'is_active' => $user->store->isActive(),
+                'is_trial' => $user->store->isTrial(),
+                'is_expired' => $user->store->isExpired(),
+            ];
+        }
+
         return $this->successResponse([
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
             'role' => $user->role,
             'phone' => $user->phone,
+            'store_id' => $user->store_id,
+            'store' => $storeData,
         ], 'Profil pengguna berhasil diambil.');
     }
 

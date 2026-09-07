@@ -25,8 +25,15 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Menambahkan kolom `store_id` (foreignUuid) berindeks ke 14 tabel bisnis: `users`, `products`, `product_unit_conversions`, `categories`, `units`, `customers`, `suppliers`, `discounts`, `taxes_and_fees`, `transactions`, `stock_movements`, `stock_opnames`, `cash_flows`, dan `store_settings`.
     - Memperbarui 14 model Eloquent dengan `$fillable = ['store_id', ...]` dan relasi `store(): BelongsTo`.
     - Migrasi atomik data existing ke toko perdana (`KasirKita Mart & Cafe`, owner: `Admin`) pada database live Supabase tanpa downtime dan tanpa kehilangan baris data.
-    - Mengubah constraint barcode dari global `UNIQUE(sku_barcode)` menjadi composite `UNIQUE(store_id, sku_barcode)` di `products` dan `product_unit_conversions`.
     - Automated test suite backend lolos 100% (94 tests, 440 assertions, termasuk test isolasi barcode antar toko di `StoreMultiTenantTest.php`).
+  - *Status Fase 2 (Selesai)*:
+    - Membuat Global Scope `StoreScope.php` dan Trait `BelongsToStore.php` yang otomatis menyaring seluruh query model bisnis (`products`, `conversions`, `categories`, `customers`, `suppliers`, `discounts`, `taxes`, `transactions`, `stock_movements`, `stock_opnames`, `cash_flows`, `store_settings`) berdasarkan `auth()->user()->store_id`.
+    - Mengintegrasikan hook otomatis pada `static::creating` untuk menyuntikkan `store_id` pada setiap entitas baru tanpa perlu penulisan manual di controller.
+    - Mendukung model bersama (*shared model*) seperti `Unit` di mana `store_id IS NULL` (satuan standar sistem seperti pcs, kg, liter) tetap dapat diakses oleh seluruh penyewa (*tenants*), sementara satuan kustom terisolasi per toko.
+    - Membuat middleware `EnsureStoreActive.php` (alias `store.active` di `bootstrap/app.php`) yang memblokir transaksi penjualan POS (`POST /api/pos/checkout`, `cancel`) saat status toko `expired` dengan kode error standar `STORE_SUBSCRIPTION_EXPIRED` (403), namun tetap mengizinkan akses baca riwayat data lama (*read-only*).
+    - Memperbarui `AuthController.php` (`login` & `me`) untuk menyertakan objek data toko lengkap (`subscription_status`, `is_active`, `is_trial`, `is_expired`, `trial_ends_at`).
+    - Memperbarui `UserController.php` agar manajemen kasir dan staf terisolasi per toko secara ketat.
+    - Membuat automated test suite komprehensif `MultiTenantScopeAndGuardTest.php` (6 tests, 23 assertions). Seluruh test suite backend lolos 100% (100 tests, 463 assertions, 0 errors).
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToStore;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Discount extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use BelongsToStore, HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'store_id',
@@ -28,11 +29,6 @@ class Discount extends Model
         'usage_count',
         'is_active',
     ];
-
-    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Store::class);
-    }
 
     protected function casts(): array
     {
