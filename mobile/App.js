@@ -39,6 +39,7 @@ import UserManagementScreen from './src/screens/UserManagementScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
 import { updaterService } from './src/services/updaterService';
+import { telemetryService } from './src/services/telemetryService';
 import UpdatePromptModal from './src/components/updater/UpdatePromptModal';
 
 // Intercept and eliminate transition: padding injected by web safe area libraries
@@ -138,6 +139,15 @@ function MainApp() {
         orientationService.applyPreference(saved.orientationPref);
       }
     }).catch(() => {});
+  }, []);
+
+  // Silent background device installation & active user telemetry
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      telemetryService.recordDevicePing().catch(() => {});
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Silent background app update check on startup

@@ -36,7 +36,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test:backup": "node scripts/testBackupService.js",
-    "test:updater": "node scripts/testUpdaterService.js"
+    "test:updater": "node scripts/testUpdaterService.js",
+    "test:telemetry": "node scripts/testTelemetryService.js"
   },
   "private": true
 }

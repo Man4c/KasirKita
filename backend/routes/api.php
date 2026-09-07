@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AppTelemetryController;
 use App\Http\Controllers\Api\AppVersionController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
@@ -33,6 +34,8 @@ Route::get('/health', function () {
 
 // App Version & Remote Update (Public for mobile client self-check)
 Route::get('/app/version', [AppVersionController::class, 'getVersion']);
+Route::post('/app/device-ping', [AppTelemetryController::class, 'ping']);
+Route::get('/app/download', [AppTelemetryController::class, 'download']);
 
 // Authentication Routes
 Route::prefix('auth')->group(function () {

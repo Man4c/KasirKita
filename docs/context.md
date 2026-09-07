@@ -18,6 +18,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
+- **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
+  - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.
+  - *Database & Model Backend*: Membuat tabel `app_installations` dan model `AppInstallation.php` dengan field `installation_id` (UUID unik per perangkat), `device_model`, `brand`, `os_name`, `os_version`, `app_version`, `first_installed_at`, `last_active_at`, `total_pings`, dan `user_id`.
+  - *Backend API*: Menambahkan endpoint publik `POST /api/app/device-ping` (idempotent activation & heartbeat updater) dan `GET /api/app/download` (redirect counter ke berkas APK). Lolos 100% automated test suite (`AppTelemetryTest.php`, 6 tests, 32 assertions).
+  - *Mobile Telemetry Service (`telemetryService.js`)*: Menghasilkan ID unik persisten yang disimpan di `SecureStore` (bertahan saat aplikasi di-update), mengekstrak metadata perangkat runtime (model HP, OS, versi app), dan dilengkapi mekanisme throttling 3 jam serta *silent fail-safe* non-blocking.
+  - *Akses Eksklusif Pemilik*: Data dipantau secara rahasia dan mandiri langsung dari **Supabase Table Editor** (`app_installations`), menjamin dashboard kasir toko tetap 100% bersih untuk transaksi jualan dan stok.
+
 - **Implementasi Logo Resmi Launcher KasirKita POS (Konsep A - Vibrant KasirKita Red + Tipografi "Kasir Kita")**:
   - Mengganti seluruh aset ikon default Expo (`icon.png`, `android-icon-foreground.png`, `android-icon-background.png`, `android-icon-monochrome.png`, `splash-icon.png`, `favicon.png`) dengan logo resmi KasirKita POS beresolusi tinggi 1024x1024 px.
   - *Desain Konsep A*: Memadukan kanopi ritel UMKM, terminal kasir modern dengan layar transaksi bercentang emerald, laci kas, lencana timbul "POS", serta teks brand resmi **"Kasir Kita"** dalam font Poppins Extra Bold (`@expo-google-fonts/poppins`) dengan drop-shadow lembut berlatar merah gradasi KasirKita (`#E11D48` ➔ `#9F1239`).
