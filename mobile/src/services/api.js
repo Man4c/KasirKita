@@ -67,7 +67,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
-  timeout: 10000,
+  timeout: 60000,
 });
 
 // Request Interceptor: Attach Token and Dynamic Base URL
@@ -120,7 +120,7 @@ export const setOnUnauthorizedHandler = (handler) => {
   onUnauthorizedHandler = handler;
 };
 
-// Response Interceptor: 401 Handler
+// Response Interceptor: 401 & Friendly Timeout/Network Error Handler
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -129,6 +129,10 @@ api.interceptors.response.use(
       if (typeof onUnauthorizedHandler === 'function') {
         onUnauthorizedHandler();
       }
+    } else if (error.code === 'ECONNABORTED' || error.message?.toLowerCase().includes('timeout')) {
+      error.message = 'Koneksi membutuhkan waktu lebih lama (server sedang bangun). Silakan ketuk tombol lagi.';
+    } else if (error.message === 'Network Error') {
+      error.message = 'Gagal terhubung ke server cloud. Pastikan internet aktif atau coba beberapa detik lagi.';
     }
     return Promise.reject(error);
   }
