@@ -18,6 +18,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
+- **Perencanaan Sistem Multi-Tenant, Registrasi Toko Baru & Manajemen Lisensi Toko (`Plan 36`)**:
+  - Transformasi arsitektur KasirKita POS dari *single-store* menjadi **Multi-Tenant (SaaS)** untuk mendukung penjualan jemput bola (*door-to-door*) ke toko-toko secara aman dan terisolasi.
+  - *Prinsip Isolasi Data*: Menggunakan row-level multi-tenancy (`store_id` UUID) dan Laravel Global Scope `BelongsToStore` di seluruh model bisnis (`products`, `transactions`, `customers`, dll) dan service layer.
+  - *Kemandirian Barcode per Toko*: Mengubah constraint dari `UNIQUE(barcode)` menjadi composite `UNIQUE(store_id, barcode)` agar produk dengan barcode identik di toko berbeda tidak saling bentrok.
+  - *Migrasi Atomik Toko #1*: Mengelompokkan seluruh data existing ke toko default perdana (`KasirKita Mart & Cafe`) tanpa downtime atau risiko kehilangan data.
+  - *Sistem Lisensi Hibrida (The Pragmatic Hybrid)*: Status toko terbagi menjadi `trial` (otomatis 14 hari penuh), `active` (diaktifkan manual/permanen via kode serial voucher di HP atau Web Superadmin), dan `expired` (fitur transaksi & cetak struk terkunci).
+  - *Pemisahan Peran Pengelolaan*:
+    1. **Web Superadmin (`/superadmin`)**: Manajemen daftar toko lengkap, filter status, analitik, dan generator kode lisensi.
+    2. **Telegram Bot Webhook**: Murni sebagai radar pemberitahuan instan (*push alert*) saat ada pendaftaran toko baru di lapangan.
+    3. **Kode Lisensi (Serial Key)**: Aktivasi instan di HP toko saat pembeli membayar tunai di tempat.
+
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.
   - *Database & Model Backend*: Membuat tabel `app_installations` dan model `AppInstallation.php` dengan field `installation_id` (UUID unik per perangkat), `device_model`, `brand`, `os_name`, `os_version`, `app_version`, `first_installed_at`, `last_active_at`, `total_pings`, dan `user_id`.
