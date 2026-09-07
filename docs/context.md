@@ -20,7 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Setup & Deployment Cloud Backend (Render Singapore), Database Supabase PostgreSQL, & Native Database Cron (`pg_cron` + `pg_net`)**:
+- **Rilis & Publikasi OTA Update APK KasirKita POS v1.3.1 (Pembaruan Nomor CS WhatsApp & In-App Auto-Updater)**:
+  - *Perubahan Konfigurasi & Nomor CS*: Memperbarui nomor kontak layanan bantuan CS WhatsApp di `mobile/src/screens/SettingsScreen.js` menjadi `085696343551` (`https://wa.me/6285696343551` dan label tampilan `0856-9634-3551`).
+  - *Bump Versi Aplikasi*: Menaikkan versi di `mobile/app.json` dan `mobile/package.json` menjadi `1.3.1` dengan Android `versionCode: 4` dan iOS `buildNumber: "4"`.
+  - *Perbaikan Root Endpoint Backend*: Memperbaiki route `/` di `backend/routes/web.php` agar mengembalikan respons JSON status online (`{"success":true,"app":"KasirKita POS API","status":"online"}`) menggantikan view `welcome.blade.php`, menyelesaikan galat 500 saat membuka domain utama backend di browser.
+  - *EAS Standalone Cloud Build*: Berhasil menyelesaikan build APK Android standalone `v1.3.1` melalui EAS Build (Build ID: `fee64dff-17f9-480e-967e-c983db9f4f7d`, ukuran ~103.1 MB).
+  - *Publikasi Database OTA*: Mengupdate kolom `app_version` pada tabel `store_settings` di Supabase PostgreSQL dengan metadata versi `1.3.1`, URL unduhan APK Expo, dan ringkasan pembaruan.
+  - *Verifikasi Endpoint Live*: Memvalidasi `GET https://kasirkita.onrender.com/api/app/version` yang kini secara live mengembalikan data v1.3.1, sehingga modal prompt in-app updater (`UpdatePromptModal`) otomatis muncul di setiap perangkat kasir v1.3.0 untuk update sekali klik tanpa kehilangan data transaksi lokal.
   - *Migrasi Server ke Region Singapore*: Backend Docker Laravel berhasil dideploy di Render Region Singapore (`https://kasirkita.onrender.com`), memangkas latensi database dari ~5.2 detik (Oregon) menjadi ~2.6 detik karena berlokasi di region yang sama dengan Supabase Singapore (`ap-southeast-1`).
   - *Database Supabase PostgreSQL*: Berhasil menghubungkan Render ke Supabase via IPv4 Connection Pooler Session Mode (`aws-0-ap-southeast-1.pooler.supabase.com:5432`), memigrasikan 25 tabel database kasir secara utuh.
   - *Akun Toko & Data Awal*: Dibuatkan akun toko `KasirKita` dengan role Owner (`admin@kasirkita.com` / `password123`) serta master data standar satuan (9 UoM) dan kategori produk.
