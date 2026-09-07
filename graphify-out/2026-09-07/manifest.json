@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788776161.0252368,
-    "ast_hash": "d673c6f18e344b070acd34d8387aeaa1",
+    "mtime": 1788778601.5233269,
+    "ast_hash": "1ba7c2262c5496cf82506960bda51ea4",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1370,8 +1370,8 @@
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788755158.1705377,
-    "ast_hash": "6989142c4b605da06ff8d510c884a0c2",
+    "mtime": 1788778491.566589,
+    "ast_hash": "13afe3129691859d8dd5c1bca5dc3d01",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -1515,33 +1515,33 @@
     "semantic_hash": ""
   },
   "mobile/assets/android-icon-background.png": {
-    "mtime": 1788000262.73876,
-    "ast_hash": "2d65569cc0e2afdcea0af9f9902d4173",
+    "mtime": 1788778473.57728,
+    "ast_hash": "04545bbe63d3c85ad786c214cc82379f",
     "semantic_hash": ""
   },
   "mobile/assets/android-icon-foreground.png": {
-    "mtime": 1788000262.7409363,
-    "ast_hash": "72e71a9c846c6aa4ae32476641a00e18",
+    "mtime": 1788778473.2964883,
+    "ast_hash": "52c3f721511ef79a7aa6e308f3abfb7a",
     "semantic_hash": ""
   },
   "mobile/assets/android-icon-monochrome.png": {
-    "mtime": 1788000262.7419953,
-    "ast_hash": "1e097dab989759fc0b69440092ca22cd",
+    "mtime": 1788778473.6594715,
+    "ast_hash": "c68046d6b10b5e8ae1d00098109a0ce0",
     "semantic_hash": ""
   },
   "mobile/assets/favicon.png": {
-    "mtime": 1788000262.7435834,
-    "ast_hash": "d9f444efbdfbe7931aa93beada07318a",
+    "mtime": 1788778473.7671392,
+    "ast_hash": "1fe943f31e8f6df9521aa15c62f7f2ef",
     "semantic_hash": ""
   },
   "mobile/assets/icon.png": {
-    "mtime": 1788000262.7486508,
-    "ast_hash": "cb975bba2216ce10a60e6c0ffe9941a2",
+    "mtime": 1788778473.2026272,
+    "ast_hash": "9ab4c1df5c115a18a40677cb97e0a261",
     "semantic_hash": ""
   },
   "mobile/assets/splash-icon.png": {
-    "mtime": 1788000262.7507231,
-    "ast_hash": "97dae5a0e62ad8551d8a31897b425e63",
+    "mtime": 1788778473.7586708,
+    "ast_hash": "52c3f721511ef79a7aa6e308f3abfb7a",
     "semantic_hash": ""
   },
   "web/public/favicon.svg": {
@@ -2862,6 +2862,11 @@
   "plans/260907-34-mobile-apk-size-optimization/plan.md": {
     "mtime": 1788776131.841547,
     "ast_hash": "04e9c5355916893bf766a68311bbda13",
+    "semantic_hash": ""
+  },
+  "mobile/scripts/generate_app_icon.py": {
+    "mtime": 1788778466.9615254,
+    "ast_hash": "2b85f3feda736610e6fd8e0599bdd77c",
     "semantic_hash": ""
   }
 }

@@ -18,10 +18,10 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
-- **Implementasi Logo Resmi Launcher KasirKita POS (Konsep A - Vibrant KasirKita Red)**:
+- **Implementasi Logo Resmi Launcher KasirKita POS (Konsep A - Vibrant KasirKita Red + Tipografi "Kasir Kita")**:
   - Mengganti seluruh aset ikon default Expo (`icon.png`, `android-icon-foreground.png`, `android-icon-background.png`, `android-icon-monochrome.png`, `splash-icon.png`, `favicon.png`) dengan logo resmi KasirKita POS beresolusi tinggi 1024x1024 px.
-  - *Desain Konsep A*: Memadukan kanopi ritel UMKM, terminal kasir modern dengan layar transaksi bercentang emerald, laci kas, serta lencana timbul "POS" berlatar merah gradasi KasirKita (`#E11D48` ➔ `#9F1239`).
-  - *Kepatuhan Safe Zone Android*: Seluruh elemen visual terkonsentrasi di zona aman pusat 60% (radius 1150px dari 4096px), menjamin logo tampil presisi dan tidak terpotong pada berbagai bentuk launcher OEM (lingkaran Pixel/Samsung, squircle Xiaomi MIUI, maupun rounded rect Oppo/Vivo).
+  - *Desain Konsep A*: Memadukan kanopi ritel UMKM, terminal kasir modern dengan layar transaksi bercentang emerald, laci kas, lencana timbul "POS", serta teks brand resmi **"Kasir Kita"** dalam font Poppins Extra Bold (`@expo-google-fonts/poppins`) dengan drop-shadow lembut berlatar merah gradasi KasirKita (`#E11D48` ➔ `#9F1239`).
+  - *Kepatuhan Safe Zone Android*: Seluruh elemen visual (kanopi, terminal kasir, laci kas, dan teks "Kasir Kita") terkonsentrasi di zona aman pusat 60% (radius 1150px dari kanvas 4096px, X: 311-712, Y: 201-743 pada 1024px), menjamin logo dan teks tampil presisi serta 100% bebas dari pemotongan pada berbagai bentuk launcher OEM (lingkaran Pixel/Samsung, squircle Xiaomi MIUI, maupun rounded rect Oppo/Vivo).
   - *Warna Adaptive Latar*: Memperbarui `adaptiveIcon.backgroundColor` di `mobile/app.json` dari `#E6F4FE` menjadi `#E11D48`.
 
 - **Perencanaan Optimasi Ukuran Unduhan APK (~20 - 28 MB) (`plans/260907-34-mobile-apk-size-optimization/plan.md`)**:

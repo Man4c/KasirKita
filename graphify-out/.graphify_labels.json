@@ -344,7 +344,6 @@
   "342": "plugins",
   "343": "updaterService.js",
   "344": "2026_09_05_153720_add_soft_deletes_to_categories_and_units_tables.php",
-  "345": "doctor.md",
   "346": "react",
   "347": "react-native",
   "348": "@react-native-community/datetimepicker",
@@ -359,7 +358,6 @@
   "357": "barcode-detector",
   "358": "Extract Flow",
   "359": "checkRadialSpotlight",
-  "360": "normalizeGitHubEvent",
   "361": "checkElementBorders",
   "362": "Impeccable Documenter",
   "363": "expo-document-picker",
@@ -395,12 +393,9 @@
   "393": "expo-font",
   "394": "expo-sharing",
   "395": "react",
-  "396": "react-native-safe-area-context",
   "397": "source-lock.mjs",
-  "398": "isScreenReaderOnlyTextStyle",
   "399": "checkElementRadialSpotlightDOM",
   "400": "axios",
   "401": "isScreenReaderOnlyTextStyle",
-  "402": "generate_app_icon.py",
-  "403": "Adaptation Strategies"
+  "402": "generate_app_icon.py"
 }
