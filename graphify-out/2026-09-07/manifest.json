@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788754340.246377,
-    "ast_hash": "7c21a2a6d0ecc8e5c76b4cdd7ef1bb4f",
+    "mtime": 1788686458.5042944,
+    "ast_hash": "07ea81cedaf83722623f6be6f9934457",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1195,9 +1195,9 @@
     "semantic_hash": "3c6ce2e6d16444282b24a9aa63885563"
   },
   "backend/routes/web.php": {
-    "mtime": 1788750777.9136748,
-    "ast_hash": "983a75ba8ab37a56d7234214ee5d7fc7",
-    "semantic_hash": ""
+    "mtime": 1787675219.0,
+    "ast_hash": "84625c52e743b1a4178bb27b7afb3615",
+    "semantic_hash": "84625c52e743b1a4178bb27b7afb3615"
   },
   "backend/tests/Feature/AuthApiTest.php": {
     "mtime": 1788319378.5356917,
@@ -1370,8 +1370,8 @@
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788753308.6672544,
-    "ast_hash": "02e33bf255476daf520eeff405bc301a",
+    "mtime": 1788574070.094516,
+    "ast_hash": "5d6a26e13b79dc0a537c43bf11df30a6",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788753316.0263042,
-    "ast_hash": "8d130d4c3721176b26a05995bd51b0b4",
+    "mtime": 1788684981.865669,
+    "ast_hash": "3def4ce8e64a2d6c3c8a133fb69dbd9f",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -1405,8 +1405,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/api.js": {
-    "mtime": 1788749179.307283,
-    "ast_hash": "3a4fe9aa9b7e0468ce08ad0eafac87a8",
+    "mtime": 1788618476.428011,
+    "ast_hash": "2aecce9f2f832514212b28b7149d9ad9",
     "semantic_hash": ""
   },
   "mobile/src/services/storage.js": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788753292.5430515,
-    "ast_hash": "7c875ed315dd3c7f438fbe237cbdf56b",
+    "mtime": 1788687801.8048923,
+    "ast_hash": "a59c05576748605d1a04a78844593a01",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {
@@ -2647,216 +2647,6 @@
   "mobile/eas.json": {
     "mtime": 1788685730.245028,
     "ast_hash": "60c2f875290b28cc2760bd8cb5683290",
-    "semantic_hash": ""
-  },
-  "backend/docker-entrypoint.sh": {
-    "mtime": 1788749275.63943,
-    "ast_hash": "e13360e781e19fb6835ae1c5e345dbdd",
-    "semantic_hash": ""
-  },
-  "skills-lock.json": {
-    "mtime": 1788690796.12111,
-    "ast_hash": "e91272810f292d0c9627f7d88c9a888d",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/CHANGELOG.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "fdd0ba418e6744556f0029ffb76711b1",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/SKILL.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "845c64575b6d28856ea6a9735a372225",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/_contributing.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "32c800fa6621705288dc651da22c9366",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/_sections.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "8547fba7fd9fae3b6be916c6f55b0f62",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/_template.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "74ec7e2bdd6c8ddbb354fcceec038bc2",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/advanced-full-text-search.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "327f8367de51b0982b963f2928184c35",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "413ba907ff4408d6fd3545f839101ebf",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/conn-idle-timeout.md": {
-    "mtime": 1788690795.0893033,
-    "ast_hash": "8bbe8b609d5241351672cefc19036db6",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/conn-limits.md": {
-    "mtime": 1788690795.0935955,
-    "ast_hash": "661b3efcf0e35136352b3923ff265d5c",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/conn-pooling.md": {
-    "mtime": 1788690795.0935955,
-    "ast_hash": "c90dab7d0ab47443b41f17d5bc9f04b3",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/conn-prepared-statements.md": {
-    "mtime": 1788690795.0935955,
-    "ast_hash": "b53eb9dea11d6da338a8b6f9e67a3622",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/data-batch-inserts.md": {
-    "mtime": 1788690795.0935955,
-    "ast_hash": "6801a3a2d414dfd6a4c79970a37e795d",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/data-n-plus-one.md": {
-    "mtime": 1788690795.0935955,
-    "ast_hash": "c3ed0702a116d654602120bd5cd7713e",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/data-pagination.md": {
-    "mtime": 1788690795.0956006,
-    "ast_hash": "59be210a420d34780949ce16d5b4a8d5",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/data-upsert.md": {
-    "mtime": 1788690795.0956006,
-    "ast_hash": "3ae132bce8b5368e1e4a426d55ca4567",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/lock-advisory.md": {
-    "mtime": 1788690795.0956006,
-    "ast_hash": "ff943eb307d8b6e12cc6ab2bcb6e2d18",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/lock-deadlock-prevention.md": {
-    "mtime": 1788690795.0956006,
-    "ast_hash": "685b04bcae3a0720e84f1507d243e959",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/lock-short-transactions.md": {
-    "mtime": 1788690795.0956006,
-    "ast_hash": "3c947d59e0359f3b236bf2ad1da52c61",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/lock-skip-locked.md": {
-    "mtime": 1788690795.0976062,
-    "ast_hash": "098d38542f44b656aa55923f06db74c1",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/monitor-explain-analyze.md": {
-    "mtime": 1788690795.0976062,
-    "ast_hash": "1fd19c373a0ff272129edd215a96e3a1",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md": {
-    "mtime": 1788690795.0976062,
-    "ast_hash": "2f0cab7f72ad9dfe2cba469aaaacc733",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md": {
-    "mtime": 1788690795.0976062,
-    "ast_hash": "25e738451079707ac54d21364b5538e1",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/query-composite-indexes.md": {
-    "mtime": 1788690795.0976062,
-    "ast_hash": "5017f09940ed04b5b3ad836e426d9084",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/query-covering-indexes.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "fd05c38771229d97f2d4065d0af0df70",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/query-index-types.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "e2395c6ef69ea2f147c9ab1d18c7f879",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/query-missing-indexes.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "786767ec677862bad060fc1b4ae0a94f",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/query-partial-indexes.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "249d8fccca68c332e946b499531f21d8",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/schema-constraints.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "476ca283cfda6c5517d94c25c41de775",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/schema-data-types.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "cd65e34969ebce0bce84f622f5072477",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "8b99b21a07cadd2d85c6c16f416b5464",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md": {
-    "mtime": 1788690795.0999932,
-    "ast_hash": "632ea53a0da6fe7651e354f3744d998e",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/schema-partitioning.md": {
-    "mtime": 1788690795.1029792,
-    "ast_hash": "0f2fe9016bf9aa79dd30d7d6a4a03358",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/schema-primary-keys.md": {
-    "mtime": 1788690795.1029792,
-    "ast_hash": "a732b1a95b6c231d47af14b715c6b9b0",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/security-privileges.md": {
-    "mtime": 1788690795.1029792,
-    "ast_hash": "e6fbc325f8f3af1cab3e1cb99d9f146a",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/security-rls-basics.md": {
-    "mtime": 1788690795.1029792,
-    "ast_hash": "82ee8b214f39f78c9e88061b6f890508",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase-postgres-best-practices/references/security-rls-performance.md": {
-    "mtime": 1788690795.1029792,
-    "ast_hash": "ad2ccf01dfd325527b18256c3e25b842",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase/CHANGELOG.md": {
-    "mtime": 1788690795.1049852,
-    "ast_hash": "2f4622961a8c9f3a3b2c40086309447b",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase/SKILL.md": {
-    "mtime": 1788690795.1049852,
-    "ast_hash": "7b96fab7659e7953872489fcadff75a7",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase/assets/feedback-issue-template.md": {
-    "mtime": 1788690795.1049852,
-    "ast_hash": "e2c8b4f1a20e46315dd7609540d9b8d4",
-    "semantic_hash": ""
-  },
-  ".agents/skills/supabase/references/skill-feedback.md": {
-    "mtime": 1788690795.10699,
-    "ast_hash": "c9fa098e2ec8bdce9d6a0f8a64d2c6c0",
     "semantic_hash": ""
   }
 }
