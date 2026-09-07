@@ -20,13 +20,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
 
 ## Progress Terbaru
 
-- **Rilis & Publikasi OTA Update APK KasirKita POS v1.3.1 (Pembaruan Nomor CS WhatsApp & In-App Auto-Updater)**:
+- **Rilis & Publikasi OTA Update APK KasirKita POS v1.3.1 Build 5 (Pembaruan Nomor CS WhatsApp, Izin Native Installer, & In-App Auto-Updater)**:
   - *Perubahan Konfigurasi & Nomor CS*: Memperbarui nomor kontak layanan bantuan CS WhatsApp di `mobile/src/screens/SettingsScreen.js` menjadi `085696343551` (`https://wa.me/6285696343551` dan label tampilan `0856-9634-3551`).
-  - *Bump Versi Aplikasi*: Menaikkan versi di `mobile/app.json` dan `mobile/package.json` menjadi `1.3.1` dengan Android `versionCode: 4` dan iOS `buildNumber: "4"`.
-  - *Perbaikan Root Endpoint Backend*: Memperbaiki route `/` di `backend/routes/web.php` agar mengembalikan respons JSON status online (`{"success":true,"app":"KasirKita POS API","status":"online"}`) menggantikan view `welcome.blade.php`, menyelesaikan galat 500 saat membuka domain utama backend di browser.
-  - *EAS Standalone Cloud Build*: Berhasil menyelesaikan build APK Android standalone `v1.3.1` melalui EAS Build (Build ID: `fee64dff-17f9-480e-967e-c983db9f4f7d`, ukuran ~103.1 MB).
-  - *Publikasi Database OTA*: Mengupdate kolom `app_version` pada tabel `store_settings` di Supabase PostgreSQL dengan metadata versi `1.3.1`, URL unduhan APK Expo, dan ringkasan pembaruan.
-  - *Verifikasi Endpoint Live*: Memvalidasi `GET https://kasirkita.onrender.com/api/app/version` yang kini secara live mengembalikan data v1.3.1, sehingga modal prompt in-app updater (`UpdatePromptModal`) otomatis muncul di setiap perangkat kasir v1.3.0 untuk update sekali klik tanpa kehilangan data transaksi lokal.
+  - *Bump Versi Aplikasi*: Menaikkan versi di `mobile/app.json` dan `mobile/package.json` menjadi `1.3.1` dengan Android `versionCode: 5` dan iOS `buildNumber: "5"`.
+  - *Izin Sistem Native Installer & Flag Activity*: Menambahkan izin resmi `android.permission.REQUEST_INSTALL_PACKAGES` di `mobile/app.json` dan parameter `FLAG_ACTIVITY_NEW_TASK` (`1 | 268435456`) pada `updaterService.js` untuk mengatasi pembatasan keamanan OS Android (khususnya Xiaomi MIUI / HyperOS) saat memicu instalasi APK in-app.
+  - *Tombol Fallback Browser di Modal Update*: Menambahkan opsi alternatif *"Pasang / Unduh Lewat Browser"* (`Linking.openURL`) dan teks panduan pada status `READY` dan `ERROR` di `UpdatePromptModal.js` agar pengguna tetap dapat memperbarui aplikasi meskipun sistem HP memblokir intent langsung.
+  - *EAS Standalone Cloud Build*: Berhasil menyelesaikan kompilasi APK rilis standalone `v1.3.1` (Build ID: `cc31f7d5-ec66-4038-accf-fc52859691de`, ukuran ~103.1 MB, URL: `https://expo.dev/artifacts/eas/FAzPj0Obe_VOaYLLVnUEW5L5s1qXozwaEDYGIEIn-jk.apk`).
+  - *Publikasi Database OTA & Live API*: Mengupdate `store_settings.app_version` di Supabase PostgreSQL dan memverifikasi endpoint `GET https://kasirkita.onrender.com/api/app/version` yang aktif live mengembalikan metadata v1.3.1 Build 5.
   - *Migrasi Server ke Region Singapore*: Backend Docker Laravel berhasil dideploy di Render Region Singapore (`https://kasirkita.onrender.com`), memangkas latensi database dari ~5.2 detik (Oregon) menjadi ~2.6 detik karena berlokasi di region yang sama dengan Supabase Singapore (`ap-southeast-1`).
   - *Database Supabase PostgreSQL*: Berhasil menghubungkan Render ke Supabase via IPv4 Connection Pooler Session Mode (`aws-0-ap-southeast-1.pooler.supabase.com:5432`), memigrasikan 25 tabel database kasir secara utuh.
   - *Akun Toko & Data Awal*: Dibuatkan akun toko `KasirKita` dengan role Owner (`admin@kasirkita.com` / `password123`) serta master data standar satuan (9 UoM) dan kategori produk.
