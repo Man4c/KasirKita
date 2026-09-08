@@ -64,15 +64,13 @@ export default function LicenseCardItem({ license, onRevoke }) {
     <View
       style={[
         styles.card,
-        isAvailable && styles.cardAvailable,
-        isRedeemed && styles.cardRedeemed,
         isRevoked && styles.cardRevoked,
       ]}
     >
       {/* Top row: Key and Status Badge */}
       <View style={styles.topRow}>
         <View style={styles.keyContainer}>
-          <Ticket size={16} color={isAvailable ? '#fbbf24' : '#71717a'} style={styles.ticketIcon} />
+          <Ticket size={16} color={isAvailable ? '#f4f4f5' : '#71717a'} style={styles.ticketIcon} />
           <Text style={[styles.keyText, isRevoked && styles.keyTextRevoked]} numberOfLines={1}>
             {license.license_key}
           </Text>
@@ -87,15 +85,15 @@ export default function LicenseCardItem({ license, onRevoke }) {
 
         {isRedeemed && (
           <View style={[styles.statusBadge, styles.statusRedeemed]}>
-            <CheckCircle2 size={12} color="#38bdf8" style={styles.badgeIcon} />
-            <Text style={[styles.statusText, { color: '#38bdf8' }]}>TERPAKAI</Text>
+            <CheckCircle2 size={12} color="#a1a1aa" style={styles.badgeIcon} />
+            <Text style={[styles.statusText, { color: '#d4d4d8' }]}>TERPAKAI</Text>
           </View>
         )}
 
         {isRevoked && (
           <View style={[styles.statusBadge, styles.statusRevoked]}>
-            <Ban size={12} color="#a1a1aa" style={styles.badgeIcon} />
-            <Text style={[styles.statusText, { color: '#a1a1aa' }]}>DICABUT</Text>
+            <Ban size={12} color="#f87171" style={styles.badgeIcon} />
+            <Text style={[styles.statusText, { color: '#f87171' }]}>DICABUT</Text>
           </View>
         )}
       </View>
@@ -138,7 +136,7 @@ export default function LicenseCardItem({ license, onRevoke }) {
             </>
           ) : (
             <>
-              <Copy size={14} color="#fbbf24" />
+              <Copy size={14} color="#a1a1aa" />
               <Text style={styles.copyBtnText}>Salin / Kirim Kode</Text>
             </>
           )}
@@ -168,17 +166,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     borderColor: '#27272a',
-    borderLeftWidth: 3,
-    borderLeftColor: '#3f3f46',
-  },
-  cardAvailable: {
-    borderLeftColor: '#10b981',
-  },
-  cardRedeemed: {
-    borderLeftColor: '#38bdf8',
   },
   cardRevoked: {
-    borderLeftColor: '#71717a',
     opacity: 0.6,
   },
   topRow: {
@@ -228,14 +217,14 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(16, 185, 129, 0.3)',
   },
   statusRedeemed: {
-    backgroundColor: 'rgba(56, 189, 248, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.3)',
-  },
-  statusRevoked: {
     backgroundColor: 'rgba(113, 113, 122, 0.15)',
     borderWidth: 1,
     borderColor: '#3f3f46',
+  },
+  statusRevoked: {
+    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
   },
   statusText: {
     fontFamily: 'Poppins_700Bold',
@@ -258,7 +247,9 @@ const styles = StyleSheet.create({
   },
   durationValue: {
     fontFamily: 'Poppins_600SemiBold',
-    color: '#fbbf24',
+    color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   notesText: {
     fontFamily: 'Poppins_400Regular',
@@ -269,24 +260,26 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   redeemInfoBox: {
-    backgroundColor: 'rgba(56, 189, 248, 0.08)',
+    backgroundColor: '#202024',
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingVertical: 5,
     marginBottom: 8,
-    borderLeftWidth: 2,
-    borderLeftColor: '#38bdf8',
+    borderWidth: 1,
+    borderColor: '#2e2e33',
   },
   redeemInfoText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
-    color: '#38bdf8',
+    color: '#a1a1aa',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
   redeemStoreName: {
     fontFamily: 'Poppins_600SemiBold',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionRow: {
     flexDirection: 'row',
@@ -302,21 +295,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: 'rgba(251, 191, 36, 0.1)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(251, 191, 36, 0.25)',
+    borderColor: '#3f3f46',
     borderRadius: 8,
     minHeight: 44,
     paddingHorizontal: 10,
   },
   copyBtnSuccess: {
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    backgroundColor: 'rgba(16, 185, 129, 0.12)',
     borderColor: 'rgba(16, 185, 129, 0.3)',
   },
   copyBtnText: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 12,
-    color: '#fbbf24',
+    color: '#f4f4f5',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

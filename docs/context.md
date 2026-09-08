@@ -1858,6 +1858,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - **Web (React + Tailwind):** Menggunakan Google Fonts `Poppins` (`font-sans: ['Poppins', 'sans-serif']` di Tailwind configuration).
   - **Mobile (React Native Expo):** Menggunakan `@expo-google-fonts/poppins` untuk konsistensi tampilan antar perangkat Android & iOS.
 - **Palet Warna & Estetika Visual:** Sepenuhnya dikurasi dan diformulasikan oleh skill `impeccable` (mengeksplorasi kontras tinggi, kenyamanan operasional kasir, dan konsistensi lintas platform).
+- **Layar Superadmin Mobile Clean Monochrome Executive SaaS:**
+  - Menghilangkan *chromatic clutter* (tabrakan 5 warna terang: Crimson, Kuning, Hijau, Cyan, Merah) dan beralih ke 95% Obsidian/Zinc monokromatik modern (`#09090b`, `#18181b`, `#202024`, `#27272a`, `#3f3f46`, `#ffffff`).
+  - Alokasi warna dibatasi ketat HANYA 5% untuk badge status fungsional (`PRO AKTIF` emerald lembut, `TRIAL` amber lembut, `EXPIRED` rose lembut).
+  - Menghilangkan garis border samping tebal pelangi (`borderLeftWidth: 3`) pada seluruh kartu toko dan lisensi.
+  - Menata ulang header kartu toko (`StoreCardItem.js`) dengan memisahkan baris nama toko (100% lebar layar, Zero Truncation) dari baris status dan kategori, menyelesaikan pemotongan teks `KasirKita Mart & C...` secara definitif.
+  - Menerapkan tombol aksi monokromatik netral: tombol "Cetak" dan "Aktifkan Toko" solid white `#ffffff` dengan teks gelap, tombol WhatsApp dan +Trial dark slate netral `#202024`.
 - Web Dashboard memiliki layout ringkas dengan header profil yang kompak.
 - Mobile POS dirancang touch-friendly untuk transaksi kasir cepat.
 

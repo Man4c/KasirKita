@@ -108,7 +108,7 @@ export default function LicenseGeneratorModal({ visible, onClose, onGenerate }) 
 
               <View style={styles.header}>
                 <View style={styles.headerTitleRow}>
-                  <Sparkles size={20} color="#fbbf24" />
+                  <Sparkles size={20} color="#f4f4f5" />
                   <Text style={styles.headerTitle}>
                     {generatedKeys.length ? 'Voucher Berhasil Dicetak!' : 'Cetak Voucher Lisensi Baru'}
                   </Text>
@@ -139,7 +139,7 @@ export default function LicenseGeneratorModal({ visible, onClose, onGenerate }) 
                         const code = item.license_key || item;
                         return (
                           <View key={idx} style={styles.keyRow}>
-                            <Ticket size={14} color="#fbbf24" style={styles.keyIcon} />
+                            <Ticket size={14} color="#f4f4f5" style={styles.keyIcon} />
                             <Text style={styles.codeText}>{code}</Text>
                           </View>
                         );
@@ -158,7 +158,7 @@ export default function LicenseGeneratorModal({ visible, onClose, onGenerate }) 
                         </>
                       ) : (
                         <>
-                          <Copy size={16} color="#fbbf24" />
+                          <Copy size={16} color="#f4f4f5" />
                           <Text style={styles.copyAllBtnText}>Salin & Bagikan Semua Kode</Text>
                         </>
                       )}
@@ -246,10 +246,10 @@ export default function LicenseGeneratorModal({ visible, onClose, onGenerate }) 
                       activeOpacity={0.8}
                     >
                       {loading ? (
-                        <ActivityIndicator color="#18181b" size="small" />
+                        <ActivityIndicator color="#09090b" size="small" />
                       ) : (
                         <>
-                          <Sparkles size={16} color="#18181b" />
+                          <Sparkles size={16} color="#09090b" />
                           <Text style={styles.submitBtnText}>Cetak {count} Voucher</Text>
                         </>
                       )}
@@ -353,8 +353,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   chipSelected: {
-    backgroundColor: 'rgba(251, 191, 36, 0.15)',
-    borderColor: '#fbbf24',
+    backgroundColor: '#ffffff',
+    borderColor: '#ffffff',
   },
   chipText: {
     fontFamily: 'Poppins_500Medium',
@@ -365,7 +365,9 @@ const styles = StyleSheet.create({
   },
   chipTextSelected: {
     fontFamily: 'Poppins_600SemiBold',
-    color: '#fbbf24',
+    color: '#09090b',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   textInput: {
     backgroundColor: '#27272a',
@@ -420,9 +422,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: 'rgba(251, 191, 36, 0.12)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(251, 191, 36, 0.3)',
+    borderColor: '#3f3f46',
     borderRadius: 8,
     minHeight: 44,
     paddingHorizontal: 14,
@@ -434,7 +436,7 @@ const styles = StyleSheet.create({
   copyAllBtnText: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 12,
-    color: '#fbbf24',
+    color: '#f4f4f5',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -468,7 +470,7 @@ const styles = StyleSheet.create({
     flex: 1.5,
     minHeight: 44,
     borderRadius: 8,
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#ffffff',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -480,7 +482,7 @@ const styles = StyleSheet.create({
   submitBtnText: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#18181b',
+    color: '#09090b',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -488,7 +490,9 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 44,
     borderRadius: 8,
-    backgroundColor: '#e11d48',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
   },

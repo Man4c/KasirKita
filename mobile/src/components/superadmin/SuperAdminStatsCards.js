@@ -17,10 +17,10 @@ export default function SuperAdminStatsCards({ stats }) {
           {/* Total Toko */}
           <View style={styles.kpiColumn}>
             <View style={styles.kpiHeader}>
-              <View style={[styles.kpiPip, { backgroundColor: '#38bdf8' }]} />
+              <View style={[styles.kpiPip, { backgroundColor: '#71717a' }]} />
               <Text style={styles.kpiLabel}>Total</Text>
             </View>
-            <Text style={[styles.kpiValue, { color: '#ffffff' }]}>{totalStores}</Text>
+            <Text style={styles.kpiValue}>{totalStores}</Text>
           </View>
 
           <View style={styles.kpiDivider} />
@@ -28,10 +28,15 @@ export default function SuperAdminStatsCards({ stats }) {
           {/* Trial Aktif */}
           <View style={styles.kpiColumn}>
             <View style={styles.kpiHeader}>
-              <View style={[styles.kpiPip, { backgroundColor: '#fbbf24' }]} />
+              <View
+                style={[
+                  styles.kpiPip,
+                  { backgroundColor: trialStores > 0 ? '#f59e0b' : '#3f3f46' },
+                ]}
+              />
               <Text style={styles.kpiLabel}>Trial</Text>
             </View>
-            <Text style={[styles.kpiValue, { color: '#fbbf24' }]}>{trialStores}</Text>
+            <Text style={styles.kpiValue}>{trialStores}</Text>
           </View>
 
           <View style={styles.kpiDivider} />
@@ -39,10 +44,15 @@ export default function SuperAdminStatsCards({ stats }) {
           {/* Pro Aktif */}
           <View style={styles.kpiColumn}>
             <View style={styles.kpiHeader}>
-              <View style={[styles.kpiPip, { backgroundColor: '#34d399' }]} />
+              <View
+                style={[
+                  styles.kpiPip,
+                  { backgroundColor: activeStores > 0 ? '#10b981' : '#3f3f46' },
+                ]}
+              />
               <Text style={styles.kpiLabel}>Pro Aktif</Text>
             </View>
-            <Text style={[styles.kpiValue, { color: '#34d399' }]}>{activeStores}</Text>
+            <Text style={styles.kpiValue}>{activeStores}</Text>
           </View>
 
           <View style={styles.kpiDivider} />
@@ -53,41 +63,30 @@ export default function SuperAdminStatsCards({ stats }) {
               <View
                 style={[
                   styles.kpiPip,
-                  { backgroundColor: expiredStores > 0 ? '#fb7185' : '#71717a' },
+                  { backgroundColor: expiredStores > 0 ? '#f43f5e' : '#3f3f46' },
                 ]}
               />
-              <Text
-                style={[styles.kpiLabel, expiredStores > 0 && { color: '#fb7185' }]}
-              >
-                Expired
-              </Text>
+              <Text style={styles.kpiLabel}>Expired</Text>
             </View>
-            <Text
-              style={[
-                styles.kpiValue,
-                { color: expiredStores > 0 ? '#fb7185' : '#71717a' },
-              ]}
-            >
-              {expiredStores}
-            </Text>
+            <Text style={styles.kpiValue}>{expiredStores}</Text>
           </View>
         </View>
 
         {/* Integrated Mini Bank Voucher Strip */}
         <View style={styles.voucherStrip}>
           <View style={styles.voucherLeft}>
-            <Ticket size={13} color="#fbbf24" style={styles.voucherIcon} />
+            <Ticket size={13} color="#a1a1aa" style={styles.voucherIcon} />
             <Text style={styles.voucherTitle}>Bank Voucher:</Text>
           </View>
           <View style={styles.voucherMetrics}>
             <View style={styles.voucherBadge}>
               <Text style={styles.voucherBadgeLabel}>Tersedia </Text>
-              <Text style={styles.voucherBadgeGreen}>{licenses.available}</Text>
+              <Text style={styles.voucherBadgeWhite}>{licenses.available}</Text>
             </View>
             <Text style={styles.voucherSeparator}>•</Text>
             <View style={styles.voucherBadge}>
               <Text style={styles.voucherBadgeLabel}>Terpakai </Text>
-              <Text style={styles.voucherBadgeBlue}>{licenses.redeemed}</Text>
+              <Text style={styles.voucherBadgeWhite}>{licenses.redeemed}</Text>
             </View>
           </View>
         </View>
@@ -143,6 +142,7 @@ const styles = StyleSheet.create({
   kpiValue: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 20,
+    color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -195,17 +195,10 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  voucherBadgeGreen: {
+  voucherBadgeWhite: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#34d399',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  voucherBadgeBlue: {
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 12,
-    color: '#38bdf8',
+    color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

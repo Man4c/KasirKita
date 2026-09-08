@@ -130,7 +130,7 @@ export default function ActivateStoreModal({ visible, store, onClose, onConfirm 
                 />
 
                 <View style={styles.infoBox}>
-                  <ShieldAlert size={16} color="#fbbf24" style={styles.infoBoxIcon} />
+                  <ShieldAlert size={16} color="#a1a1aa" style={styles.infoBoxIcon} />
                   <Text style={styles.infoBoxText}>
                     Toko mitra akan langsung aktif berstatus PRO seketika tanpa memerlukan kode voucher di HP pembeli.
                   </Text>
@@ -155,11 +155,11 @@ export default function ActivateStoreModal({ visible, store, onClose, onConfirm 
                   activeOpacity={0.8}
                 >
                   {loading ? (
-                    <ActivityIndicator color="#ffffff" size="small" />
+                    <ActivityIndicator color="#09090b" size="small" />
                   ) : (
                     <>
-                      <CheckCircle2 size={16} color="#ffffff" />
-                      <Text style={styles.submitBtnText}>Aktifkan Sekarang</Text>
+                      <CheckCircle2 size={16} color="#09090b" />
+                      <Text style={styles.submitBtnText}>Aktifkan Toko</Text>
                     </>
                   )}
                 </TouchableOpacity>
@@ -274,8 +274,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   chipSelected: {
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-    borderColor: '#10b981',
+    backgroundColor: '#ffffff',
+    borderColor: '#ffffff',
   },
   chipText: {
     fontFamily: 'Poppins_500Medium',
@@ -286,7 +286,9 @@ const styles = StyleSheet.create({
   },
   chipTextSelected: {
     fontFamily: 'Poppins_600SemiBold',
-    color: '#34d399',
+    color: '#09090b',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   textInput: {
     backgroundColor: '#27272a',
@@ -305,11 +307,11 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'rgba(251, 191, 36, 0.08)',
+    backgroundColor: '#202024',
     borderRadius: 8,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'rgba(251, 191, 36, 0.2)',
+    borderColor: '#2e2e33',
   },
   infoBoxIcon: {
     marginRight: 8,
@@ -320,7 +322,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
-    color: '#fbbf24',
+    color: '#a1a1aa',
     lineHeight: 18,
     includeFontPadding: false,
   },
@@ -354,7 +356,7 @@ const styles = StyleSheet.create({
     flex: 1.5,
     minHeight: 44,
     borderRadius: 8,
-    backgroundColor: '#10b981',
+    backgroundColor: '#ffffff',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -364,9 +366,9 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   submitBtnText: {
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#ffffff',
+    color: '#09090b',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

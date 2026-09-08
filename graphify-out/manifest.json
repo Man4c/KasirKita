@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788835293.4870727,
-    "ast_hash": "b46a5ea339366741c9d408dfb5c853aa",
+    "mtime": 1788838302.3804362,
+    "ast_hash": "084ca015c1fad5eb053aa46ceb036e09",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -3045,43 +3045,43 @@
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/ActivateStoreModal.js": {
-    "mtime": 1788835033.4141579,
-    "ast_hash": "748a58fb07e576ef3b0a3062b8ea6e8e",
+    "mtime": 1788838111.8731763,
+    "ast_hash": "777e59d1bb6dca9b77409b50a60eaf48",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/ExtendTrialModal.js": {
-    "mtime": 1788835040.5848906,
-    "ast_hash": "29cb5da87c7db56f90ff05ab401401cf",
+    "mtime": 1788838128.7384856,
+    "ast_hash": "4c3fb33f16d6d377436428d721417c43",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/LicenseCardItem.js": {
-    "mtime": 1788836758.038422,
-    "ast_hash": "44847d5137d39bb5ee116cff799cbacd",
+    "mtime": 1788838033.8081243,
+    "ast_hash": "fd7538f590187472847c854bf15ad9cd",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/LicenseGeneratorModal.js": {
-    "mtime": 1788835059.9867415,
-    "ast_hash": "072b8b66b65bc5c41b50caad330c10fb",
+    "mtime": 1788838090.0468822,
+    "ast_hash": "fa2281128836c6f74bd5c16e6e5233ac",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/StoreCardItem.js": {
-    "mtime": 1788836706.9086988,
-    "ast_hash": "4578c2c3d5ff18107558f34ad6b578fa",
+    "mtime": 1788838007.7600324,
+    "ast_hash": "68b85782449a0007e0c5fd048bd5105a",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/SuperAdminHeader.js": {
-    "mtime": 1788836654.6469562,
-    "ast_hash": "cee5fc334b7fa3c70add4c6ebe43b024",
+    "mtime": 1788837970.062301,
+    "ast_hash": "cbf47a406d6026f40b6324d8cc5bc14b",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/SuperAdminStatsCards.js": {
-    "mtime": 1788836679.6416512,
-    "ast_hash": "7438871a7739def50f637af4918e5932",
+    "mtime": 1788837958.58603,
+    "ast_hash": "d506f89e5df3e526a64941b752fb754a",
     "semantic_hash": ""
   },
   "mobile/src/screens/SuperAdminScreen.js": {
-    "mtime": 1788836744.1278217,
-    "ast_hash": "1a83401cb8772d0cad15ee9e929af7f6",
+    "mtime": 1788838062.2179291,
+    "ast_hash": "e05693528c14848861f13ed12d3be2ca",
     "semantic_hash": ""
   },
   "mobile/src/services/superAdminService.js": {

@@ -83,34 +83,27 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
   };
 
   return (
-    <View
-      style={[
-        styles.card,
-        isActive && styles.cardActive,
-        isTrial && styles.cardTrial,
-        isExpired && styles.cardExpired,
-      ]}
-    >
-      {/* Row 1: Hero Store Name & Primary Status Badge */}
+    <View style={styles.card}>
+      {/* Row 1: Hero Store Name (100% Full Width - Zero Truncation!) */}
       <View style={styles.cardHeader}>
         <View style={styles.storeTitleWrapper}>
           <View style={styles.storeIconBox}>
-            <Store size={15} color="#f43f5e" />
+            <Store size={15} color="#e4e4e7" />
           </View>
           <Text style={styles.storeName} numberOfLines={1}>
             {store.name}
           </Text>
         </View>
-        {renderStatusBadge()}
       </View>
 
-      {/* Row 2: Category Pill & Validity Info */}
+      {/* Row 2: Category Pill, Status Badge & Expiry Info */}
       <View style={styles.metaRow}>
         <View style={styles.categoryBadge}>
           <Text style={styles.categoryBadgeText}>
             {getCategoryLabel(store.business_category)}
           </Text>
         </View>
+        {renderStatusBadge()}
         <Text style={styles.metaSeparator}>•</Text>
         <View style={styles.expiryRow}>
           {isTrial && <Clock size={12} color="#fbbf24" style={styles.expiryIcon} />}
@@ -122,6 +115,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
               isTrial && { color: '#fbbf24' },
               isExpired && { color: '#fb7185' },
             ]}
+            numberOfLines={1}
           >
             {renderExpiryInfo()}
           </Text>
@@ -170,7 +164,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
         </View>
       </View>
 
-      {/* Row 5: Action Buttons (Touch Target >= 44dp) */}
+      {/* Row 5: Action Buttons (Touch Target >= 44dp, Clean Monochrome) */}
       <View style={styles.actionRow}>
         <TouchableOpacity
           style={styles.waButton}
@@ -203,7 +197,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
           hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
           accessibilityLabel="Aktifkan toko menjadi PRO"
         >
-          <CheckCircle2 size={15} color="#ffffff" />
+          <CheckCircle2 size={15} color="#09090b" />
           <Text style={styles.activateButtonText}>Aktifkan Toko</Text>
         </TouchableOpacity>
       </View>
@@ -219,22 +213,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#27272a',
-    borderLeftWidth: 3,
-    borderLeftColor: '#3f3f46',
-  },
-  cardActive: {
-    borderLeftColor: '#10b981',
-  },
-  cardTrial: {
-    borderLeftColor: '#f59e0b',
-  },
-  cardExpired: {
-    borderLeftColor: '#f43f5e',
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginBottom: 6,
   },
   storeTitleWrapper: {
@@ -242,13 +224,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     minWidth: 0,
-    marginRight: 8,
   },
   storeIconBox: {
     width: 28,
     height: 28,
     borderRadius: 7,
-    backgroundColor: 'rgba(244, 63, 94, 0.12)',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
@@ -390,6 +373,8 @@ const styles = StyleSheet.create({
   metricBold: {
     fontFamily: 'Poppins_700Bold',
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   metricDivider: {
     width: 1,
@@ -407,9 +392,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    backgroundColor: '#202024',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderColor: '#2e2e33',
     borderRadius: 8,
     paddingHorizontal: 10,
     minHeight: 44,
@@ -418,7 +403,7 @@ const styles = StyleSheet.create({
   waButtonText: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 12,
-    color: '#10b981',
+    color: '#d4d4d8',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -427,9 +412,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    backgroundColor: '#202024',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
+    borderColor: '#2e2e33',
     borderRadius: 8,
     paddingHorizontal: 8,
     minHeight: 44,
@@ -438,7 +423,7 @@ const styles = StyleSheet.create({
   trialButtonText: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 12,
-    color: '#fbbf24',
+    color: '#d4d4d8',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -447,16 +432,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#e11d48',
+    backgroundColor: '#ffffff',
     borderRadius: 8,
     paddingHorizontal: 10,
     minHeight: 44,
     flex: 1.3,
   },
   activateButtonText: {
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#ffffff',
+    color: '#09090b',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

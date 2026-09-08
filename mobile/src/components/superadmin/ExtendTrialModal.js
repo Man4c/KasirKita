@@ -69,7 +69,7 @@ export default function ExtendTrialModal({ visible, store, onClose, onConfirm })
 
               <View style={styles.header}>
                 <View style={styles.headerTitleRow}>
-                  <Clock size={20} color="#fbbf24" />
+                  <Clock size={20} color="#f4f4f5" />
                   <Text style={styles.headerTitle}>Perpanjang Masa Trial</Text>
                 </View>
                 <TouchableOpacity
@@ -141,11 +141,11 @@ export default function ExtendTrialModal({ visible, store, onClose, onConfirm })
                   activeOpacity={0.8}
                 >
                   {loading ? (
-                    <ActivityIndicator color="#18181b" size="small" />
+                    <ActivityIndicator color="#09090b" size="small" />
                   ) : (
                     <>
-                      <Clock size={16} color="#18181b" />
-                      <Text style={styles.submitBtnText}>Perpanjang Sekarang</Text>
+                      <Clock size={16} color="#09090b" />
+                      <Text style={styles.submitBtnText}>Perpanjang Trial</Text>
                     </>
                   )}
                 </TouchableOpacity>
@@ -260,8 +260,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   chipSelected: {
-    backgroundColor: 'rgba(251, 191, 36, 0.15)',
-    borderColor: '#fbbf24',
+    backgroundColor: '#ffffff',
+    borderColor: '#ffffff',
   },
   chipText: {
     fontFamily: 'Poppins_500Medium',
@@ -272,7 +272,9 @@ const styles = StyleSheet.create({
   },
   chipTextSelected: {
     fontFamily: 'Poppins_600SemiBold',
-    color: '#fbbf24',
+    color: '#09090b',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   textInput: {
     backgroundColor: '#27272a',
@@ -318,7 +320,7 @@ const styles = StyleSheet.create({
     flex: 1.5,
     minHeight: 44,
     borderRadius: 8,
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#ffffff',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -330,7 +332,7 @@ const styles = StyleSheet.create({
   submitBtnText: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#18181b',
+    color: '#09090b',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

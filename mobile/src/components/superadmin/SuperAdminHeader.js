@@ -7,7 +7,7 @@ export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing
     <View style={styles.headerContainer}>
       <View style={styles.leftSection}>
         <View style={styles.shieldIconWrapper}>
-          <ShieldCheck size={20} color="#fbbf24" />
+          <ShieldCheck size={18} color="#f4f4f5" />
         </View>
         <View style={styles.titleWrapper}>
           <View style={styles.titleRow}>
@@ -34,7 +34,7 @@ export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing
           activeOpacity={0.7}
           accessibilityLabel="Segarkan data platform"
         >
-          <RotateCcw size={18} color={refreshing ? '#71717a' : '#fb7185'} />
+          <RotateCcw size={18} color={refreshing ? '#52525b' : '#a1a1aa'} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(251, 191, 36, 0.12)',
+    backgroundColor: '#27272a',
     borderWidth: 1,
-    borderColor: 'rgba(251, 191, 36, 0.3)',
+    borderColor: '#3f3f46',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
@@ -98,7 +98,9 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   rootBadge: {
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#27272a',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
     paddingHorizontal: 7,
     paddingVertical: 1,
     borderRadius: 4,
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
   rootBadgeText: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#18181b',
+    color: '#f4f4f5',
     includeFontPadding: false,
     textAlignVertical: 'center',
     letterSpacing: 0.5,
