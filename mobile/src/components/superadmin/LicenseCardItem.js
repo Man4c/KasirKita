@@ -116,16 +116,20 @@ export default function LicenseCardItem({ license, onRevoke }) {
         )}
       </View>
 
-      {/* Middle row: Duration & Details */}
-      <View style={styles.detailsRow}>
-        <Text style={styles.durationText}>
-          Paket: <Text style={styles.durationValue}>{getDurationLabel(license.duration_type)}</Text>
-        </Text>
+      {/* Middle section: Duration & Administrative Notes */}
+      <View style={styles.detailsBlock}>
+        <View style={styles.durationRow}>
+          <Text style={styles.durationText}>
+            Paket: <Text style={styles.durationValue}>{getDurationLabel(license.duration_type)}</Text>
+          </Text>
+        </View>
 
         {license.notes ? (
-          <Text style={styles.notesText}>
-            {license.notes}
-          </Text>
+          <View style={styles.notesRow}>
+            <Text style={styles.notesText} numberOfLines={2}>
+              {license.notes}
+            </Text>
+          </View>
         ) : null}
       </View>
 
@@ -152,12 +156,12 @@ export default function LicenseCardItem({ license, onRevoke }) {
           {copied ? (
             <>
               <Check size={14} color="#34d399" />
-              <Text style={[styles.copyBtnText, { color: '#34d399' }]}>Tersalin!</Text>
+              <Text style={[styles.copyBtnText, { color: '#34d399' }]} numberOfLines={1}>Tersalin!</Text>
             </>
           ) : (
             <>
               <Copy size={14} color="#a1a1aa" />
-              <Text style={styles.copyBtnText}>Salin / Kirim Kode</Text>
+              <Text style={styles.copyBtnText} numberOfLines={1}>Salin / Kirim Kode</Text>
             </>
           )}
         </TouchableOpacity>
@@ -174,12 +178,12 @@ export default function LicenseCardItem({ license, onRevoke }) {
             {isRevoking ? (
               <>
                 <ActivityIndicator size={12} color="#fb7185" />
-                <Text style={styles.revokeBtnText}>Mencabut...</Text>
+                <Text style={styles.revokeBtnText} numberOfLines={1}>Mencabut...</Text>
               </>
             ) : (
               <>
                 <Ban size={14} color="#ef4444" />
-                <Text style={styles.revokeBtnText}>Cabut</Text>
+                <Text style={styles.revokeBtnText} numberOfLines={1}>Cabut</Text>
               </>
             )}
           </TouchableOpacity>
@@ -257,11 +261,13 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  detailsRow: {
+  detailsBlock: {
+    paddingVertical: 4,
+    gap: 4,
+  },
+  durationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 6,
   },
   durationText: {
     fontFamily: 'Poppins_400Regular',
@@ -276,12 +282,17 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
+  notesRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
   notesText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
     color: '#71717a',
     includeFontPadding: false,
-    textAlignVertical: 'center',
+    lineHeight: 18,
+    flex: 1,
   },
   redeemInfoRow: {
     paddingVertical: 4,

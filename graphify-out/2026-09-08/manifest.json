@@ -3045,33 +3045,33 @@
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/ActivateStoreModal.js": {
-    "mtime": 1788839363.9083078,
-    "ast_hash": "2a6bf57f0acb0e034a6b5dcc1030fc2d",
+    "mtime": 1788840259.3841305,
+    "ast_hash": "7b4fff5932d2cb29556322abf6572213",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/ExtendTrialModal.js": {
-    "mtime": 1788839383.2632527,
-    "ast_hash": "8d1d757bd06ce5f8101f21aa1d7e334e",
+    "mtime": 1788840266.5611918,
+    "ast_hash": "673486e44fd76b758d68c3ae09b359f0",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/LicenseCardItem.js": {
-    "mtime": 1788839284.5609813,
-    "ast_hash": "132563ec923c8e909d2f22f3a3a5981c",
+    "mtime": 1788840229.4004347,
+    "ast_hash": "40e3c8a781b3be24e02ac141af4302d9",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/LicenseGeneratorModal.js": {
-    "mtime": 1788839400.9332318,
-    "ast_hash": "882169fc23008fdfd39689da96ced093",
+    "mtime": 1788840276.6411915,
+    "ast_hash": "658b6254b32b9dc61ed423250df21ecf",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/StoreCardItem.js": {
-    "mtime": 1788839347.9780288,
-    "ast_hash": "e042299b50b5f3b62cd0906423df7848",
+    "mtime": 1788840252.8247938,
+    "ast_hash": "ec74657c1599ba9c1db54f3d03f7e27f",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/SuperAdminHeader.js": {
-    "mtime": 1788839315.027565,
-    "ast_hash": "da602f83a9536fd159731e2d4701bb47",
+    "mtime": 1788840202.803429,
+    "ast_hash": "51ada3b597f91310d3000f0e0353c3e6",
     "semantic_hash": ""
   },
   "mobile/src/components/superadmin/SuperAdminStatsCards.js": {
@@ -3080,8 +3080,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SuperAdminScreen.js": {
-    "mtime": 1788839304.088354,
-    "ast_hash": "6c01a142c74a01e68e461394b8c970b3",
+    "mtime": 1788840246.7956882,
+    "ast_hash": "a8866e5618c2cab79cde3a078503a48b",
     "semantic_hash": ""
   },
   "mobile/src/services/superAdminService.js": {

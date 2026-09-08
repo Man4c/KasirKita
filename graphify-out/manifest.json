@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788839421.0516381,
-    "ast_hash": "6ca595ea7ee678d5bc5da9c262ab50ed",
+    "mtime": 1788843104.482252,
+    "ast_hash": "b6b6a29c1c7ee781be3bae92311872ce",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -965,8 +965,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/AuthController.php": {
-    "mtime": 1788825839.1777937,
-    "ast_hash": "8431858f5fd7ee6f27b15706928fca70",
+    "mtime": 1788843533.8889346,
+    "ast_hash": "9cbe9c3e14cfe39eaa56931bc4938e3a",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Controller.php": {
@@ -1370,8 +1370,8 @@
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788833148.3071873,
-    "ast_hash": "f9b21c4b6135f2fe215fedd6cd341bc4",
+    "mtime": 1788841090.649082,
+    "ast_hash": "9980f937133d13bee5d3a249b0b5e264",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
-    "mtime": 1788831120.699784,
-    "ast_hash": "a0af94e8a0e49d5a516fb53f30a28d92",
+    "mtime": 1788843569.20038,
+    "ast_hash": "af408e51e970e653812a631b9065be4b",
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {
@@ -1395,8 +1395,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
-    "mtime": 1788835917.7087362,
-    "ast_hash": "d6c3d4728fcece8c65fb43fb048eb2b4",
+    "mtime": 1788843524.5263543,
+    "ast_hash": "841d2235342db3853b50f8acf45a93b6",
     "semantic_hash": ""
   },
   "mobile/src/screens/PosScreen.js": {
@@ -3000,8 +3000,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/auth/RegisterStoreModal.js": {
-    "mtime": 1788825114.2400541,
-    "ast_hash": "8fdde37ef1ea876bfdd1423e88f80cfd",
+    "mtime": 1788843617.805127,
+    "ast_hash": "f877c0608ac5d3a5556aeceeaf900056",
     "semantic_hash": ""
   },
   "mobile/src/components/settings/LicenseActivationModal.js": {

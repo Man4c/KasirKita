@@ -155,17 +155,54 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
 
       {/* Row 5: Contextual Action Buttons */}
       <View style={styles.actionRow}>
-        {isActive ? (
-          <>
+        {isTrial ? (
+          <View style={styles.trialActionGroup}>
+            <View style={styles.secondaryActionRow}>
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={handleOpenWhatsApp}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                accessibilityLabel="Hubungi pemilik via WhatsApp"
+              >
+                <MessageSquare size={14} color="#34d399" />
+                <Text style={styles.secondaryButtonText} numberOfLines={1}>WhatsApp</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={() => onExtendTrial(store)}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                accessibilityLabel="Perpanjang masa trial toko"
+              >
+                <Clock size={14} color="#fbbf24" />
+                <Text style={styles.secondaryButtonText} numberOfLines={1}>+ Perpanjang Trial</Text>
+              </TouchableOpacity>
+            </View>
+
             <TouchableOpacity
-              style={styles.waButton}
+              style={styles.primaryActivateButton}
+              onPress={() => onActivate(store)}
+              activeOpacity={0.8}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              accessibilityLabel="Aktifkan toko menjadi PRO"
+            >
+              <CheckCircle2 size={15} color="#ffffff" />
+              <Text style={styles.primaryActivateButtonText} numberOfLines={1}>Aktifkan Toko ke PRO</Text>
+            </TouchableOpacity>
+          </View>
+        ) : isActive ? (
+          <View style={styles.secondaryActionRow}>
+            <TouchableOpacity
+              style={styles.secondaryButton}
               onPress={handleOpenWhatsApp}
               activeOpacity={0.7}
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
               accessibilityLabel="Hubungi pemilik via WhatsApp"
             >
               <MessageSquare size={14} color="#34d399" />
-              <Text style={styles.waButtonText}>Hubungi WhatsApp</Text>
+              <Text style={styles.secondaryButtonText} numberOfLines={1}>Hubungi WhatsApp</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -176,46 +213,34 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
               accessibilityLabel="Perpanjang atau kelola paket lisensi toko"
             >
               <Clock size={14} color="#fb7185" />
-              <Text style={styles.extendActiveButtonText}>Perpanjang</Text>
+              <Text style={styles.extendActiveButtonText} numberOfLines={1}>Perpanjang Lisensi</Text>
             </TouchableOpacity>
-          </>
+          </View>
         ) : (
-          <>
+          /* isExpired: Toko Kedaluwarsa */
+          <View style={styles.secondaryActionRow}>
             <TouchableOpacity
-              style={styles.waButton}
+              style={styles.secondaryButton}
               onPress={handleOpenWhatsApp}
               activeOpacity={0.7}
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
               accessibilityLabel="Hubungi pemilik via WhatsApp"
             >
               <MessageSquare size={14} color="#34d399" />
-              <Text style={styles.waButtonText}>WhatsApp</Text>
+              <Text style={styles.secondaryButtonText} numberOfLines={1}>WhatsApp</Text>
             </TouchableOpacity>
-
-            {isTrial && (
-              <TouchableOpacity
-                style={styles.trialButton}
-                onPress={() => onExtendTrial(store)}
-                activeOpacity={0.7}
-                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-                accessibilityLabel="Perpanjang masa trial toko"
-              >
-                <Clock size={14} color="#fbbf24" />
-                <Text style={styles.trialButtonText}>+ Trial</Text>
-              </TouchableOpacity>
-            )}
 
             <TouchableOpacity
-              style={styles.activateButton}
+              style={styles.primaryActivateButtonHalf}
               onPress={() => onActivate(store)}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-              accessibilityLabel="Aktifkan toko menjadi PRO"
+              accessibilityLabel="Aktifkan kembali toko menjadi PRO"
             >
               <CheckCircle2 size={15} color="#ffffff" />
-              <Text style={styles.activateButtonText}>Aktifkan PRO</Text>
+              <Text style={styles.primaryActivateButtonText} numberOfLines={1}>Aktifkan PRO</Text>
             </TouchableOpacity>
-          </>
+          </View>
         )}
       </View>
     </View>
@@ -355,27 +380,32 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   actionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingTop: 8,
+    paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: '#1c1c20',
   },
-  waButton: {
+  trialActionGroup: {
+    gap: 8,
+  },
+  secondaryActionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  secondaryButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
+    gap: 6,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',
     borderRadius: 8,
-    paddingHorizontal: 12,
-    minHeight: 44,
-    flex: 1.4,
+    paddingHorizontal: 10,
+    minHeight: 42,
   },
-  waButtonText: {
+  secondaryButtonText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 12,
     color: '#d4d4d8',
@@ -383,17 +413,17 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   extendActiveButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
+    gap: 6,
     backgroundColor: 'rgba(225, 29, 72, 0.1)',
     borderWidth: 1,
     borderColor: 'rgba(225, 29, 72, 0.25)',
     borderRadius: 8,
     paddingHorizontal: 10,
-    minHeight: 44,
-    flex: 1,
+    minHeight: 42,
   },
   extendActiveButtonText: {
     fontFamily: 'Poppins_500Medium',
@@ -402,40 +432,30 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  trialButton: {
+  primaryActivateButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
-    backgroundColor: '#18181b',
-    borderWidth: 1,
-    borderColor: '#27272a',
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    minHeight: 44,
-    flex: 0.8,
-  },
-  trialButtonText: {
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 12,
-    color: '#d4d4d8',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  activateButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 5,
+    gap: 6,
     backgroundColor: '#e11d48',
     borderRadius: 8,
-    paddingHorizontal: 10,
+    paddingHorizontal: 14,
     minHeight: 44,
-    flex: 1.2,
   },
-  activateButtonText: {
+  primaryActivateButtonHalf: {
+    flex: 1.2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#e11d48',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    minHeight: 42,
+  },
+  primaryActivateButtonText: {
     fontFamily: 'Poppins_600SemiBold',
-    fontSize: 12,
+    fontSize: 12.5,
     color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
