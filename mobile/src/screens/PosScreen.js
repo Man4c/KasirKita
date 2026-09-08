@@ -11,6 +11,7 @@ import {
 import {
   ArrowRight,
   ShoppingCart,
+  Lock,
 } from 'lucide-react-native';
 import api from '../services/api';
 import { storage } from '../services/storage';
@@ -19,6 +20,7 @@ import { syncManager } from '../services/syncManager';
 import { printerService } from '../services/printerService';
 import { orientationService } from '../services/orientationService';
 import { showAlert } from '../utils/alert';
+import { useAuth } from '../context/AuthContext';
 import { useCheckoutReducer, CHECKOUT_ACTION_TYPES } from '../hooks/useCheckoutState';
 import PosCartModal from '../components/pos/PosCartModal';
 import CustomerPickerModal from '../components/pos/CustomerPickerModal';
@@ -29,6 +31,7 @@ import ProductGrid from '../components/pos/ProductGrid';
 import LandscapeRegisterPanel from '../components/pos/LandscapeRegisterPanel';
 import PosCheckoutView from '../components/pos/PosCheckoutView';
 import PosBarcodeScannerView from '../components/pos/PosBarcodeScannerView';
+import { LicenseActivationModal } from '../components/settings';
 
 export default function PosScreen({
   isLandscape = false,
@@ -79,6 +82,10 @@ export default function PosScreen({
 
   // Barcode Scanner Mode State
   const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
+
+  // Store License & Expired State
+  const { isStoreExpired, refreshStoreStatus } = useAuth();
+  const [licenseModalOpen, setLicenseModalOpen] = useState(false);
 
   useEffect(() => {
     if (onCheckoutStateChange) {
@@ -548,6 +555,16 @@ export default function PosScreen({
         })),
       };
 
+      // 0. Check store active/trial expiration guard
+      if (isStoreExpired) {
+        showAlert(
+          'Masa Trial Toko Berakhir',
+          'Masa aktif toko Anda telah berakhir sehingga transaksi kasir dikunci sementara. Silakan aktivasi lisensi toko untuk melanjutkan penjualan.'
+        );
+        setLicenseModalOpen(true);
+        return;
+      }
+
       // 1. Direct offline handling if offline
       if (!isOnline && paymentMethod === 'CASH') {
         await handleOfflineSuccess(payload, receiptItems);
@@ -603,6 +620,15 @@ export default function PosScreen({
           return;
         }
 
+        if (err.response?.status === 403 && (err.response?.data?.error === 'STORE_SUBSCRIPTION_EXPIRED' || err.response?.data?.message?.includes('lisensi') || err.response?.data?.message?.includes('trial'))) {
+          showAlert(
+            'Masa Trial Toko Berakhir',
+            err.response?.data?.message || 'Transaksi kasir terkunci sementara. Silakan masukkan kode lisensi untuk melanjutkan.'
+          );
+          setLicenseModalOpen(true);
+          return;
+        }
+
         showAlert('Gagal', err.response?.data?.message || 'Terjadi kesalahan transaksi.');
       }
     } finally {
@@ -614,6 +640,25 @@ export default function PosScreen({
 
   return (
     <View style={[styles.container, isLandscape && styles.landscapeRoot]}>
+      {/* Expired Store Notice Banner */}
+      {isStoreExpired && (
+        <TouchableOpacity
+          style={styles.expiredBanner}
+          onPress={() => setLicenseModalOpen(true)}
+          activeOpacity={0.8}
+        >
+          <View style={styles.expiredBannerLeft}>
+            <Lock size={14} color="#ffffff" style={{ flexShrink: 0 }} />
+            <Text style={styles.expiredBannerText} numberOfLines={1}>
+              Masa Trial Habis • Transaksi Terkunci
+            </Text>
+          </View>
+          <View style={styles.expiredBannerBtn}>
+            <Text style={styles.expiredBannerBtnText}>Aktivasi</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+
       {!isCheckoutView ? (
         <>
           {/* LEFT COLUMN: Catalog & Products Component OR Barcode Scanner View */}
@@ -868,6 +913,17 @@ export default function PosScreen({
           </View>
         </Modal>
       )}
+
+      {/* License Activation Modal */}
+      <LicenseActivationModal
+        visible={licenseModalOpen}
+        onClose={() => setLicenseModalOpen(false)}
+        onSuccess={() => {
+          if (refreshStoreStatus) {
+            refreshStoreStatus().catch(() => {});
+          }
+        }}
+      />
     </View>
   );
 }
@@ -882,6 +938,44 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     overflow: 'hidden',
+  },
+  expiredBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#b91c1c',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    zIndex: 99,
+  },
+  expiredBannerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flex: 1,
+    minWidth: 0,
+  },
+  expiredBannerText: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 12,
+    color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  expiredBannerBtn: {
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+    flexShrink: 0,
+    marginLeft: 8,
+  },
+  expiredBannerBtnText: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 12,
+    color: '#b91c1c',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   floatingCart: {
     position: 'absolute',

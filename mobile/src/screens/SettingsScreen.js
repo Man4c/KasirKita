@@ -38,6 +38,7 @@ import {
   Upload,
   ArrowUpCircle,
   Sparkles,
+  Award,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
@@ -58,6 +59,7 @@ import {
   TestReceiptModal,
   SecurityAuditModal,
   BackupRestoreModal,
+  LicenseActivationModal,
 } from '../components/settings';
 import UpdatePromptModal from '../components/updater/UpdatePromptModal';
 import appConfig from '../../app.json';
@@ -65,7 +67,7 @@ import appConfig from '../../app.json';
 const APP_VERSION = appConfig?.expo?.version || '1.3.0';
 
 export default function SettingsScreen({ isLandscape = false, navigation }) {
-  const { user, logout, updateUser } = useAuth();
+  const { user, logout, updateUser, store, refreshStoreStatus } = useAuth();
 
   // Settings State
   const [storeName, setStoreName] = useState('KasirKita Mart');
@@ -96,6 +98,7 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
   const [storeModalOpen, setStoreModalOpen] = useState(false);
   const [printerModalOpen, setPrinterModalOpen] = useState(false);
   const [testReceiptOpen, setTestReceiptOpen] = useState(false);
+  const [licenseModalOpen, setLicenseModalOpen] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [serverStatus, setServerStatus] = useState('Memeriksa...');
   const [serverPing, setServerPing] = useState(null);
@@ -127,6 +130,9 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
     loadSettings();
     checkServerHealth();
     syncManager.init();
+    if (refreshStoreStatus) {
+      refreshStoreStatus().catch(() => {});
+    }
 
     // Silent background check for latest app version
     updaterService.checkForUpdate({ timeout: 4000 }).then((info) => {
@@ -689,9 +695,9 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         </View>
       </View>
 
-      {/* 3. Seksi Identitas Toko */}
+      {/* 3. Seksi Identitas Toko & Lisensi */}
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>IDENTITAS TOKO</Text>
+        <Text style={styles.sectionHeader}>IDENTITAS TOKO & LISENSI</Text>
         <View style={styles.card}>
           {/* Store Info Row (Clickable to Edit) */}
           <TouchableOpacity
@@ -710,6 +716,79 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
               <Text style={styles.menuTitle} numberOfLines={1}>{storeName}</Text>
               <Text style={styles.menuSubtitle} numberOfLines={1}>{storeAddress}</Text>
               <Text style={styles.menuDetailText}>WA/Telp: {storePhone}</Text>
+            </View>
+            <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Store License Status Row */}
+          <TouchableOpacity
+            style={styles.menuRow}
+            activeOpacity={0.7}
+            onPress={() => setLicenseModalOpen(true)}
+          >
+            <View
+              style={[
+                styles.menuIconBox,
+                {
+                  backgroundColor: store?.is_expired
+                    ? 'rgba(239, 68, 68, 0.12)'
+                    : store?.is_trial
+                    ? 'rgba(245, 158, 11, 0.12)'
+                    : 'rgba(52, 211, 153, 0.12)',
+                },
+              ]}
+            >
+              <Award
+                size={18}
+                color={
+                  store?.is_expired ? '#f87171' : store?.is_trial ? '#fbbf24' : '#34d399'
+                }
+              />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                <Text style={styles.menuTitle}>Status Lisensi</Text>
+                <View
+                  style={[
+                    styles.licenseBadge,
+                    {
+                      backgroundColor: store?.is_expired
+                        ? 'rgba(239, 68, 68, 0.15)'
+                        : store?.is_trial
+                        ? 'rgba(245, 158, 11, 0.15)'
+                        : 'rgba(52, 211, 153, 0.15)',
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.licenseBadgeText,
+                      {
+                        color: store?.is_expired
+                          ? '#f87171'
+                          : store?.is_trial
+                          ? '#fbbf24'
+                          : '#34d399',
+                      },
+                    ]}
+                  >
+                    {store?.is_expired
+                      ? 'KEDALUWARSA'
+                      : store?.is_trial
+                      ? 'TRIAL'
+                      : 'PRO AKTIF'}
+                  </Text>
+                </View>
+              </View>
+              <Text style={styles.menuSubtitle} numberOfLines={1}>
+                {store?.is_expired
+                  ? 'Masa coba berakhir • Ketuk untuk aktivasi'
+                  : store?.is_trial
+                  ? `Uji coba ${store?.days_remaining ?? '14'} hari lagi • Ketuk untuk aktivasi`
+                  : `Akses Permanen • ${store?.license_key || 'Seumur Hidup'}`}
+              </Text>
             </View>
             <ChevronRight size={18} color="#a1a1aa" style={{ flexShrink: 0 }} />
           </TouchableOpacity>
@@ -1461,6 +1540,17 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
         updateInfo={updateInfo}
         onClose={() => setUpdateModalOpen(false)}
       />
+
+      {/* MODAL 8: AKTIVASI LISENSI TOKO */}
+      <LicenseActivationModal
+        visible={licenseModalOpen}
+        onClose={() => setLicenseModalOpen(false)}
+        onSuccess={() => {
+          if (refreshStoreStatus) {
+            refreshStoreStatus().catch(() => {});
+          }
+        }}
+      />
     </ScrollView>
   );
 }
@@ -1573,6 +1663,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Poppins_700Bold',
     color: '#fb7185',
+  },
+  licenseBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    alignSelf: 'flex-start',
+  },
+  licenseBadgeText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   profileEmail: {
     fontSize: 12,

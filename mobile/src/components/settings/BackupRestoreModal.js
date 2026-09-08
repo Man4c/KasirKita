@@ -12,6 +12,7 @@ import {
 import {
   X,
   AlertTriangle,
+  AlertCircle,
   RefreshCw,
   Download,
   Upload,
@@ -202,7 +203,27 @@ export default function BackupRestoreModal({
                       KasirKita v{inspectedData?.appVersion || '1.3.0'}
                     </Text>
                   </View>
+                  {inspectedData?.storeName ? (
+                    <View style={styles.metaPill}>
+                      <Text style={styles.metaPillText} numberOfLines={1}>
+                        {inspectedData.storeName}
+                      </Text>
+                    </View>
+                  ) : null}
                 </View>
+
+                {/* Store Mismatch Warning Banner */}
+                {inspectedData?.isStoreMismatch && (
+                  <View style={styles.storeMismatchBox}>
+                    <AlertCircle size={18} color="#fb7185" style={{ marginRight: 8, flexShrink: 0 }} />
+                    <View style={{ flex: 1, minWidth: 0 }}>
+                      <Text style={styles.storeMismatchTitle}>Peringatan: Berkas Milik Toko Lain</Text>
+                      <Text style={styles.storeMismatchText}>
+                        Berkas ini tercatat milik "{inspectedData?.storeName || 'Toko Lain'}" dan berbeda dengan toko yang sedang aktif. Pemulihan lintas toko ditolak demi keamanan.
+                      </Text>
+                    </View>
+                  </View>
+                )}
 
                 {/* Data Grid Ringkasan */}
                 <View style={styles.statsGrid}>
@@ -327,7 +348,7 @@ export default function BackupRestoreModal({
               <TouchableOpacity
                 style={[
                   styles.confirmBtn,
-                  isRestoring && styles.confirmBtnDisabled,
+                  (isRestoring || inspectedData?.isStoreMismatch) && styles.confirmBtnDisabled,
                 ]}
                 activeOpacity={0.8}
                 onPress={() =>
@@ -335,7 +356,7 @@ export default function BackupRestoreModal({
                     includeOfflineQueue: hasOfflineQueueInFile && selectedScenario === 'full',
                   })
                 }
-                disabled={isRestoring}
+                disabled={isRestoring || inspectedData?.isStoreMismatch}
               >
                 {isRestoring ? (
                   <ActivityIndicator size="small" color="#ffffff" />
@@ -536,6 +557,29 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     includeFontPadding: false,
     textAlignVertical: 'center',
+  },
+  storeMismatchBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.35)',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 16,
+  },
+  storeMismatchTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#fb7185',
+    marginBottom: 2,
+    includeFontPadding: false,
+  },
+  storeMismatchText: {
+    fontSize: 12,
+    color: '#e4e4e7',
+    lineHeight: 18,
+    includeFontPadding: false,
   },
   statsGrid: {
     flexDirection: 'row',

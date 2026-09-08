@@ -19,10 +19,13 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
+  Sparkles,
+  ChevronRight,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
 import { getDefaultBaseUrl } from '../services/api';
+import RegisterStoreModal from '../components/auth/RegisterStoreModal';
 
 // Disable layout property transitions on web
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -47,6 +50,7 @@ export default function LoginScreen() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [registerModalOpen, setRegisterModalOpen] = useState(false);
 
   const { login } = useAuth();
 
@@ -207,6 +211,28 @@ export default function LoginScreen() {
               </View>
             )}
           </TouchableOpacity>
+
+          {/* Register Store Action Card */}
+          <View style={styles.registerDivider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>ATAU</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          <TouchableOpacity
+            style={styles.registerCard}
+            onPress={() => setRegisterModalOpen(true)}
+            activeOpacity={0.8}
+          >
+            <View style={styles.registerIconBox}>
+              <Sparkles size={18} color="#fb7185" />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.registerCardTitle}>Buka Toko Baru (Gratis 14 Hari)</Text>
+              <Text style={styles.registerCardSubtitle}>Daftar mandiri • Langsung aktif siap jualan</Text>
+            </View>
+            <ChevronRight size={16} color="#fb7185" style={{ flexShrink: 0 }} />
+          </TouchableOpacity>
         </View>
 
         {/* Demo Fast Login */}
@@ -224,6 +250,13 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Register Store Modal */}
+        <RegisterStoreModal
+          visible={registerModalOpen}
+          onClose={() => setRegisterModalOpen(false)}
+          apiUrl={apiUrl}
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -406,6 +439,59 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     fontSize: 12,
     fontFamily: 'Poppins_400Regular',
+    marginTop: 2,
+  },
+  registerDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 14,
+    gap: 10,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#27272a',
+  },
+  dividerText: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 12,
+    color: '#71717a',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  registerCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(225, 29, 72, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.25)',
+    borderRadius: 14,
+    padding: 12,
+    gap: 12,
+    minHeight: 52,
+  },
+  registerIconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  registerCardTitle: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 13,
+    color: '#fb7185',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  registerCardSubtitle: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 12,
+    color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
     marginTop: 2,
   },
 });

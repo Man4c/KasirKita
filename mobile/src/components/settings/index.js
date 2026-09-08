@@ -7,3 +7,5 @@ export { default as PrinterGuideModal } from './PrinterGuideModal';
 export { default as TestReceiptModal } from './TestReceiptModal';
 export { default as SecurityAuditModal } from './SecurityAuditModal';
 export { default as BackupRestoreModal } from './BackupRestoreModal';
+export { default as LicenseActivationModal } from './LicenseActivationModal';
+

@@ -55,6 +55,17 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - `POST /api/store/activate-license`: Klaim lisensi toko khusus role `owner` dengan proteksi kode duplikat, invalid, dan revoked.
     - Menghubungkan notifikasi aktivasi instan ke Telegram pengembang melalui `TelegramNotificationService::notifyLicenseActivated()`.
     - Membuat automated test suite komprehensif `LicenseActivationTest.php` (8 tests, 40 assertions). Seluruh test suite backend lolos 100% (**114 tests passed, 558 assertions, 0 errors**).
+  - *Status Fase 5 (Selesai)*:
+    - Memperbarui `mobile/src/context/AuthContext.js` dengan fungsi `registerStore(regData)`, `refreshStoreStatus()`, `activateLicense(licenseKey)`, serta eksposur state toko (`store`, `isStoreActive`, `isStoreTrial`, `isStoreExpired`).
+    - Membuat komponen `mobile/src/components/auth/RegisterStoreModal.js` (Bottom Sheet form pendaftaran mandiri toko baru dengan seleksi chip kategori usaha Ritel, F&B, Jasa, Lainnya, auto-login mulus).
+    - Membuat komponen `mobile/src/components/settings/LicenseActivationModal.js` (Bottom Sheet modal input serial key `KK-PRO-XXXX-XXXX`, auto-formatting uppercase & tanda hubung, live indicator, celebratory feedback view).
+    - Memperbarui `mobile/src/screens/LoginScreen.js` dengan kartu aksi "Buka Toko Baru (Gratis 14 Hari)" dan trigger modal registrasi.
+    - Memperbarui `mobile/src/screens/SettingsScreen.js` pada seksi "IDENTITAS TOKO & LISENSI" dengan kartu status lisensi interaktif, badge real-time (TRIAL, PRO AKTIF, KEDALUWARSA), hitung mundur sisa hari, dan tombol aktivasi.
+    - Memperbarui `mobile/src/screens/PosScreen.js` dengan sticky banner peringatan saat toko `expired`, pencegahan transaksi checkout dengan dialog aktivasi serial key saat backend menolak via 403 `STORE_SUBSCRIPTION_EXPIRED`.
+    - Memperbarui `mobile/src/services/backupService.js` (bump `CURRENT_SCHEMA_VERSION` ke `3`, menyematkan `store_id` dan `store_name` pada amplop backup, memvalidasi identitas penyewa, dan memblokir restore silang antar toko).
+    - Memperbarui `mobile/src/components/settings/BackupRestoreModal.js` dengan badge nama toko dan peringatan `storeMismatchBox` jika berkas backup milik toko lain.
+    - Menjalankan audit Impeccable dan syntax check node (`0 issues`), seluruh aturan Defensive UI Craft (font floor >= 12px, touch target >= 44dp, Android anti-shift `includeFontPadding: false` + `textAlignVertical: 'center'`) terpenuhi 100%.
+
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.

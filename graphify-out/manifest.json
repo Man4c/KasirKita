@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788824820.2753625,
-    "ast_hash": "d26e056b05a10d133658b16878102837",
+    "mtime": 1788825569.3986495,
+    "ast_hash": "214e4d00671f2e082b4c3d8902b52274",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
-    "mtime": 1788618483.5205927,
-    "ast_hash": "fa33120f396dd470a53c8de5aef4242d",
+    "mtime": 1788825098.6447792,
+    "ast_hash": "79237656382c5c9d02b5ff25cf67fe25",
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {
@@ -1395,13 +1395,13 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/LoginScreen.js": {
-    "mtime": 1788571591.7618227,
-    "ast_hash": "09521f4e7a26f19adf846f1038847e96",
+    "mtime": 1788825176.6323347,
+    "ast_hash": "d33b1424a0342ff3ed44d10ea1b5d69f",
     "semantic_hash": ""
   },
   "mobile/src/screens/PosScreen.js": {
-    "mtime": 1788620166.600464,
-    "ast_hash": "8c629bf1dc0b95d5a2cb37f6af8c8fc9",
+    "mtime": 1788825376.8344786,
+    "ast_hash": "10e8f1b041555b5dec7fb2e41b1f681a",
     "semantic_hash": ""
   },
   "mobile/src/services/api.js": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788753292.5430515,
-    "ast_hash": "7c875ed315dd3c7f438fbe237cbdf56b",
+    "mtime": 1788825273.0918007,
+    "ast_hash": "16868b5db61e47e987446fd04afd6f9a",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {
@@ -2250,8 +2250,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/index.js": {
-    "mtime": 1788670659.7371593,
-    "ast_hash": "9b9ac57dc9f558a3a47061341056630e",
+    "mtime": 1788825134.7577584,
+    "ast_hash": "72b969a197eed587a755225f32240a0b",
     "semantic_hash": ""
   },
   "plans/260902-23-mobile-settings-screen-refactoring/plan.md": {
@@ -2590,13 +2590,13 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/BackupRestoreModal.js": {
-    "mtime": 1788670612.4546118,
-    "ast_hash": "5edcb2ca39a53d497d0721c668fedf66",
+    "mtime": 1788825500.2409642,
+    "ast_hash": "91329319ca0d05e3f010d7fce6c76581",
     "semantic_hash": ""
   },
   "mobile/src/services/backupService.js": {
-    "mtime": 1788678214.197722,
-    "ast_hash": "0faa450cb1800502bfd001f7e94f3f35",
+    "mtime": 1788825427.4370732,
+    "ast_hash": "73e96e6081ee61afd5372ca5e84c968d",
     "semantic_hash": ""
   },
   "mobile/scripts/testBackupService.js": {
@@ -2920,8 +2920,8 @@
     "semantic_hash": ""
   },
   "plans/260908-36-multi-tenant-dan-lisensi-toko/plan.md": {
-    "mtime": 1788824778.330835,
-    "ast_hash": "deac4dc64d9ac774746e841d3349d7a6",
+    "mtime": 1788825559.9656365,
+    "ast_hash": "b45ca2c288d1151fa4c19a48034a62a5",
     "semantic_hash": ""
   },
   "backend/app/Http/Middleware/EnsureStoreActive.php": {
@@ -2997,6 +2997,16 @@
   "backend/tests/Feature/LicenseActivationTest.php": {
     "mtime": 1788824742.854018,
     "ast_hash": "554bb33469cfc2be89472fb67facdf57",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/auth/RegisterStoreModal.js": {
+    "mtime": 1788825114.2400541,
+    "ast_hash": "8fdde37ef1ea876bfdd1423e88f80cfd",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/settings/LicenseActivationModal.js": {
+    "mtime": 1788825127.1032412,
+    "ast_hash": "833d118e1490448246cea2116d7d85c7",
     "semantic_hash": ""
   }
 }

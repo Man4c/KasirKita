@@ -7,7 +7,7 @@ import { storage } from './storage';
 import { offlineStorage } from './offlineStorage';
 import appConfig from '../../app.json';
 
-export const CURRENT_SCHEMA_VERSION = 2;
+export const CURRENT_SCHEMA_VERSION = 3;
 export const APP_VERSION = appConfig?.expo?.version || '1.3.0';
 
 export const backupService = {
@@ -109,12 +109,19 @@ export const backupService = {
         };
       }
 
-      // Construct standardized backup envelope with versioning
+      // Extract current logged-in store identity for safe multi-tenant envelope
+      const currentUser = await storage.getUser();
+      const currentStoreId = currentUser?.store_id || currentUser?.store?.id || null;
+      const currentStoreName = currentUser?.store?.name || storeData?.name || 'KasirKita Mart';
+
+      // Construct standardized backup envelope with versioning and store isolation
       const backupEnvelope = {
         app: 'KasirKita',
         schema_version: CURRENT_SCHEMA_VERSION,
         exported_at: new Date().toISOString(),
         app_version: APP_VERSION,
+        store_id: currentStoreId,
+        store_name: currentStoreName,
         source_device: {
           platform: Platform.OS,
           has_offline_queue: hasPendingQueue,
@@ -251,7 +258,7 @@ export const backupService = {
         }
       }
 
-      return this.parseAndValidateBackupContent(rawJsonContent, filename);
+      return await this.parseAndValidateBackupContent(rawJsonContent, filename);
     } catch (err) {
       return {
         canceled: false,
@@ -265,7 +272,7 @@ export const backupService = {
    * Parse and validate raw backup JSON string.
    * Runs schema sanitizer to support backward compatibility with schema_version 1.
    */
-  parseAndValidateBackupContent(rawJsonContent, filename = 'backup.json') {
+  async parseAndValidateBackupContent(rawJsonContent, filename = 'backup.json') {
     try {
       if (!rawJsonContent || typeof rawJsonContent !== 'string') {
         throw new Error('Berkas cadangan kosong atau tidak terbaca.');
@@ -317,6 +324,16 @@ export const backupService = {
 
       const queue = Array.isArray(data.offline_queue) ? data.offline_queue : [];
 
+      // Validate store identity to prevent accidental cross-tenant data override
+      const currentUser = await storage.getUser();
+      const currentStoreId = currentUser?.store_id || currentUser?.store?.id || null;
+      const backupStoreId = parsed.store_id || parsed.data?.store?.id || null;
+      const backupStoreName = parsed.store_name || parsed.data?.store?.name || null;
+
+      const isStoreMismatch = Boolean(
+        currentStoreId && backupStoreId && currentStoreId !== backupStoreId
+      );
+
       return {
         canceled: false,
         valid: true,
@@ -324,6 +341,9 @@ export const backupService = {
         schemaVersion,
         exportedAt: parsed.exported_at || null,
         appVersion: parsed.app_version || '1.0.0',
+        storeId: backupStoreId,
+        storeName: backupStoreName,
+        isStoreMismatch,
         payload: parsed,
         summary: {
           productsCount: Array.isArray(data.products) ? data.products.length : 0,
@@ -357,6 +377,18 @@ export const backupService = {
     try {
       if (!backupPayload || !backupPayload.data) {
         throw new Error('Data cadangan kosong atau tidak valid.');
+      }
+
+      // Strict Cross-Store Isolation Guard
+      const currentUser = await storage.getUser();
+      const currentStoreId = currentUser?.store_id || currentUser?.store?.id || null;
+      const backupStoreId = backupPayload.store_id || backupPayload.data?.store?.id || null;
+      const backupStoreName = backupPayload.store_name || backupPayload.data?.store?.name || 'Toko Lain';
+
+      if (currentStoreId && backupStoreId && currentStoreId !== backupStoreId) {
+        throw new Error(
+          `Pemulihan ditolak: Berkas cadangan ini berasal dari toko "${backupStoreName}", berbeda dengan akun toko Anda saat ini. Untuk menjaga integritas dan keamanan data, pemulihan data antar-toko tidak diizinkan.`
+        );
       }
 
       const data = backupPayload.data;
