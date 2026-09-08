@@ -23,6 +23,26 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Terhubung dengan modal pendaftaran mandiri `RegisterStoreModal` (nama toko, kategori bisnis, kontak, dan kredensial owner).
   - Lolos uji Impeccable detector (0 violations) dan Anti-Shift typography rule.
 
+- **Rilis Resmi KasirKita POS Mobile v1.4.2 (Build 8) (`Plan 34` & `Plan 36`)**:
+  - **Kompilasi Standalone EAS Cloud**:
+    - Berhasil membangun APK mandiri Android profil `preview` (Build ID: `afc55cb3-55f8-451a-91ed-ba02052fadba`).
+    - Ukuran berkas APK tetap optimal: **36,51 MB (36.516.522 bytes)** dengan Google R8 ProGuard dan arsitektur `arm64-v8a`.
+  - **Fitur Baru & Perbaikan yang Terbawa di v1.4.2**:
+    1. *Restrukturisasi Tombol Aksi SuperAdmin Mobile*:
+       - Label aksi toko dipersingkat menjadi ergonomis: `"WhatsApp"`, `"Perpanjang"`, `"Trial"`.
+       - Tombol Kunci Toko / Set Expired (`[ 🚫 ]` dan `[ 🗹 Buka Kunci ]`) dengan dialog konfirmasi aman dan sinkronisasi server langsung.
+    2. *Pencegahan Teks Terpotong pada Kartu Lisensi*:
+       - Pemisahan baris informasi paket dan catatan lisensi agar tidak saling bertubrukan (*anti-overflow*).
+    3. *Desain Bersih Minimalis Buka Toko Baru*:
+       - Menghilangkan kotak ikon berlebih di kartu login; layout rata kiri rapi dengan panah chevron di kanan.
+       - Peningkatan pesan validasi bahasa Indonesia yang ramah pengguna dan auto-scroll otomatis saat pendaftaran toko.
+    4. *Verifikasi Telemetry Tracking*:
+       - Sinkronisasi pelaporan instalasi perangkat ke database Supabase `app_installations`.
+  - **Distribusi & CDN Global**:
+    - Berkas APK telah diunggah ke CDN Supabase Storage bucket `apk-releases`: `https://sdtnczxxlkgormclplzz.supabase.co/storage/v1/object/public/apk-releases/KasirKita-v1.4.2.apk`.
+    - Database pusat Supabase (`store_settings`) dan endpoint produksi Render (`https://kasirkita.onrender.com/api/app/version`) telah diperbarui ke `latest_version: "1.4.2"` dan `latest_version_code: 8`.
+    - In-app remote updater otomatis aktif: seluruh pengguna mobile akan mendapatkan notifikasi pembaruan saat membuka aplikasi.
+
 - **Rilis Resmi KasirKita POS Mobile v1.4.1 (Build 7) (`Plan 34` & `Plan 36`)**:
   - **Kompilasi Standalone EAS Cloud**:
     - Berhasil membangun APK mandiri Android profil `preview` (Build ID: `433a363d-7349-4130-8a32-7066395d4196`).

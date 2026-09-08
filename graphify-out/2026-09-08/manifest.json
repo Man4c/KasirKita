@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788844669.6156218,
-    "ast_hash": "c96f84ac681185f6e583c3faf0a2960e",
+    "mtime": 1788846249.4292078,
+    "ast_hash": "fcc65f472ac6778e53e0bf493840182b",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1370,8 +1370,8 @@
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788841090.649082,
-    "ast_hash": "9980f937133d13bee5d3a249b0b5e264",
+    "mtime": 1788846701.788379,
+    "ast_hash": "3beeb3fcd936df426dea1f0906e5c9b7",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788833136.9577415,
-    "ast_hash": "a1a3db4aa5afacaa07a0f4331433f536",
+    "mtime": 1788846703.2943437,
+    "ast_hash": "ce447901bfee18f3ff11ed7b7bec960b",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -2105,8 +2105,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/StoreSetting.php": {
-    "mtime": 1788833375.826193,
-    "ast_hash": "07a88045df07cb741748769885e15494",
+    "mtime": 1788846710.430815,
+    "ast_hash": "d396b6fc542d47a2e3ff66ec012ce61d",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_02_051850_create_store_settings_table.php": {
@@ -2615,8 +2615,8 @@
     "semantic_hash": ""
   },
   "backend/config/app_version.php": {
-    "mtime": 1788833381.7487202,
-    "ast_hash": "972b2b55e847649f3ba2131111e93d4d",
+    "mtime": 1788846716.6283505,
+    "ast_hash": "7a4278c31777732f95dd91ff18faf80b",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_06_000002_add_app_version_to_store_settings_table.php": {
@@ -2895,8 +2895,8 @@
     "semantic_hash": ""
   },
   "mobile/src/services/telemetryService.js": {
-    "mtime": 1788820423.1279805,
-    "ast_hash": "e6417b04d769d93617396e26bf61c2cd",
+    "mtime": 1788846705.0950863,
+    "ast_hash": "ae4ddff0df36544fce47f28d7ce97635",
     "semantic_hash": ""
   },
   "plans/260908-35-app-installation-and-telemetry-tracking/plan.md": {
