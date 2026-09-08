@@ -19,13 +19,10 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  Sparkles,
-  ChevronRight,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { storage } from '../services/storage';
 import { getDefaultBaseUrl } from '../services/api';
-import RegisterStoreModal from '../components/auth/RegisterStoreModal';
 
 // Disable layout property transitions on web
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -50,7 +47,6 @@ export default function LoginScreen() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [registerModalOpen, setRegisterModalOpen] = useState(false);
 
   const { login } = useAuth();
 
@@ -90,16 +86,6 @@ export default function LoginScreen() {
       setError(res.message);
     }
     setLoading(false);
-  };
-
-  const fillDemo = (type) => {
-    if (type === 'owner') {
-      setEmail('owner@kasirkita.com');
-      setPassword('password123');
-    } else {
-      setEmail('kasir@kasirkita.com');
-      setPassword('password123');
-    }
   };
 
   return (
@@ -211,52 +197,7 @@ export default function LoginScreen() {
               </View>
             )}
           </TouchableOpacity>
-
-          {/* Register Store Action Card */}
-          <View style={styles.registerDivider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>ATAU</Text>
-            <View style={styles.dividerLine} />
-          </View>
-
-          <TouchableOpacity
-            style={styles.registerCard}
-            onPress={() => setRegisterModalOpen(true)}
-            activeOpacity={0.8}
-          >
-            <View style={styles.registerIconBox}>
-              <Sparkles size={18} color="#fb7185" />
-            </View>
-            <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={styles.registerCardTitle}>Buka Toko Baru (Gratis 14 Hari)</Text>
-              <Text style={styles.registerCardSubtitle}>Daftar mandiri • Langsung aktif siap jualan</Text>
-            </View>
-            <ChevronRight size={16} color="#fb7185" style={{ flexShrink: 0 }} />
-          </TouchableOpacity>
         </View>
-
-        {/* Demo Fast Login */}
-        <View style={styles.demoSection}>
-          <Text style={styles.demoTitle}>Akun Demo Cepat:</Text>
-          <View style={styles.demoButtons}>
-            <TouchableOpacity style={styles.demoBtn} onPress={() => fillDemo('owner')}>
-              <Text style={styles.demoRoleOwner}>Pemilik (Owner)</Text>
-              <Text style={styles.demoDesc}>owner@kasirkita.com</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.demoBtn} onPress={() => fillDemo('cashier')}>
-              <Text style={styles.demoRoleCashier}>Kasir Toko</Text>
-              <Text style={styles.demoDesc}>kasir@kasirkita.com</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Register Store Modal */}
-        <RegisterStoreModal
-          visible={registerModalOpen}
-          onClose={() => setRegisterModalOpen(false)}
-          apiUrl={apiUrl}
-        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -402,96 +343,5 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 14,
     fontFamily: 'Poppins_600SemiBold',
-  },
-  demoSection: {
-    marginTop: 24,
-  },
-  demoTitle: {
-    fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#d4d4d8',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  demoButtons: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  demoBtn: {
-    flex: 1,
-    backgroundColor: '#18181b',
-    borderColor: '#27272a',
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 10,
-  },
-  demoRoleOwner: {
-    color: '#fb7185',
-    fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
-  },
-  demoRoleCashier: {
-    color: '#34d399',
-    fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
-  },
-  demoDesc: {
-    color: '#a1a1aa',
-    fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    marginTop: 2,
-  },
-  registerDivider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 14,
-    gap: 10,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#27272a',
-  },
-  dividerText: {
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 12,
-    color: '#71717a',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  registerCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(225, 29, 72, 0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(225, 29, 72, 0.25)',
-    borderRadius: 14,
-    padding: 12,
-    gap: 12,
-    minHeight: 52,
-  },
-  registerIconBox: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: 'rgba(225, 29, 72, 0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexShrink: 0,
-  },
-  registerCardTitle: {
-    fontFamily: 'Poppins_600SemiBold',
-    fontSize: 13,
-    color: '#fb7185',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  registerCardSubtitle: {
-    fontFamily: 'Poppins_400Regular',
-    fontSize: 12,
-    color: '#a1a1aa',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-    marginTop: 2,
   },
 });
