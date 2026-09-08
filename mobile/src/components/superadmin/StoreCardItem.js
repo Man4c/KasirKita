@@ -10,10 +10,11 @@ import {
   CheckCircle2,
   Clock,
   MessageSquare,
+  Ban,
 } from 'lucide-react-native';
 import { showAlert } from '../../utils/alert.js';
 
-export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
+export default function StoreCardItem({ store, onActivate, onExtendTrial, onToggleStatus }) {
   const isTrial = store.subscription_status === 'trial';
   const isActive = store.subscription_status === 'active';
   const isExpired = store.subscription_status === 'expired';
@@ -177,7 +178,17 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
                 accessibilityLabel="Perpanjang masa trial toko"
               >
                 <Clock size={14} color="#fbbf24" />
-                <Text style={styles.secondaryButtonText} numberOfLines={1}>+ Perpanjang Trial</Text>
+                <Text style={styles.secondaryButtonText} numberOfLines={1}>Trial</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.lockButton}
+                onPress={() => onToggleStatus && onToggleStatus(store, 'expired')}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                accessibilityLabel="Kunci / Set Expired"
+              >
+                <Ban size={15} color="#ef4444" />
               </TouchableOpacity>
             </View>
 
@@ -202,7 +213,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
               accessibilityLabel="Hubungi pemilik via WhatsApp"
             >
               <MessageSquare size={14} color="#34d399" />
-              <Text style={styles.secondaryButtonText} numberOfLines={1}>Hubungi WhatsApp</Text>
+              <Text style={styles.secondaryButtonText} numberOfLines={1}>WhatsApp</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -213,32 +224,55 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
               accessibilityLabel="Perpanjang atau kelola paket lisensi toko"
             >
               <Clock size={14} color="#fb7185" />
-              <Text style={styles.extendActiveButtonText} numberOfLines={1}>Perpanjang Lisensi</Text>
+              <Text style={styles.extendActiveButtonText} numberOfLines={1}>Perpanjang</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.lockButton}
+              onPress={() => onToggleStatus && onToggleStatus(store, 'expired')}
+              activeOpacity={0.7}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              accessibilityLabel="Kunci / Set Expired"
+            >
+              <Ban size={15} color="#ef4444" />
             </TouchableOpacity>
           </View>
         ) : (
           /* isExpired: Toko Kedaluwarsa */
-          <View style={styles.secondaryActionRow}>
-            <TouchableOpacity
-              style={styles.secondaryButton}
-              onPress={handleOpenWhatsApp}
-              activeOpacity={0.7}
-              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-              accessibilityLabel="Hubungi pemilik via WhatsApp"
-            >
-              <MessageSquare size={14} color="#34d399" />
-              <Text style={styles.secondaryButtonText} numberOfLines={1}>WhatsApp</Text>
-            </TouchableOpacity>
+          <View style={styles.trialActionGroup}>
+            <View style={styles.secondaryActionRow}>
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={handleOpenWhatsApp}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                accessibilityLabel="Hubungi pemilik via WhatsApp"
+              >
+                <MessageSquare size={14} color="#34d399" />
+                <Text style={styles.secondaryButtonText} numberOfLines={1}>WhatsApp</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.unlockButton}
+                onPress={() => onToggleStatus && onToggleStatus(store, 'active')}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                accessibilityLabel="Buka Kunci / Set Active"
+              >
+                <CheckCircle2 size={15} color="#34d399" />
+                <Text style={styles.unlockButtonText} numberOfLines={1}>Buka Kunci</Text>
+              </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
-              style={styles.primaryActivateButtonHalf}
+              style={styles.primaryActivateButton}
               onPress={() => onActivate(store)}
               activeOpacity={0.8}
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
               accessibilityLabel="Aktifkan kembali toko menjadi PRO"
             >
               <CheckCircle2 size={15} color="#ffffff" />
-              <Text style={styles.primaryActivateButtonText} numberOfLines={1}>Aktifkan PRO</Text>
+              <Text style={styles.primaryActivateButtonText} numberOfLines={1}>Aktifkan Toko ke PRO</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -457,6 +491,37 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 12.5,
     color: '#ffffff',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  lockButton: {
+    width: 42,
+    minHeight: 42,
+    borderRadius: 8,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  unlockButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.25)',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    minHeight: 42,
+  },
+  unlockButtonText: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 12,
+    color: '#34d399',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

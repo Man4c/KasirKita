@@ -123,6 +123,34 @@ export default function SuperAdminScreen({ user, onLogout }) {
     }
   };
 
+  const handleToggleStatus = (store, targetStatus) => {
+    const isLocking = targetStatus === 'expired';
+    showAlert(
+      isLocking ? 'Kunci Toko (Set Expired)' : 'Buka Kunci Toko',
+      isLocking
+        ? `Kunci toko "${store.name}" menjadi kedaluwarsa? Fitur kasir POS toko ini akan dinonaktifkan.`
+        : `Buka kunci toko "${store.name}" dan aktifkan kembali statusnya?`,
+      [
+        { text: 'Batal', style: 'cancel' },
+        {
+          text: isLocking ? 'Kunci Toko' : 'Buka Kunci',
+          style: isLocking ? 'destructive' : 'default',
+          onPress: async () => {
+            try {
+              const res = await superAdminService.toggleStatus(store.id, { status: targetStatus });
+              if (res?.success) {
+                showAlert('Sukses', res.message || `Status toko "${store.name}" berhasil diubah.`);
+                loadData(true);
+              }
+            } catch (err) {
+              showAlert('Gagal Mengubah Status', err.message || 'Terjadi kesalahan saat mengubah status toko.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   // License actions
   const handleGenerateLicenses = async (payload) => {
     const res = await superAdminService.generateLicenses(payload);
@@ -303,6 +331,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
                   store={item}
                   onActivate={(st) => setActivateStore(st)}
                   onExtendTrial={(st) => setExtendTrialStore(st)}
+                  onToggleStatus={handleToggleStatus}
                 />
               ) : (
                 <LicenseCardItem
