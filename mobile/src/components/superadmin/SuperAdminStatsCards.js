@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { Store, Clock, Crown, AlertTriangle, Ticket } from 'lucide-react-native';
+import { Ticket } from 'lucide-react-native';
 
 export default function SuperAdminStatsCards({ stats }) {
   const totalStores = stats?.total_stores ?? 0;
@@ -11,70 +11,84 @@ export default function SuperAdminStatsCards({ stats }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.grid}>
-        {/* Total Toko */}
-        <View style={[styles.card, styles.totalCard]}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconCircle, { backgroundColor: 'rgba(56, 189, 248, 0.12)' }]}>
-              <Store size={18} color="#38bdf8" />
+      <View style={styles.dashboardCard}>
+        {/* 4-Pillar Executive KPI Strip */}
+        <View style={styles.kpiRow}>
+          {/* Total Toko */}
+          <View style={styles.kpiColumn}>
+            <View style={styles.kpiHeader}>
+              <View style={[styles.kpiPip, { backgroundColor: '#38bdf8' }]} />
+              <Text style={styles.kpiLabel}>Total</Text>
             </View>
-            <Text style={styles.cardLabel}>Total Toko</Text>
+            <Text style={[styles.kpiValue, { color: '#ffffff' }]}>{totalStores}</Text>
           </View>
-          <Text style={styles.cardValue}>{totalStores}</Text>
-          <Text style={styles.cardHint}>Semua tenant</Text>
+
+          <View style={styles.kpiDivider} />
+
+          {/* Trial Aktif */}
+          <View style={styles.kpiColumn}>
+            <View style={styles.kpiHeader}>
+              <View style={[styles.kpiPip, { backgroundColor: '#fbbf24' }]} />
+              <Text style={styles.kpiLabel}>Trial</Text>
+            </View>
+            <Text style={[styles.kpiValue, { color: '#fbbf24' }]}>{trialStores}</Text>
+          </View>
+
+          <View style={styles.kpiDivider} />
+
+          {/* Pro Aktif */}
+          <View style={styles.kpiColumn}>
+            <View style={styles.kpiHeader}>
+              <View style={[styles.kpiPip, { backgroundColor: '#34d399' }]} />
+              <Text style={styles.kpiLabel}>Pro Aktif</Text>
+            </View>
+            <Text style={[styles.kpiValue, { color: '#34d399' }]}>{activeStores}</Text>
+          </View>
+
+          <View style={styles.kpiDivider} />
+
+          {/* Kedaluwarsa */}
+          <View style={styles.kpiColumn}>
+            <View style={styles.kpiHeader}>
+              <View
+                style={[
+                  styles.kpiPip,
+                  { backgroundColor: expiredStores > 0 ? '#fb7185' : '#71717a' },
+                ]}
+              />
+              <Text
+                style={[styles.kpiLabel, expiredStores > 0 && { color: '#fb7185' }]}
+              >
+                Expired
+              </Text>
+            </View>
+            <Text
+              style={[
+                styles.kpiValue,
+                { color: expiredStores > 0 ? '#fb7185' : '#71717a' },
+              ]}
+            >
+              {expiredStores}
+            </Text>
+          </View>
         </View>
 
-        {/* Trial Aktif */}
-        <View style={[styles.card, styles.trialCard]}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconCircle, { backgroundColor: 'rgba(245, 158, 11, 0.12)' }]}>
-              <Clock size={18} color="#f59e0b" />
+        {/* Integrated Mini Bank Voucher Strip */}
+        <View style={styles.voucherStrip}>
+          <View style={styles.voucherLeft}>
+            <Ticket size={13} color="#fbbf24" style={styles.voucherIcon} />
+            <Text style={styles.voucherTitle}>Bank Voucher:</Text>
+          </View>
+          <View style={styles.voucherMetrics}>
+            <View style={styles.voucherBadge}>
+              <Text style={styles.voucherBadgeLabel}>Tersedia </Text>
+              <Text style={styles.voucherBadgeGreen}>{licenses.available}</Text>
             </View>
-            <Text style={styles.cardLabel}>Trial Aktif</Text>
-          </View>
-          <Text style={[styles.cardValue, { color: '#fbbf24' }]}>{trialStores}</Text>
-          <Text style={styles.cardHint}>Masa uji coba</Text>
-        </View>
-
-        {/* Pro Aktif */}
-        <View style={[styles.card, styles.activeCard]}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconCircle, { backgroundColor: 'rgba(16, 185, 129, 0.12)' }]}>
-              <Crown size={18} color="#10b981" />
+            <Text style={styles.voucherSeparator}>•</Text>
+            <View style={styles.voucherBadge}>
+              <Text style={styles.voucherBadgeLabel}>Terpakai </Text>
+              <Text style={styles.voucherBadgeBlue}>{licenses.redeemed}</Text>
             </View>
-            <Text style={styles.cardLabel}>Pro Aktif</Text>
-          </View>
-          <Text style={[styles.cardValue, { color: '#34d399' }]}>{activeStores}</Text>
-          <Text style={styles.cardHint}>Berlangganan resmi</Text>
-        </View>
-
-        {/* Kedaluwarsa */}
-        <View style={[styles.card, styles.expiredCard]}>
-          <View style={styles.cardHeader}>
-            <View style={[styles.iconCircle, { backgroundColor: 'rgba(244, 63, 94, 0.12)' }]}>
-              <AlertTriangle size={18} color="#f43f5e" />
-            </View>
-            <Text style={styles.cardLabel}>Kedaluwarsa</Text>
-          </View>
-          <Text style={[styles.cardValue, { color: '#fb7185' }]}>{expiredStores}</Text>
-          <Text style={styles.cardHint}>Perlu tindak lanjut</Text>
-        </View>
-      </View>
-
-      {/* Mini Bank Voucher Strip */}
-      <View style={styles.voucherStrip}>
-        <View style={styles.voucherStripLeft}>
-          <Ticket size={16} color="#fbbf24" style={styles.ticketIcon} />
-          <Text style={styles.voucherStripTitle}>Bank Voucher Lisensi:</Text>
-        </View>
-        <View style={styles.voucherMetricsRow}>
-          <View style={styles.voucherBadge}>
-            <Text style={styles.voucherBadgeLabel}>Tersedia: </Text>
-            <Text style={[styles.voucherBadgeValue, { color: '#34d399' }]}>{licenses.available}</Text>
-          </View>
-          <View style={styles.voucherBadge}>
-            <Text style={styles.voucherBadgeLabel}>Terpakai: </Text>
-            <Text style={[styles.voucherBadgeValue, { color: '#38bdf8' }]}>{licenses.redeemed}</Text>
           </View>
         </View>
       </View>
@@ -85,105 +99,90 @@ export default function SuperAdminStatsCards({ stats }) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingTop: 10,
     paddingBottom: 8,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-  },
-  card: {
-    flex: 1,
-    minWidth: '47%',
+  dashboardCard: {
     backgroundColor: '#18181b',
-    borderRadius: 14,
-    padding: 12,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#27272a',
+    overflow: 'hidden',
   },
-  totalCard: {
-    borderLeftWidth: 3,
-    borderLeftColor: '#38bdf8',
-  },
-  trialCard: {
-    borderLeftWidth: 3,
-    borderLeftColor: '#f59e0b',
-  },
-  activeCard: {
-    borderLeftWidth: 3,
-    borderLeftColor: '#10b981',
-  },
-  expiredCard: {
-    borderLeftWidth: 3,
-    borderLeftColor: '#f43f5e',
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 6,
-  },
-  iconCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cardLabel: {
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 12,
-    color: '#d4d4d8',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  cardValue: {
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 22,
-    color: '#ffffff',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  cardHint: {
-    fontFamily: 'Poppins_400Regular',
-    fontSize: 12,
-    color: '#71717a',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-    marginTop: 2,
-  },
-  voucherStrip: {
-    marginTop: 10,
-    backgroundColor: '#18181b',
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+  kpiRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: '#27272a',
+    paddingVertical: 10,
+    paddingHorizontal: 8,
   },
-  voucherStripLeft: {
+  kpiColumn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  kpiHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 2,
+  },
+  kpiPip: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    flexShrink: 0,
+  },
+  kpiLabel: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 12,
+    color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  kpiValue: {
+    fontFamily: 'Poppins_700Bold',
+    fontSize: 20,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  kpiDivider: {
+    width: 1,
+    height: 28,
+    backgroundColor: '#27272a',
+    flexShrink: 0,
+  },
+  voucherStrip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#202024',
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  voucherLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     flexShrink: 0,
   },
-  ticketIcon: {
+  voucherIcon: {
     marginRight: 6,
+    flexShrink: 0,
   },
-  voucherStripTitle: {
+  voucherTitle: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 12,
     color: '#d4d4d8',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  voucherMetricsRow: {
+  voucherMetrics: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
+    flexShrink: 0,
   },
   voucherBadge: {
     flexDirection: 'row',
@@ -196,8 +195,22 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  voucherBadgeValue: {
+  voucherBadgeGreen: {
     fontFamily: 'Poppins_700Bold',
+    fontSize: 12,
+    color: '#34d399',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  voucherBadgeBlue: {
+    fontFamily: 'Poppins_700Bold',
+    fontSize: 12,
+    color: '#38bdf8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  voucherSeparator: {
+    color: '#52525b',
     fontSize: 12,
     includeFontPadding: false,
     textAlignVertical: 'center',

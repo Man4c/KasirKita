@@ -11,14 +11,17 @@ export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing
         </View>
         <View style={styles.titleWrapper}>
           <View style={styles.titleRow}>
-            <Text style={styles.appTitle}>KasirKita SaaS</Text>
+            <Text style={styles.appTitle}>KasirKita Platform</Text>
             <View style={styles.rootBadge}>
               <Text style={styles.rootBadgeText}>ROOT</Text>
             </View>
           </View>
-          <Text style={styles.userSubtitle} numberOfLines={1}>
-            {user?.name ? `${user.name} (${user.email || 'superadmin'})` : 'Super Administrator'}
-          </Text>
+          <View style={styles.subRow}>
+            <View style={styles.statusDot} />
+            <Text style={styles.userSubtitle} numberOfLines={1}>
+              {user?.email || 'superadmin@kasirkita.com'}
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -29,8 +32,9 @@ export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing
           disabled={refreshing}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           activeOpacity={0.7}
+          accessibilityLabel="Segarkan data platform"
         >
-          <RotateCcw size={18} color={refreshing ? '#71717a' : '#f43f5e'} />
+          <RotateCcw size={18} color={refreshing ? '#71717a' : '#fb7185'} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -38,6 +42,7 @@ export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing
           onPress={onLogout}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           activeOpacity={0.7}
+          accessibilityLabel="Keluar dari akun Superadmin"
         >
           <LogOut size={18} color="#ef4444" />
         </TouchableOpacity>
@@ -94,8 +99,8 @@ const styles = StyleSheet.create({
   },
   rootBadge: {
     backgroundColor: '#fbbf24',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    paddingHorizontal: 7,
+    paddingVertical: 1,
     borderRadius: 4,
   },
   rootBadgeText: {
@@ -104,6 +109,20 @@ const styles = StyleSheet.create({
     color: '#18181b',
     includeFontPadding: false,
     textAlignVertical: 'center',
+    letterSpacing: 0.5,
+  },
+  subRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#10b981',
+    marginRight: 6,
+    flexShrink: 0,
   },
   userSubtitle: {
     fontFamily: 'Poppins_400Regular',
@@ -111,7 +130,7 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     includeFontPadding: false,
     textAlignVertical: 'center',
-    marginTop: 1,
+    flexShrink: 1,
   },
   rightActions: {
     flexDirection: 'row',
@@ -130,7 +149,7 @@ const styles = StyleSheet.create({
     borderColor: '#3f3f46',
   },
   logoutButton: {
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    borderColor: 'rgba(239, 68, 68, 0.25)',
+    backgroundColor: 'rgba(239, 68, 68, 0.12)',
+    borderColor: 'rgba(239, 68, 68, 0.3)',
   },
 });

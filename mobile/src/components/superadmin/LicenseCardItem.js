@@ -61,7 +61,14 @@ export default function LicenseCardItem({ license, onRevoke }) {
   };
 
   return (
-    <View style={[styles.card, isRevoked && styles.cardRevoked]}>
+    <View
+      style={[
+        styles.card,
+        isAvailable && styles.cardAvailable,
+        isRedeemed && styles.cardRedeemed,
+        isRevoked && styles.cardRevoked,
+      ]}
+    >
       {/* Top row: Key and Status Badge */}
       <View style={styles.topRow}>
         <View style={styles.keyContainer}>
@@ -73,21 +80,21 @@ export default function LicenseCardItem({ license, onRevoke }) {
 
         {isAvailable && (
           <View style={[styles.statusBadge, styles.statusAvailable]}>
-            <Clock size={11} color="#34d399" style={styles.badgeIcon} />
+            <Clock size={12} color="#34d399" style={styles.badgeIcon} />
             <Text style={[styles.statusText, { color: '#34d399' }]}>TERSEDIA</Text>
           </View>
         )}
 
         {isRedeemed && (
           <View style={[styles.statusBadge, styles.statusRedeemed]}>
-            <CheckCircle2 size={11} color="#38bdf8" style={styles.badgeIcon} />
+            <CheckCircle2 size={12} color="#38bdf8" style={styles.badgeIcon} />
             <Text style={[styles.statusText, { color: '#38bdf8' }]}>TERPAKAI</Text>
           </View>
         )}
 
         {isRevoked && (
           <View style={[styles.statusBadge, styles.statusRevoked]}>
-            <Ban size={11} color="#a1a1aa" style={styles.badgeIcon} />
+            <Ban size={12} color="#a1a1aa" style={styles.badgeIcon} />
             <Text style={[styles.statusText, { color: '#a1a1aa' }]}>DICABUT</Text>
           </View>
         )}
@@ -161,8 +168,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     borderColor: '#27272a',
+    borderLeftWidth: 3,
+    borderLeftColor: '#3f3f46',
+  },
+  cardAvailable: {
+    borderLeftColor: '#10b981',
+  },
+  cardRedeemed: {
+    borderLeftColor: '#38bdf8',
   },
   cardRevoked: {
+    borderLeftColor: '#71717a',
     opacity: 0.6,
   },
   topRow: {

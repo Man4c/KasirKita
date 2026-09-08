@@ -1,6 +1,16 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Linking, Alert } from 'react-native';
-import { Store, User, Phone, Package, Receipt, Users, CheckCircle2, Clock, MessageSquare } from 'lucide-react-native';
+import {
+  Store,
+  User,
+  Phone,
+  Package,
+  Receipt,
+  Users,
+  CheckCircle2,
+  Clock,
+  MessageSquare,
+} from 'lucide-react-native';
 
 export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
   const isTrial = store.subscription_status === 'trial';
@@ -73,96 +83,127 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
   };
 
   return (
-    <View style={styles.card}>
-      {/* Header: Store Name & Badges */}
+    <View
+      style={[
+        styles.card,
+        isActive && styles.cardActive,
+        isTrial && styles.cardTrial,
+        isExpired && styles.cardExpired,
+      ]}
+    >
+      {/* Row 1: Hero Store Name & Primary Status Badge */}
       <View style={styles.cardHeader}>
-        <View style={styles.storeNameContainer}>
-          <Store size={18} color="#f43f5e" style={styles.storeIcon} />
+        <View style={styles.storeTitleWrapper}>
+          <View style={styles.storeIconBox}>
+            <Store size={15} color="#f43f5e" />
+          </View>
           <Text style={styles.storeName} numberOfLines={1}>
             {store.name}
           </Text>
         </View>
-        <View style={styles.badgeGroup}>
-          <View style={styles.categoryBadge}>
-            <Text style={styles.categoryBadgeText}>{getCategoryLabel(store.business_category)}</Text>
-          </View>
-          {renderStatusBadge()}
+        {renderStatusBadge()}
+      </View>
+
+      {/* Row 2: Category Pill & Validity Info */}
+      <View style={styles.metaRow}>
+        <View style={styles.categoryBadge}>
+          <Text style={styles.categoryBadgeText}>
+            {getCategoryLabel(store.business_category)}
+          </Text>
+        </View>
+        <Text style={styles.metaSeparator}>•</Text>
+        <View style={styles.expiryRow}>
+          {isTrial && <Clock size={12} color="#fbbf24" style={styles.expiryIcon} />}
+          {isActive && <CheckCircle2 size={12} color="#34d399" style={styles.expiryIcon} />}
+          <Text
+            style={[
+              styles.expiryText,
+              isActive && { color: '#34d399' },
+              isTrial && { color: '#fbbf24' },
+              isExpired && { color: '#fb7185' },
+            ]}
+          >
+            {renderExpiryInfo()}
+          </Text>
         </View>
       </View>
 
-      {/* Sub-header: Expiry info & Owner details */}
-      <View style={styles.detailSection}>
-        <Text style={[styles.expiryText, isExpired && { color: '#fb7185' }]}>
-          {renderExpiryInfo()}
-        </Text>
-
+      {/* Row 3: Owner & Contact Details */}
+      <View style={styles.contactSection}>
         <View style={styles.infoRow}>
-          <User size={13} color="#a1a1aa" style={styles.infoIcon} />
+          <User size={13} color="#71717a" style={styles.infoIcon} />
           <Text style={styles.infoText} numberOfLines={1}>
-            {store.owner?.name || 'Belum ada pemilik'} ({store.owner?.email || '-'})
+            {store.owner?.name || 'Tanpa Pemilik'}
+            {store.owner?.email ? ` (${store.owner.email})` : ''}
           </Text>
         </View>
 
         {(store.phone || store.owner?.phone) && (
           <View style={styles.infoRow}>
-            <Phone size={13} color="#a1a1aa" style={styles.infoIcon} />
+            <Phone size={13} color="#71717a" style={styles.infoIcon} />
             <Text style={styles.infoText}>{store.phone || store.owner?.phone}</Text>
           </View>
         )}
       </View>
 
-      {/* Metrics Strip */}
+      {/* Row 4: Key Operational Metrics Strip */}
       <View style={styles.metricsStrip}>
         <View style={styles.metricItem}>
           <Users size={13} color="#71717a" style={styles.metricIcon} />
-          <Text style={styles.metricText}>{store.users_count ?? 0} Staf</Text>
+          <Text style={styles.metricText}>
+            <Text style={styles.metricBold}>{store.users_count ?? 0}</Text> Staf
+          </Text>
         </View>
         <View style={styles.metricDivider} />
         <View style={styles.metricItem}>
           <Package size={13} color="#71717a" style={styles.metricIcon} />
-          <Text style={styles.metricText}>{store.products_count ?? 0} Produk</Text>
+          <Text style={styles.metricText}>
+            <Text style={styles.metricBold}>{store.products_count ?? 0}</Text> Produk
+          </Text>
         </View>
         <View style={styles.metricDivider} />
         <View style={styles.metricItem}>
           <Receipt size={13} color="#71717a" style={styles.metricIcon} />
-          <Text style={styles.metricText}>{store.transactions_count ?? 0} Nota</Text>
+          <Text style={styles.metricText}>
+            <Text style={styles.metricBold}>{store.transactions_count ?? 0}</Text> Nota
+          </Text>
         </View>
       </View>
 
-      {/* Action Buttons Row */}
+      {/* Row 5: Action Buttons (Touch Target >= 44dp) */}
       <View style={styles.actionRow}>
-        {/* WhatsApp Button */}
         <TouchableOpacity
           style={styles.waButton}
           onPress={handleOpenWhatsApp}
           activeOpacity={0.7}
           hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          accessibilityLabel="Hubungi pemilik via WhatsApp"
         >
-          <MessageSquare size={14} color="#10b981" />
+          <MessageSquare size={15} color="#10b981" />
           <Text style={styles.waButtonText}>WhatsApp</Text>
         </TouchableOpacity>
 
-        {/* Extend Trial (only visible if trial or expired) */}
         {(isTrial || isExpired) && (
           <TouchableOpacity
             style={styles.trialButton}
             onPress={() => onExtendTrial(store)}
             activeOpacity={0.7}
             hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+            accessibilityLabel="Perpanjang masa trial toko"
           >
             <Clock size={14} color="#fbbf24" />
             <Text style={styles.trialButtonText}>+ Trial</Text>
           </TouchableOpacity>
         )}
 
-        {/* Activate Button */}
         <TouchableOpacity
           style={styles.activateButton}
           onPress={() => onActivate(store)}
           activeOpacity={0.7}
           hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          accessibilityLabel="Aktifkan toko menjadi PRO"
         >
-          <CheckCircle2 size={14} color="#ffffff" />
+          <CheckCircle2 size={15} color="#ffffff" />
           <Text style={styles.activateButtonText}>Aktifkan Toko</Text>
         </TouchableOpacity>
       </View>
@@ -178,57 +219,56 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#27272a',
+    borderLeftWidth: 3,
+    borderLeftColor: '#3f3f46',
+  },
+  cardActive: {
+    borderLeftColor: '#10b981',
+  },
+  cardTrial: {
+    borderLeftColor: '#f59e0b',
+  },
+  cardExpired: {
+    borderLeftColor: '#f43f5e',
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 6,
   },
-  storeNameContainer: {
+  storeTitleWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
     minWidth: 0,
     marginRight: 8,
   },
-  storeIcon: {
+  storeIconBox: {
+    width: 28,
+    height: 28,
+    borderRadius: 7,
+    backgroundColor: 'rgba(244, 63, 94, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 8,
     flexShrink: 0,
   },
   storeName: {
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_700Bold',
     fontSize: 15,
     color: '#ffffff',
-    flexShrink: 1,
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  badgeGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    flexShrink: 0,
-  },
-  categoryBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    paddingHorizontal: 7,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  categoryBadgeText: {
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 12,
-    color: '#d4d4d8',
+    flex: 1,
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 7,
+    paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
+    flexShrink: 0,
   },
   badgeIcon: {
     marginRight: 4,
@@ -253,20 +293,57 @@ const styles = StyleSheet.create({
     fontSize: 12,
     includeFontPadding: false,
     textAlignVertical: 'center',
+    letterSpacing: 0.3,
   },
-  detailSection: {
-    paddingVertical: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: '#27272a',
-    gap: 4,
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    gap: 6,
+  },
+  categoryBadge: {
+    backgroundColor: '#27272a',
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  categoryBadgeText: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 12,
+    color: '#d4d4d8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  metaSeparator: {
+    color: '#52525b',
+    fontSize: 12,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  expiryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    minWidth: 0,
+  },
+  expiryIcon: {
+    marginRight: 4,
+    flexShrink: 0,
   },
   expiryText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 12,
-    color: '#34d399',
+    color: '#a1a1aa',
     includeFontPadding: false,
     textAlignVertical: 'center',
-    marginBottom: 2,
+  },
+  contactSection: {
+    paddingVertical: 6,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+    gap: 4,
   },
   infoRow: {
     flexDirection: 'row',
@@ -282,14 +359,18 @@ const styles = StyleSheet.create({
     color: '#a1a1aa',
     includeFontPadding: false,
     textAlignVertical: 'center',
+    flex: 1,
   },
   metricsStrip: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#27272a',
+    marginVertical: 4,
+    backgroundColor: '#202024',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#27272a',
   },
   metricItem: {
     flexDirection: 'row',
@@ -306,16 +387,20 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
+  metricBold: {
+    fontFamily: 'Poppins_700Bold',
+    color: '#ffffff',
+  },
   metricDivider: {
     width: 1,
-    height: 12,
-    backgroundColor: '#27272a',
+    height: 14,
+    backgroundColor: '#2e2e33',
   },
   actionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingTop: 10,
+    paddingTop: 8,
   },
   waButton: {
     flexDirection: 'row',

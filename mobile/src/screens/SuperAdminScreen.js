@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  ScrollView,
   RefreshControl,
   ActivityIndicator,
   Alert,
@@ -207,8 +208,13 @@ export default function SuperAdminScreen({ user, onLogout }) {
         )}
       </View>
 
-      {/* Filter Chips Bar */}
-      <View style={styles.filterPillsRow}>
+      {/* Filter Chips Horizontal Scrollable Bar */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.filterPillsScroll}
+        style={styles.filterPillsScrollWrapper}
+      >
         {(activeTab === 'stores' ? STORE_FILTERS : LICENSE_FILTERS).map((filter) => {
           const currentFilter = activeTab === 'stores' ? storeFilter : licenseFilter;
           const isSelected = currentFilter === filter.key;
@@ -232,7 +238,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
     </View>
   );
 
@@ -269,35 +275,37 @@ export default function SuperAdminScreen({ user, onLogout }) {
           <Text style={styles.loadingText}>Memuat Platform Superadmin...</Text>
         </View>
       ) : (
-        <FlatList
-          data={activeTab === 'stores' ? stores : licenses}
-          keyExtractor={(item) => (activeTab === 'stores' ? `store-${item.id}` : `lic-${item.id}`)}
-          renderItem={({ item }) =>
-            activeTab === 'stores' ? (
-              <StoreCardItem
-                store={item}
-                onActivate={(st) => setActivateStore(st)}
-                onExtendTrial={(st) => setExtendTrialStore(st)}
+        <View style={styles.responsiveContainer}>
+          <FlatList
+            data={activeTab === 'stores' ? stores : licenses}
+            keyExtractor={(item) => (activeTab === 'stores' ? `store-${item.id}` : `lic-${item.id}`)}
+            renderItem={({ item }) =>
+              activeTab === 'stores' ? (
+                <StoreCardItem
+                  store={item}
+                  onActivate={(st) => setActivateStore(st)}
+                  onExtendTrial={(st) => setExtendTrialStore(st)}
+                />
+              ) : (
+                <LicenseCardItem
+                  license={item}
+                  onRevoke={handleRevokeLicense}
+                />
+              )
+            }
+            ListHeaderComponent={renderListHeader}
+            ListEmptyComponent={renderEmptyState}
+            contentContainerStyle={styles.listContent}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => loadData(true)}
+                tintColor="#fbbf24"
+                colors={['#fbbf24']}
               />
-            ) : (
-              <LicenseCardItem
-                license={item}
-                onRevoke={handleRevokeLicense}
-              />
-            )
-          }
-          ListHeaderComponent={renderListHeader}
-          ListEmptyComponent={renderEmptyState}
-          contentContainerStyle={styles.listContent}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => loadData(true)}
-              tintColor="#fbbf24"
-              colors={['#fbbf24']}
-            />
-          }
-        />
+            }
+          />
+        </View>
       )}
 
       {/* Modals */}
@@ -329,6 +337,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#09090b',
   },
+  responsiveContainer: {
+    flex: 1,
+    width: '100%',
+    maxWidth: 720,
+    alignSelf: 'center',
+  },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
@@ -347,7 +361,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   listHeader: {
-    paddingBottom: 10,
+    paddingBottom: 4,
   },
   tabBarContainer: {
     flexDirection: 'row',
@@ -355,7 +369,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 4,
     marginHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: '#27272a',
   },
@@ -431,23 +445,25 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  filterPillsRow: {
+  filterPillsScrollWrapper: {
+    marginBottom: 8,
+  },
+  filterPillsScroll: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginHorizontal: 16,
-    marginBottom: 8,
-    flexWrap: 'wrap',
+    paddingHorizontal: 16,
+    gap: 8,
   },
   filterPill: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     backgroundColor: '#18181b',
     borderWidth: 1,
     borderColor: '#27272a',
-    minHeight: 32,
+    minHeight: 34,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   filterPillActive: {
     backgroundColor: 'rgba(244, 63, 94, 0.15)',
