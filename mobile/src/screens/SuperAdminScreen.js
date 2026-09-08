@@ -29,7 +29,7 @@ import ExtendTrialModal from '../components/superadmin/ExtendTrialModal';
 import LicenseGeneratorModal from '../components/superadmin/LicenseGeneratorModal';
 
 const STORE_FILTERS = [
-  { key: 'all', label: 'Semua Toko' },
+  { key: 'all', label: 'Semua' },
   { key: 'trial', label: 'Trial' },
   { key: 'active', label: 'Pro Aktif' },
   { key: 'expired', label: 'Kedaluwarsa' },
@@ -365,13 +365,13 @@ const styles = StyleSheet.create({
   },
   tabBarContainer: {
     flexDirection: 'row',
-    backgroundColor: '#18181b',
+    backgroundColor: '#121214',
     borderRadius: 12,
     padding: 4,
-    marginHorizontal: 16,
+    marginHorizontal: 0,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: '#1c1c20',
   },
   tabButton: {
     flex: 1,
@@ -403,17 +403,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 0,
     marginBottom: 10,
   },
   searchInputWrapper: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#18181b',
+    backgroundColor: '#121214',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: '#1c1c20',
     paddingHorizontal: 12,
     height: 44,
   },
@@ -448,7 +448,8 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   filterPillsScrollWrapper: {
-    marginBottom: 8,
+    marginHorizontal: -16,
+    marginBottom: 10,
   },
   filterPillsScroll: {
     flexDirection: 'row',
@@ -460,16 +461,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: '#18181b',
+    backgroundColor: '#121214',
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: '#1c1c20',
     minHeight: 34,
     justifyContent: 'center',
     alignItems: 'center',
   },
   filterPillActive: {
     backgroundColor: '#27272a',
-    borderColor: '#52525b',
+    borderColor: '#3f3f46',
   },
   filterPillText: {
     fontFamily: 'Poppins_500Medium',

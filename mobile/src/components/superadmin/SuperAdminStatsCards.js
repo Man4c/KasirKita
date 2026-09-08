@@ -23,8 +23,6 @@ export default function SuperAdminStatsCards({ stats }) {
             <Text style={styles.kpiValue}>{totalStores}</Text>
           </View>
 
-          <View style={styles.kpiDivider} />
-
           {/* Trial Aktif */}
           <View style={styles.kpiColumn}>
             <View style={styles.kpiHeader}>
@@ -39,8 +37,6 @@ export default function SuperAdminStatsCards({ stats }) {
             <Text style={styles.kpiValue}>{trialStores}</Text>
           </View>
 
-          <View style={styles.kpiDivider} />
-
           {/* Pro Aktif */}
           <View style={styles.kpiColumn}>
             <View style={styles.kpiHeader}>
@@ -54,8 +50,6 @@ export default function SuperAdminStatsCards({ stats }) {
             </View>
             <Text style={styles.kpiValue}>{activeStores}</Text>
           </View>
-
-          <View style={styles.kpiDivider} />
 
           {/* Kedaluwarsa */}
           <View style={styles.kpiColumn}>
@@ -75,7 +69,7 @@ export default function SuperAdminStatsCards({ stats }) {
         {/* Integrated Mini Bank Voucher Strip */}
         <View style={styles.voucherStrip}>
           <View style={styles.voucherLeft}>
-            <Ticket size={13} color="#a1a1aa" style={styles.voucherIcon} />
+            <Ticket size={13} color="#71717a" style={styles.voucherIcon} />
             <Text style={styles.voucherTitle}>Bank Voucher:</Text>
           </View>
           <View style={styles.voucherMetrics}>
@@ -97,22 +91,22 @@ export default function SuperAdminStatsCards({ stats }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     paddingTop: 10,
     paddingBottom: 8,
   },
   dashboardCard: {
-    backgroundColor: '#18181b',
-    borderRadius: 12,
+    backgroundColor: '#121214',
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: '#1c1c20',
     overflow: 'hidden',
   },
   kpiRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 8,
   },
   kpiColumn: {
@@ -135,7 +129,7 @@ const styles = StyleSheet.create({
   kpiLabel: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 12,
-    color: '#a1a1aa',
+    color: '#71717a',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -146,21 +140,14 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  kpiDivider: {
-    width: 1,
-    height: 28,
-    backgroundColor: '#27272a',
-    flexShrink: 0,
-  },
   voucherStrip: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#202024',
     borderTopWidth: 1,
-    borderTopColor: '#27272a',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    borderTopColor: '#1c1c20',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
   },
   voucherLeft: {
     flexDirection: 'row',

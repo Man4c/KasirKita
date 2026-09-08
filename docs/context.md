@@ -1858,12 +1858,27 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - **Web (React + Tailwind):** Menggunakan Google Fonts `Poppins` (`font-sans: ['Poppins', 'sans-serif']` di Tailwind configuration).
   - **Mobile (React Native Expo):** Menggunakan `@expo-google-fonts/poppins` untuk konsistensi tampilan antar perangkat Android & iOS.
 - **Palet Warna & Estetika Visual:** Sepenuhnya dikurasi dan diformulasikan oleh skill `impeccable` (mengeksplorasi kontras tinggi, kenyamanan operasional kasir, dan konsistensi lintas platform).
-- **Layar Superadmin Mobile Clean Monochrome Executive SaaS:**
-  - Menghilangkan *chromatic clutter* (tabrakan 5 warna terang: Crimson, Kuning, Hijau, Cyan, Merah) dan beralih ke 95% Obsidian/Zinc monokromatik modern (`#09090b`, `#18181b`, `#202024`, `#27272a`, `#3f3f46`, `#ffffff`).
-  - Alokasi warna dibatasi ketat HANYA 5% untuk badge status fungsional (`PRO AKTIF` emerald lembut, `TRIAL` amber lembut, `EXPIRED` rose lembut).
-  - Menghilangkan garis border samping tebal pelangi (`borderLeftWidth: 3`) pada seluruh kartu toko dan lisensi.
-  - Menata ulang header kartu toko (`StoreCardItem.js`) dengan memisahkan baris nama toko (100% lebar layar, Zero Truncation) dari baris status dan kategori, menyelesaikan pemotongan teks `KasirKita Mart & C...` secara definitif.
-  - Menerapkan tombol aksi monokromatik netral: tombol "Cetak" dan "Aktifkan Toko" solid white `#ffffff` dengan teks gelap, tombol WhatsApp dan +Trial dark slate netral `#202024`.
+- **Layar Superadmin Mobile Truly Clean Minimalist Dark (Opsi A):**
+  - **Eliminasi Struktur Kotak Bersarang (Anti Box-Fatigue):**
+    - Menghilangkan `storeIconBox` (kotak 28x28 bergaris) di samping nama toko, digantikan ikon inline halus.
+    - Menghilangkan sub-kotak `categoryBadge`, digantikan teks kategori bersih `• Ritel`.
+    - Mengganti kontainer `metricsStrip` (kotak abu-abu di dalam kartu) dengan baris tipografi borderless: `2 Staf • 9 Produk • 6 Nota`.
+    - Mengganti kotak `redeemInfoBox` pada kartu lisensi dengan baris teks datar: `Digunakan oleh: ...`.
+    - Menghilangkan garis pemisah kaku `kpiDivider` pada ringkasan KPI dan menyatukan pita voucher ke kartu utama.
+  - **Penyelesaian Tuntas Pemotongan Teks (Zero Truncation Rule):**
+    - Email administrator pada header `superadmin@kasirkita.com` tampil 100% utuh tanpa elipsis.
+    - Masa aktif toko `s/d 2026-10-08` tampil lapang dan utuh tanpa terpotong `Aktif s/d 2026-1...`.
+    - Filter bar: Menyederhanakan label `Semua Toko` menjadi `Semua` sehingga pill keempat `Kedaluwarsa` pas dan tidak terpotong di tepi kanan layar 360dp.
+  - **Tombol Kontekstual Pintar (Intelligent Contextual Actions):**
+    - Mengeliminasi tombol redundan "Aktifkan Toko" pada toko yang sudah berstatus `PRO AKTIF`.
+    - Toko aktif kini memiliki tombol proporsional: `[ Hubungi WhatsApp ]` dan `[ Perpanjang ]`.
+    - Tombol solid white kontras tinggi `[ Aktifkan PRO ]` HANYA muncul pada toko berstatus `Trial` atau `Kedaluwarsa`.
+  - **Harmonisasi Alignment & Spacing:**
+    - Menghilangkan margin ganda (*double margin*) pada dashboard card, tab bar, dan search input, sehingga seluruh elemen memiliki batas tepi horizontal yang seragam (16dp).
+  - **Kepatuhan Standar Kualitas (Defensive UI Craft):**
+    - Seluruh font >= 12px (The Readability Floor Rule).
+    - Touch targets >= 44dp dengan hitSlop terpasang.
+    - Tipografi Android menyertakan `includeFontPadding: false` dan `textAlignVertical: 'center'` (The Anti-Shift Rule).
 - Web Dashboard memiliki layout ringkas dengan header profil yang kompak.
 - Mobile POS dirancang touch-friendly untuk transaksi kasir cepat.
 

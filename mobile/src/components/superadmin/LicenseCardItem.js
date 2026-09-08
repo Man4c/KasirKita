@@ -113,7 +113,7 @@ export default function LicenseCardItem({ license, onRevoke }) {
 
       {/* Redeem Information if already used */}
       {isRedeemed && (
-        <View style={styles.redeemInfoBox}>
+        <View style={styles.redeemInfoRow}>
           <Text style={styles.redeemInfoText} numberOfLines={1}>
             Digunakan oleh: <Text style={styles.redeemStoreName}>{license.redeemed_by_store?.name || 'Toko Mitra'}</Text>
             {license.redeemed_at && ` (${license.redeemed_at.substring(0, 10)})`}
@@ -160,12 +160,12 @@ export default function LicenseCardItem({ license, onRevoke }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#18181b',
+    backgroundColor: '#121214',
     borderRadius: 12,
-    padding: 12,
+    padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: '#1c1c20',
   },
   cardRevoked: {
     opacity: 0.6,
@@ -213,18 +213,12 @@ const styles = StyleSheet.create({
   },
   statusAvailable: {
     backgroundColor: 'rgba(16, 185, 129, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
   },
   statusRedeemed: {
     backgroundColor: 'rgba(113, 113, 122, 0.15)',
-    borderWidth: 1,
-    borderColor: '#3f3f46',
   },
   statusRevoked: {
     backgroundColor: 'rgba(239, 68, 68, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.3)',
   },
   statusText: {
     fontFamily: 'Poppins_700Bold',
@@ -259,25 +253,20 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  redeemInfoBox: {
-    backgroundColor: '#202024',
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 5,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#2e2e33',
+  redeemInfoRow: {
+    paddingVertical: 4,
+    marginBottom: 4,
   },
   redeemInfoText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
-    color: '#a1a1aa',
+    color: '#71717a',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
   redeemStoreName: {
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#ffffff',
+    fontFamily: 'Poppins_500Medium',
+    color: '#d4d4d8',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -285,9 +274,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingTop: 6,
+    paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#27272a',
+    borderTopColor: '#1c1c20',
   },
   copyBtn: {
     flex: 1,
@@ -295,9 +284,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#27272a',
+    backgroundColor: '#18181b',
     borderWidth: 1,
-    borderColor: '#3f3f46',
+    borderColor: '#27272a',
     borderRadius: 8,
     minHeight: 44,
     paddingHorizontal: 10,
@@ -307,9 +296,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(16, 185, 129, 0.3)',
   },
   copyBtnText: {
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_500Medium',
     fontSize: 12,
-    color: '#f4f4f5',
+    color: '#d4d4d8',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -318,15 +307,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    backgroundColor: '#18181b',
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.25)',
+    borderColor: '#27272a',
     borderRadius: 8,
     minHeight: 44,
     paddingHorizontal: 12,
   },
   revokeBtnText: {
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_500Medium',
     fontSize: 12,
     color: '#ef4444',
     includeFontPadding: false,

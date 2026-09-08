@@ -45,12 +45,11 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
     });
   };
 
-  // Calculate status badge text & expiry
+  // Calculate status badge text
   const renderStatusBadge = () => {
     if (isTrial) {
       return (
         <View style={[styles.badge, styles.badgeTrial]}>
-          <Clock size={12} color="#fbbf24" style={styles.badgeIcon} />
           <Text style={[styles.badgeText, { color: '#fbbf24' }]}>TRIAL</Text>
         </View>
       );
@@ -58,7 +57,6 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
     if (isActive) {
       return (
         <View style={[styles.badge, styles.badgeActive]}>
-          <CheckCircle2 size={12} color="#34d399" style={styles.badgeIcon} />
           <Text style={[styles.badgeText, { color: '#34d399' }]}>PRO AKTIF</Text>
         </View>
       );
@@ -70,59 +68,50 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
     );
   };
 
-  const renderExpiryInfo = () => {
+  const getExpiryString = () => {
     if (isTrial) {
       const dateStr = store.trial_ends_at ? store.trial_ends_at.substring(0, 10) : '-';
-      return `Trial s/d ${dateStr}`;
+      return `s/d ${dateStr}`;
     }
     if (isActive) {
-      if (!store.subscription_expires_at) return 'Lisensi Seumur Hidup';
-      return `Aktif s/d ${store.subscription_expires_at.substring(0, 10)}`;
+      if (!store.subscription_expires_at) return 'Seumur Hidup';
+      return `s/d ${store.subscription_expires_at.substring(0, 10)}`;
     }
-    return 'Langganan telah berakhir';
+    return 'Berakhir';
   };
 
   return (
     <View style={styles.card}>
-      {/* Row 1: Hero Store Name (100% Full Width - Zero Truncation!) */}
+      {/* Row 1: Store Name with clean inline Store icon */}
       <View style={styles.cardHeader}>
-        <View style={styles.storeTitleWrapper}>
-          <View style={styles.storeIconBox}>
-            <Store size={15} color="#e4e4e7" />
-          </View>
-          <Text style={styles.storeName} numberOfLines={1}>
-            {store.name}
-          </Text>
-        </View>
+        <Store size={16} color="#71717a" style={styles.storeIcon} />
+        <Text style={styles.storeName} numberOfLines={1}>
+          {store.name}
+        </Text>
       </View>
 
-      {/* Row 2: Category Pill, Status Badge & Expiry Info */}
+      {/* Row 2: Status Badge • Expiry • Category (Zero Truncation, Flat, Clean) */}
       <View style={styles.metaRow}>
-        <View style={styles.categoryBadge}>
-          <Text style={styles.categoryBadgeText}>
-            {getCategoryLabel(store.business_category)}
-          </Text>
-        </View>
         {renderStatusBadge()}
-        <Text style={styles.metaSeparator}>•</Text>
-        <View style={styles.expiryRow}>
-          {isTrial && <Clock size={12} color="#fbbf24" style={styles.expiryIcon} />}
-          {isActive && <CheckCircle2 size={12} color="#34d399" style={styles.expiryIcon} />}
-          <Text
-            style={[
-              styles.expiryText,
-              isActive && { color: '#34d399' },
-              isTrial && { color: '#fbbf24' },
-              isExpired && { color: '#fb7185' },
-            ]}
-            numberOfLines={1}
-          >
-            {renderExpiryInfo()}
-          </Text>
-        </View>
+        <Text style={styles.metaDot}>•</Text>
+        <Text
+          style={[
+            styles.expiryText,
+            isActive && { color: '#34d399' },
+            isTrial && { color: '#fbbf24' },
+            isExpired && { color: '#fb7185' },
+          ]}
+          numberOfLines={1}
+        >
+          {getExpiryString()}
+        </Text>
+        <Text style={styles.metaDot}>•</Text>
+        <Text style={styles.categoryText} numberOfLines={1}>
+          {getCategoryLabel(store.business_category)}
+        </Text>
       </View>
 
-      {/* Row 3: Owner & Contact Details */}
+      {/* Row 3: Owner & Phone Details */}
       <View style={styles.contactSection}>
         <View style={styles.infoRow}>
           <User size={13} color="#71717a" style={styles.infoIcon} />
@@ -140,22 +129,22 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
         )}
       </View>
 
-      {/* Row 4: Key Operational Metrics Strip */}
-      <View style={styles.metricsStrip}>
+      {/* Row 4: Clean Borderless Metrics Row */}
+      <View style={styles.metricsRow}>
         <View style={styles.metricItem}>
           <Users size={13} color="#71717a" style={styles.metricIcon} />
           <Text style={styles.metricText}>
             <Text style={styles.metricBold}>{store.users_count ?? 0}</Text> Staf
           </Text>
         </View>
-        <View style={styles.metricDivider} />
+        <Text style={styles.metricDot}>•</Text>
         <View style={styles.metricItem}>
           <Package size={13} color="#71717a" style={styles.metricIcon} />
           <Text style={styles.metricText}>
             <Text style={styles.metricBold}>{store.products_count ?? 0}</Text> Produk
           </Text>
         </View>
-        <View style={styles.metricDivider} />
+        <Text style={styles.metricDot}>•</Text>
         <View style={styles.metricItem}>
           <Receipt size={13} color="#71717a" style={styles.metricIcon} />
           <Text style={styles.metricText}>
@@ -164,42 +153,70 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
         </View>
       </View>
 
-      {/* Row 5: Action Buttons (Touch Target >= 44dp, Clean Monochrome) */}
+      {/* Row 5: Contextual Action Buttons */}
       <View style={styles.actionRow}>
-        <TouchableOpacity
-          style={styles.waButton}
-          onPress={handleOpenWhatsApp}
-          activeOpacity={0.7}
-          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-          accessibilityLabel="Hubungi pemilik via WhatsApp"
-        >
-          <MessageSquare size={15} color="#10b981" />
-          <Text style={styles.waButtonText}>WhatsApp</Text>
-        </TouchableOpacity>
+        {isActive ? (
+          <>
+            <TouchableOpacity
+              style={styles.waButton}
+              onPress={handleOpenWhatsApp}
+              activeOpacity={0.7}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              accessibilityLabel="Hubungi pemilik via WhatsApp"
+            >
+              <MessageSquare size={14} color="#34d399" />
+              <Text style={styles.waButtonText}>Hubungi WhatsApp</Text>
+            </TouchableOpacity>
 
-        {(isTrial || isExpired) && (
-          <TouchableOpacity
-            style={styles.trialButton}
-            onPress={() => onExtendTrial(store)}
-            activeOpacity={0.7}
-            hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-            accessibilityLabel="Perpanjang masa trial toko"
-          >
-            <Clock size={14} color="#fbbf24" />
-            <Text style={styles.trialButtonText}>+ Trial</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.extendActiveButton}
+              onPress={() => onActivate(store)}
+              activeOpacity={0.7}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              accessibilityLabel="Perpanjang atau kelola paket lisensi toko"
+            >
+              <Clock size={14} color="#d4d4d8" />
+              <Text style={styles.extendActiveButtonText}>Perpanjang</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={styles.waButton}
+              onPress={handleOpenWhatsApp}
+              activeOpacity={0.7}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              accessibilityLabel="Hubungi pemilik via WhatsApp"
+            >
+              <MessageSquare size={14} color="#34d399" />
+              <Text style={styles.waButtonText}>WhatsApp</Text>
+            </TouchableOpacity>
+
+            {isTrial && (
+              <TouchableOpacity
+                style={styles.trialButton}
+                onPress={() => onExtendTrial(store)}
+                activeOpacity={0.7}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                accessibilityLabel="Perpanjang masa trial toko"
+              >
+                <Clock size={14} color="#fbbf24" />
+                <Text style={styles.trialButtonText}>+ Trial</Text>
+              </TouchableOpacity>
+            )}
+
+            <TouchableOpacity
+              style={styles.activateButton}
+              onPress={() => onActivate(store)}
+              activeOpacity={0.7}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              accessibilityLabel="Aktifkan toko menjadi PRO"
+            >
+              <CheckCircle2 size={15} color="#09090b" />
+              <Text style={styles.activateButtonText}>Aktifkan PRO</Text>
+            </TouchableOpacity>
+          </>
         )}
-
-        <TouchableOpacity
-          style={styles.activateButton}
-          onPress={() => onActivate(store)}
-          activeOpacity={0.7}
-          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-          accessibilityLabel="Aktifkan toko menjadi PRO"
-        >
-          <CheckCircle2 size={15} color="#09090b" />
-          <Text style={styles.activateButtonText}>Aktifkan Toko</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -207,69 +224,51 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#18181b',
-    borderRadius: 14,
+    backgroundColor: '#121214',
+    borderRadius: 12,
     padding: 14,
-    marginBottom: 12,
+    marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: '#1c1c20',
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 6,
   },
-  storeTitleWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    minWidth: 0,
-  },
-  storeIconBox: {
-    width: 28,
-    height: 28,
-    borderRadius: 7,
-    backgroundColor: '#27272a',
-    borderWidth: 1,
-    borderColor: '#3f3f46',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
+  storeIcon: {
+    marginRight: 7,
     flexShrink: 0,
   },
   storeName: {
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins_600SemiBold',
     fontSize: 15,
     color: '#ffffff',
     flex: 1,
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  badge: {
+  metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
+    marginBottom: 10,
+    gap: 6,
+    flexWrap: 'nowrap',
+  },
+  badge: {
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 5,
     flexShrink: 0,
   },
-  badgeIcon: {
-    marginRight: 4,
-  },
   badgeTrial: {
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
+    backgroundColor: 'rgba(245, 158, 11, 0.12)',
   },
   badgeActive: {
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    backgroundColor: 'rgba(16, 185, 129, 0.12)',
   },
   badgeExpired: {
-    backgroundColor: 'rgba(244, 63, 94, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(244, 63, 94, 0.3)',
+    backgroundColor: 'rgba(244, 63, 94, 0.12)',
   },
   badgeText: {
     fontFamily: 'Poppins_700Bold',
@@ -278,54 +277,32 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     letterSpacing: 0.3,
   },
-  metaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-    gap: 6,
-  },
-  categoryBadge: {
-    backgroundColor: '#27272a',
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#3f3f46',
-  },
-  categoryBadgeText: {
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 12,
-    color: '#d4d4d8',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  metaSeparator: {
+  metaDot: {
     color: '#52525b',
     fontSize: 12,
     includeFontPadding: false,
     textAlignVertical: 'center',
-  },
-  expiryRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    minWidth: 0,
-  },
-  expiryIcon: {
-    marginRight: 4,
     flexShrink: 0,
   },
   expiryText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 12,
-    color: '#a1a1aa',
     includeFontPadding: false,
     textAlignVertical: 'center',
+    flexShrink: 0,
+  },
+  categoryText: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 12,
+    color: '#71717a',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+    flexShrink: 1,
   },
   contactSection: {
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderTopWidth: 1,
-    borderTopColor: '#27272a',
+    borderTopColor: '#1c1c20',
     gap: 4,
   },
   infoRow: {
@@ -344,16 +321,11 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     flex: 1,
   },
-  metricsStrip: {
+  metricsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingVertical: 8,
-    marginVertical: 4,
-    backgroundColor: '#202024',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#27272a',
+    paddingVertical: 6,
+    gap: 8,
   },
   metricItem: {
     flexDirection: 'row',
@@ -371,37 +343,60 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   metricBold: {
-    fontFamily: 'Poppins_700Bold',
-    color: '#ffffff',
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#e4e4e7',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
-  metricDivider: {
-    width: 1,
-    height: 14,
-    backgroundColor: '#2e2e33',
+  metricDot: {
+    color: '#3f3f46',
+    fontSize: 12,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   actionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#1c1c20',
   },
   waButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#202024',
+    backgroundColor: '#18181b',
     borderWidth: 1,
-    borderColor: '#2e2e33',
+    borderColor: '#27272a',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    minHeight: 44,
+    flex: 1.4,
+  },
+  waButtonText: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 12,
+    color: '#d4d4d8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  extendActiveButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
     borderRadius: 8,
     paddingHorizontal: 10,
     minHeight: 44,
     flex: 1,
   },
-  waButtonText: {
-    fontFamily: 'Poppins_600SemiBold',
+  extendActiveButtonText: {
+    fontFamily: 'Poppins_500Medium',
     fontSize: 12,
     color: '#d4d4d8',
     includeFontPadding: false,
@@ -412,16 +407,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    backgroundColor: '#202024',
+    backgroundColor: '#18181b',
     borderWidth: 1,
-    borderColor: '#2e2e33',
+    borderColor: '#27272a',
     borderRadius: 8,
     paddingHorizontal: 8,
     minHeight: 44,
     flex: 0.8,
   },
   trialButtonText: {
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_500Medium',
     fontSize: 12,
     color: '#d4d4d8',
     includeFontPadding: false,
@@ -436,10 +431,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     minHeight: 44,
-    flex: 1.3,
+    flex: 1.2,
   },
   activateButtonText: {
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins_600SemiBold',
     fontSize: 12,
     color: '#09090b',
     includeFontPadding: false,
