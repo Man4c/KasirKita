@@ -113,7 +113,8 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - **Perbaikan Relasi `LicenseKey.php`**: Menambahkan relasi `redeemedByStore()` sebagai alias yang mengarah ke `Store::class, 'redeemed_by_store_id'`, memperbaiki toast error "Gagal memuat bank lisensi" di portal Superadmin.
     - **Auto-Redirect Superadmin ke `/superadmin`**: Menyematkan pengalihan otomatis saat Superadmin login (`Login.jsx`) maupun saat mengakses route root `/` (`App.jsx`), sehingga Superadmin langsung diarahkan ke portal master SaaS `/superadmin` alih-alih layar kasir POS ritel (`/`).
     - **Branding Header Superadmin**: Tampilan header sidebar desktop & drawer mobile otomatis menyesuaikan menjadi *"KasirKita SaaS - Platform Management"* dengan lencana perisai emas (*ShieldCheck*) saat Superadmin aktif login.
-    - **Test Coverage**: Menambahkan test `test_regular_store_owner_is_forbidden_from_superadmin_endpoints()` di `SuperAdminControllerTest.php` untuk memverifikasi proteksi HTTP 403 bagi owner toko biasa. Total 125 backend tests lolos 100% (650 assertions).
+    - **Test Coverage**: Menambahkan test `test_regular_store_owner_is_forbidden_from_superadmin_endpoints()` di `SuperAdminControllerTest.php` dan suite pengujian `TelegramNotificationTest.php` (4 tests). Total **129 backend tests lolos 100% (658 assertions)**.
+    - **Perintah Diagnostik Telegram**: Disediakan Artisan command `php artisan telegram:test {--message=}` (`TestTelegramNotificationCommand.php`) untuk memverifikasi kesiapan Bot Token dan Chat ID Telegram secara instan.
 
 
 

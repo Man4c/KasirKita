@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788828224.390157,
-    "ast_hash": "5e42fbc19306d89757d800465ccb711f",
+    "mtime": 1788828594.374148,
+    "ast_hash": "a5a829a2f0ab1b379e6eb8cac236f22f",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1295,18 +1295,18 @@
     "semantic_hash": "8f5d92b26072457dc9e4e1f5910282f6"
   },
   "web/src/App.jsx": {
-    "mtime": 1788826151.2758546,
-    "ast_hash": "a8508ec920a90c92b1f05f10dc9dccad",
+    "mtime": 1788828532.6025472,
+    "ast_hash": "79e0670cac10bb2370743ad28e2bde94",
     "semantic_hash": ""
   },
   "web/src/components/layout/AppLayout.jsx": {
-    "mtime": 1788827914.8299377,
-    "ast_hash": "e3856dcccf1cef1333040840340f1058",
+    "mtime": 1788828557.4612799,
+    "ast_hash": "52a1800e63af8dbe2e47a96c9da62dad",
     "semantic_hash": ""
   },
   "web/src/context/AuthContext.jsx": {
-    "mtime": 1788826022.9544485,
-    "ast_hash": "5c1de5d38f8808102cb7199350c5c67b",
+    "mtime": 1788828510.2400308,
+    "ast_hash": "aaaaca0b25578a5837763a0d225a1aa4",
     "semantic_hash": ""
   },
   "web/src/main.jsx": {
@@ -1330,8 +1330,8 @@
     "semantic_hash": ""
   },
   "web/src/pages/Login.jsx": {
-    "mtime": 1788827862.604154,
-    "ast_hash": "74182c1f173a76211da419d1ec6bbbb3",
+    "mtime": 1788828937.0955145,
+    "ast_hash": "8ddff659bfe0c54628f8bb82bee564a1",
     "semantic_hash": ""
   },
   "web/src/pages/Pos.jsx": {
