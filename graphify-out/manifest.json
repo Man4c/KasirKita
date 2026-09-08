@@ -1370,8 +1370,8 @@
     "semantic_hash": ""
   },
   "mobile/app.json": {
-    "mtime": 1788778491.566589,
-    "ast_hash": "13afe3129691859d8dd5c1bca5dc3d01",
+    "mtime": 1788833148.3071873,
+    "ast_hash": "f9b21c4b6135f2fe215fedd6cd341bc4",
     "semantic_hash": ""
   },
   "mobile/index.js": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
   },
   "mobile/package.json": {
-    "mtime": 1788820565.3360639,
-    "ast_hash": "d3672e9eb0b3b0d90f68a9b5a858b7ac",
+    "mtime": 1788833136.9577415,
+    "ast_hash": "a1a3db4aa5afacaa07a0f4331433f536",
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
@@ -2105,8 +2105,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/StoreSetting.php": {
-    "mtime": 1788823787.749902,
-    "ast_hash": "c1ddcd4404900b7934d71b70d74e318a",
+    "mtime": 1788833375.826193,
+    "ast_hash": "07a88045df07cb741748769885e15494",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_02_051850_create_store_settings_table.php": {
@@ -2600,8 +2600,8 @@
     "semantic_hash": ""
   },
   "mobile/scripts/testBackupService.js": {
-    "mtime": 1788677107.2011175,
-    "ast_hash": "7e3d796539d59f5f92c17b543ea8cb32",
+    "mtime": 1788833271.2669392,
+    "ast_hash": "e958bc058a8cfefe0343891d47dc2429",
     "semantic_hash": ""
   },
   "plans/260906-33-mobile-in-app-remote-updater/plan.md": {
@@ -2615,8 +2615,8 @@
     "semantic_hash": ""
   },
   "backend/config/app_version.php": {
-    "mtime": 1788684268.5622778,
-    "ast_hash": "0acb1e87cf8bedd39b117df271560897",
+    "mtime": 1788833381.7487202,
+    "ast_hash": "972b2b55e847649f3ba2131111e93d4d",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_09_06_000002_add_app_version_to_store_settings_table.php": {

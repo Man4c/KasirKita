@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788831174.5603359,
-    "ast_hash": "951139c66f8cb43e4178349cd1950e54",
+    "mtime": 1788832421.536452,
+    "ast_hash": "450507864dfb80a7fd5d202db2d6782e",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "mobile/src/screens/SettingsScreen.js": {
-    "mtime": 1788825273.0918007,
-    "ast_hash": "16868b5db61e47e987446fd04afd6f9a",
+    "mtime": 1788832329.6335754,
+    "ast_hash": "9c070d32ceba51a526595a8c83c5052b",
     "semantic_hash": ""
   },
   "mobile/src/components/ReceiptView.js": {
@@ -2975,8 +2975,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/StoreLicenseController.php": {
-    "mtime": 1788824687.9020684,
-    "ast_hash": "3dbd601914d30dc26e3addc11c3b6fba",
+    "mtime": 1788832310.8481264,
+    "ast_hash": "92a7375e96c54b620ba0be35ab75ee66",
     "semantic_hash": ""
   },
   "backend/app/Models/LicenseKey.php": {
@@ -3005,8 +3005,8 @@
     "semantic_hash": ""
   },
   "mobile/src/components/settings/LicenseActivationModal.js": {
-    "mtime": 1788825127.1032412,
-    "ast_hash": "833d118e1490448246cea2116d7d85c7",
+    "mtime": 1788832321.4673839,
+    "ast_hash": "c60bbccef9e97a8918587bf53a4a0765",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/SuperAdminController.php": {

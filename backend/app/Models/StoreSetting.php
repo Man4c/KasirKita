@@ -23,15 +23,15 @@ class StoreSetting extends Model
     ];
 
     public const DEFAULT_APP_VERSION = [
-        'latest_version' => '1.3.0',
-        'latest_version_code' => 130,
+        'latest_version' => '1.4.0',
+        'latest_version_code' => 6,
         'min_supported_version' => '1.0.0',
         'apk_url' => null,
         'apk_size_bytes' => 0,
         'changelog' => [
-            'Pembaruan sistem dan perbaikan performa kasir',
+            'Pembaruan sistem dan optimasi ukuran APK ramping (~28 MB)',
         ],
-        'release_date' => '2026-09-06',
+        'release_date' => '2026-09-08',
         'is_mandatory' => false,
     ];
 

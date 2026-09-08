@@ -146,29 +146,29 @@ async function runTests() {
   // --- SUITE 1: UJI BERKAS RUSAK & INVALID INPUT ---
   console.log('--- SUITE 1: Uji Berkas Rusak & Penanganan Error Ramah Pengguna ---');
 
-  test('Berkas JSON terpotong (truncated / kurung hilang saat kirim WA) ditolak dengan pesan jelas', () => {
+  await testAsync('Berkas JSON terpotong (truncated / kurung hilang saat kirim WA) ditolak dengan pesan jelas', async () => {
     const truncatedJson = '{"app": "KasirKita", "schema_version": 2, "data": {"products": [{"id": 1, "name": "Teh"';
-    const res = service.parseAndValidateBackupContent(truncatedJson);
+    const res = await service.parseAndValidateBackupContent(truncatedJson);
     assert.strictEqual(res.valid, false);
     assert(res.message.includes('bukan format JSON yang valid'));
   });
 
-  test('Berkas JSON valid tapi BUKAN KasirKita ditolak dengan pesan jelas', () => {
+  await testAsync('Berkas JSON valid tapi BUKAN KasirKita ditolak dengan pesan jelas', async () => {
     const foreignJson = JSON.stringify({ app: 'AplikasiLainPOS', version: 1, items: [] });
-    const res = service.parseAndValidateBackupContent(foreignJson);
+    const res = await service.parseAndValidateBackupContent(foreignJson);
     assert.strictEqual(res.valid, false);
     assert(res.message.includes('bukan merupakan cadangan resmi KasirKita POS'));
   });
 
-  test('Berkas KasirKita tapi tanpa data (data: null) ditolak dengan aman', () => {
+  await testAsync('Berkas KasirKita tapi tanpa data (data: null) ditolak dengan aman', async () => {
     const emptyDataJson = JSON.stringify({ app: 'KasirKita', schema_version: 2, data: null });
-    const res = service.parseAndValidateBackupContent(emptyDataJson);
+    const res = await service.parseAndValidateBackupContent(emptyDataJson);
     assert.strictEqual(res.valid, false);
     assert(res.message.includes('Struktur data'));
   });
 
-  test('String kosong atau tipe bukan string ditolak tanpa throw crash', () => {
-    const res = service.parseAndValidateBackupContent('');
+  await testAsync('String kosong atau tipe bukan string ditolak tanpa throw crash', async () => {
+    const res = await service.parseAndValidateBackupContent('');
     assert.strictEqual(res.valid, false);
     assert(res.message.includes('kosong atau tidak terbaca'));
   });
@@ -176,7 +176,7 @@ async function runTests() {
   // --- SUITE 2: UJI MIGRATOR & SANITIZER SKEMA LAMA (SCHEMA_VERSION 1) ---
   console.log('\n--- SUITE 2: Uji Sanitizer & Migrator Skema Lama (schema_version: 1) ---');
 
-  test('Berkas cadangan v1 tanpa base_unit_id disanitasi otomatis dengan default pcs', () => {
+  await testAsync('Berkas cadangan v1 tanpa base_unit_id disanitasi otomatis dengan default pcs', async () => {
     const legacyV1Payload = {
       app: 'KasirKita',
       schema_version: 1,
@@ -190,7 +190,7 @@ async function runTests() {
       },
     };
 
-    const res = service.parseAndValidateBackupContent(JSON.stringify(legacyV1Payload));
+    const res = await service.parseAndValidateBackupContent(JSON.stringify(legacyV1Payload));
     assert.strictEqual(res.valid, true);
     assert.strictEqual(res.schemaVersion, 1);
     // Verifikasi produk 101 mendapatkan default base_unit_id 'pcs'
