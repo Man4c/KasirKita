@@ -1915,6 +1915,13 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Seluruh font >= 12px, touch targets >= 44dp, Android anti-shift `includeFontPadding: false` + `textAlignVertical: 'center'`.
 - Web Dashboard memiliki layout ringkas dengan header profil yang kompak.
 - Mobile POS dirancang touch-friendly untuk transaksi kasir cepat.
+- **Registrasi Mandiri Toko & Peningkatan UX Login:**
+  - Menghilangkan ikon kotak sparkles dari kartu "Buka Toko Baru" pada `LoginScreen.js` sehingga tampil minimalis, anggun, rata kiri bersih berdampingan dengan panah chevron.
+  - Memperbaiki penanganan error 422 pada `POST /api/auth/register-store`:
+    - Mengoreksi duplikasi email `owner@kasirkita.com` di database lokal (sebelumnya sudah ada user owner lokal tanpa toko yang menyebabkan constraint violation).
+    - Melokalkan pesan validasi Laravel di `AuthController.php` ke Bahasa Indonesia yang ramah pengguna.
+    - Menambahkan penguraian multi-error otomatis pada `AuthContext.js`.
+    - Menyematkan `useRef` auto-scroll ke puncak form serta banner error lengket (`footerErrorBar`) tepat di atas tombol footer pada `RegisterStoreModal.js` sehingga pengguna langsung melihat pesan error tanpa harus menggulir manual.
 
 ## Keputusan Logic / Data
 
