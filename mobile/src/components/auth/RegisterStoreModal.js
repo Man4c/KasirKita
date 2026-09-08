@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -40,6 +40,7 @@ const BUSINESS_TYPES = [
 
 export default function RegisterStoreModal({ visible, onClose, apiUrl = null }) {
   const { registerStore } = useAuth();
+  const scrollViewRef = useRef(null);
 
   const [storeName, setStoreName] = useState('');
   const [businessType, setBusinessType] = useState('retail');
@@ -69,25 +70,30 @@ export default function RegisterStoreModal({ visible, onClose, apiUrl = null }) 
     onClose();
   };
 
+  const triggerError = (msg) => {
+    setError(msg);
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
   const handleSubmit = async () => {
     if (!storeName.trim()) {
-      setError('Nama toko wajib diisi.');
+      triggerError('Nama toko wajib diisi.');
       return;
     }
     if (!ownerName.trim()) {
-      setError('Nama pemilik toko wajib diisi.');
+      triggerError('Nama pemilik toko wajib diisi.');
       return;
     }
     if (!phone.trim()) {
-      setError('Nomor WhatsApp / HP wajib diisi.');
+      triggerError('Nomor WhatsApp / HP wajib diisi.');
       return;
     }
     if (!email.trim()) {
-      setError('Email akun wajib diisi.');
+      triggerError('Email akun wajib diisi.');
       return;
     }
     if (!password || password.length < 6) {
-      setError('Kata sandi minimal 6 karakter.');
+      triggerError('Kata sandi minimal 6 karakter.');
       return;
     }
 
@@ -107,7 +113,7 @@ export default function RegisterStoreModal({ visible, onClose, apiUrl = null }) 
     const res = await registerStore(payload, apiUrl);
 
     if (!res.success) {
-      setError(res.message);
+      triggerError(res.message);
       setLoading(false);
       return;
     }
@@ -163,6 +169,7 @@ export default function RegisterStoreModal({ visible, onClose, apiUrl = null }) 
 
           {/* Form Content */}
           <ScrollView
+            ref={scrollViewRef}
             style={styles.scrollBody}
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
@@ -326,6 +333,16 @@ export default function RegisterStoreModal({ visible, onClose, apiUrl = null }) 
               </View>
             </View>
           </ScrollView>
+
+          {/* Inline Footer Error Bar */}
+          {error ? (
+            <View style={styles.footerErrorBar}>
+              <AlertCircle size={14} color="#fb7185" style={{ marginRight: 8, flexShrink: 0 }} />
+              <Text style={styles.footerErrorText} numberOfLines={2}>
+                {error}
+              </Text>
+            </View>
+          ) : null}
 
           {/* Sticky Bottom Actions */}
           <View style={styles.footer}>
@@ -629,5 +646,22 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
+  },
+  footerErrorBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(225, 29, 72, 0.3)',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  footerErrorText: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 12,
+    color: '#fb7185',
+    flex: 1,
+    includeFontPadding: false,
+    lineHeight: 16,
   },
 });

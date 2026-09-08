@@ -28,6 +28,16 @@ class AuthController extends Controller
             'phone' => ['required', 'string', 'max:50'],
             'password' => ['required', 'string', 'min:6'],
             'address' => ['nullable', 'string'],
+        ], [
+            'store_name.required' => 'Nama toko wajib diisi.',
+            'business_type.required' => 'Jenis usaha wajib dipilih.',
+            'owner_name.required' => 'Nama pemilik toko wajib diisi.',
+            'email.required' => 'Email akun login wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email ini sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda.',
+            'phone.required' => 'Nomor WhatsApp / HP wajib diisi.',
+            'password.required' => 'Kata sandi wajib diisi.',
+            'password.min' => 'Kata sandi minimal 6 karakter.',
         ]);
 
         $result = $provisioningService->registerStore($validated);

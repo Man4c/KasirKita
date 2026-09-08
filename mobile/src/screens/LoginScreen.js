@@ -19,7 +19,6 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  Sparkles,
   ChevronRight,
 } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
@@ -214,14 +213,11 @@ export default function LoginScreen() {
             onPress={() => setRegisterModalOpen(true)}
             activeOpacity={0.8}
           >
-            <View style={styles.registerIconBox}>
-              <Sparkles size={18} color="#fb7185" />
-            </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.registerCardTitle}>Buka Toko Baru (Gratis 14 Hari)</Text>
               <Text style={styles.registerCardSubtitle}>Daftar mandiri • Langsung aktif siap jualan</Text>
             </View>
-            <ChevronRight size={16} color="#fb7185" style={{ flexShrink: 0 }} />
+            <ChevronRight size={18} color="#fb7185" style={{ flexShrink: 0, marginLeft: 8 }} />
           </TouchableOpacity>
         </View>
 
@@ -402,18 +398,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(225, 29, 72, 0.25)',
     borderRadius: 14,
-    padding: 12,
-    gap: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     minHeight: 52,
-  },
-  registerIconBox: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: 'rgba(225, 29, 72, 0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexShrink: 0,
   },
   registerCardTitle: {
     fontFamily: 'Poppins_600SemiBold',

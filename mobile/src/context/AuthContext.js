@@ -102,9 +102,16 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: res.data.message };
     } catch (err) {
+      let message = err.response?.data?.message || err.message || 'Pendaftaran toko gagal. Periksa koneksi internet Anda.';
+      if (err.response?.data?.errors) {
+        const errorList = Object.values(err.response.data.errors).flat();
+        if (errorList.length > 0) {
+          message = errorList.join('. ');
+        }
+      }
       return {
         success: false,
-        message: err.response?.data?.message || err.message || 'Pendaftaran toko gagal. Periksa koneksi internet Anda.',
+        message,
       };
     }
   };
