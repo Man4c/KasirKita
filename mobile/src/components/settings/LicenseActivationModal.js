@@ -76,6 +76,48 @@ export default function LicenseActivationModal({ visible, onClose, onSuccess }) 
     }
   };
 
+  const getDurationInfo = () => {
+    if (!successResult) return { label: 'Seumur Hidup (Lifetime)', isLifetime: true };
+
+    const lic = successResult.license || {};
+    const st = successResult.store || {};
+    const type = lic.duration_type;
+    const days = lic.duration_days;
+    const expiresAt = st.subscription_expires_at;
+
+    let dateStr = '';
+    if (expiresAt) {
+      try {
+        const d = new Date(expiresAt);
+        dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      } catch (e) {
+        dateStr = '';
+      }
+    }
+
+    if (type === 'lifetime' || !expiresAt) {
+      return {
+        label: 'Seumur Hidup (Lifetime)',
+        detail: 'Permanen',
+        isLifetime: true,
+      };
+    }
+
+    let typeText = 'Kustom';
+    if (type === '1_month' || days === 30) typeText = '1 Bulan (30 Hari)';
+    else if (type === '6_months' || days === 180) typeText = '6 Bulan (180 Hari)';
+    else if (type === '1_year' || days === 365) typeText = '1 Tahun (365 Hari)';
+    else if (days) typeText = `${days} Hari`;
+
+    return {
+      label: dateStr ? `${typeText} • s/d ${dateStr}` : typeText,
+      detail: dateStr ? `s/d ${dateStr}` : typeText,
+      isLifetime: false,
+    };
+  };
+
+  const durationInfo = getDurationInfo();
+
   return (
     <Modal
       visible={visible}
@@ -107,7 +149,7 @@ export default function LicenseActivationModal({ visible, onClose, onSuccess }) 
               </View>
               <View style={styles.headerTextGroup}>
                 <Text style={styles.headerTitle}>Aktivasi Lisensi PRO</Text>
-                <Text style={styles.headerSubtitle}>Buka akses kasir permanen tanpa batas waktu</Text>
+                <Text style={styles.headerSubtitle}>Masukkan serial key untuk membuka akses kasir penuh</Text>
               </View>
             </View>
             <TouchableOpacity
@@ -135,7 +177,7 @@ export default function LicenseActivationModal({ visible, onClose, onSuccess }) 
                 </View>
                 <Text style={styles.successTitle}>Aktivasi Berhasil!</Text>
                 <Text style={styles.successDesc}>
-                  Selamat, toko <Text style={{ color: '#f4f4f5', fontFamily: 'Poppins_600SemiBold' }}>{store?.name || 'Anda'}</Text> kini telah berstatus PRO AKTIF (Permanen). Semua fitur kasir terbuka penuh!
+                  Selamat, toko <Text style={{ color: '#f4f4f5', fontFamily: 'Poppins_600SemiBold' }}>{successResult.store?.name || store?.name || 'Anda'}</Text> kini telah berstatus PRO AKTIF {durationInfo.isLifetime ? '(Permanen)' : `(${durationInfo.detail})`}. Semua fitur kasir terbuka penuh!
                 </Text>
 
                 <View style={styles.successCard}>
@@ -145,7 +187,7 @@ export default function LicenseActivationModal({ visible, onClose, onSuccess }) 
                   </View>
                   <View style={styles.successRow}>
                     <Text style={styles.successLabel}>Masa Berlaku:</Text>
-                    <Text style={[styles.successValue, { color: '#34d399' }]}>Seumur Hidup (Lifetime)</Text>
+                    <Text style={[styles.successValue, { color: '#34d399' }]}>{durationInfo.label}</Text>
                   </View>
                 </View>
 

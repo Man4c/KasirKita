@@ -82,6 +82,12 @@ class StoreLicenseController extends Controller
         try {
             $result = $this->licenseService->activateLicense($store, $user, $validated['license_key']);
 
+            $daysRemaining = null;
+            if ($result['store']->isActive() && $result['store']->subscription_expires_at) {
+                $diff = now()->diffInSeconds($result['store']->subscription_expires_at, false);
+                $daysRemaining = max(0, (int) ceil($diff / 86400));
+            }
+
             $data = [
                 'store' => [
                     'id' => $result['store']->id,
@@ -94,6 +100,7 @@ class StoreLicenseController extends Controller
                     'activated_at' => $result['store']->activated_at?->toIso8601String(),
                     'subscription_expires_at' => $result['store']->subscription_expires_at?->toIso8601String(),
                     'license_key' => $result['store']->license_key,
+                    'days_remaining' => $daysRemaining,
                 ],
                 'license' => [
                     'license_key' => $result['license']->license_key,

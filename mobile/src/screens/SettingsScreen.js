@@ -787,6 +787,18 @@ export default function SettingsScreen({ isLandscape = false, navigation }) {
                   ? 'Masa coba berakhir • Ketuk untuk aktivasi'
                   : store?.is_trial
                   ? `Uji coba ${store?.days_remaining ?? '14'} hari lagi • Ketuk untuk aktivasi`
+                  : store?.subscription_expires_at
+                  ? (() => {
+                      let dateFormatted = '';
+                      try {
+                        const d = new Date(store.subscription_expires_at);
+                        dateFormatted = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                      } catch (e) {
+                        dateFormatted = '';
+                      }
+                      const daysLeft = store.days_remaining != null ? ` (${store.days_remaining} hari lagi)` : '';
+                      return `Aktif s/d ${dateFormatted}${daysLeft} • ${store?.license_key || 'PRO'}`;
+                    })()
                   : `Akses Permanen • ${store?.license_key || 'Seumur Hidup'}`}
               </Text>
             </View>
