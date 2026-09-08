@@ -38,19 +38,6 @@ export default function Login() {
     }
   };
 
-  const fillCredentials = (type) => {
-    if (type === 'superadmin') {
-      setEmail('superadmin@kasirkita.com');
-      setPassword('password123');
-    } else if (type === 'owner') {
-      setEmail('owner@kasirkita.com');
-      setPassword('password123');
-    } else {
-      setEmail('kasir@kasirkita.com');
-      setPassword('password123');
-    }
-  };
-
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-zinc-950 px-4 py-8 relative overflow-hidden font-sans">
       {/* Background Decorative Glow */}
@@ -121,39 +108,6 @@ export default function Login() {
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        {/* Quick Demo Logins */}
-        <div className="mt-8 pt-6 border-t border-zinc-800/80">
-          <p className="text-xs text-zinc-400 text-center mb-3 font-semibold uppercase tracking-wider">
-            Akun Demo Siap Pakai:
-          </p>
-          <div className="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              onClick={() => fillCredentials('owner')}
-              className="p-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all cursor-pointer"
-            >
-              <p className="text-xs font-semibold text-rose-400 truncate">Pemilik Toko</p>
-              <p className="text-xs text-zinc-400 mt-0.5 truncate">Toko Mart & Cafe</p>
-            </button>
-            <button
-              type="button"
-              onClick={() => fillCredentials('cashier')}
-              className="p-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all cursor-pointer"
-            >
-              <p className="text-xs font-semibold text-emerald-400 truncate">Kasir Toko</p>
-              <p className="text-xs text-zinc-400 mt-0.5 truncate">Penjualan POS</p>
-            </button>
-            <button
-              type="button"
-              onClick={() => fillCredentials('superadmin')}
-              className="p-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all cursor-pointer"
-            >
-              <p className="text-xs font-semibold text-amber-400 truncate">Superadmin</p>
-              <p className="text-xs text-zinc-400 mt-0.5 truncate">Platform SaaS</p>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
