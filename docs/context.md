@@ -1915,6 +1915,14 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Seluruh font >= 12px, touch targets >= 44dp, Android anti-shift `includeFontPadding: false` + `textAlignVertical: 'center'`.
 - Web Dashboard memiliki layout ringkas dengan header profil yang kompak.
 - Mobile POS dirancang touch-friendly untuk transaksi kasir cepat.
+- **SuperAdmin Mobile - Optimasi Tombol & Fitur Kunci/Set Expired:**
+  - Menyederhanakan label tombol kartu toko (`StoreCardItem.js`):
+    - `"Hubungi WhatsApp"` ➔ `"WhatsApp"`
+    - `"Perpanjang Lisensi"` ➔ `"Perpanjang"`
+    - `"+ Perpanjang Trial"` ➔ `"Trial"`
+    - Mencegah teks terpotong elipsis (`...`) pada layar HP sempit.
+  - Menambahkan tombol aksi cepat `[ 🚫 ]` (Kunci / Set Expired) untuk toko Trial dan Pro Aktif dengan dialog konfirmasi protektif.
+  - Menambahkan tombol `[ 🗹 Buka Kunci ]` untuk toko yang berstatus Kedaluwarsa agar dapat diaktifkan kembali secara instan.
 - **Registrasi Mandiri Toko & Peningkatan UX Login:**
   - Menghilangkan ikon kotak sparkles dari kartu "Buka Toko Baru" pada `LoginScreen.js` sehingga tampil minimalis, anggun, rata kiri bersih berdampingan dengan panah chevron.
   - Memperbaiki penanganan error 422 pada `POST /api/auth/register-store`:
