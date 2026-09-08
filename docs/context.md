@@ -142,6 +142,12 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - `LicenseCardItem.js`: Kartu voucher serial key (`KK-PRO-XXXX-XXXX`) dengan status TERSEDIA/TERPAKAI/DICABUT, info penukar, tombol salin/bagikan kode, dan tombol cabut lisensi.
     - `LicenseGeneratorModal.js`: Bottom Sheet modal pencetakan batch serial key dengan pilihan durasi, jumlah voucher (1, 5, 10, 20), catatan event, serta opsi salin semua kode.
   - *Kepatuhan Impeccable Craft*: Seluruh touch targets >= 44dp, font floor >= 12px, Android anti-shift (`includeFontPadding: false` + `textAlignVertical: 'center'`) terpenuhi 100%. Lolos detector dengan 0 issue.
+  - *Redesain Impeccable Mobile Superadmin (/bolder, /typeset, /layout, /adapt)*:
+    - **Reclaiming Viewport (/layout)**: Mengganti grid 2x2 metrik raksasa (~280dp) menjadi *Executive 4-Column KPI Strip* ringkas (~85dp) dengan angka tegas 20px dan mini bar Bank Voucher terintegrasi, menghemat ~200dp ruang vertikal sehingga daftar toko dan tombol aksi langsung terlihat utuh tanpa scroll.
+    - **Zero Truncation (/typeset)**: Subtitle header disederhanakan menjadi email administrator dengan status dot aktif (menghilangkan elipsis `(supe...`). Nama toko dipindahkan ke baris mandiri (`flex: 1`, 15px `Poppins_700Bold`) berdampingan hanya dengan status badge utama, sehingga nama toko panjang tidak lagi terpotong `KasirKita Ma...`.
+    - **Horizontal Scroll Filter Pills (/layout)**: Baris filter toko dan lisensi dibungkus horizontal ScrollView agar tidak melipat 2 baris tidak beraturan.
+    - **Executive Contrast & Visual Impact (/bolder)**: Menambahkan garis aksen border samping kartu (emerald untuk aktif, amber untuk trial, rose untuk expired) dan mempertajam kontras tombol WhatsApp, +Trial, dan Aktifkan Toko (min 44dp).
+    - **Tablet / Wide Screen Adaptation (/adapt)**: Menambahkan `responsiveContainer` (`maxWidth: 720`, `alignSelf: 'center'`) pada FlatList sehingga di layar tablet atau landscape tidak meregang ke tepi layar.
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.
