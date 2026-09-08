@@ -18,6 +18,21 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
+- **Rilis Resmi KasirKita POS Mobile v1.4.1 (Build 7) (`Plan 34` & `Plan 36`)**:
+  - **Kompilasi Standalone EAS Cloud**:
+    - Berhasil membangun APK mandiri Android profil `preview` (Build ID: `433a363d-7349-4130-8a32-7066395d4196`).
+    - Ukuran berkas APK tetap super ramping: **36,50 MB (36.503.694 bytes)** berkat Google R8 ProGuard compiler dan arsitektur `arm64-v8a`.
+  - **Fitur Baru yang Terbawa di v1.4.1**:
+    1. *Layar Superadmin Mobile*: Pengelolaan toko mitra tenant dan bank serial key lisensi langsung terintegrasi di dalam aplikasi Android.
+    2. *Desain Clean Minimalist Red & Black*: Menghilangkan tabrakan 5 warna pelangi (cyan/kuning) menjadi palet profesional Obsidian Black `#09090b` dan KasirKita Red `#e11d48` / `#fb7185`.
+    3. *Zero Truncation Detail Lisensi & Toko*: Perbaikan flex layout sehingga nama toko dan riwayat penukaran voucher lisensi tampil utuh tanpa terpotong.
+    4. *Animasi Rotasi 360° Tombol Reload*: Tombol reload di samping logout berputar dinamis saat disentuh atau saat data disinkronkan.
+    5. *Perbaikan Tombol Cabut Lisensi*: Integrasi `showAlert` universal cross-platform, indikator loading spinner saat mencabut, dan pembaruan optimistik seketika.
+  - **Distribusi & CDN Global**:
+    - Berkas APK telah diunggah ke CDN Supabase Storage bucket `apk-releases`: `https://sdtnczxxlkgormclplzz.supabase.co/storage/v1/object/public/apk-releases/KasirKita-v1.4.1.apk`.
+    - Database pusat Supabase (`store_settings`) dan endpoint produksi Render (`https://kasirkita.onrender.com/api/app/version`) telah diperbarui ke `latest_version: "1.4.1"` dan `latest_version_code: 7`.
+    - In-app remote updater otomatis aktif: seluruh HP kasir yang menjalankan versi v1.4.0 ke bawah akan langsung menerima notifikasi update saat membuka aplikasi.
+
 - **Penyempurnaan Layar Superadmin Mobile: Animasi Spin Tombol Reload & Perbaikan Aksi Cabut Lisensi (`SuperAdminHeader.js`, `LicenseCardItem.js`, `SuperAdminScreen.js`, `alert.js`)**:
   - **Animasi Putar 360° Tombol Reload (`SuperAdminHeader.js`)**:
     - Mengintegrasikan `Animated.Value`, `Easing`, dan interpolasi rotasi `0deg` -> `360deg` dengan native driver (`Platform.OS !== 'web'`).
