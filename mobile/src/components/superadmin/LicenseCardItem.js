@@ -1,0 +1,326 @@
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  Share,
+  Alert,
+} from 'react-native';
+import { Ticket, Copy, Check, Ban, CheckCircle2, Clock } from 'lucide-react-native';
+
+export default function LicenseCardItem({ license, onRevoke }) {
+  const [copied, setCopied] = useState(false);
+
+  const isAvailable = license.status === 'available';
+  const isRedeemed = license.status === 'redeemed';
+  const isRevoked = license.status === 'revoked';
+
+  const getDurationLabel = (type) => {
+    switch (type) {
+      case '1_month': return '1 Bulan';
+      case '6_months': return '6 Bulan';
+      case '1_year': return '1 Tahun';
+      case 'lifetime': return 'Seumur Hidup';
+      default: return type || 'Standar';
+    }
+  };
+
+  const handleCopyOrShare = async () => {
+    const textToShare = `Kode Lisensi KasirKita POS Pro (${getDurationLabel(license.duration_type)}):\n${license.license_key}\n\nMasukkan kode ini pada menu Pengaturan > Aktivasi Lisensi di aplikasi kasir Anda.`;
+
+    if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(license.license_key).catch(() => {});
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      return;
+    }
+
+    try {
+      await Share.share({
+        message: textToShare,
+        title: 'Kode Lisensi KasirKita POS',
+      });
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback
+    }
+  };
+
+  const confirmRevoke = () => {
+    Alert.alert(
+      'Cabut Voucher Lisensi',
+      `Apakah Anda yakin ingin membatalkan dan mencabut voucher ${license.license_key}? Tindakan ini tidak dapat dibatalkan.`,
+      [
+        { text: 'Batal', style: 'cancel' },
+        { text: 'Cabut Voucher', style: 'destructive', onPress: () => onRevoke(license.id) },
+      ]
+    );
+  };
+
+  return (
+    <View style={[styles.card, isRevoked && styles.cardRevoked]}>
+      {/* Top row: Key and Status Badge */}
+      <View style={styles.topRow}>
+        <View style={styles.keyContainer}>
+          <Ticket size={16} color={isAvailable ? '#fbbf24' : '#71717a'} style={styles.ticketIcon} />
+          <Text style={[styles.keyText, isRevoked && styles.keyTextRevoked]} numberOfLines={1}>
+            {license.license_key}
+          </Text>
+        </View>
+
+        {isAvailable && (
+          <View style={[styles.statusBadge, styles.statusAvailable]}>
+            <Clock size={11} color="#34d399" style={styles.badgeIcon} />
+            <Text style={[styles.statusText, { color: '#34d399' }]}>TERSEDIA</Text>
+          </View>
+        )}
+
+        {isRedeemed && (
+          <View style={[styles.statusBadge, styles.statusRedeemed]}>
+            <CheckCircle2 size={11} color="#38bdf8" style={styles.badgeIcon} />
+            <Text style={[styles.statusText, { color: '#38bdf8' }]}>TERPAKAI</Text>
+          </View>
+        )}
+
+        {isRevoked && (
+          <View style={[styles.statusBadge, styles.statusRevoked]}>
+            <Ban size={11} color="#a1a1aa" style={styles.badgeIcon} />
+            <Text style={[styles.statusText, { color: '#a1a1aa' }]}>DICABUT</Text>
+          </View>
+        )}
+      </View>
+
+      {/* Middle row: Duration & Details */}
+      <View style={styles.detailsRow}>
+        <Text style={styles.durationText}>
+          Paket: <Text style={styles.durationValue}>{getDurationLabel(license.duration_type)}</Text>
+        </Text>
+
+        {license.notes && (
+          <Text style={styles.notesText} numberOfLines={1}>
+            {license.notes}
+          </Text>
+        )}
+      </View>
+
+      {/* Redeem Information if already used */}
+      {isRedeemed && (
+        <View style={styles.redeemInfoBox}>
+          <Text style={styles.redeemInfoText} numberOfLines={1}>
+            Digunakan oleh: <Text style={styles.redeemStoreName}>{license.redeemed_by_store?.name || 'Toko Mitra'}</Text>
+            {license.redeemed_at && ` (${license.redeemed_at.substring(0, 10)})`}
+          </Text>
+        </View>
+      )}
+
+      {/* Action Buttons */}
+      <View style={styles.actionRow}>
+        <TouchableOpacity
+          style={[styles.copyBtn, copied && styles.copyBtnSuccess]}
+          onPress={handleCopyOrShare}
+          activeOpacity={0.7}
+          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+        >
+          {copied ? (
+            <>
+              <Check size={14} color="#34d399" />
+              <Text style={[styles.copyBtnText, { color: '#34d399' }]}>Tersalin!</Text>
+            </>
+          ) : (
+            <>
+              <Copy size={14} color="#fbbf24" />
+              <Text style={styles.copyBtnText}>Salin / Kirim Kode</Text>
+            </>
+          )}
+        </TouchableOpacity>
+
+        {isAvailable && (
+          <TouchableOpacity
+            style={styles.revokeBtn}
+            onPress={confirmRevoke}
+            activeOpacity={0.7}
+            hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          >
+            <Ban size={14} color="#ef4444" />
+            <Text style={styles.revokeBtnText}>Cabut</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: '#18181b',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#27272a',
+  },
+  cardRevoked: {
+    opacity: 0.6,
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  keyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    minWidth: 0,
+    marginRight: 8,
+  },
+  ticketIcon: {
+    marginRight: 6,
+    flexShrink: 0,
+  },
+  keyText: {
+    fontFamily: 'Poppins_700Bold',
+    fontSize: 14,
+    color: '#ffffff',
+    letterSpacing: 0.5,
+    flexShrink: 1,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  keyTextRevoked: {
+    textDecorationLine: 'line-through',
+    color: '#71717a',
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 6,
+    flexShrink: 0,
+  },
+  badgeIcon: {
+    marginRight: 3,
+  },
+  statusAvailable: {
+    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+  },
+  statusRedeemed: {
+    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.3)',
+  },
+  statusRevoked: {
+    backgroundColor: 'rgba(113, 113, 122, 0.15)',
+    borderWidth: 1,
+    borderColor: '#3f3f46',
+  },
+  statusText: {
+    fontFamily: 'Poppins_700Bold',
+    fontSize: 12,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  detailsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 6,
+  },
+  durationText: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 12,
+    color: '#a1a1aa',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  durationValue: {
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fbbf24',
+  },
+  notesText: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 12,
+    color: '#71717a',
+    maxWidth: '50%',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  redeemInfoBox: {
+    backgroundColor: 'rgba(56, 189, 248, 0.08)',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginBottom: 8,
+    borderLeftWidth: 2,
+    borderLeftColor: '#38bdf8',
+  },
+  redeemInfoText: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 12,
+    color: '#38bdf8',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  redeemStoreName: {
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
+  },
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingTop: 6,
+    borderTopWidth: 1,
+    borderTopColor: '#27272a',
+  },
+  copyBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(251, 191, 36, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(251, 191, 36, 0.25)',
+    borderRadius: 8,
+    minHeight: 44,
+    paddingHorizontal: 10,
+  },
+  copyBtnSuccess: {
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+  },
+  copyBtnText: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 12,
+    color: '#fbbf24',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  revokeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.25)',
+    borderRadius: 8,
+    minHeight: 44,
+    paddingHorizontal: 12,
+  },
+  revokeBtnText: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 12,
+    color: '#ef4444',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+});

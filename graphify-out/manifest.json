@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788832421.536452,
-    "ast_hash": "450507864dfb80a7fd5d202db2d6782e",
+    "mtime": 1788834513.265284,
+    "ast_hash": "1d5de314a2f25442b8e5af680b53642d",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": "dc580fca35a0e98ed20777ede5e545a1"
   },
   "mobile/App.js": {
-    "mtime": 1788820576.6951249,
-    "ast_hash": "0676fdb6899e0fe2f72366e5c60ef543",
+    "mtime": 1788835084.5903943,
+    "ast_hash": "39d5ec0c23e78f2eae2368c9fa187fcb",
     "semantic_hash": ""
   },
   "mobile/app.json": {
@@ -2860,8 +2860,8 @@
     "semantic_hash": ""
   },
   "plans/260907-34-mobile-apk-size-optimization/plan.md": {
-    "mtime": 1788776131.841547,
-    "ast_hash": "04e9c5355916893bf766a68311bbda13",
+    "mtime": 1788834496.700996,
+    "ast_hash": "bd54fd05bc7805b537fbde34d847ccaa",
     "semantic_hash": ""
   },
   "mobile/scripts/generate_app_icon.py": {
@@ -3042,6 +3042,51 @@
   "backend/tests/Feature/TelegramNotificationTest.php": {
     "mtime": 1788829822.9230196,
     "ast_hash": "dd1c92f9ff455cbca9972be54418d4a0",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/superadmin/ActivateStoreModal.js": {
+    "mtime": 1788835033.4141579,
+    "ast_hash": "748a58fb07e576ef3b0a3062b8ea6e8e",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/superadmin/ExtendTrialModal.js": {
+    "mtime": 1788835040.5848906,
+    "ast_hash": "29cb5da87c7db56f90ff05ab401401cf",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/superadmin/LicenseCardItem.js": {
+    "mtime": 1788835049.5122876,
+    "ast_hash": "c1aef8cf0125eb4b3b466d75035f8ca5",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/superadmin/LicenseGeneratorModal.js": {
+    "mtime": 1788835059.9867415,
+    "ast_hash": "072b8b66b65bc5c41b50caad330c10fb",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/superadmin/StoreCardItem.js": {
+    "mtime": 1788835024.6325612,
+    "ast_hash": "689cd5d04e5eb5210303819fe0e9b0ea",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/superadmin/SuperAdminHeader.js": {
+    "mtime": 1788835008.0940752,
+    "ast_hash": "8b8536b25e97ccd73cae909c4b830c70",
+    "semantic_hash": ""
+  },
+  "mobile/src/components/superadmin/SuperAdminStatsCards.js": {
+    "mtime": 1788835014.6892848,
+    "ast_hash": "ce411150c15c657b49b66b5485ce857c",
+    "semantic_hash": ""
+  },
+  "mobile/src/screens/SuperAdminScreen.js": {
+    "mtime": 1788835072.2145784,
+    "ast_hash": "8648228e799ca2cec53141128b946851",
+    "semantic_hash": ""
+  },
+  "mobile/src/services/superAdminService.js": {
+    "mtime": 1788835209.385601,
+    "ast_hash": "710af4b15a1f0ab4edec2fa362d8a5e1",
     "semantic_hash": ""
   }
 }

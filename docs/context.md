@@ -130,7 +130,18 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Catatan versi aplikasi di tabel `store_settings` database cloud Supabase (`sdtnczxxlkgormclplzz`) telah diperbarui ke `latest_version: "1.4.0"`, `latest_version_code: 6`, memicu dialog pembaruan jarak jauh in-app otomatis bagi seluruh HP kasir yang menjalankan v1.3.1 ke bawah.
     - Seluruh test suite (Mobile Updater 18/18, Mobile Backup 10/10, Mobile Telemetry 6/6, dan Backend 129/129 tests) lulus 100%.
 
-
+- **Implementasi Layar SuperAdmin Native di Aplikasi Mobile Android (`SuperAdminScreen.js`)**:
+  - Menyediakan portal administrasi platform SaaS multi-tenant langsung di dalam aplikasi APK mobile Android bagi akun Superadmin (`superadmin@kasirkita.com` / `role === 'superadmin'`).
+  - *Alur Masuk Khusus Superadmin*: Saat login di mobile, Superadmin langsung diarahkan ke layar Superadmin (bukan kasir POS).
+  - *Komponen Modular (`mobile/src/components/superadmin/`)*:
+    - `SuperAdminHeader.js`: Lencana emas ROOT SaaS (`ShieldCheck`), nama & email user, tombol refresh, dan logout cepat.
+    - `SuperAdminStatsCards.js`: 4 Kartu analitik utama (Total Toko, Trial Aktif, Pro Aktif, Kedaluwarsa) dan mini banner Bank Voucher.
+    - `StoreCardItem.js`: Kartu toko mitra dengan status badge, detail pemilik toko, metrik staf/produk/transaksi, tombol WhatsApp satu-klik (`wa.me`), tombol "Aktifkan Toko", dan tombol "Perpanjang Trial".
+    - `ActivateStoreModal.js`: Bottom Sheet modal aktivasi langsung di lapangan dengan preset durasi (1 Bulan, 6 Bulan, 1 Tahun, Seumur Hidup) dan catatan audit pembayaran tunai.
+    - `ExtendTrialModal.js`: Bottom Sheet modal perpanjangan masa trial (+7, +14, +30 hari).
+    - `LicenseCardItem.js`: Kartu voucher serial key (`KK-PRO-XXXX-XXXX`) dengan status TERSEDIA/TERPAKAI/DICABUT, info penukar, tombol salin/bagikan kode, dan tombol cabut lisensi.
+    - `LicenseGeneratorModal.js`: Bottom Sheet modal pencetakan batch serial key dengan pilihan durasi, jumlah voucher (1, 5, 10, 20), catatan event, serta opsi salin semua kode.
+  - *Kepatuhan Impeccable Craft*: Seluruh touch targets >= 44dp, font floor >= 12px, Android anti-shift (`includeFontPadding: false` + `textAlignVertical: 'center'`) terpenuhi 100%. Lolos detector dengan 0 issue.
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
   - Menyediakan sistem pelacakan otomatis untuk memantau total perangkat HP riil yang telah menginstal KasirKita POS (*Total Real Installs*) dan pengguna aktif harian (*Daily Active Users*) tanpa mengotori UI dashboard operasional toko.

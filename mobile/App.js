@@ -36,6 +36,7 @@ import TaxManagementScreen from './src/screens/TaxManagementScreen';
 import CustomerManagementScreen from './src/screens/CustomerManagementScreen';
 import SupplierManagementScreen from './src/screens/SupplierManagementScreen';
 import UserManagementScreen from './src/screens/UserManagementScreen';
+import SuperAdminScreen from './src/screens/SuperAdminScreen';
 import { orientationService } from './src/services/orientationService';
 import { storage } from './src/services/storage';
 import { updaterService } from './src/services/updaterService';
@@ -214,6 +215,26 @@ function MainApp() {
     : Math.max(insets.top, androidStatusHeight);
   const safeLeftPadding = isLandscape ? Math.max(insets.left, isCompactLandscape ? 4 : 8) : 0;
   const safeRightPadding = isLandscape ? Math.max(insets.right, isCompactLandscape ? 4 : 8) : 0;
+
+  // Platform Superadmin SaaS View (Dedicated Screen)
+  if (user?.role === 'superadmin') {
+    return (
+      <View
+        style={[
+          styles.safeArea,
+          {
+            paddingTop: safeTopPadding,
+            paddingBottom: insets.bottom,
+            paddingLeft: safeLeftPadding,
+            paddingRight: safeRightPadding,
+          },
+        ]}
+      >
+        <StatusBar style="light" backgroundColor="#18181b" translucent={Platform.OS === 'android'} />
+        <SuperAdminScreen user={user} onLogout={logout} />
+      </View>
+    );
+  }
 
   return (
     <View
