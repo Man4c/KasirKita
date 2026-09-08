@@ -117,6 +117,19 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - **Test Coverage**: Menambahkan test `test_regular_store_owner_is_forbidden_from_superadmin_endpoints()` di `SuperAdminControllerTest.php` dan suite pengujian `TelegramNotificationTest.php` (4 tests). Total **129 backend tests lolos 100% (658 assertions)**.
     - **Perintah Diagnostik Telegram**: Disediakan Artisan command `php artisan telegram:test {--message=}` (`TestTelegramNotificationCommand.php`) untuk memverifikasi kesiapan Bot Token dan Chat ID Telegram secara instan.
 
+- **Optimasi Ukuran APK Ramping & Rilis KasirKita POS v1.4.0 Build 6 (`Plan 34`)**:
+  - **Akar Masalah**: APK universal bawaan Expo EAS Build membengkak ke ~108 MB karena memaketkan binary mesin C++ untuk 4 arsitektur prosesor (`x86`, `x86_64`, `armeabi-v7a`, `arm64-v8a`), di mana ~80 MB file emulator PC tidak pernah dipakai di HP fisik kasir nyata.
+  - **Solusi Arsitektur**:
+    - Mengintegrasikan plugin resmi Expo `expo-build-properties` di `mobile/app.json` dengan pembatasan arsitektur CPU ke `buildArchs: ["arm64-v8a"]`.
+    - Mengaktifkan pengoptimalan kompilator Google Android R8: `enableProguardInReleaseBuilds: true` dan `enableShrinkResourcesInReleaseBuilds: true` untuk membuang method dan resource XML yang tidak dipanggil dari dependensi.
+    - Menjaga integritas native library penting: `expo-secure-store`, `expo-audio` (lonceng kasir), `@react-native-community/datetimepicker`, dan `expo-asset`.
+  - **Hasil Nyata**:
+    - Ukuran berkas unduhan APK standalone turun drastis dari **108,14 MB (108.144.173 bytes)** menjadi **34,77 MB (36.461.006 bytes)** — penghematan kuota unduh kasir sebesar **-66,3% (-71,68 MB)**!
+    - Kompilasi EAS Cloud Build profil `preview` (`kasirkita-pos-mobile`, Build ID: `b925f24f-7346-409c-9a41-7d054a0ccb74`) tuntas sukses 100%.
+    - Berkas APK resmi `KasirKita-v1.4.0.apk` telah diunggah ke CDN global Supabase Storage bucket publik `apk-releases` (`https://sdtnczxxlkgormclplzz.supabase.co/storage/v1/object/public/apk-releases/KasirKita-v1.4.0.apk`).
+    - Catatan versi aplikasi di tabel `store_settings` database cloud Supabase (`sdtnczxxlkgormclplzz`) telah diperbarui ke `latest_version: "1.4.0"`, `latest_version_code: 6`, memicu dialog pembaruan jarak jauh in-app otomatis bagi seluruh HP kasir yang menjalankan v1.3.1 ke bawah.
+    - Seluruh test suite (Mobile Updater 18/18, Mobile Backup 10/10, Mobile Telemetry 6/6, dan Backend 129/129 tests) lulus 100%.
+
 
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
