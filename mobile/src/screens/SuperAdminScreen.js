@@ -155,7 +155,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
           onPress={() => setActiveTab('stores')}
           activeOpacity={0.7}
         >
-          <Store size={16} color={activeTab === 'stores' ? '#09090b' : '#a1a1aa'} />
+          <Store size={16} color={activeTab === 'stores' ? '#ffffff' : '#a1a1aa'} />
           <Text style={[styles.tabButtonText, activeTab === 'stores' && styles.tabButtonTextActive]}>
             Toko Mitra ({stores.length})
           </Text>
@@ -166,7 +166,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
           onPress={() => setActiveTab('licenses')}
           activeOpacity={0.7}
         >
-          <Ticket size={16} color={activeTab === 'licenses' ? '#09090b' : '#a1a1aa'} />
+          <Ticket size={16} color={activeTab === 'licenses' ? '#ffffff' : '#a1a1aa'} />
           <Text style={[styles.tabButtonText, activeTab === 'licenses' && styles.tabButtonTextActive]}>
             Bank Lisensi ({licenses.length})
           </Text>
@@ -202,7 +202,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
             activeOpacity={0.8}
             hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
           >
-            <Sparkles size={16} color="#09090b" />
+            <Sparkles size={16} color="#ffffff" />
             <Text style={styles.generateFabText}>Cetak</Text>
           </TouchableOpacity>
         )}
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   tabButtonActive: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#e11d48',
   },
   tabButtonText: {
     fontFamily: 'Poppins_500Medium',
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
   },
   tabButtonTextActive: {
     fontFamily: 'Poppins_600SemiBold',
-    color: '#09090b',
+    color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#e11d48',
     borderRadius: 10,
     height: 44,
     paddingHorizontal: 14,
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
   generateFabText: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#09090b',
+    color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -469,8 +469,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterPillActive: {
-    backgroundColor: '#27272a',
-    borderColor: '#3f3f46',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderColor: '#e11d48',
   },
   filterPillText: {
     fontFamily: 'Poppins_500Medium',
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
   },
   filterPillTextActive: {
     fontFamily: 'Poppins_600SemiBold',
-    color: '#ffffff',
+    color: '#fb7185',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

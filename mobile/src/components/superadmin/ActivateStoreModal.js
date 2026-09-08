@@ -158,7 +158,7 @@ export default function ActivateStoreModal({ visible, store, onClose, onConfirm 
                     <ActivityIndicator color="#09090b" size="small" />
                   ) : (
                     <>
-                      <CheckCircle2 size={16} color="#09090b" />
+                      <CheckCircle2 size={16} color="#ffffff" />
                       <Text style={styles.submitBtnText}>Aktifkan Toko</Text>
                     </>
                   )}
@@ -274,8 +274,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   chipSelected: {
-    backgroundColor: '#ffffff',
-    borderColor: '#ffffff',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderColor: '#e11d48',
   },
   chipText: {
     fontFamily: 'Poppins_500Medium',
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   },
   chipTextSelected: {
     fontFamily: 'Poppins_600SemiBold',
-    color: '#09090b',
+    color: '#fb7185',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     flex: 1.5,
     minHeight: 44,
     borderRadius: 8,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#e11d48',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
   submitBtnText: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#09090b',
+    color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

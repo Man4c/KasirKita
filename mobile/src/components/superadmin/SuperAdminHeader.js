@@ -7,7 +7,7 @@ export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing
     <View style={styles.headerContainer}>
       <View style={styles.leftSection}>
         <View style={styles.shieldIconWrapper}>
-          <ShieldCheck size={18} color="#f4f4f5" />
+          <ShieldCheck size={18} color="#fb7185" />
         </View>
         <View style={styles.titleWrapper}>
           <View style={styles.titleRow}>
@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: '#18181b',
+    backgroundColor: 'rgba(225, 29, 72, 0.12)',
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: 'rgba(225, 29, 72, 0.25)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   rootBadge: {
-    backgroundColor: '#18181b',
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: 'rgba(225, 29, 72, 0.3)',
     paddingHorizontal: 6,
     paddingVertical: 1,
     borderRadius: 4,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   rootBadgeText: {
     fontFamily: 'Poppins_700Bold',
     fontSize: 12,
-    color: '#a1a1aa',
+    color: '#fb7185',
     includeFontPadding: false,
     textAlignVertical: 'center',
     letterSpacing: 0.5,

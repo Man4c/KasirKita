@@ -84,8 +84,8 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
     <View style={styles.card}>
       {/* Row 1: Store Name with clean inline Store icon */}
       <View style={styles.cardHeader}>
-        <Store size={16} color="#71717a" style={styles.storeIcon} />
-        <Text style={styles.storeName} numberOfLines={1}>
+        <Store size={16} color="#fb7185" style={styles.storeIcon} />
+        <Text style={styles.storeName} numberOfLines={2}>
           {store.name}
         </Text>
       </View>
@@ -101,12 +101,11 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
             isTrial && { color: '#fbbf24' },
             isExpired && { color: '#fb7185' },
           ]}
-          numberOfLines={1}
         >
           {getExpiryString()}
         </Text>
         <Text style={styles.metaDot}>•</Text>
-        <Text style={styles.categoryText} numberOfLines={1}>
+        <Text style={styles.categoryText}>
           {getCategoryLabel(store.business_category)}
         </Text>
       </View>
@@ -115,7 +114,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
       <View style={styles.contactSection}>
         <View style={styles.infoRow}>
           <User size={13} color="#71717a" style={styles.infoIcon} />
-          <Text style={styles.infoText} numberOfLines={1}>
+          <Text style={styles.infoText}>
             {store.owner?.name || 'Tanpa Pemilik'}
             {store.owner?.email ? ` (${store.owner.email})` : ''}
           </Text>
@@ -175,7 +174,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
               accessibilityLabel="Perpanjang atau kelola paket lisensi toko"
             >
-              <Clock size={14} color="#d4d4d8" />
+              <Clock size={14} color="#fb7185" />
               <Text style={styles.extendActiveButtonText}>Perpanjang</Text>
             </TouchableOpacity>
           </>
@@ -212,7 +211,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
               accessibilityLabel="Aktifkan toko menjadi PRO"
             >
-              <CheckCircle2 size={15} color="#09090b" />
+              <CheckCircle2 size={15} color="#ffffff" />
               <Text style={styles.activateButtonText}>Aktifkan PRO</Text>
             </TouchableOpacity>
           </>
@@ -387,9 +386,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#18181b',
+    backgroundColor: 'rgba(225, 29, 72, 0.1)',
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: 'rgba(225, 29, 72, 0.25)',
     borderRadius: 8,
     paddingHorizontal: 10,
     minHeight: 44,
@@ -398,7 +397,7 @@ const styles = StyleSheet.create({
   extendActiveButtonText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 12,
-    color: '#d4d4d8',
+    color: '#fb7185',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -427,7 +426,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#e11d48',
     borderRadius: 8,
     paddingHorizontal: 10,
     minHeight: 44,
@@ -436,7 +435,7 @@ const styles = StyleSheet.create({
   activateButtonText: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 12,
-    color: '#09090b',
+    color: '#ffffff',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

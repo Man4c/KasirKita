@@ -17,7 +17,7 @@ export default function SuperAdminStatsCards({ stats }) {
           {/* Total Toko */}
           <View style={styles.kpiColumn}>
             <View style={styles.kpiHeader}>
-              <View style={[styles.kpiPip, { backgroundColor: '#71717a' }]} />
+              <View style={[styles.kpiPip, { backgroundColor: '#e11d48' }]} />
               <Text style={styles.kpiLabel}>Total</Text>
             </View>
             <Text style={styles.kpiValue}>{totalStores}</Text>
@@ -69,7 +69,7 @@ export default function SuperAdminStatsCards({ stats }) {
         {/* Integrated Mini Bank Voucher Strip */}
         <View style={styles.voucherStrip}>
           <View style={styles.voucherLeft}>
-            <Ticket size={13} color="#71717a" style={styles.voucherIcon} />
+            <Ticket size={13} color="#fb7185" style={styles.voucherIcon} />
             <Text style={styles.voucherTitle}>Bank Voucher:</Text>
           </View>
           <View style={styles.voucherMetrics}>

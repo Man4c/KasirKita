@@ -70,7 +70,7 @@ export default function LicenseCardItem({ license, onRevoke }) {
       {/* Top row: Key and Status Badge */}
       <View style={styles.topRow}>
         <View style={styles.keyContainer}>
-          <Ticket size={16} color={isAvailable ? '#f4f4f5' : '#71717a'} style={styles.ticketIcon} />
+          <Ticket size={16} color={isAvailable ? '#fb7185' : '#71717a'} style={styles.ticketIcon} />
           <Text style={[styles.keyText, isRevoked && styles.keyTextRevoked]} numberOfLines={1}>
             {license.license_key}
           </Text>
@@ -92,8 +92,8 @@ export default function LicenseCardItem({ license, onRevoke }) {
 
         {isRevoked && (
           <View style={[styles.statusBadge, styles.statusRevoked]}>
-            <Ban size={12} color="#f87171" style={styles.badgeIcon} />
-            <Text style={[styles.statusText, { color: '#f87171' }]}>DICABUT</Text>
+            <Ban size={12} color="#fb7185" style={styles.badgeIcon} />
+            <Text style={[styles.statusText, { color: '#fb7185' }]}>DICABUT</Text>
           </View>
         )}
       </View>
@@ -104,19 +104,21 @@ export default function LicenseCardItem({ license, onRevoke }) {
           Paket: <Text style={styles.durationValue}>{getDurationLabel(license.duration_type)}</Text>
         </Text>
 
-        {license.notes && (
-          <Text style={styles.notesText} numberOfLines={1}>
+        {license.notes ? (
+          <Text style={styles.notesText}>
             {license.notes}
           </Text>
-        )}
+        ) : null}
       </View>
 
-      {/* Redeem Information if already used */}
+      {/* Redeem Information if already used (Zero Truncation - Full Info Always Visible!) */}
       {isRedeemed && (
         <View style={styles.redeemInfoRow}>
-          <Text style={styles.redeemInfoText} numberOfLines={1}>
+          <Text style={styles.redeemInfoText}>
             Digunakan oleh: <Text style={styles.redeemStoreName}>{license.redeemed_by_store?.name || 'Toko Mitra'}</Text>
-            {license.redeemed_at && ` (${license.redeemed_at.substring(0, 10)})`}
+            {license.redeemed_at && (
+              <Text style={styles.redeemDateText}> • {license.redeemed_at.substring(0, 10)}</Text>
+            )}
           </Text>
         </View>
       )}
@@ -249,7 +251,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
     color: '#71717a',
-    maxWidth: '50%',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
@@ -260,15 +261,20 @@ const styles = StyleSheet.create({
   redeemInfoText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
-    color: '#71717a',
+    color: '#a1a1aa',
     includeFontPadding: false,
-    textAlignVertical: 'center',
+    lineHeight: 18,
   },
   redeemStoreName: {
-    fontFamily: 'Poppins_500Medium',
-    color: '#d4d4d8',
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#ffffff',
     includeFontPadding: false,
-    textAlignVertical: 'center',
+  },
+  redeemDateText: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 12,
+    color: '#71717a',
+    includeFontPadding: false,
   },
   actionRow: {
     flexDirection: 'row',
@@ -307,9 +313,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    backgroundColor: '#18181b',
+    backgroundColor: 'rgba(225, 29, 72, 0.08)',
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: 'rgba(225, 29, 72, 0.25)',
     borderRadius: 8,
     minHeight: 44,
     paddingHorizontal: 12,
@@ -317,7 +323,7 @@ const styles = StyleSheet.create({
   revokeBtnText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 12,
-    color: '#ef4444',
+    color: '#fb7185',
     includeFontPadding: false,
     textAlignVertical: 'center',
   },
