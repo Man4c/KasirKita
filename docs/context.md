@@ -18,6 +18,11 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
+- **Pengembalian Tombol & Modal Buka Toko Baru (`LoginScreen.js`, `RegisterStoreModal.js`)**:
+  - Mengembalikan kartu aksi *"Buka Toko Baru (Gratis 14 Hari)"* di bawah tombol Masuk Kasir Mobile pada [`LoginScreen.js`](file:///d:/Projects/KasirKita/mobile/src/screens/LoginScreen.js).
+  - Terhubung dengan modal pendaftaran mandiri `RegisterStoreModal` (nama toko, kategori bisnis, kontak, dan kredensial owner).
+  - Lolos uji Impeccable detector (0 violations) dan Anti-Shift typography rule.
+
 - **Rilis Resmi KasirKita POS Mobile v1.4.1 (Build 7) (`Plan 34` & `Plan 36`)**:
   - **Kompilasi Standalone EAS Cloud**:
     - Berhasil membangun APK mandiri Android profil `preview` (Build ID: `433a363d-7349-4130-8a32-7066395d4196`).
