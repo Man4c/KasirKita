@@ -8,6 +8,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class DiscountController extends Controller
 {
@@ -68,8 +69,17 @@ class DiscountController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $storeId = $request->user()?->store_id;
+
         $validated = $request->validate([
-            'code' => ['required', 'string', 'max:50', 'unique:discounts,code'],
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('discounts', 'code')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+            ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'type' => ['required', 'string', 'in:PERCENTAGE,FIXED,MIN_SPEND'],
@@ -130,8 +140,18 @@ class DiscountController extends Controller
             return $this->errorResponse('Promosi tidak ditemukan.', 404);
         }
 
+        $storeId = $request->user()?->store_id ?? $discount->store_id;
+
         $validated = $request->validate([
-            'code' => ['required', 'string', 'max:50', "unique:discounts,code,{$id}"],
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('discounts', 'code')
+                    ->ignore($discount->id)
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+            ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'type' => ['required', 'string', 'in:PERCENTAGE,FIXED,MIN_SPEND'],

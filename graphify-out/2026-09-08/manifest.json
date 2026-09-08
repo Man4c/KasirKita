@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788825569.3986495,
-    "ast_hash": "214e4d00671f2e082b4c3d8902b52274",
+    "mtime": 1788826466.6218736,
+    "ast_hash": "addad14f2eab944124dbc00166ff89bf",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -965,8 +965,8 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/AuthController.php": {
-    "mtime": 1788824703.3306384,
-    "ast_hash": "b90c169d2c9991adb4c0d5217b0232e6",
+    "mtime": 1788825839.1777937,
+    "ast_hash": "8431858f5fd7ee6f27b15706928fca70",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Controller.php": {
@@ -1015,8 +1015,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/User.php": {
-    "mtime": 1788824027.8904047,
-    "ast_hash": "ba3c685c8cc7a2c00d16ff9bcfcd7e57",
+    "mtime": 1788825820.3754745,
+    "ast_hash": "3613cf3af5f4d5aba803f9972acd3fe8",
     "semantic_hash": ""
   },
   "backend/app/Providers/AppServiceProvider.php": {
@@ -1035,8 +1035,8 @@
     "semantic_hash": "e66bb13691f6184c762c196427d8e685"
   },
   "backend/bootstrap/app.php": {
-    "mtime": 1788823687.708431,
-    "ast_hash": "a5559bcb927c541a81368d5bbf516d55",
+    "mtime": 1788825929.5488775,
+    "ast_hash": "7bb96d43a501ff00d2b203fe8a832c6c",
     "semantic_hash": ""
   },
   "backend/bootstrap/providers.php": {
@@ -1185,8 +1185,8 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1788824714.976164,
-    "ast_hash": "dde703872b8465d75965765f248755b5",
+    "mtime": 1788825999.9387841,
+    "ast_hash": "54f6cd88e3e631eaf96cb8c8e1480b47",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -1295,19 +1295,19 @@
     "semantic_hash": "8f5d92b26072457dc9e4e1f5910282f6"
   },
   "web/src/App.jsx": {
-    "mtime": 1788258553.156288,
-    "ast_hash": "e75befe65512524497a703629275db15",
+    "mtime": 1788826151.2758546,
+    "ast_hash": "a8508ec920a90c92b1f05f10dc9dccad",
     "semantic_hash": ""
   },
   "web/src/components/layout/AppLayout.jsx": {
-    "mtime": 1788418342.0880382,
-    "ast_hash": "c5e70cb66bb29e9d62dcc13d54017e05",
+    "mtime": 1788826386.279285,
+    "ast_hash": "436b06100c0f033aacecf530efbf0a3a",
     "semantic_hash": ""
   },
   "web/src/context/AuthContext.jsx": {
-    "mtime": 1787999737.0472658,
-    "ast_hash": "dc7dc5771caa983a1f0b96df5968ffd1",
-    "semantic_hash": "dc7dc5771caa983a1f0b96df5968ffd1"
+    "mtime": 1788826022.9544485,
+    "ast_hash": "5c1de5d38f8808102cb7199350c5c67b",
+    "semantic_hash": ""
   },
   "web/src/main.jsx": {
     "mtime": 1787999674.0711637,
@@ -2920,8 +2920,8 @@
     "semantic_hash": ""
   },
   "plans/260908-36-multi-tenant-dan-lisensi-toko/plan.md": {
-    "mtime": 1788825559.9656365,
-    "ast_hash": "b45ca2c288d1151fa4c19a48034a62a5",
+    "mtime": 1788826456.190778,
+    "ast_hash": "77b859008bb9d3af48f0048c9defb04e",
     "semantic_hash": ""
   },
   "backend/app/Http/Middleware/EnsureStoreActive.php": {
@@ -3007,6 +3007,26 @@
   "mobile/src/components/settings/LicenseActivationModal.js": {
     "mtime": 1788825127.1032412,
     "ast_hash": "833d118e1490448246cea2116d7d85c7",
+    "semantic_hash": ""
+  },
+  "backend/app/Http/Controllers/Api/SuperAdminController.php": {
+    "mtime": 1788825988.9036467,
+    "ast_hash": "8033427ca1ae77345b2682186550efe8",
+    "semantic_hash": ""
+  },
+  "backend/app/Http/Middleware/EnsureSuperAdmin.php": {
+    "mtime": 1788825922.3984745,
+    "ast_hash": "2194d9202d5effe816939967be83028f",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/SuperAdminControllerTest.php": {
+    "mtime": 1788825968.9697382,
+    "ast_hash": "3d92752fcf88921b9c6bf5220fc7d48c",
+    "semantic_hash": ""
+  },
+  "web/src/pages/Superadmin.jsx": {
+    "mtime": 1788826409.0956824,
+    "ast_hash": "cff1fa1d8cb4c75e2ece9342d7c25555",
     "semantic_hash": ""
   }
 }

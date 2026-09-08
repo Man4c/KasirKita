@@ -86,6 +86,26 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - Tab 2 "Bank & Generator Lisensi": Form generator voucher serial key batch dengan durasi fleksibel dan catatan distribusi, kartu pratinjau kode yang baru dicetak dengan tombol salin semua, serta tabel bank lisensi dengan tombol salin dan cabut.
     - Menjalankan audit Impeccable detector pada seluruh file web yang dimodifikasi (`0 issues detected`), memenuhi aturan keterbacaan (font ≥ 12px), data table protection (`whitespace-nowrap`), dan flexbox pairing.
     - Menjalankan `npm run build` di Vite (`built in 343ms` tanpa error).
+  - *Status Fase 7 (Selesai)*:
+    - Membuat automated integration test komprehensif `MultiTenantComprehensiveIntegrationTest.php` yang menguji siklus hidup lengkap 8 tahap multi-tenant:
+      1. Registrasi toko A (Ritel) dan verifikasi auto-provisioning kategori kebutuhan pokok & ritel.
+      2. Registrasi toko B (F&B) dan verifikasi auto-provisioning menu makanan/minuman dan satuan porsi/cup.
+      3. Verifikasi koeksistensi barcode identik (`8991234567890`) antara Toko A dan Toko B secara bersamaan tanpa terjadi benturan validasi duplikasi (*composite unique constraint safety*).
+      4. Verifikasi isolasi data ketat (*zero data leakage*) untuk katalog produk, master pelanggan, dan transaksi penjualan.
+      5. Eksekusi transaksi penjualan POS Toko A berhasil dan terverifikasi tidak bocor ke Toko B.
+      6. Verifikasi lockout POS Toko B saat masa trial kedaluwarsa (HTTP 403 `STORE_SUBSCRIPTION_EXPIRED`) dengan akses baca riwayat tetap terbuka.
+      7. Aktivasi lisensi Toko B via serial key `KK-PRO-XXXX-XXXX` yang membuka kembali fitur kasir POS secara seketika.
+      8. Aktivasi manual Toko C langsung di lapangan oleh Superadmin (metode jemput bola tunai seumur hidup / *lifetime*).
+    - Menuntaskan *scoped unique validation* pada layer Laravel Form Validation di seluruh controller bisnis:
+      - `ProductController.php`: `sku_barcode` pada `products` dan `product_unit_conversions` disaring berdasar `store_id`.
+      - `CategoryController.php`: `slug` disaring berdasar `store_id`.
+      - `CustomerController.php`: `phone` disaring berdasar `store_id`.
+      - `DiscountController.php`: `code` disaring berdasar `store_id`.
+      - `UnitController.php`: `symbol` disaring berdasar `store_id` atau default sistem (`store_id IS NULL`).
+    - Seluruh backend test suite lolos 100%: **124 tests passed, 648 assertions, 0 errors**.
+    - Build Web Frontend (`npm run build`) sukses tanpa error (321ms).
+    - Seluruh berkas mobile dan web terverifikasi bersih dari issue Impeccable UI (`0 issues detected`).
+    - Seluruh 7 fase pada `Plan 36` resmi tuntas (*Status: Completed*).
 
 
 

@@ -33,9 +33,25 @@ class UnitController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $storeId = $request->user()?->store_id;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'symbol' => ['required', 'string', 'max:50', 'unique:units,symbol'],
+            'symbol' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('units', 'symbol')
+                    ->where(function ($q) use ($storeId) {
+                        return $q->where(function ($sq) use ($storeId) {
+                            if ($storeId) {
+                                $sq->where('store_id', $storeId)->orWhereNull('store_id');
+                            } else {
+                                $sq->whereNull('store_id');
+                            }
+                        })->whereNull('deleted_at');
+                    }),
+            ],
             'description' => ['nullable', 'string'],
         ]);
 
@@ -72,9 +88,27 @@ class UnitController extends Controller
             return $this->errorResponse('Satuan barang tidak ditemukan.', 404);
         }
 
+        $storeId = $request->user()?->store_id ?? $unit->store_id;
+
         $validated = $request->validate([
             'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'symbol' => ['sometimes', 'required', 'string', 'max:50', Rule::unique('units', 'symbol')->ignore($unit->id)],
+            'symbol' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('units', 'symbol')
+                    ->ignore($unit->id)
+                    ->where(function ($q) use ($storeId) {
+                        return $q->where(function ($sq) use ($storeId) {
+                            if ($storeId) {
+                                $sq->where('store_id', $storeId)->orWhereNull('store_id');
+                            } else {
+                                $sq->whereNull('store_id');
+                            }
+                        })->whereNull('deleted_at');
+                    }),
+            ],
             'description' => ['nullable', 'string'],
         ]);
 

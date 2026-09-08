@@ -57,9 +57,18 @@ class CustomerController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $storeId = $request->user()?->store_id;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:50', 'unique:customers,phone'],
+            'phone' => [
+                'nullable',
+                'string',
+                'max:50',
+                Rule::unique('customers', 'phone')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+            ],
             'email' => ['nullable', 'email', 'max:255'],
             'address' => ['nullable', 'string'],
             'membership_type' => ['nullable', 'string', 'in:REGULAR,VIP,WHOLESALE'],
@@ -105,13 +114,18 @@ class CustomerController extends Controller
             return $this->errorResponse('Pelanggan tidak ditemukan.', 404);
         }
 
+        $storeId = $request->user()?->store_id ?? $customer->store_id;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'phone' => [
                 'nullable',
                 'string',
                 'max:50',
-                Rule::unique('customers', 'phone')->ignore($customer->id),
+                Rule::unique('customers', 'phone')
+                    ->ignore($customer->id)
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
             ],
             'email' => ['nullable', 'email', 'max:255'],
             'address' => ['nullable', 'string'],

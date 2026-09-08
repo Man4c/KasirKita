@@ -82,12 +82,23 @@ class ProductController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $storeId = $request->user()?->store_id;
+
         $validated = $request->validate([
             'category_id' => ['nullable', 'exists:categories,id'],
             'base_unit_id' => ['nullable', 'exists:units,id'],
             'default_pos_unit_id' => ['nullable', 'exists:units,id'],
             'name' => ['required', 'string', 'max:255'],
-            'sku_barcode' => ['nullable', 'string', 'max:100', Rule::unique('products', 'sku_barcode')->whereNull('deleted_at'), 'unique:product_unit_conversions,sku_barcode'],
+            'sku_barcode' => [
+                'nullable',
+                'string',
+                'max:100',
+                Rule::unique('products', 'sku_barcode')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+                Rule::unique('product_unit_conversions', 'sku_barcode')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q),
+            ],
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'avg_cost' => ['nullable', 'numeric', 'min:0'],
@@ -100,7 +111,16 @@ class ProductController extends Controller
             'conversions.*.unit_id' => ['required_with:conversions', 'exists:units,id'],
             'conversions.*.conversion_factor' => ['required_with:conversions', 'numeric', 'gt:0'],
             'conversions.*.price' => ['required_with:conversions', 'numeric', 'min:0'],
-            'conversions.*.sku_barcode' => ['nullable', 'string', 'max:100', 'unique:product_unit_conversions,sku_barcode', Rule::unique('products', 'sku_barcode')->whereNull('deleted_at')],
+            'conversions.*.sku_barcode' => [
+                'nullable',
+                'string',
+                'max:100',
+                Rule::unique('product_unit_conversions', 'sku_barcode')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q),
+                Rule::unique('products', 'sku_barcode')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+            ],
             'conversions.*.is_default_pos' => ['nullable', 'boolean'],
         ]);
 
@@ -192,12 +212,25 @@ class ProductController extends Controller
             return $this->errorResponse('Produk tidak ditemukan.', 404);
         }
 
+        $storeId = $request->user()?->store_id ?? $product->store_id;
+
         $validated = $request->validate([
             'category_id' => ['nullable', 'exists:categories,id'],
             'base_unit_id' => ['nullable', 'exists:units,id'],
             'default_pos_unit_id' => ['nullable', 'exists:units,id'],
             'name' => ['required', 'string', 'max:255'],
-            'sku_barcode' => ['nullable', 'string', 'max:100', Rule::unique('products', 'sku_barcode')->ignore($product->id)->whereNull('deleted_at')],
+            'sku_barcode' => [
+                'nullable',
+                'string',
+                'max:100',
+                Rule::unique('products', 'sku_barcode')
+                    ->ignore($product->id)
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+                Rule::unique('product_unit_conversions', 'sku_barcode')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNot('product_id', $product->id),
+            ],
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'min_stock' => ['nullable', 'numeric', 'min:0'],

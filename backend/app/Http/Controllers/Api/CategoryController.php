@@ -8,6 +8,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -30,9 +31,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $storeId = $request->user()?->store_id;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:categories,slug'],
+            'slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'slug')
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+            ],
             'description' => ['nullable', 'string'],
         ]);
 
@@ -78,9 +88,19 @@ class CategoryController extends Controller
             return $this->errorResponse('Kategori tidak ditemukan.', 404);
         }
 
+        $storeId = $request->user()?->store_id ?? $category->store_id;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:categories,slug,'.$category->id],
+            'slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'slug')
+                    ->ignore($category->id)
+                    ->where(fn ($q) => $storeId ? $q->where('store_id', $storeId) : $q)
+                    ->whereNull('deleted_at'),
+            ],
             'description' => ['nullable', 'string'],
         ]);
 
