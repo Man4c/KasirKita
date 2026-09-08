@@ -4782,8 +4782,8 @@
       "source_location": "L749",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_relativeluminance",
-      "community": 308,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 141,
+      "community_name": "initGlobalBar",
       "norm_label": "relativeluminance()"
     },
     {
@@ -4793,8 +4793,8 @@
       "source_location": "L756",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_contrastratio",
-      "community": 308,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 141,
+      "community_name": "initGlobalBar",
       "norm_label": "contrastratio()"
     },
     {
@@ -4837,8 +4837,8 @@
       "source_location": "L825",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_gethue",
-      "community": 308,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 141,
+      "community_name": "initGlobalBar",
       "norm_label": "gethue()"
     },
     {
@@ -4980,8 +4980,8 @@
       "source_location": "L1013",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_splittoplevelcommas",
-      "community": 399,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 331,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "splittoplevelcommas()"
     },
     {
@@ -4991,8 +4991,8 @@
       "source_location": "L1039",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_parsecolormix",
-      "community": 399,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 331,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "parsecolormix()"
     },
     {
@@ -5112,8 +5112,8 @@
       "source_location": "L1380",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkcolors",
-      "community": 308,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 141,
+      "community_name": "initGlobalBar",
       "norm_label": "checkcolors()"
     },
     {
@@ -5178,8 +5178,8 @@
       "source_location": "L1623",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_isaccentcolor",
-      "community": 300,
-      "community_name": "template-extensions.mjs",
+      "community": 401,
+      "community_name": "syncEditBadgeHitProxies",
       "norm_label": "isaccentcolor()"
     },
     {
@@ -5189,8 +5189,8 @@
       "source_location": "L1667",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_resolveheroheadingsizepx",
-      "community": 300,
-      "community_name": "template-extensions.mjs",
+      "community": 401,
+      "community_name": "syncEditBadgeHitProxies",
       "norm_label": "resolveheroheadingsizepx()"
     },
     {
@@ -5200,8 +5200,8 @@
       "source_location": "L1702",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkheroeyebrow",
-      "community": 300,
-      "community_name": "template-extensions.mjs",
+      "community": 401,
+      "community_name": "syncEditBadgeHitProxies",
       "norm_label": "checkheroeyebrow()"
     },
     {
@@ -5728,8 +5728,8 @@
       "source_location": "L3600",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_domaccentdashpseudo",
-      "community": 300,
-      "community_name": "template-extensions.mjs",
+      "community": 401,
+      "community_name": "syncEditBadgeHitProxies",
       "norm_label": "domaccentdashpseudo()"
     },
     {
@@ -5739,8 +5739,8 @@
       "source_location": "L3615",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementheroeyebrowdom",
-      "community": 300,
-      "community_name": "template-extensions.mjs",
+      "community": 401,
+      "community_name": "syncEditBadgeHitProxies",
       "norm_label": "checkelementheroeyebrowdom()"
     },
     {
@@ -5860,8 +5860,8 @@
       "source_location": "L3886",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_isnumberedsectionlabelcandidate",
-      "community": 300,
-      "community_name": "template-extensions.mjs",
+      "community": 401,
+      "community_name": "syncEditBadgeHitProxies",
       "norm_label": "isnumberedsectionlabelcandidate()"
     },
     {
@@ -5959,8 +5959,8 @@
       "source_location": "L4087",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementaipalettedom",
-      "community": 308,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 141,
+      "community_name": "initGlobalBar",
       "norm_label": "checkelementaipalettedom()"
     },
     {
@@ -5970,8 +5970,8 @@
       "source_location": "L4160",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_parseradialgradientstops",
-      "community": 399,
-      "community_name": "checkElementRadialSpotlightDOM",
+      "community": 331,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "parseradialgradientstops()"
     },
     {
@@ -5981,7 +5981,7 @@
       "source_location": "L4189",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkradialspotlight",
-      "community": 399,
+      "community": 308,
       "community_name": "checkElementRadialSpotlightDOM",
       "norm_label": "checkradialspotlight()"
     },
@@ -5992,7 +5992,7 @@
       "source_location": "L4227",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_elementgradientvalue",
-      "community": 399,
+      "community": 308,
       "community_name": "checkElementRadialSpotlightDOM",
       "norm_label": "elementgradientvalue()"
     },
@@ -6003,7 +6003,7 @@
       "source_location": "L4238",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_spotlightlabel",
-      "community": 399,
+      "community": 308,
       "community_name": "checkElementRadialSpotlightDOM",
       "norm_label": "spotlightlabel()"
     },
@@ -6014,7 +6014,7 @@
       "source_location": "L4247",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementradialspotlightdom",
-      "community": 399,
+      "community": 308,
       "community_name": "checkElementRadialSpotlightDOM",
       "norm_label": "checkelementradialspotlightdom()"
     },
@@ -6025,7 +6025,7 @@
       "source_location": "L4260",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementradialspotlight",
-      "community": 399,
+      "community": 308,
       "community_name": "checkElementRadialSpotlightDOM",
       "norm_label": "checkelementradialspotlight()"
     },
@@ -6036,8 +6036,8 @@
       "source_location": "L4277",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_resolvefontsizepx",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "resolvefontsizepx()"
     },
     {
@@ -6058,8 +6058,8 @@
       "source_location": "L4315",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_csscoloristransparent",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "csscoloristransparent()"
     },
     {
@@ -6069,8 +6069,8 @@
       "source_location": "L4324",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_colorsnearlymatch",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "colorsnearlymatch()"
     },
     {
@@ -6080,8 +6080,8 @@
       "source_location": "L4337",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_getcomputedstylefor",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "getcomputedstylefor()"
     },
     {
@@ -6091,8 +6091,8 @@
       "source_location": "L4347",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_hasvisiblebackgroundboundary",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "hasvisiblebackgroundboundary()"
     },
     {
@@ -6102,8 +6102,8 @@
       "source_location": "L4366",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_hasmeaningfuldirecttext",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "hasmeaningfuldirecttext()"
     },
     {
@@ -6113,8 +6113,8 @@
       "source_location": "L4374",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_textdescendantsflushsides",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "textdescendantsflushsides()"
     },
     {
@@ -6124,8 +6124,8 @@
       "source_location": "L4399",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_isvisuallyhidden",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "isvisuallyhidden()"
     },
     {
@@ -6135,8 +6135,8 @@
       "source_location": "L4428",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_isnonrenderedtext",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "isnonrenderedtext()"
     },
     {
@@ -6146,8 +6146,8 @@
       "source_location": "L4449",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkquality",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "checkquality()"
     },
     {
@@ -6190,8 +6190,8 @@
       "source_location": "L4886",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementquality",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "checkelementquality()"
     },
     {
@@ -6256,8 +6256,8 @@
       "source_location": "L5108",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementheroeyebrow",
-      "community": 300,
-      "community_name": "template-extensions.mjs",
+      "community": 401,
+      "community_name": "syncEditBadgeHitProxies",
       "norm_label": "checkelementheroeyebrow()"
     },
     {
@@ -6454,8 +6454,8 @@
       "source_location": "L5762",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkoversizedh1",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 41,
+      "community_name": "detect-antipatterns-browser.js",
       "norm_label": "checkoversizedh1()"
     },
     {
@@ -6465,8 +6465,8 @@
       "source_location": "L5780",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementoversizedh1",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 41,
+      "community_name": "detect-antipatterns-browser.js",
       "norm_label": "checkelementoversizedh1()"
     },
     {
@@ -6476,8 +6476,8 @@
       "source_location": "L5787",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_detect_antipatterns_browser_checkelementoversizedh1dom",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 41,
+      "community_name": "detect-antipatterns-browser.js",
       "norm_label": "checkelementoversizedh1dom()"
     },
     {
@@ -10700,8 +10700,8 @@
       "source_location": "L3104",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_detector_rules_checks_text_edge_tags",
-      "community": 326,
-      "community_name": "expo-secure-store",
+      "community": 300,
+      "community_name": "template-extensions.mjs",
       "norm_label": "text_edge_tags"
     },
     {
@@ -15210,8 +15210,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_lib_artifact_schema_readproductschemaversion",
-      "community": 80,
-      "community_name": "StockOpnameController.php",
+      "community": 33,
+      "community_name": "doctor.mjs",
       "norm_label": "readproductschemaversion()"
     },
     {
@@ -19720,8 +19720,8 @@
       "source_location": "L1029",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_isusefulmanualeditcontext",
-      "community": 35,
-      "community_name": "initGlobalBar",
+      "community": 0,
+      "community_name": "live-browser.js",
       "norm_label": "isusefulmanualeditcontext()"
     },
     {
@@ -19731,8 +19731,8 @@
       "source_location": "L1035",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_collectmanualcontextpieces",
-      "community": 35,
-      "community_name": "initGlobalBar",
+      "community": 0,
+      "community_name": "live-browser.js",
       "norm_label": "collectmanualcontextpieces()"
     },
     {
@@ -20127,8 +20127,8 @@
       "source_location": "L1667",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_detectinsertaxisfromstyle",
-      "community": 0,
-      "community_name": "live-browser.js",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "detectinsertaxisfromstyle()"
     },
     {
@@ -20138,8 +20138,8 @@
       "source_location": "L1686",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_detectinsertaxis",
-      "community": 0,
-      "community_name": "live-browser.js",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "detectinsertaxis()"
     },
     {
@@ -20149,8 +20149,8 @@
       "source_location": "L1697",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_layoutflowchildren",
-      "community": 39,
-      "community_name": "Request",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "layoutflowchildren()"
     },
     {
@@ -20226,8 +20226,8 @@
       "source_location": "L1814",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_cursorforinsertaxis",
-      "community": 39,
-      "community_name": "Request",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "cursorforinsertaxis()"
     },
     {
@@ -20237,8 +20237,8 @@
       "source_location": "L1818",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_placeholdersizing",
-      "community": 0,
-      "community_name": "live-browser.js",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "placeholdersizing()"
     },
     {
@@ -20259,8 +20259,8 @@
       "source_location": "L1841",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_applyplaceholdersizingstyles",
-      "community": 0,
-      "community_name": "live-browser.js",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "applyplaceholdersizingstyles()"
     },
     {
@@ -20336,8 +20336,8 @@
       "source_location": "L1925",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_ensureinsertline",
-      "community": 39,
-      "community_name": "Request",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "ensureinsertline()"
     },
     {
@@ -20347,8 +20347,8 @@
       "source_location": "L1943",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_showinsertline",
-      "community": 39,
-      "community_name": "Request",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "showinsertline()"
     },
     {
@@ -20369,8 +20369,8 @@
       "source_location": "L1993",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_setpageinteractioncursor",
-      "community": 39,
-      "community_name": "Request",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "setpageinteractioncursor()"
     },
     {
@@ -20380,8 +20380,8 @@
       "source_location": "L2013",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_syncpageinteractioncursor",
-      "community": 39,
-      "community_name": "Request",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "syncpageinteractioncursor()"
     },
     {
@@ -20534,8 +20534,8 @@
       "source_location": "L2228",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_createinsertplaceholder",
-      "community": 0,
-      "community_name": "live-browser.js",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "createinsertplaceholder()"
     },
     {
@@ -21084,8 +21084,8 @@
       "source_location": "L3593",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_sourcehintforelement",
-      "community": 35,
-      "community_name": "initGlobalBar",
+      "community": 0,
+      "community_name": "live-browser.js",
       "norm_label": "sourcehintforelement()"
     },
     {
@@ -21095,8 +21095,8 @@
       "source_location": "L3609",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_parsesourceloc",
-      "community": 35,
-      "community_name": "initGlobalBar",
+      "community": 0,
+      "community_name": "live-browser.js",
       "norm_label": "parsesourceloc()"
     },
     {
@@ -21678,8 +21678,8 @@
       "source_location": "L4474",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_usesshadowchromeroot",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "usesshadowchromeroot()"
     },
     {
@@ -21689,8 +21689,8 @@
       "source_location": "L4479",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_setimportantstyle",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "setimportantstyle()"
     },
     {
@@ -21700,8 +21700,8 @@
       "source_location": "L4483",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_initeditbadgehitproxies",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "initeditbadgehitproxies()"
     },
     {
@@ -21711,8 +21711,8 @@
       "source_location": "L4505",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_styleeditbadgeproxy",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "styleeditbadgeproxy()"
     },
     {
@@ -21722,8 +21722,8 @@
       "source_location": "L4531",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_proxymouseevent",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "proxymouseevent()"
     },
     {
@@ -21733,8 +21733,8 @@
       "source_location": "L4553",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_bindeditbadgeproxy",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "bindeditbadgeproxy()"
     },
     {
@@ -21744,8 +21744,8 @@
       "source_location": "L4584",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_editbadgeproxytargets",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "editbadgeproxytargets()"
     },
     {
@@ -21755,8 +21755,8 @@
       "source_location": "L4595",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_synceditbadgehitproxies",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "synceditbadgehitproxies()"
     },
     {
@@ -21766,8 +21766,8 @@
       "source_location": "L4629",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_initeditbadge",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "initeditbadge()"
     },
     {
@@ -21777,8 +21777,8 @@
       "source_location": "L4657",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_positioneditbadge",
-      "community": 330,
-      "community_name": "@react-native-async-storage/async-storage",
+      "community": 394,
+      "community_name": "expo-sharing",
       "norm_label": "positioneditbadge()"
     },
     {
@@ -22140,8 +22140,8 @@
       "source_location": "L5206",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_detectdevserverbase",
-      "community": 401,
-      "community_name": "syncEditBadgeHitProxies",
+      "community": 396,
+      "community_name": "Operate mode depth (and Read notes)",
       "norm_label": "detectdevserverbase()"
     },
     {
@@ -22151,8 +22151,8 @@
       "source_location": "L5219",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_componentmodulecandidates",
-      "community": 401,
-      "community_name": "syncEditBadgeHitProxies",
+      "community": 396,
+      "community_name": "Operate mode depth (and Read notes)",
       "norm_label": "componentmodulecandidates()"
     },
     {
@@ -22162,8 +22162,8 @@
       "source_location": "L5234",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_importfirstreachable",
-      "community": 401,
-      "community_name": "syncEditBadgeHitProxies",
+      "community": 396,
+      "community_name": "Operate mode depth (and Read notes)",
       "norm_label": "importfirstreachable()"
     },
     {
@@ -22173,8 +22173,8 @@
       "source_location": "L5252",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_probepreviewtree",
-      "community": 401,
-      "community_name": "syncEditBadgeHitProxies",
+      "community": 396,
+      "community_name": "Operate mode depth (and Read notes)",
       "norm_label": "probepreviewtree()"
     },
     {
@@ -22184,8 +22184,8 @@
       "source_location": "L5263",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_loadsvelteruntime",
-      "community": 401,
-      "community_name": "syncEditBadgeHitProxies",
+      "community": 396,
+      "community_name": "Operate mode depth (and Read notes)",
       "norm_label": "loadsvelteruntime()"
     },
     {
@@ -22371,8 +22371,8 @@
       "source_location": "L5685",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_describemountfailure",
-      "community": 401,
-      "community_name": "syncEditBadgeHitProxies",
+      "community": 396,
+      "community_name": "Operate mode depth (and Read notes)",
       "norm_label": "describemountfailure()"
     },
     {
@@ -22921,8 +22921,8 @@
       "source_location": "L7255",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_handlemousemove",
-      "community": 39,
-      "community_name": "Request",
+      "community": 89,
+      "community_name": "png.mjs",
       "norm_label": "handlemousemove()"
     },
     {
@@ -23020,8 +23020,8 @@
       "source_location": "L7729",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_loadmodernscreenshot",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "loadmodernscreenshot()"
     },
     {
@@ -23064,8 +23064,8 @@
       "source_location": "L7815",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_istransparentcolor",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "istransparentcolor()"
     },
     {
@@ -23075,8 +23075,8 @@
       "source_location": "L7831",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_resolvecanvasbackground",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "resolvecanvasbackground()"
     },
     {
@@ -23086,8 +23086,8 @@
       "source_location": "L7852",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_capturechromenodes",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "capturechromenodes()"
     },
     {
@@ -23097,8 +23097,8 @@
       "source_location": "L7876",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_hidecapturechromeforshaderproxy",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "hidecapturechromeforshaderproxy()"
     },
     {
@@ -23108,8 +23108,8 @@
       "source_location": "L7895",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_shoulduseancestorcropshaderproxy",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "shoulduseancestorcropshaderproxy()"
     },
     {
@@ -23119,8 +23119,8 @@
       "source_location": "L7905",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_paintsshaderproxysurface",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "paintsshaderproxysurface()"
     },
     {
@@ -23130,8 +23130,8 @@
       "source_location": "L7912",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_findshaderproxycaptureroot",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "findshaderproxycaptureroot()"
     },
     {
@@ -23141,8 +23141,8 @@
       "source_location": "L7935",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_captureelementfromrenderedancestor",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "captureelementfromrenderedancestor()"
     },
     {
@@ -23152,8 +23152,8 @@
       "source_location": "L7959",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_captureelementtoblob",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "captureelementtoblob()"
     },
     {
@@ -23174,8 +23174,8 @@
       "source_location": "L8178",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_csscolortorgb01",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "csscolortorgb01()"
     },
     {
@@ -23185,8 +23185,8 @@
       "source_location": "L8192",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_resolvepaperrgb",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "resolvepaperrgb()"
     },
     {
@@ -23196,8 +23196,8 @@
       "source_location": "L8209",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_paintsbackdrop",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "paintsbackdrop()"
     },
     {
@@ -23207,8 +23207,8 @@
       "source_location": "L8224",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_findbackdropancestor",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "findbackdropancestor()"
     },
     {
@@ -23218,8 +23218,8 @@
       "source_location": "L8235",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_averagergb01",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "averagergb01()"
     },
     {
@@ -23229,8 +23229,8 @@
       "source_location": "L8246",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_dominantrgb01",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "dominantrgb01()"
     },
     {
@@ -23240,8 +23240,8 @@
       "source_location": "L8272",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_samplesurroundingrgb",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "samplesurroundingrgb()"
     },
     {
@@ -23251,8 +23251,8 @@
       "source_location": "L8290",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_compileshader",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "compileshader()"
     },
     {
@@ -23284,8 +23284,8 @@
       "source_location": "L8323",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_showshaderbitmapfallback",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "showshaderbitmapfallback()"
     },
     {
@@ -23295,8 +23295,8 @@
       "source_location": "L8342",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_browser_showshaderoverlay",
-      "community": 89,
-      "community_name": "png.mjs",
+      "community": 330,
+      "community_name": "@react-native-async-storage/async-storage",
       "norm_label": "showshaderoverlay()"
     },
     {
@@ -27354,8 +27354,8 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_strippollerownedeventfields",
-      "community": 16,
-      "community_name": "live-server.mjs",
+      "community": 19,
+      "community_name": "GENERIC_FONTS",
       "norm_label": "strippollerownedeventfields()"
     },
     {
@@ -27365,8 +27365,8 @@
       "source_location": "L192",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_enqueueevent",
-      "community": 16,
-      "community_name": "live-server.mjs",
+      "community": 19,
+      "community_name": "GENERIC_FONTS",
       "norm_label": "enqueueevent()"
     },
     {
@@ -27376,8 +27376,8 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_restorependingeventsfromstore",
-      "community": 16,
-      "community_name": "live-server.mjs",
+      "community": 19,
+      "community_name": "GENERIC_FONTS",
       "norm_label": "restorependingeventsfromstore()"
     },
     {
@@ -27409,8 +27409,8 @@
       "source_location": "L240",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_recordgeneratedelivery",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "recordgeneratedelivery()"
     },
     {
@@ -27431,8 +27431,8 @@
       "source_location": "L272",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_recordagentphase",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "recordagentphase()"
     },
     {
@@ -27508,8 +27508,8 @@
       "source_location": "L410",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_acknowledgependingevent",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "acknowledgependingevent()"
     },
     {
@@ -27541,8 +27541,8 @@
       "source_location": "L451",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_findpendingeventbyid",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "findpendingeventbyid()"
     },
     {
@@ -27629,8 +27629,8 @@
       "source_location": "L582",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_agentpollingconnected",
-      "community": 16,
-      "community_name": "live-server.mjs",
+      "community": 19,
+      "community_name": "GENERIC_FONTS",
       "norm_label": "agentpollingconnected()"
     },
     {
@@ -27651,8 +27651,8 @@
       "source_location": "L597",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_broadcast",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "broadcast()"
     },
     {
@@ -27662,8 +27662,8 @@
       "source_location": "L604",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_recordmanualeditactivity",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "recordmanualeditactivity()"
     },
     {
@@ -27761,8 +27761,8 @@
       "source_location": "L1213",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_sessionfilemetadatafrompollreply",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "sessionfilemetadatafrompollreply()"
     },
     {
@@ -27783,8 +27783,8 @@
       "source_location": "L1283",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_server_handlepollpost",
-      "community": 19,
-      "community_name": "GENERIC_FONTS",
+      "community": 16,
+      "community_name": "live-server.mjs",
       "norm_label": "handlepollpost()"
     },
     {
@@ -32359,8 +32359,8 @@
       "source_location": "L1106",
       "_origin": "ast",
       "id": "agents_skills_impeccable_scripts_live_svelte_component_removesveltecomponentsession",
-      "community": 12,
-      "community_name": "svelte-component.mjs",
+      "community": 22,
+      "community_name": "live-accept.mjs",
       "norm_label": "removesveltecomponentsession()"
     },
     {
@@ -44621,8 +44621,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "mobile_package_dependencies_axios",
-      "community": 418,
-      "community_name": "expo-image-picker",
+      "community": 409,
+      "community_name": "bolder.md",
       "norm_label": "axios"
     },
     {
@@ -44632,8 +44632,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "mobile_package_json_axios",
-      "community": 418,
-      "community_name": "expo-image-picker",
+      "community": 409,
+      "community_name": "bolder.md",
       "norm_label": "axios"
     },
     {
@@ -44775,8 +44775,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "mobile_package_dependencies_expo_dev_client",
-      "community": 329,
-      "community_name": "Responsive Design",
+      "community": 411,
+      "community_name": "expo-dev-client",
       "norm_label": "expo-dev-client"
     },
     {
@@ -44786,8 +44786,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "expo_dev_client",
-      "community": 329,
-      "community_name": "Responsive Design",
+      "community": 411,
+      "community_name": "expo-dev-client",
       "norm_label": "expo-dev-client"
     },
     {
@@ -44797,8 +44797,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "mobile_package_dependencies_expo_document_picker",
-      "community": 394,
-      "community_name": "expo-sharing",
+      "community": 399,
+      "community_name": "checkElementRadialSpotlightDOM",
       "norm_label": "expo-document-picker"
     },
     {
@@ -44808,8 +44808,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "expo_document_picker",
-      "community": 394,
-      "community_name": "expo-sharing",
+      "community": 399,
+      "community_name": "checkElementRadialSpotlightDOM",
       "norm_label": "expo-document-picker"
     },
     {
@@ -44863,8 +44863,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "mobile_package_dependencies_expo_image_picker",
-      "community": 396,
-      "community_name": "Operate mode depth (and Read notes)",
+      "community": 408,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "expo-image-picker"
     },
     {
@@ -44874,8 +44874,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "expo_image_picker",
-      "community": 396,
-      "community_name": "Operate mode depth (and Read notes)",
+      "community": 408,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "expo-image-picker"
     },
     {
@@ -45083,8 +45083,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "mobile_package_dependencies_react_native_safe_area_context",
-      "community": 408,
-      "community_name": "react-native-safe-area-context",
+      "community": 329,
+      "community_name": "Responsive Design",
       "norm_label": "react-native-safe-area-context"
     },
     {
@@ -45094,8 +45094,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "react_native_safe_area_context",
-      "community": 408,
-      "community_name": "react-native-safe-area-context",
+      "community": 329,
+      "community_name": "Responsive Design",
       "norm_label": "react-native-safe-area-context"
     },
     {
@@ -47247,7 +47247,7 @@
       "label": "styles",
       "file_type": "code",
       "source_file": "mobile/src/components/superadmin/LicenseCardItem.js",
-      "source_location": "L192",
+      "source_location": "L196",
       "_origin": "ast",
       "id": "mobile_src_components_superadmin_licensecarditem_styles",
       "community": 121,
@@ -47324,7 +47324,7 @@
       "label": "StoreCardItem()",
       "file_type": "code",
       "source_file": "mobile/src/components/superadmin/StoreCardItem.js",
-      "source_location": "L16",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "mobile_src_components_superadmin_storecarditem_storecarditem",
       "community": 121,
@@ -47335,7 +47335,7 @@
       "label": "styles",
       "file_type": "code",
       "source_file": "mobile/src/components/superadmin/StoreCardItem.js",
-      "source_location": "L225",
+      "source_location": "L284",
       "_origin": "ast",
       "id": "mobile_src_components_superadmin_storecarditem_styles",
       "community": 121,
@@ -48281,7 +48281,7 @@
       "label": "styles",
       "file_type": "code",
       "source_file": "mobile/src/screens/SuperAdminScreen.js",
-      "source_location": "L353",
+      "source_location": "L382",
       "_origin": "ast",
       "id": "mobile_src_screens_superadminscreen_styles",
       "community": 121,
@@ -60183,7 +60183,7 @@
       "label": "Keputusan Logic / Data",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1919",
+      "source_location": "L1926",
       "_origin": "ast",
       "id": "docs_context_keputusan_logic_data",
       "community": 146,
@@ -60194,7 +60194,7 @@
       "label": "Catatan Verifikasi",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1923",
+      "source_location": "L1930",
       "_origin": "ast",
       "id": "docs_context_catatan_verifikasi",
       "community": 146,
@@ -60205,7 +60205,7 @@
       "label": "Hal Yang Perlu Diperhatikan Agent",
       "file_type": "document",
       "source_file": "docs/context.md",
-      "source_location": "L1932",
+      "source_location": "L1939",
       "_origin": "ast",
       "id": "docs_context_hal_yang_perlu_diperhatikan_agent",
       "community": 146,
@@ -192044,7 +192044,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "mobile/src/components/superadmin/LicenseCardItem.js",
-      "source_location": "L192",
+      "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_components_superadmin_licensecarditem",
@@ -192243,7 +192243,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "mobile/src/components/superadmin/StoreCardItem.js",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_components_superadmin_storecarditem",
@@ -192254,7 +192254,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "mobile/src/components/superadmin/StoreCardItem.js",
-      "source_location": "L225",
+      "source_location": "L284",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_components_superadmin_storecarditem",
@@ -192266,7 +192266,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "mobile/src/components/superadmin/StoreCardItem.js",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_components_superadmin_storecarditem",
@@ -192278,7 +192278,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "mobile/src/components/superadmin/StoreCardItem.js",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_components_superadmin_storecarditem",
@@ -192315,7 +192315,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "mobile/src/components/superadmin/StoreCardItem.js",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_components_superadmin_storecarditem_storecarditem",
@@ -195373,7 +195373,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "mobile/src/screens/SuperAdminScreen.js",
-      "source_location": "L353",
+      "source_location": "L382",
       "weight": 1.0,
       "_origin": "ast",
       "source": "mobile_src_screens_superadminscreen",
@@ -208945,7 +208945,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1923",
+      "source_location": "L1930",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -208956,7 +208956,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1932",
+      "source_location": "L1939",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -208978,7 +208978,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/context.md",
-      "source_location": "L1919",
+      "source_location": "L1926",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_context_context_project",
@@ -212243,5 +212243,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6dab2f2a149de73323c49d87fb172acd45a137ee"
+  "built_at_commit": "a3b9b513f994d8e6a601104b40ba10af9f28bfda"
 }

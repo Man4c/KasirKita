@@ -12,15 +12,18 @@ return [
     |
     */
 
-    'latest_version' => env('APP_LATEST_VERSION', '1.4.0'),
-    'latest_version_code' => (int) env('APP_LATEST_VERSION_CODE', 6),
+    'latest_version' => env('APP_LATEST_VERSION', '1.4.2'),
+    'latest_version_code' => (int) env('APP_LATEST_VERSION_CODE', 8),
     'min_supported_version' => env('APP_MIN_SUPPORTED_VERSION', '1.0.0'),
     'apk_url' => env('APP_APK_URL', null),
     'apk_size_bytes' => (int) env('APP_APK_SIZE_BYTES', 0),
     'changelog' => env('APP_CHANGELOG')
         ? array_filter(array_map('trim', explode(';', env('APP_CHANGELOG'))))
         : [
-            'Pembaruan sistem dan optimasi ukuran APK ramping (~28 MB)',
+            'Pembaruan tombol aksi SuperAdmin (WhatsApp, Perpanjang, Trial, dan Kunci Toko)',
+            'Perbaikan tata letak & pencegahan teks terpotong pada kartu lisensi',
+            'Desain bersih minimalis pada kartu Buka Toko Baru di layar login',
+            'Peningkatan validasi dan auto-scroll pada pendaftaran mandiri toko baru',
         ],
     'release_date' => env('APP_RELEASE_DATE', '2026-09-08'),
     'is_mandatory' => filter_var(env('APP_IS_MANDATORY', false), FILTER_VALIDATE_BOOLEAN),

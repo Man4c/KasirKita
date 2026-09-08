@@ -23,13 +23,16 @@ class StoreSetting extends Model
     ];
 
     public const DEFAULT_APP_VERSION = [
-        'latest_version' => '1.4.0',
-        'latest_version_code' => 6,
+        'latest_version' => '1.4.2',
+        'latest_version_code' => 8,
         'min_supported_version' => '1.0.0',
         'apk_url' => null,
         'apk_size_bytes' => 0,
         'changelog' => [
-            'Pembaruan sistem dan optimasi ukuran APK ramping (~28 MB)',
+            'Pembaruan tombol aksi SuperAdmin (WhatsApp, Perpanjang, Trial, dan Kunci Toko)',
+            'Perbaikan tata letak & pencegahan teks terpotong pada kartu lisensi',
+            'Desain bersih minimalis pada kartu Buka Toko Baru di layar login',
+            'Peningkatan validasi dan auto-scroll pada pendaftaran mandiri toko baru',
         ],
         'release_date' => '2026-09-08',
         'is_mandatory' => false,

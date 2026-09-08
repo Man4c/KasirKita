@@ -11,8 +11,8 @@ const LAST_PING_VER_KEY = 'kasirkita_last_telemetry_ping_version';
 // 3 Hours ping throttle to save network data & mobile battery
 const THROTTLE_WINDOW_MS = 3 * 60 * 60 * 1000;
 
-export const APP_VERSION = appConfig?.expo?.version || '1.3.1';
-export const APP_VERSION_CODE = appConfig?.expo?.android?.versionCode || 5;
+export const APP_VERSION = appConfig?.expo?.version || '1.4.2';
+export const APP_VERSION_CODE = appConfig?.expo?.android?.versionCode || 8;
 
 /**
  * Generate a random UUID v4 with 'inst_' prefix.
