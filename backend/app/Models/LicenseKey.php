@@ -35,6 +35,14 @@ class LicenseKey extends Model
     }
 
     /**
+     * Store that redeemed this license key (alias).
+     */
+    public function redeemedByStore(): BelongsTo
+    {
+        return $this->belongsTo(Store::class, 'redeemed_by_store_id');
+    }
+
+    /**
      * User/Owner who redeemed this license key.
      */
     public function redeemedByUser(): BelongsTo

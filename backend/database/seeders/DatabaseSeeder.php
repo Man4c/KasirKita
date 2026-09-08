@@ -37,7 +37,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Seed Users (Owner & Cashier)
+        // 2. Seed Users (Superadmin, Owner & Cashier)
+        $superadmin = User::updateOrCreate(
+            ['email' => 'superadmin@kasirkita.com'],
+            [
+                'name' => 'Superadmin KasirKita',
+                'phone' => '081299999999',
+                'password' => Hash::make('password123'),
+                'role' => 'superadmin',
+                'is_active' => true,
+            ]
+        );
+
         $owner = User::updateOrCreate(
             ['email' => 'owner@kasirkita.com'],
             [

@@ -37,16 +37,16 @@ class SuperAdminControllerTest extends TestCase
             'trial_ends_at' => now()->addDays(14),
         ]);
 
-        // Superadmin user (owner@kasirkita.com or role superadmin)
+        // Superadmin user (superadmin@kasirkita.com with role superadmin)
         $this->superAdmin = User::factory()->create([
-            'email' => 'owner@kasirkita.com',
-            'role' => 'owner',
+            'email' => 'superadmin@kasirkita.com',
+            'role' => 'superadmin',
             'store_id' => $this->store1->id,
         ]);
 
-        // Regular cashier (not superadmin)
+        // Regular Store Cashier
         $this->regularCashier = User::factory()->create([
-            'email' => 'kasir@beta.com',
+            'email' => 'cashier@kasirkita.com',
             'role' => 'cashier',
             'store_id' => $this->store2->id,
         ]);
@@ -55,6 +55,24 @@ class SuperAdminControllerTest extends TestCase
     public function test_non_superadmin_is_forbidden_from_superadmin_endpoints(): void
     {
         $response = $this->actingAs($this->regularCashier)
+            ->getJson('/api/superadmin/stats');
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'success' => false,
+                'error_code' => 'SUPERADMIN_ACCESS_REQUIRED',
+            ]);
+    }
+
+    public function test_regular_store_owner_is_forbidden_from_superadmin_endpoints(): void
+    {
+        $regularOwner = User::factory()->create([
+            'email' => 'owner@kasirkita.com',
+            'role' => 'owner',
+            'store_id' => $this->store1->id,
+        ]);
+
+        $response = $this->actingAs($regularOwner)
             ->getJson('/api/superadmin/stats');
 
         $response->assertStatus(403)

@@ -102,10 +102,16 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
       - `CustomerController.php`: `phone` disaring berdasar `store_id`.
       - `DiscountController.php`: `code` disaring berdasar `store_id`.
       - `UnitController.php`: `symbol` disaring berdasar `store_id` atau default sistem (`store_id IS NULL`).
-    - Seluruh backend test suite lolos 100%: **124 tests passed, 648 assertions, 0 errors**.
-    - Build Web Frontend (`npm run build`) sukses tanpa error (321ms).
+    - Seluruh backend test suite lolos 100%: **125 tests passed, 650 assertions, 0 errors**.
+    - Build Web Frontend (`npm run build`) sukses tanpa error (355ms).
     - Seluruh berkas mobile dan web terverifikasi bersih dari issue Impeccable UI (`0 issues detected`).
     - Seluruh 7 fase pada `Plan 36` resmi tuntas (*Status: Completed*).
+  - *Pemisahan Akun Superadmin SaaS vs Pemilik Toko & Fix Relasi Lisensi*:
+    - **Pemisahan Peran Tegas**: Mengubah default `isSuperAdmin()` pada `User.php` dari `owner@kasirkita.com` menjadi `superadmin@kasirkita.com`. Akun `owner@kasirkita.com` kini murni menjadi Pemilik Toko biasa ("KasirKita Mart & Cafe"), di mana menu "Platform SaaS" otomatis hilang dari sidebar/navigasi.
+    - **Akun Dedicated Superadmin**: Dibuatkan akun khusus `superadmin@kasirkita.com` (role: `superadmin`, password: `password123`) di seeder dan database live Supabase untuk pengelolaan multi-tenant SaaS pusat dan bank lisensi.
+    - **Quick Login Demo 3 Peran**: Form login Web (`Login.jsx`) kini menyediakan 3 tombol demo cepat: *Pemilik Toko*, *Kasir Toko*, dan *Superadmin*.
+    - **Perbaikan Relasi `LicenseKey.php`**: Menambahkan relasi `redeemedByStore()` sebagai alias yang mengarah ke `Store::class, 'redeemed_by_store_id'`, memperbaiki toast error "Gagal memuat bank lisensi" di portal Superadmin.
+    - **Test Coverage**: Menambahkan test `test_regular_store_owner_is_forbidden_from_superadmin_endpoints()` di `SuperAdminControllerTest.php` untuk memverifikasi proteksi HTTP 403 bagi owner toko biasa. Total 125 backend tests lolos 100% (650 assertions).
 
 
 

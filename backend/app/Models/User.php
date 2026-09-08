@@ -77,7 +77,7 @@ class User extends Authenticatable
      */
     public function isSuperAdmin(): bool
     {
-        return $this->role === 'superadmin' || $this->email === config('app.superadmin_email', env('SUPERADMIN_EMAIL', 'owner@kasirkita.com'));
+        return $this->role === 'superadmin' || $this->email === config('app.superadmin_email', env('SUPERADMIN_EMAIL', 'superadmin@kasirkita.com'));
     }
 
     public function transactions(): HasMany

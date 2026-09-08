@@ -173,12 +173,18 @@ export default function AppLayout() {
         <div className="p-3 border-t border-zinc-800/80">
           <div className="flex items-center justify-between px-2 py-1.5">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-200 font-bold text-xs shrink-0">
-                {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+              <div className={
+                isSuperAdmin 
+                  ? "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 bg-amber-500/20 text-amber-300 border border-amber-500/30" 
+                  : "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 bg-zinc-800 text-zinc-200"
+              }>
+                {isSuperAdmin ? '⚡' : (user?.name?.charAt(0)?.toUpperCase() || 'U')}
               </div>
               <div className="truncate">
                 <p className="text-xs font-semibold text-zinc-200 truncate">{user?.name || 'Kasir'}</p>
-                <p className="text-xs text-zinc-400 capitalize">{user?.role || 'cashier'}</p>
+                <p className="text-xs text-zinc-400 capitalize">
+                  {isSuperAdmin ? 'Superadmin SaaS' : (user?.role === 'owner' ? 'Pemilik Toko' : 'Kasir Toko')}
+                </p>
               </div>
             </div>
             <button
@@ -234,12 +240,13 @@ export default function AppLayout() {
                   <p className="font-bold text-sm text-white">{user?.name || 'Kasir'}</p>
                   <p className="text-xs text-zinc-300 truncate mt-0.5">{user?.email || 'kasir@kasirkita.com'}</p>
                   <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                    <span className="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-rose-500 text-white shrink-0 whitespace-nowrap">
-                      {user?.role || 'cashier'}
-                    </span>
-                    {isSuperAdmin && (
+                    {isSuperAdmin ? (
                       <span className="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0 whitespace-nowrap">
-                        Superadmin
+                        Superadmin SaaS
+                      </span>
+                    ) : (
+                      <span className="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-rose-500 text-white shrink-0 whitespace-nowrap">
+                        {user?.role === 'owner' ? 'Pemilik Toko' : 'Kasir Toko'}
                       </span>
                     )}
                   </div>

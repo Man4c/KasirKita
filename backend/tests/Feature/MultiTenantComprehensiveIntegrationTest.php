@@ -270,8 +270,8 @@ class MultiTenantComprehensiveIntegrationTest extends TestCase
         // STEP 8: Superadmin Direct Field Activation (Door-to-door Cash)
         // -------------------------------------------------------------
         $superAdmin = User::factory()->create([
-            'email' => 'owner@kasirkita.com',
-            'role' => 'owner',
+            'email' => 'superadmin@kasirkita.com',
+            'role' => 'superadmin',
             'store_id' => $storeAId,
         ]);
 

@@ -399,6 +399,8 @@
   "397": "source-lock.mjs",
   "398": "Visualize: Direction Comps & Asset Production",
   "399": "checkElementRadialSpotlightDOM",
+  "400": "inline-ignores.mjs",
+  "401": "syncEditBadgeHitProxies",
   "402": "generate_app_icon.py",
   "403": "Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking)",
   "404": "2026_09_08_000001_create_app_installations_table.php",
@@ -410,5 +412,8 @@
   "410": "react-native",
   "411": "useCheckoutState.js",
   "412": "2026_09_08_000003_scope_category_and_unit_uniqueness_per_store.php",
+  "413": "Generate Report",
+  "414": "$impeccable hooks",
+  "415": "Visualize: Direction Comps & Asset Production",
   "417": "2026_09_08_000004_create_license_keys_table.php"
 }
