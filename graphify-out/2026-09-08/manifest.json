@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788827228.8857694,
-    "ast_hash": "8c38c4f6b83124d4d0d762ae129ebd31",
+    "mtime": 1788828224.390157,
+    "ast_hash": "5e42fbc19306d89757d800465ccb711f",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1015,8 +1015,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/User.php": {
-    "mtime": 1788825820.3754745,
-    "ast_hash": "3613cf3af5f4d5aba803f9972acd3fe8",
+    "mtime": 1788827731.390741,
+    "ast_hash": "161b29521e78bac80b52cc152eed42e7",
     "semantic_hash": ""
   },
   "backend/app/Providers/AppServiceProvider.php": {
@@ -1160,8 +1160,8 @@
     "semantic_hash": "9ac8ca6ff520e4be6b782874fe6d2e3f"
   },
   "backend/database/seeders/DatabaseSeeder.php": {
-    "mtime": 1788669790.634609,
-    "ast_hash": "3a5f8a26f96c5faf53ebf8e692100c0b",
+    "mtime": 1788827745.1102026,
+    "ast_hash": "58e79d2accce6ff9363895cdb5769404",
     "semantic_hash": ""
   },
   "backend/package.json": {
@@ -1300,8 +1300,8 @@
     "semantic_hash": ""
   },
   "web/src/components/layout/AppLayout.jsx": {
-    "mtime": 1788826386.279285,
-    "ast_hash": "436b06100c0f033aacecf530efbf0a3a",
+    "mtime": 1788827914.8299377,
+    "ast_hash": "e3856dcccf1cef1333040840340f1058",
     "semantic_hash": ""
   },
   "web/src/context/AuthContext.jsx": {
@@ -1330,8 +1330,8 @@
     "semantic_hash": ""
   },
   "web/src/pages/Login.jsx": {
-    "mtime": 1788084557.1382768,
-    "ast_hash": "c0256577eeb89ad2f520bf5f02fc0d08",
+    "mtime": 1788827862.604154,
+    "ast_hash": "74182c1f173a76211da419d1ec6bbbb3",
     "semantic_hash": ""
   },
   "web/src/pages/Pos.jsx": {
@@ -2980,8 +2980,8 @@
     "semantic_hash": ""
   },
   "backend/app/Models/LicenseKey.php": {
-    "mtime": 1788824658.4805622,
-    "ast_hash": "4aeb7936f9964726090ee5667bb13721",
+    "mtime": 1788827519.3727348,
+    "ast_hash": "00774069e180789466dae6f2d952ca7e",
     "semantic_hash": ""
   },
   "backend/app/Services/LicenseService.php": {
@@ -3020,8 +3020,8 @@
     "semantic_hash": ""
   },
   "backend/tests/Feature/SuperAdminControllerTest.php": {
-    "mtime": 1788825968.9697382,
-    "ast_hash": "3d92752fcf88921b9c6bf5220fc7d48c",
+    "mtime": 1788827787.7534149,
+    "ast_hash": "59962f5ab3d4f9b1b9dc98f9a915e64c",
     "semantic_hash": ""
   },
   "web/src/pages/Superadmin.jsx": {
@@ -3030,8 +3030,8 @@
     "semantic_hash": ""
   },
   "backend/tests/Feature/MultiTenantComprehensiveIntegrationTest.php": {
-    "mtime": 1788827087.45818,
-    "ast_hash": "9493bc0faa721a10f9af81d889a7fc51",
+    "mtime": 1788827754.4124215,
+    "ast_hash": "4e41dd3399c535cc3a0c39990e02197f",
     "semantic_hash": ""
   }
 }

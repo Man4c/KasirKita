@@ -9,8 +9,14 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
+  const { login, isAuthenticated, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate(isSuperAdmin ? '/superadmin' : '/');
+    }
+  }, [isAuthenticated, isSuperAdmin, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +26,8 @@ export default function Login() {
     try {
       const res = await login(email, password);
       if (res.success) {
-        navigate('/');
+        const isSuper = !!res.user?.is_superadmin || res.user?.role === 'superadmin';
+        navigate(isSuper ? '/superadmin' : '/');
       } else {
         setError(res.message || 'Login gagal. Periksa kembali email dan kata sandi.');
       }

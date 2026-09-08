@@ -18,6 +18,14 @@ import Discounts from './pages/Discounts';
 import TaxesAndFees from './pages/TaxesAndFees';
 import Superadmin from './pages/Superadmin';
 
+function RootIndexRoute() {
+  const { isSuperAdmin } = useAuth();
+  if (isSuperAdmin) {
+    return <Navigate to="/superadmin" replace />;
+  }
+  return <Pos />;
+}
+
 function AuthGuard({ children, allowedRoles, requireSuperAdmin = false }) {
   const { user, isAuthenticated, loading, isSuperAdmin } = useAuth();
 
@@ -37,8 +45,8 @@ function AuthGuard({ children, allowedRoles, requireSuperAdmin = false }) {
     return <Navigate to="/" replace />;
   }
 
-  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user?.role) && !isSuperAdmin) {
-    return <Navigate to="/" replace />;
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+    return <Navigate to={isSuperAdmin ? "/superadmin" : "/"} replace />;
   }
 
   return children;
@@ -59,9 +67,16 @@ export default function App() {
               </AuthGuard>
             }
           >
-            {/* Accessible by Cashier & Owner */}
-            <Route index element={<Pos />} />
-            <Route path="transactions" element={<Transactions />} />
+            {/* Accessible by Cashier & Owner (Superadmin redirected to /superadmin) */}
+            <Route index element={<RootIndexRoute />} />
+            <Route
+              path="transactions"
+              element={
+                <AuthGuard allowedRoles={['owner', 'cashier']}>
+                  <Transactions />
+                </AuthGuard>
+              }
+            />
 
             {/* Owner-Only Routes */}
             <Route

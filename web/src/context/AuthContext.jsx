@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       setToken(userToken);
       localStorage.setItem('kasirkita_token', userToken);
       localStorage.setItem('kasirkita_user', JSON.stringify(userData));
-      return { success: true };
+      return { success: true, user: userData };
     }
     return { success: false, message: res.data.message };
   };

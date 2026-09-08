@@ -106,8 +106,14 @@ export default function AppLayout() {
       >
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-6 h-16 border-b border-zinc-800/80">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-zinc-800/80 border border-zinc-700/80 overflow-hidden shrink-0 shadow-inner">
-            {storeInfo?.logo ? (
+          <div className={
+            isSuperAdmin 
+              ? "flex items-center justify-center w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 shrink-0 shadow-inner"
+              : "flex items-center justify-center w-10 h-10 rounded-xl bg-zinc-800/80 border border-zinc-700/80 overflow-hidden shrink-0 shadow-inner"
+          }>
+            {isSuperAdmin ? (
+              <ShieldCheck className="w-5 h-5 text-amber-400" />
+            ) : storeInfo?.logo ? (
               <img 
                 src={storeInfo.logo} 
                 alt={storeInfo.name} 
@@ -119,10 +125,10 @@ export default function AppLayout() {
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="font-bold text-sm tracking-tight text-white truncate">
-              {storeInfo?.name || 'KasirKita Mart'}
+              {isSuperAdmin ? 'KasirKita SaaS' : (storeInfo?.name || 'KasirKita Mart')}
             </h1>
             <p className="text-xs text-zinc-400 font-normal truncate">
-              {storeInfo?.address || 'KasirKita POS'}
+              {isSuperAdmin ? 'Platform Management' : (storeInfo?.address || 'KasirKita POS')}
             </p>
           </div>
         </div>
@@ -150,11 +156,13 @@ export default function AppLayout() {
                       to={item.to}
                       className={
                         isActive
-                          ? 'flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-rose-500 text-white shadow-md shadow-rose-950/30'
+                          ? (item.badge === 'ROOT'
+                              ? 'flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-md shadow-amber-950/20'
+                              : 'flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-rose-500 text-white shadow-md shadow-rose-950/30')
                           : 'flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-zinc-300 hover:text-white hover:bg-zinc-800/70'
                       }
                     >
-                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-zinc-400'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? (item.badge === 'ROOT' ? 'text-amber-400' : 'text-white') : 'text-zinc-400'}`} />
                       <span className="truncate flex-1">{item.label}</span>
                       {item.badge && (
                         <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0 whitespace-nowrap">
@@ -291,9 +299,11 @@ export default function AppLayout() {
                         key={item.to}
                         to={item.to}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={
+                        className={({ isActive }) =>
                           isActive
-                            ? 'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-rose-500 text-white shadow-md shadow-rose-950/30'
+                            ? (item.badge === 'ROOT'
+                                ? 'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-md shadow-amber-950/20'
+                                : 'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-rose-500 text-white shadow-md shadow-rose-950/30')
                             : 'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors text-zinc-300 hover:text-white hover:bg-zinc-800'
                         }
                       >
