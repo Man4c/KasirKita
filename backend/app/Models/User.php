@@ -72,6 +72,14 @@ class User extends Authenticatable
         return $this->role === 'cashier';
     }
 
+    /**
+     * Check if user is platform superadmin.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin' || $this->email === config('app.superadmin_email', env('SUPERADMIN_EMAIL', 'owner@kasirkita.com'));
+    }
+
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'user_id');

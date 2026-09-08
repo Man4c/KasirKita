@@ -20,13 +20,14 @@ import {
   UserCheck,
   TicketPercent,
   ReceiptText,
+  ShieldCheck,
   Menu,
   X
 } from 'lucide-react';
 import api from '../../services/api';
 
 export default function AppLayout() {
-  const { user, logout, isOwner } = useAuth();
+  const { user, logout, isOwner, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [profileOpen, setProfileOpen] = useState(false);
@@ -53,6 +54,12 @@ export default function AppLayout() {
   };
 
   const navSections = [
+    ...(isSuperAdmin ? [{
+      title: 'Platform SaaS',
+      items: [
+        { to: '/superadmin', label: 'Superadmin Portal', icon: ShieldCheck, roles: ['cashier', 'owner', 'superadmin'], badge: 'ROOT' },
+      ],
+    }] : []),
     {
       title: 'Operasional Kasir',
       items: [
@@ -141,14 +148,19 @@ export default function AppLayout() {
                     <NavLink
                       key={item.to}
                       to={item.to}
-                      className={`flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                      className={
                         isActive
-                          ? 'bg-rose-500 text-white font-semibold shadow-md shadow-rose-950/30'
-                          : 'text-zinc-300 hover:text-white hover:bg-zinc-800/70'
-                      }`}
+                          ? 'flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-rose-500 text-white shadow-md shadow-rose-950/30'
+                          : 'flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-zinc-300 hover:text-white hover:bg-zinc-800/70'
+                      }
                     >
                       <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-zinc-400'}`} />
-                      <span className="truncate">{item.label}</span>
+                      <span className="truncate flex-1">{item.label}</span>
+                      {item.badge && (
+                        <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0 whitespace-nowrap">
+                          {item.badge}
+                        </span>
+                      )}
                     </NavLink>
                   );
                 })}
@@ -221,10 +233,26 @@ export default function AppLayout() {
                 <div className="px-3.5 py-2 border-b border-zinc-800 text-xs">
                   <p className="font-bold text-sm text-white">{user?.name || 'Kasir'}</p>
                   <p className="text-xs text-zinc-300 truncate mt-0.5">{user?.email || 'kasir@kasirkita.com'}</p>
-                  <span className="inline-block mt-2 text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-rose-500 text-white shrink-0 whitespace-nowrap">
-                    {user?.role || 'cashier'}
-                  </span>
+                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                    <span className="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-rose-500 text-white shrink-0 whitespace-nowrap">
+                      {user?.role || 'cashier'}
+                    </span>
+                    {isSuperAdmin && (
+                      <span className="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0 whitespace-nowrap">
+                        Superadmin
+                      </span>
+                    )}
+                  </div>
                 </div>
+                {isSuperAdmin && (
+                  <NavLink
+                    to="/superadmin"
+                    className="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition-colors cursor-pointer border-b border-zinc-800/60"
+                  >
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>Portal Superadmin</span>
+                  </NavLink>
+                )}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
@@ -256,14 +284,19 @@ export default function AppLayout() {
                         key={item.to}
                         to={item.to}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={({ isActive }) =>
-                          `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                            isActive ? 'bg-rose-500 text-white font-semibold shadow-md shadow-rose-950/30' : 'text-zinc-300 hover:text-white hover:bg-zinc-800'
-                          }`
+                        className={
+                          isActive
+                            ? 'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-rose-500 text-white shadow-md shadow-rose-950/30'
+                            : 'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors text-zinc-300 hover:text-white hover:bg-zinc-800'
                         }
                       >
                         <Icon className="w-4 h-4 shrink-0" />
-                        <span className="truncate">{item.label}</span>
+                        <span className="truncate flex-1">{item.label}</span>
+                        {item.badge && (
+                          <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0 whitespace-nowrap">
+                            {item.badge}
+                          </span>
+                        )}
                       </NavLink>
                     );
                   })}

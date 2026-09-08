@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\StockOpnameController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\StoreLicenseController;
 use App\Http\Controllers\Api\StoreSettingController;
+use App\Http\Controllers\Api\SuperAdminController;
 use App\Http\Controllers\Api\TaxAndFeeController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\UserController;
@@ -168,5 +169,17 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/cash-flows', [FinanceController::class, 'storeCashFlow']);
             Route::get('/export', [FinanceController::class, 'exportCsv']);
         });
+    });
+
+    // Platform Superadmin Portal API
+    Route::prefix('superadmin')->middleware('superadmin')->group(function () {
+        Route::get('/stats', [SuperAdminController::class, 'stats']);
+        Route::get('/stores', [SuperAdminController::class, 'stores']);
+        Route::post('/stores/{id}/activate', [SuperAdminController::class, 'activateStore']);
+        Route::post('/stores/{id}/extend-trial', [SuperAdminController::class, 'extendTrial']);
+        Route::post('/stores/{id}/toggle-status', [SuperAdminController::class, 'toggleStatus']);
+        Route::get('/licenses', [SuperAdminController::class, 'licenses']);
+        Route::post('/licenses/generate', [SuperAdminController::class, 'generateLicenses']);
+        Route::post('/licenses/{id}/revoke', [SuperAdminController::class, 'revokeLicense']);
     });
 });

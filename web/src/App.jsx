@@ -16,9 +16,10 @@ import Transactions from './pages/Transactions';
 import CashFlow from './pages/CashFlow';
 import Discounts from './pages/Discounts';
 import TaxesAndFees from './pages/TaxesAndFees';
+import Superadmin from './pages/Superadmin';
 
-function AuthGuard({ children, allowedRoles }) {
-  const { user, isAuthenticated, loading } = useAuth();
+function AuthGuard({ children, allowedRoles, requireSuperAdmin = false }) {
+  const { user, isAuthenticated, loading, isSuperAdmin } = useAuth();
 
   if (loading) {
     return (
@@ -32,7 +33,11 @@ function AuthGuard({ children, allowedRoles }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+  if (requireSuperAdmin && !isSuperAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user?.role) && !isSuperAdmin) {
     return <Navigate to="/" replace />;
   }
 
@@ -144,6 +149,14 @@ export default function App() {
               element={
                 <AuthGuard allowedRoles={['owner']}>
                   <CashFlow />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="superadmin"
+              element={
+                <AuthGuard requireSuperAdmin={true}>
+                  <Superadmin />
                 </AuthGuard>
               }
             />

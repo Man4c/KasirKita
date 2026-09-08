@@ -54,7 +54,7 @@ Transformasi arsitektur **KasirKita POS** dari *single-store* menjadi **Multi-Te
 | 3 | **Backend Auth, Registrasi Toko & Template Data Bawaan**: Endpoint `POST /api/auth/register-store` dengan auto-provisioning template data awal (satuan, kategori) sesuai kategori usaha (Ritel, F&B, Jasa), serta webhook alert Telegram pemilik. | completed |
 | 4 | **Sistem Lisensi & Generator Kode Aktivasi**: Tabel `license_keys`, generator kode serial acak berformat `KK-PRO-XXXX-XXXX`, dan endpoint `POST /api/store/activate-license` untuk klaim lisensi di HP toko. | completed |
 | 5 | **Antarmuka Mobile (React Native)**: Layar *"Daftar Toko Baru"* di `LoginScreen.js`, layar status lisensi di Pengaturan HP dengan input kode aktivasi, lock-screen ramah saat expired, serta pengamanan `store_id` pada file cadangan (`backupService.js`). | completed |
-| 6 | **Portal Web Superadmin (`/superadmin`)**: Halaman manajemen toko responsif mobile di Web React: kartu statistik (Total, Trial, Active, Expired), tabel toko dengan search & filter, generator lisensi, dan tombol toggle aktivasi langsung. | pending |
+| 6 | **Portal Web Superadmin (`/superadmin`)**: Halaman manajemen toko responsif mobile di Web React: kartu statistik (Total, Trial, Active, Expired), tabel toko dengan search & filter, generator lisensi, dan tombol toggle aktivasi langsung. | completed |
 | 7 | **Pengujian Komprehensif & Dokumentasi**: Automated test suite (isolasi data antar toko, benturan barcode beda toko, guard expired, registrasi), audit Impeccable, dan pembaruan `docs/context.md`. | pending |
 
 ---

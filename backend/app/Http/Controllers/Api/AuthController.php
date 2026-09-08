@@ -54,6 +54,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'phone' => $user->phone,
+                'is_superadmin' => $user->isSuperAdmin(),
                 'store_id' => $user->store_id,
                 'store' => $storeData,
             ],
@@ -110,6 +111,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'phone' => $user->phone,
+                'is_superadmin' => $user->isSuperAdmin(),
                 'store_id' => $user->store_id,
                 'store' => $storeData,
             ],
@@ -148,6 +150,7 @@ class AuthController extends Controller
             'email' => $user->email,
             'role' => $user->role,
             'phone' => $user->phone,
+            'is_superadmin' => $user->isSuperAdmin(),
             'store_id' => $user->store_id,
             'store' => $storeData,
         ], 'Profil pengguna berhasil diambil.');

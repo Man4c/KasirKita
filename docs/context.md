@@ -65,6 +65,28 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Memperbarui `mobile/src/services/backupService.js` (bump `CURRENT_SCHEMA_VERSION` ke `3`, menyematkan `store_id` dan `store_name` pada amplop backup, memvalidasi identitas penyewa, dan memblokir restore silang antar toko).
     - Memperbarui `mobile/src/components/settings/BackupRestoreModal.js` dengan badge nama toko dan peringatan `storeMismatchBox` jika berkas backup milik toko lain.
     - Menjalankan audit Impeccable dan syntax check node (`0 issues`), seluruh aturan Defensive UI Craft (font floor >= 12px, touch target >= 44dp, Android anti-shift `includeFontPadding: false` + `textAlignVertical: 'center'`) terpenuhi 100%.
+  - *Status Fase 6 (Selesai)*:
+    - Membuat model & helper `isSuperAdmin()` pada `User.php` dan middleware `EnsureSuperAdmin.php` (alias `superadmin` di `bootstrap/app.php`).
+    - Membuat controller `SuperAdminController.php` dengan endpoint:
+      - `GET /api/superadmin/stats`: Agregasi metrik total toko, toko trial aktif, toko pro aktif, toko expired, dan statistik voucher lisensi.
+      - `GET /api/superadmin/stores`: Query seluruh toko mitra dengan pencarian, filter status, filter kategori bisnis, dan relasi pemilik/staf/produk/transaksi.
+      - `POST /api/superadmin/stores/{id}/activate`: Aktivasi manual toko langsung di lapangan dengan durasi fleksibel (1 tahun, 6 bulan, 1 bulan, seumur hidup, kustom) dan catatan audit transaksi pembayaran tunai.
+      - `POST /api/superadmin/stores/{id}/extend-trial`: Perpanjangan masa trial toko (+7, +14, +30 hari).
+      - `POST /api/superadmin/stores/{id}/toggle-status`: Pengubahan status operasional toko langsung (active, trial, expired).
+      - `GET /api/superadmin/licenses`: Daftar bank kode lisensi dengan filter status (available, redeemed, revoked) dan pencarian.
+      - `POST /api/superadmin/licenses/generate`: Pencetakan batch serial key format `KK-PRO-XXXX-XXXX` langsung dari web.
+      - `POST /api/superadmin/licenses/{id}/revoke`: Pencabutan kode lisensi yang belum terpakai.
+    - Membuat automated test suite komprehensif `SuperAdminControllerTest.php` (9 tests, 47 assertions). Total seluruh backend test suite lolos 100% (**123 tests passed, 605 assertions, 0 errors**).
+    - Memperbarui `web/src/context/AuthContext.jsx` untuk mengekspos `isSuperAdmin`.
+    - Memperbarui `web/src/components/layout/AppLayout.jsx` dengan seksi navigasi desktop & mobile "Platform SaaS" (badge "ROOT"), tautan cepat di dropdown profil, dan dukungan badge navigasi.
+    - Memperbarui `web/src/App.jsx` dengan route `/superadmin` yang diproteksi `requireSuperAdmin`.
+    - Membangun antarmuka dashboard Web React `web/src/pages/Superadmin.jsx`:
+      - 4 Kartu Metrik Utama (Total Toko, Trial Aktif, Pro Aktif, Kedaluwarsa) dan pita mini Bank Voucher.
+      - Tab 1 "Daftar Toko Mitra": Toolbar pencarian, filter status pill, filter kategori usaha, tabel responsif dengan tombol WhatsApp langsung (`wa.me`), indikator sisa hari, modal aktivasi instan di tempat, modal perpanjang trial, dan tombol toggle status.
+      - Tab 2 "Bank & Generator Lisensi": Form generator voucher serial key batch dengan durasi fleksibel dan catatan distribusi, kartu pratinjau kode yang baru dicetak dengan tombol salin semua, serta tabel bank lisensi dengan tombol salin dan cabut.
+    - Menjalankan audit Impeccable detector pada seluruh file web yang dimodifikasi (`0 issues detected`), memenuhi aturan keterbacaan (font ≥ 12px), data table protection (`whitespace-nowrap`), dan flexbox pairing.
+    - Menjalankan `npm run build` di Vite (`built in 343ms` tanpa error).
+
 
 
 - **Implementasi Pelacakan Instalasi Perangkat & Pengguna Aktif (App Installation & Telemetry Tracking) (`Plan 35`)**:
