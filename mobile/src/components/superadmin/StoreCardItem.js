@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Linking, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Linking } from 'react-native';
 import {
   Store,
   User,
@@ -11,6 +11,7 @@ import {
   Clock,
   MessageSquare,
 } from 'lucide-react-native';
+import { showAlert } from '../../utils/alert.js';
 
 export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
   const isTrial = store.subscription_status === 'trial';
@@ -31,7 +32,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
   const handleOpenWhatsApp = () => {
     let phone = store.phone || store.owner?.phone;
     if (!phone) {
-      Alert.alert('Kontak Kosong', 'Toko ini belum menyertakan nomor telepon/WhatsApp.');
+      showAlert('Kontak Kosong', 'Toko ini belum menyertakan nomor telepon/WhatsApp.');
       return;
     }
     phone = phone.replace(/[^0-9]/g, '');
@@ -41,7 +42,7 @@ export default function StoreCardItem({ store, onActivate, onExtendTrial }) {
     const message = encodeURIComponent(`Halo ${store.owner?.name || store.name}, kami dari tim KasirKita POS...`);
     const waUrl = `https://wa.me/${phone}?text=${message}`;
     Linking.openURL(waUrl).catch(() => {
-      Alert.alert('Gagal Membuka WhatsApp', 'Pastikan aplikasi WhatsApp telah terpasang di perangkat Anda.');
+      showAlert('Gagal Membuka WhatsApp', 'Pastikan aplikasi WhatsApp telah terpasang di perangkat Anda.');
     });
   };
 

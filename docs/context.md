@@ -18,6 +18,19 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - `plans/`: Rencana modular dan pelacakan fase task untuk `plans-kanban`.
   - `graphify-out/`: Hasil analisis struktur kode dan visualisasi arsitektur.
 
+- **Penyempurnaan Layar Superadmin Mobile: Animasi Spin Tombol Reload & Perbaikan Aksi Cabut Lisensi (`SuperAdminHeader.js`, `LicenseCardItem.js`, `SuperAdminScreen.js`, `alert.js`)**:
+  - **Animasi Putar 360° Tombol Reload (`SuperAdminHeader.js`)**:
+    - Mengintegrasikan `Animated.Value`, `Easing`, dan interpolasi rotasi `0deg` -> `360deg` dengan native driver (`Platform.OS !== 'web'`).
+    - Saat tombol reload ditekan: ikon `<RotateCcw>` berputar seketika 360° dengan kurva bezier halus.
+    - Saat proses refresh data (`refreshing === true`) berlangsung: animasi berputar secara kontinu (`Animated.loop`) dengan warna aksen rose `#fb7185` dan style aktif `iconButtonSpinning`, kemudian berhenti anggun saat data selesai dimuat.
+  - **Perbaikan Aksi Cabut Voucher Lisensi (`LicenseCardItem.js` & `SuperAdminScreen.js`)**:
+    - *Akar Masalah*: Pemanggilan `Alert.alert` mentah dari `react-native` pada platform Web / Preview tidak mengeksekusi callback `onPress` (hanya alert statis browser tanpa tombol aksi). Selain itu pada native, tidak ada visual loading feedback saat proses API berlangsung.
+    - *Solusi Cross-Platform*: Mengganti seluruh `Alert.alert` dengan `showAlert` universal dari `mobile/src/utils/alert.js` (mendukung `window.confirm` interaktif di Web dan dialog native di Android/iOS).
+    - *Optimistic State & Loading State*: Menambahkan local state `isRevoking` pada `LicenseCardItem.js` yang menampilkan mini activity indicator spinner `#fb7185` dan teks "Mencabut..." dengan proteksi `disabled` saat request berlangsung.
+    - *Sinkronisasi Data*: Di `SuperAdminScreen.js`, status lisensi langsung diperbarui secara optimistik di state lokal (`status: 'revoked'`) dan kuota voucher tersedia dikurangi seketika sebelum background data reload dijalankan.
+    - *Standarisasi Alert*: Mengganti seluruh penggunaan `Alert` mentah di `ActivateStoreModal.js`, `ExtendTrialModal.js`, `LicenseGeneratorModal.js`, dan `StoreCardItem.js` dengan `showAlert`.
+    - *Verifikasi*: Lolos syntax check node ES modules, 0 error pada Impeccable detector, dan 10 test suite `SuperAdminControllerTest` lolos 100%.
+
 - **Implementasi Sistem Multi-Tenant & Lisensi Toko (`Plan 36`)**:
   - Transformasi arsitektur KasirKita POS dari *single-store* menjadi **Multi-Tenant (SaaS)** untuk mendukung penjualan jemput bola (*door-to-door*) ke toko-toko secara aman dan terisolasi.
   - *Status Fase 1 (Selesai)*:

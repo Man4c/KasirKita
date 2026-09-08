@@ -11,9 +11,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { X, Clock } from 'lucide-react-native';
+import { showAlert } from '../../utils/alert.js';
 
 const DAY_OPTIONS = [
   { days: 7, label: '+7 Hari (1 Minggu)' },
@@ -45,7 +45,7 @@ export default function ExtendTrialModal({ visible, store, onClose, onConfirm })
       });
       onClose();
     } catch (err) {
-      Alert.alert('Gagal Perpanjang Trial', err.message || 'Terjadi kesalahan sistem.');
+      showAlert('Gagal Perpanjang Trial', err.message || 'Terjadi kesalahan sistem.');
     } finally {
       setLoading(false);
     }

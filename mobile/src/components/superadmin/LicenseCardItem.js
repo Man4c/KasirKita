@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   Platform,
   Share,
-  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { Ticket, Copy, Check, Ban, CheckCircle2, Clock } from 'lucide-react-native';
+import { showAlert } from '../../utils/alert.js';
 
 export default function LicenseCardItem({ license, onRevoke }) {
   const [copied, setCopied] = useState(false);
+  const [isRevoking, setIsRevoking] = useState(false);
 
   const isAvailable = license.status === 'available';
   const isRedeemed = license.status === 'redeemed';
@@ -49,13 +51,29 @@ export default function LicenseCardItem({ license, onRevoke }) {
     }
   };
 
+  const executeRevoke = async () => {
+    if (isRevoking) return;
+    setIsRevoking(true);
+    try {
+      if (onRevoke) {
+        await onRevoke(license.id);
+      }
+    } finally {
+      setIsRevoking(false);
+    }
+  };
+
   const confirmRevoke = () => {
-    Alert.alert(
+    showAlert(
       'Cabut Voucher Lisensi',
       `Apakah Anda yakin ingin membatalkan dan mencabut voucher ${license.license_key}? Tindakan ini tidak dapat dibatalkan.`,
       [
         { text: 'Batal', style: 'cancel' },
-        { text: 'Cabut Voucher', style: 'destructive', onPress: () => onRevoke(license.id) },
+        {
+          text: 'Cabut Voucher',
+          style: 'destructive',
+          onPress: executeRevoke,
+        },
       ]
     );
   };
@@ -146,13 +164,24 @@ export default function LicenseCardItem({ license, onRevoke }) {
 
         {isAvailable && (
           <TouchableOpacity
-            style={styles.revokeBtn}
+            style={[styles.revokeBtn, isRevoking && styles.revokeBtnDisabled]}
             onPress={confirmRevoke}
+            disabled={isRevoking}
             activeOpacity={0.7}
             hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+            accessibilityLabel={`Cabut voucher ${license.license_key}`}
           >
-            <Ban size={14} color="#ef4444" />
-            <Text style={styles.revokeBtnText}>Cabut</Text>
+            {isRevoking ? (
+              <>
+                <ActivityIndicator size={12} color="#fb7185" />
+                <Text style={styles.revokeBtnText}>Mencabut...</Text>
+              </>
+            ) : (
+              <>
+                <Ban size={14} color="#ef4444" />
+                <Text style={styles.revokeBtnText}>Cabut</Text>
+              </>
+            )}
           </TouchableOpacity>
         )}
       </View>
@@ -319,6 +348,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     minHeight: 44,
     paddingHorizontal: 12,
+  },
+  revokeBtnDisabled: {
+    opacity: 0.6,
   },
   revokeBtnText: {
     fontFamily: 'Poppins_500Medium',

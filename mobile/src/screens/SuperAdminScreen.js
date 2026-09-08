@@ -9,7 +9,6 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import {
   Search,
@@ -19,6 +18,7 @@ import {
   Sparkles,
   AlertCircle,
 } from 'lucide-react-native';
+import showAlert from '../utils/alert';
 import superAdminService from '../services/superAdminService';
 import SuperAdminHeader from '../components/superadmin/SuperAdminHeader';
 import SuperAdminStatsCards from '../components/superadmin/SuperAdminStatsCards';
@@ -93,7 +93,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
         setLicenses(licRes.data?.data || licRes.data || []);
       }
     } catch (err) {
-      Alert.alert('Gagal Memuat Data', err.message || 'Periksa koneksi internet Anda.');
+      showAlert('Gagal Memuat Data', err.message || 'Periksa koneksi internet Anda.');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -109,7 +109,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
     if (!activateStore) return;
     const res = await superAdminService.activateStore(activateStore.id, payload);
     if (res.success) {
-      Alert.alert('Sukses', `Toko "${activateStore.name}" berhasil diaktifkan menjadi PRO!`);
+      showAlert('Sukses', `Toko "${activateStore.name}" berhasil diaktifkan menjadi PRO!`);
       loadData(true);
     }
   };
@@ -118,7 +118,7 @@ export default function SuperAdminScreen({ user, onLogout }) {
     if (!extendTrialStore) return;
     const res = await superAdminService.extendTrial(extendTrialStore.id, payload);
     if (res.success) {
-      Alert.alert('Sukses', `Masa trial "${extendTrialStore.name}" berhasil diperpanjang.`);
+      showAlert('Sukses', `Masa trial "${extendTrialStore.name}" berhasil diperpanjang.`);
       loadData(true);
     }
   };
@@ -133,12 +133,30 @@ export default function SuperAdminScreen({ user, onLogout }) {
   const handleRevokeLicense = async (id) => {
     try {
       const res = await superAdminService.revokeLicense(id);
-      if (res.success) {
-        Alert.alert('Sukses', 'Voucher lisensi berhasil dicabut.');
+      if (res?.success) {
+        // Optimistic update in UI
+        setLicenses((prev) =>
+          prev.map((lic) => (lic.id === id ? { ...lic, status: 'revoked' } : lic))
+        );
+        setStats((prev) => {
+          if (!prev || !prev.licenses) return prev;
+          return {
+            ...prev,
+            licenses: {
+              ...prev.licenses,
+              available: Math.max(0, (prev.licenses.available || 1) - 1),
+              revoked: (prev.licenses.revoked || 0) + 1,
+            },
+          };
+        });
+        showAlert('Sukses', 'Voucher lisensi berhasil dicabut.');
         loadData(true);
+        return true;
       }
+      return false;
     } catch (err) {
-      Alert.alert('Gagal Mencabut', err.message);
+      showAlert('Gagal Mencabut', err.message || 'Terjadi kesalahan saat mencabut voucher lisensi.');
+      return false;
     }
   };
 

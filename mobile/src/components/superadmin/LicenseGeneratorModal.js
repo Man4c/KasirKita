@@ -12,9 +12,9 @@ import {
   Platform,
   ScrollView,
   Share,
-  Alert,
 } from 'react-native';
 import { X, Ticket, Copy, Check, Sparkles } from 'lucide-react-native';
+import { showAlert } from '../../utils/alert.js';
 
 const DURATION_OPTIONS = [
   { key: '1_year', label: '1 Tahun' },
@@ -61,7 +61,7 @@ export default function LicenseGeneratorModal({ visible, onClose, onGenerate }) 
         handleClose();
       }
     } catch (err) {
-      Alert.alert('Gagal Mencetak', err.message || 'Terjadi kesalahan sistem.');
+      showAlert('Gagal Mencetak', err.message || 'Terjadi kesalahan sistem.');
     } finally {
       setLoading(false);
     }

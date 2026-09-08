@@ -1,8 +1,75 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Platform } from 'react-native';
 import { ShieldCheck, RotateCcw, LogOut } from 'lucide-react-native';
 
 export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing }) {
+  const spinAnim = useRef(new Animated.Value(0)).current;
+  const isSpinning = useRef(false);
+
+  useEffect(() => {
+    let animationLoop;
+    if (refreshing) {
+      isSpinning.current = true;
+      animationLoop = Animated.loop(
+        Animated.timing(spinAnim, {
+          toValue: 1,
+          duration: 800,
+          easing: Easing.linear,
+          useNativeDriver: Platform.OS !== 'web',
+        })
+      );
+      animationLoop.start();
+    } else {
+      if (animationLoop) {
+        animationLoop.stop();
+      }
+      if (isSpinning.current) {
+        Animated.timing(spinAnim, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: Platform.OS !== 'web',
+        }).start(() => {
+          spinAnim.setValue(0);
+          isSpinning.current = false;
+        });
+      } else {
+        spinAnim.setValue(0);
+      }
+    }
+
+    return () => {
+      if (animationLoop) {
+        animationLoop.stop();
+      }
+    };
+  }, [refreshing, spinAnim]);
+
+  const handlePressRefresh = () => {
+    if (refreshing) return;
+    isSpinning.current = true;
+    Animated.timing(spinAnim, {
+      toValue: 1,
+      duration: 650,
+      easing: Easing.bezier(0.2, 0.8, 0.2, 1),
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => {
+      if (!refreshing) {
+        spinAnim.setValue(0);
+        isSpinning.current = false;
+      }
+    });
+
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
+
+  const spin = spinAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.leftSection}>
@@ -27,14 +94,16 @@ export default function SuperAdminHeader({ user, onRefresh, onLogout, refreshing
 
       <View style={styles.rightActions}>
         <TouchableOpacity
-          style={styles.iconButton}
-          onPress={onRefresh}
+          style={[styles.iconButton, refreshing && styles.iconButtonSpinning]}
+          onPress={handlePressRefresh}
           disabled={refreshing}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           activeOpacity={0.7}
           accessibilityLabel="Segarkan data platform"
         >
-          <RotateCcw size={18} color={refreshing ? '#52525b' : '#a1a1aa'} />
+          <Animated.View style={{ transform: [{ rotate: spin }] }}>
+            <RotateCcw size={18} color={refreshing ? '#fb7185' : '#a1a1aa'} />
+          </Animated.View>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -149,6 +218,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#27272a',
+  },
+  iconButtonSpinning: {
+    borderColor: 'rgba(225, 29, 72, 0.3)',
+    backgroundColor: 'rgba(225, 29, 72, 0.08)',
   },
   logoutButton: {
     backgroundColor: 'rgba(239, 68, 68, 0.08)',

@@ -11,9 +11,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { X, CheckCircle2, ShieldAlert } from 'lucide-react-native';
+import { showAlert } from '../../utils/alert.js';
 
 const DURATION_OPTIONS = [
   { key: '1_year', label: '1 Tahun (Rekomendasi)' },
@@ -46,7 +46,7 @@ export default function ActivateStoreModal({ visible, store, onClose, onConfirm 
       });
       onClose();
     } catch (err) {
-      Alert.alert('Gagal Aktivasi', err.message || 'Terjadi kesalahan sistem.');
+      showAlert('Gagal Aktivasi', err.message || 'Terjadi kesalahan sistem.');
     } finally {
       setLoading(false);
     }
