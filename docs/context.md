@@ -56,7 +56,7 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
     - Menghubungkan notifikasi aktivasi instan ke Telegram pengembang melalui `TelegramNotificationService::notifyLicenseActivated()`.
     - Membuat automated test suite komprehensif `LicenseActivationTest.php` (8 tests, 40 assertions). Seluruh test suite backend lolos 100% (**114 tests passed, 558 assertions, 0 errors**).
   - *Status Fase 5 (Selesai)*:
-    - Memperbarui `mobile/src/context/AuthContext.js` dengan fungsi `registerStore(regData)`, `refreshStoreStatus()`, `activateLicense(licenseKey)`, serta eksposur state toko (`store`, `isStoreActive`, `isStoreTrial`, `isStoreExpired`).
+    - Memperbarui `mobile/src/context/AuthContext.js` dengan fungsi `registerStore(regData)`, `refreshStoreStatus()`, `activateLicense(licenseKey)`, `updateUser(userData)`, serta eksposur state toko (`store`, `isStoreActive`, `isStoreTrial`, `isStoreExpired`).
     - Membuat komponen `mobile/src/components/auth/RegisterStoreModal.js` (Bottom Sheet form pendaftaran mandiri toko baru dengan seleksi chip kategori usaha Ritel, F&B, Jasa, Lainnya, auto-login mulus).
     - Membuat komponen `mobile/src/components/settings/LicenseActivationModal.js` (Bottom Sheet modal input serial key `KK-PRO-XXXX-XXXX`, auto-formatting uppercase & tanda hubung, live indicator, celebratory feedback view).
     - Memperbarui `mobile/src/screens/LoginScreen.js` dengan kartu aksi "Buka Toko Baru (Gratis 14 Hari)" dan trigger modal registrasi.

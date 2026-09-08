@@ -166,6 +166,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (updatedUserData) => {
+    try {
+      const newUser = {
+        ...user,
+        ...updatedUserData,
+      };
+      setUser(newUser);
+      await storage.setUser(newUser);
+      return { success: true };
+    } catch (err) {
+      console.error('Failed to update user in auth context:', err);
+      return { success: false, message: err.message };
+    }
+  };
+
   const store = user?.store || null;
   const isStoreActive = store ? store.is_active : true;
   const isStoreTrial = store ? store.is_trial : false;

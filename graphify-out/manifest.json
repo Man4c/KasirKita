@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788829844.5299025,
-    "ast_hash": "9f43a5ccd75eff969820dd1d23460adf",
+    "mtime": 1788831174.5603359,
+    "ast_hash": "951139c66f8cb43e4178349cd1950e54",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "mobile/src/context/AuthContext.js": {
-    "mtime": 1788825098.6447792,
-    "ast_hash": "79237656382c5c9d02b5ff25cf67fe25",
+    "mtime": 1788831120.699784,
+    "ast_hash": "a0af94e8a0e49d5a516fb53f30a28d92",
     "semantic_hash": ""
   },
   "mobile/src/screens/DashboardScreen.js": {

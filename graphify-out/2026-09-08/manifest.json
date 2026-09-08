@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "docs/context.md": {
-    "mtime": 1788828594.374148,
-    "ast_hash": "a5a829a2f0ab1b379e6eb8cac236f22f",
+    "mtime": 1788829844.5299025,
+    "ast_hash": "9f43a5ccd75eff969820dd1d23460adf",
     "semantic_hash": ""
   },
   "docs/index.md": {
@@ -3032,6 +3032,16 @@
   "backend/tests/Feature/MultiTenantComprehensiveIntegrationTest.php": {
     "mtime": 1788827754.4124215,
     "ast_hash": "4e41dd3399c535cc3a0c39990e02197f",
+    "semantic_hash": ""
+  },
+  "backend/app/Console/Commands/TestTelegramNotificationCommand.php": {
+    "mtime": 1788829792.6394725,
+    "ast_hash": "be2e9cbc93578462bbb97d5828e09736",
+    "semantic_hash": ""
+  },
+  "backend/tests/Feature/TelegramNotificationTest.php": {
+    "mtime": 1788829822.9230196,
+    "ast_hash": "dd1c92f9ff455cbca9972be54418d4a0",
     "semantic_hash": ""
   }
 }
