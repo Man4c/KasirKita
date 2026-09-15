@@ -23,6 +23,19 @@ Update file ini setelah sesi kerja, setelah ada keputusan arsitektur baru, atau 
   - Terhubung dengan modal pendaftaran mandiri `RegisterStoreModal` (nama toko, kategori bisnis, kontak, dan kredensial owner).
   - Lolos uji Impeccable detector (0 violations) dan Anti-Shift typography rule.
 
+- **Pengamanan Database Supabase & Remediasi Security Advisors (RLS Hardening & PostgREST Lockdown)**:
+  - **Akar Masalah**: Peringatan kritis (*Critical Advisory Alert*) dari Supabase terkait `rls_disabled_in_public`, `sensitive_columns_exposed` pada 28 tabel publik, dan `extension_in_public` pada `pg_trgm` & `pg_net`.
+  - **Remediasi Menyeluruh**:
+    1. *Aktivasi RLS*: Mengaktifkan Row Level Security (RLS) pada seluruh 28 tabel di schema `public`.
+    2. *Pencabutan Izin PostgREST*: Mencabut (`REVOKE ALL`) seluruh izin akses tabel, sequence, dan routine dari peran `anon` dan `authenticated`, serta memperbarui default privileges.
+    3. *Explicit Rejection Policies*: Menambahkan policy `no_direct_api_access` (`FOR ALL TO anon, authenticated USING (false) WITH CHECK (false)`) di seluruh tabel publik untuk memblokir total akses API HTTP PostgREST.
+    4. *Relokasi Ekstensi*: Memindahkan ekstensi `pg_trgm` dan `pg_net` dari schema `public` ke schema aman `extensions`.
+  - **Hasil Verifikasi**:
+    - Supabase Security Advisors lints: **0 Critical Issues, 0 Warnings, 0 Info Notices (`lints: []`)**.
+    - Permintaan langsung via HTTP PostgREST anonim ke tabel `users` berhasil diblokir dengan `401 Unauthorized / permission denied for table users`.
+    - Backend Laravel produksi di Render berjalan normal 100% tanpa gangguan melalui koneksi PostgreSQL `postgres` superuser (`rolbypassrls = true`).
+    - CDN Storage untuk unduhan APK (`apk-releases/KasirKita-v1.4.2.apk`) tetap aktif 200 OK.
+
 - **Rilis Resmi KasirKita POS Mobile v1.4.2 (Build 8) (`Plan 34` & `Plan 36`)**:
   - **Kompilasi Standalone EAS Cloud**:
     - Berhasil membangun APK mandiri Android profil `preview` (Build ID: `afc55cb3-55f8-451a-91ed-ba02052fadba`).

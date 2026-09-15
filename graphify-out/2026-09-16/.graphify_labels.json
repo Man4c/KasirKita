@@ -398,7 +398,6 @@
   "396": "Operate mode depth (and Read notes)",
   "397": "source-lock.mjs",
   "398": "Visualize: Direction Comps & Asset Production",
-  "399": "componentModuleCandidates",
   "400": "inline-ignores.mjs",
   "401": "syncEditBadgeHitProxies",
   "402": "generate_app_icon.py",
@@ -407,7 +406,6 @@
   "405": "@expo-google-fonts/poppins",
   "406": "EnsureStoreActive.php",
   "407": "@react-native-async-storage/async-storage",
-  "408": "expo-document-picker",
   "409": "bolder.md",
   "410": "react-native",
   "411": "expo-dev-client",
@@ -417,6 +415,5 @@
   "415": "react-dom",
   "416": "lucide-react-native",
   "417": "2026_09_08_000004_create_license_keys_table.php",
-  "418": "expo-image-picker",
   "419": "react-native-svg"
 }
